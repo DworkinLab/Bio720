@@ -18,7 +18,9 @@ TBD
 
 ## Instructors
 [Dr. Brian Golding](http://helix.biology.mcmaster.ca/)
+
 [Dr. Ben Evans](https://benevanslab.wordpress.com/)
+
 [Dr. Ian Dworkin](https://scholar.google.com/citations?user=Iium3AEAAAAJ&hl=)
 
 ## Recommended books (not required, but these may be helpful). We will let you find copies of these (i.e. via amazon, or used book sellers) if you think they would be useful.
