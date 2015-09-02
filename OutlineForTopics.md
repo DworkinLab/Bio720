@@ -14,9 +14,10 @@ BG: The basic skill set for practical bioinformatics research (with NGS data)
 
 BE: Identifying and utilizing polymorphism data from Illumina resequencing (and reduced representation sequencing).
 
-Introduction to the Macaque data
-Data types for identifying polymorphism (reduced representation approaches in particular).
-SNP calling/genotyping: GATK (and base recalibration, deduplication, unified genotyper VS. haplotype caller), vcftools, vcf file formats, bed file format
+- Introduction to the Macaque data
+- Data types for identifying polymorphism (reduced representation approaches in particular).
+- SNP calling/genotyping: GATK (and base recalibration, deduplication, unified genotyper VS. haplotype caller)
+- vcftools, vcfformats, bed file format
 
 ID: Introduction to using RNAseq for the analysis of differentially expressed genes
 
