@@ -2,10 +2,11 @@
 The current plan is ...
 
 Four lectures each:
+
 BG: The basic skill set for practical bioinformatics research (with NGS data)
-    UNIX cmd line
-         redirection
-         pipelines, etc
+1. UNIX cmd line
+    redirection
+    pipelines, etc
     Editor - nano
     Programming - R *(maybe to ID?)*
     File formats - fastq, gff
