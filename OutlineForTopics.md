@@ -22,7 +22,7 @@ BE: Identifying and utilizing polymorphism data from Illumina resequencing (and 
 ID: Introduction to using RNAseq for the analysis of differentially expressed genes
 
 0. Markdown (this probably belongs with R) 
-1. Transcriptome Assembly using Trinity (ID can do the practical part: Maybe BG for theory?), and how to interpret and use the **de novo* transcriptome assembly. 
+1. Transcriptome Assembly using Trinity (ID can do the practical part: Maybe BG for theory?), and how to interpret and use the *de novo* transcriptome assembly. 
 2. Considerations for types of features to use (genes, transcripts, kmers), How to count for RNAseq (what features to use, different approaches to deal with multi-mapped reads)
 3. Basic Statistics for the analysis of count data for differential expression
 4. Differential expression analysis. Examining data for technical issues. Dealing with multiple comparisons (FDR). 
