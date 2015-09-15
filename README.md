@@ -1,6 +1,6 @@
 # Bio720
 
-** Please note: this page is currently a stub with minimal information!!! **
+*Please note: this page is currently a stub with minimal information!!*
 
 ## Course Summary
 This is the page for Bio720, a practical introduction to bioinformatics and genomics research. 
