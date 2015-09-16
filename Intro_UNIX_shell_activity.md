@@ -10,7 +10,7 @@ In class this week Brian introduced some of the basic commands on the UNIX shell
 
 So first you login into the remote machine:
 
-```{shell}
+```shell
 ssh username@server.ca
 ```
 
@@ -18,13 +18,13 @@ where the username and server information are on your sheets.
 
 Then we learned some commands to navigate around the file system like:
 
-```{shell}
+```shell
 ls
 ```
 
 to list the files in the current working directory or:
 
-```{shell}
+```shell
 ls /
 ```
 
