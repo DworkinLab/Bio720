@@ -40,8 +40,8 @@ Given the tutorial, and your readings, we now want you to do several things.
 2. Without changing your working directory, look at the contents in the root (`/`) directory.
 3. the info server has most of the bioinformatic software located in `/usr/local`. Please navigate (change directory) to this location.
 4. using what we learned in class (and maybe using `man` to find the right flags) take a look at all of the files. You will notice that there are more items in this directory than can be displayed on the page at one time. Instead look up the arguments for the `ls` command that will allow you to simultaneously do the following:
-     display each item in the directory in its own row.
-     provide more information about each item (in particular permissions like `drwxr-xr-x`).
+   * display each item in the directory in its own row.
+   * provide more information about each item (in particular permissions like `drwxr-xr-x`).
 5. What is the permission for the directory to the program `bowtie2` for you (located in `usr/local/`).
 6. return to your home directory.
 7. make a new folder called NewFolderTest.
