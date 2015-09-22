@@ -1,4 +1,4 @@
-# Using the apply functions - last updated June 13th 2011 Ian Dworkin
+# Using the apply functions - last updated Sept 22, 2015
 
 # There are a set of really useful functions to repeatedly perform the same action (i.e. calling a function across the whole data set)
 
@@ -6,9 +6,14 @@
 
 
 
-# For this example, we will use the dll.data
-setwd("/Users/ian/R/R scripts/Dll data/")
+# For this example, we will use the dll.data (if you have a local copy).
+setwd("/Users/ian/R/R scripts/Dll data/") # change to your directory
 dll.data = read.csv("dll.txt", header=TRUE) 
+
+# Or you can just import it from DRYAD (online)
+dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", h=T)
+
+# Now we will change some of the variables to factors in R.
 dll.data$temp <- factor(dll.data$temp)
 dll.data$replicate <- factor(dll.data$replicate)
 
