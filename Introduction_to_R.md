@@ -15,8 +15,10 @@ The data set that is used for some of these activities can be found on the [DRYA
 dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", h=T)
 ```
 
+*Please note, the scripts may look a bit different, as I have edited them a bit after making the screencasts. All of the important parts are still there!
 1. Why use `R` (and why learn to program):Motivating example of working counts of expression data from RNAseq.
 2. Introduction to `R`: [part 1. `R` as a calculator](https://youtu.be/Kyxx9_NLlUY/0.jpg)
+  - the introductory script can be found [here](./Rscripts/R_Introductory_tutorial_part_1.R)
 3. Introduction to `R`: [part 2. Basic operations and operators in `R`](https://www.youtube.com/watch?v=UrtWeRPpWCw)
 4. Introduction to `R`: [part 3. Element-by-element operations, booleans & basic functions](https://www.youtube.com/watch?v=8VcysxMmpg0)
 5. Introduction to `R`: [part 4. objects and classes in `R`](https://www.youtube.com/watch?v=-qDiqnEVaLk)
