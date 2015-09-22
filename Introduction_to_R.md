@@ -6,5 +6,5 @@ Readings: From Bioinformatics Data Skills, chapter 8 presents a crash course in 
 
 
 1. Why use `R` (and why learn to program):Motivating example of working counts of expression data from RNAseq.
-2. Introduction to `R`: [![IMAGE `R` as a calculator](https://youtu.be/Kyxx9_NLlUY/0.jpg)](https://youtu.be/Kyxx9_NLlUY)
+2. Introduction to `R`: [[`R` as a calculator](https://youtu.be/Kyxx9_NLlUY/0.jpg)](https://youtu.be/Kyxx9_NLlUY)
 3. 
