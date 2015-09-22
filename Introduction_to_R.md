@@ -17,8 +17,10 @@ dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll
 
 *Please note, the scripts may look a bit different, as I have edited them a bit after making the screencasts. All of the important parts are still there!*
 
+The first link is to the screencast itself (hosted on youtube). The subsequent links are to the scripts and exercises.
+
 1. Why use `R` (and why learn to program):Motivating example of working counts of expression data from RNAseq.
-2. Introduction to `R`: [part 1. `R` as a calculator](https://youtu.be/Kyxx9_NLlUY/0.jpg)
+2. Introduction to `R`: [part 1. `R` as a calculator](https://youtu.be/Kyxx9_NLlUY)
   - the introductory script can be found [here](./Rscripts/R_Introductory_tutorial_part_1.R)
 3. Introduction to `R`: [part 2. Basic operations and operators in `R`](https://www.youtube.com/watch?v=UrtWeRPpWCw)
 4. Introduction to `R`: [part 3. Element-by-element operations, booleans & basic functions](https://www.youtube.com/watch?v=8VcysxMmpg0)
@@ -27,5 +29,9 @@ dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll
 7. Introduction to `R`: [part 6. writing your own functions in `R`](https://www.youtube.com/watch?v=Mth_tvrxik0)
 8. Introduction to `R`: [part 7. regular sequences and indexing](https://www.youtube.com/watch?v=V5_vb7gLtrk)
 9. Introduction to `R`: [part 8. getting data into `R`](https://www.youtube.com/watch?v=SlupCvzH2nM)
+  - the script for this activity can be found [here](./Rscripts/R_Introductory_tutorial_part_2.R)
+  - the data can be downloaded [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv)
 10. Introduction to `R`: [part 9. control flow in `R`](https://www.youtube.com/watch?v=FgtqJ8-DN7k)
+  - The script can be viewed [here](./Rscripts/IntroductionControlFlowR.R)
 11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ) 
+  - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
