@@ -19,7 +19,7 @@ dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll
 
 The first link is to the screencast itself (hosted on youtube). The subsequent links are to the scripts and exercises.
 
-1. Why use `R` (and why learn to program):Motivating example of working counts of expression data from RNAseq.
+1. Why use `R` (and why learn to program): Motivating example of working counts of expression data from RNAseq (not yet completed, so skip ahead!).
 2. Introduction to `R`: [part 1. `R` as a calculator](https://youtu.be/Kyxx9_NLlUY)
   - the introductory script can be found [here](./Rscripts/R_Introductory_tutorial_part_1.R)
 3. Introduction to `R`: [part 2. Basic operations and operators in `R`](https://www.youtube.com/watch?v=UrtWeRPpWCw)
