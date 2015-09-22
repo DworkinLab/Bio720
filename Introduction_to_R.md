@@ -24,6 +24,7 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   - the introductory script can be found [here](./Rscripts/R_Introductory_tutorial_part_1.R)
   - the first exercise is [here](./R_exercises/R_exercise_1.md)
 3. Introduction to `R`: [part 2. Basic operations and operators in `R`](https://www.youtube.com/watch?v=UrtWeRPpWCw)
+- the second exercise is [here](./R_exercises/R_exercise_2.md)
 4. Introduction to `R`: [part 3. Element-by-element operations, booleans & basic functions](https://www.youtube.com/watch?v=8VcysxMmpg0)
 5. Introduction to `R`: [part 4. objects and classes in `R`](https://www.youtube.com/watch?v=-qDiqnEVaLk)
 6. Introduction to `R`: [part 5. workspaces and getting help in `R`](https://www.youtube.com/watch?v=0Y9IRfJwzjo)
