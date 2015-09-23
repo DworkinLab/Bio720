@@ -1,5 +1,9 @@
 # `R` exercise 3
 
+0. If you are not working with a fresh R instance, then use the command:
+```R
+rm(list=ls()
+```
 1. Create a vector ` a` with 5 numbers.
 2. Create a vector `b` with 6 numbers.
 3. What happens when you add `a` and `b`?
