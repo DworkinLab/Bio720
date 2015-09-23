@@ -14,6 +14,7 @@ C <- matrix(1:99, nrow=10, ncol=10)
   - What happens with `C`? 
   - Does `R` still produce an object `C`?
   - How did it deal with the "problem"? 
+
 5. How many rows and columns does `C` have?
 6. What is the final element (final row by final column) in `C`?  
 7. Remove the object `C`
