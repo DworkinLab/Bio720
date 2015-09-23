@@ -34,6 +34,7 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 7. Introduction to `R`: [part 6. writing your own functions in `R`](https://www.youtube.com/watch?v=Mth_tvrxik0)
   - the sixth exercise is [here](./R_exercises/R_exercise_6.md)
 8. Introduction to `R`: [part 7. regular sequences and indexing](https://www.youtube.com/watch?v=V5_vb7gLtrk)
+  - the seventh exercise is [here](./R_exercises/R_exercise_7.md)
 9. Introduction to `R`: [part 8. getting data into `R`](https://www.youtube.com/watch?v=SlupCvzH2nM)
   - the script for this activity can be found [here](./Rscripts/R_Introductory_tutorial_part_2.R)
   - the data can be downloaded [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv)
