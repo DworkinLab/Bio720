@@ -13,7 +13,7 @@ R flavoured markdown (`.Rmd`) extends the idea of markdown by enabling the runni
 
 One of the most important things you can do from the get go is organize your project. What you want to avoid is this:
 
-![alt text](http://www.phdcomics.com/comics/archive/phd052810s.gif "PhD Comics 1323, Copyright Jorge Cham")
+![alt text](http://www.phdcomics.com/comics.php?f=1323 "PhD Comics 1323, Copyright Jorge Cham")
 
 So the best thing to do is decide from the outset on a useful and clear way to organize your project and your files (and using version control to avoid the problem above). Your book (Bioinformatics Data Skills) goes over this in detail, and another good resource is [here](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000424). However, here is my own short and sweet version of it. Each project should be organized into its own folder, with a specific (and common for all projects) set of sub-folders:
 
