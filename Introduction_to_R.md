@@ -40,5 +40,21 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   - the data can be downloaded [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv)
 10. Introduction to `R`: [part 9. control flow in `R`](https://www.youtube.com/watch?v=FgtqJ8-DN7k)
   - The script can be viewed [here](./Rscripts/IntroductionControlFlowR.R)
-11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ) 
+11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ)
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
+
+
+## Notes for Ian to add & improve the screencasts
+- seperate "getting data into R" into 3-4 shorter screencasts(with exercises)
+- seperate " control flow" into one on if & ifelse, and another on loops.
+- seperate the apply screencasts (one for apply alone, additional one for tapply, sapply, lapply)
+- new screencast on lists as a class (heterogeneous collections) and working with them
+- new screencast on data.frame as a list, but also relationship to matrix.
+- new screencast on ordering data sets, and the use of the index in R.
+- introduce tidyr, dplyr, reshape2, data.table, readr, libraries
+- base plotting Introduction
+- ggplot2 plotting syntax (and the Hadleyverse syntax as a "macro language" within R)
+- real programming things? (declarative syntax, S3 and S4 objects,  )
+- things to make R work better with big data sets (pre-allocating space for incoming data, pre-allocating objects and filling them instead of growing objects. Dynamic typing/checking at runtime)
+- knitr (with and without Rstudio)
+- version control and github (with and without Rstudio)
