@@ -1,0 +1,135 @@
+---
+title: "Bio720_InClassActivitySept28_2015"
+author: "Ian Dworkin"
+date: "October 2, 2015"
+output: html_document
+---
+
+In class this week our [in class activity][./R_exercise_InClass.md] worked to import some RNAseq count data sets, examine them and then do some simple plotting. Below I summarize how we went about doing each step. **Please keep in mind** this is a fairly inefficient way to do it, but they are good for practicing `R` fundamentals. I will go over in class (in a few weeks) a much better approach to do these types of operations.
+
+# importing data into `R`
+After you have downloaded the data onto your local machine, and placed them in your project directory, you need to navigate to that directory with the files. For me (on my computer) that would be:
+
+#```{r}
+#setwd("~/Dropbox/Bio720/Sept28_data/")
+#```
+
+We will then import the data into `R`. For large numbers of files (or large files) there are a number of tricks that we will learn in the near future. For now, since we only have 4 files we will do them individually.
+
+```{r}
+file1_sm <- read.table("~/Dropbox/Bio720/Sept28_data/M200_sm_male_hdhorn_ACAGTG_L008_results.xprs", h=T)
+file2_sm <- read.table("~/Dropbox/Bio720/Sept28_data/M172_sm_male_hdhorn_ATCACG_L003_results.xprs", h=T)
+file3_lg <- read.table("~/Dropbox/Bio720/Sept28_data/M257_lg_male_hdhorn_ATGTCA_L002_results.xprs", h=T)
+file4_lg <- read.table("~/Dropbox/Bio720/Sept28_data/M180_lg_male_hdhorn_CAGATC_L001_results.xprs", h=T)
+```
+
+## Checking that the data imported correctly
+
+It is always important to check that the data imported correctly. So check the numbers of rows and columns for each to make sure. You could use `dim()` or `str()` to do so. i.e. (repeat for each file).
+
+```{r}
+str(file1_sm)
+```
+(How can you compare this to the number of lines in the original file? at the command line?)
+
+I would also typically check the `head()` and `tail()` of each file as well. Since this has 15 columns it will not print out nicely to the screen. However you should do it for each file.
+
+## Re-ordering the data
+
+As I mentioned in class. [eXpress](http://bio.math.berkeley.edu/eXpress/overview.html) does not order all of the genes for each different file. You can see that here for two of the files.
+
+```{r}
+file1_sm[1:3,1:3]
+file2_sm[1:3,1:3]
+```
+
+So we need to sort them so that we can compare them (i.e each row corresponds to the same genes). There are some libraries (namely `plyr` and `dplyr`) that can help with this, but we will use the "standard" `R` approach, by re-ordering based on a column using the index. Let's first do this for one.
+
+```{r}
+file1_ordered <- file1_sm[order(file1_sm$target_id), ]
+```
+
+So what have we done? Well we are making a new object (`file1_ordered`) copied from the original file. However, instead of copying it exactly we are re-ordering the rows (remember `[rows,columns]`) using `order()` based on one of the columns (`target_id`). 
+
+Let's go ahead and do this for each of the files:
+```{r}
+file2_ordered <- file2_sm[order(file2_sm$target_id), ]
+file3_ordered <- file3_lg[order(file3_lg$target_id), ]
+file4_ordered <- file4_lg[order(file4_lg$target_id), ]
+```
+
+Now let us check that they are the same sizes as before
+```{r}
+dim(file1_ordered)
+dim(file2_ordered)
+dim(file3_ordered)
+dim(file4_ordered)
+```
+
+And that they have been re-ordered properly.
+
+```{r}
+file1_ordered[1:3,2]
+file2_ordered[1:3,2]
+file3_ordered[1:3,2]
+file4_ordered[1:3,2]
+```
+
+I will let you check the last few elements for each object as an exercise (using `tail()` or the index).
+
+## Making a single matrix (or data.frame) for "tpm"
+For a quick check we will extract one estimate of transcript abundance, the "tpm" (transcripts per million) from each of the four objects and put them in a new object together. We could do this either into a matrix (since they are all numeric) or a data.frame (which would allow us to also add gene names as a column).
+
+So into a matrix (again sacrificing efficiency for clarity):
+###matrix
+```{r}
+tpm_matrix <- cbind(file1_ordered$tpm,file2_ordered$tpm,
+                    file3_ordered$tpm, file4_ordered$tpm)
+head(tpm_matrix)
+dim(tpm_matrix)
+```
+
+Note that this did not maintain column names, and we have no identifiers left. We can fix this easily.
+
+```{r}
+colnames(tpm_matrix) <- c("sm1", "sm2", "lg1", "lg2")
+head(tpm_matrix)
+```
+
+We could also add gene names as row names
+```{r}
+rownames(tpm_matrix) <- file1_ordered$target_id
+head(tpm_matrix)
+```
+
+### data.frame
+It may be more useful sometimes to make a data.frame out of it. This is also pretty easy:
+  
+```{r}  
+tpm_df <- data.frame(sm1 = file1_ordered$tpm,
+                     sm2 = file2_ordered$tpm,
+                     lg1 = file3_ordered$tpm, 
+                     lg2 = file4_ordered$tpm, 
+                     geneID = file1_ordered$target_id )
+```
+
+
+## correlations
+To look at the correlations among the estimated tpm's for each sample, we can use the `cor()` function. This only accepts numeric variables so you can use the matrix as is, or just subset the 4 columns in the data.frame.
+
+```{r}
+cor(tpm_matrix)
+```
+
+or
+
+```{r}
+cor(tpm_df[,1:4])
+```
+
+We can also produce quick and dirty scatterplots
+
+
+```{r, echo=FALSE}
+plot(tpm_df[,1:4])
+```
