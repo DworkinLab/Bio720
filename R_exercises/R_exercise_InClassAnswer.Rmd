@@ -8,11 +8,11 @@ output: html_document
 In class this week our [in class activity][./R_exercise_InClass.md] worked to import some RNAseq count data sets, examine them and then do some simple plotting. Below I summarize how we went about doing each step. **Please keep in mind** this is a fairly inefficient way to do it, but they are good for practicing `R` fundamentals. I will go over in class (in a few weeks) a much better approach to do these types of operations.
 
 # importing data into `R`
-After you have downloaded the data onto your local machine, and placed them in your project directory, you need to navigate to that directory with the files. For me (on my computer) that would be:
+After you have downloaded the data onto your local machine, and placed them in your project directory, you need to navigate to that directory with the files. 
 
-#```{r}
-#setwd("~/Dropbox/Bio720/Sept28_data/")
-#```
+```{r}
+#setwd("~/Dropbox/Bio720/Sept28_data/") # set to appropriate working directory
+```
 
 We will then import the data into `R`. For large numbers of files (or large files) there are a number of tricks that we will learn in the near future. For now, since we only have 4 files we will do them individually.
 

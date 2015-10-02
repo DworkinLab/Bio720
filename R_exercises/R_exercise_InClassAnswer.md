@@ -10,9 +10,9 @@ In class this week our [in class activity][./R_exercise_InClass.md] worked to im
 # importing data into `R`
 After you have downloaded the data onto your local machine, and placed them in your project directory, you need to navigate to that directory with the files. For me (on my computer) that would be:
 
-#```{r}
-#setwd("~/Dropbox/Bio720/Sept28_data/")
-#```
+```{r}
+#setwd("~/Dropbox/Bio720/Sept28_data/") # set to your directory
+```
 
 We will then import the data into `R`. For large numbers of files (or large files) there are a number of tricks that we will learn in the near future. For now, since we only have 4 files we will do them individually.
 
@@ -93,7 +93,7 @@ So we need to sort them so that we can compare them (i.e each row corresponds to
 file1_ordered <- file1_sm[order(file1_sm$target_id), ]
 ```
 
-So what have we done? Well we are making a new object (`file1_ordered`) copied from the original file. However, instead of copying it exactly we are re-ordering the rows (remember `[rows,columns]`) using `order()` based on one of the columns (`target_id`). 
+So what have we done? Well we are making a new object (`file1_ordered`) copied from the original file. However, instead of copying it exactly we are re-ordering the rows (remember `[rows,columns]`) using `order()` based on one of the columns (`target_id`).
 
 Let's go ahead and do this for each of the files:
 
@@ -274,13 +274,13 @@ head(tpm_matrix)
 
 ### data.frame
 It may be more useful sometimes to make a data.frame out of it. This is also pretty easy:
-  
+
 
 ```r
 tpm_df <- data.frame(sm1 = file1_ordered$tpm,
                      sm2 = file2_ordered$tpm,
-                     lg1 = file3_ordered$tpm, 
-                     lg2 = file4_ordered$tpm, 
+                     lg1 = file3_ordered$tpm,
+                     lg2 = file4_ordered$tpm,
                      geneID = file1_ordered$target_id )
 ```
 
@@ -319,4 +319,4 @@ cor(tpm_df[,1:4])
 We can also produce quick and dirty scatterplots
 
 
-![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png)
