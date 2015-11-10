@@ -1,3 +1,8 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
 # Bio720 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
 
 ---
@@ -38,9 +43,9 @@ library("gplots")
 
 
 Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple
-```{r}
-setwd("../data")
-```
+#```{r}
+#setwd("../data")
+#```
 
 ## Loading the count data into R
 
@@ -141,7 +146,7 @@ dim(tot_count_matrix)
 
 ```{r simple scatter plot across samples, echo=FALSE}
 plot(log(tot_count_matrix[,1]),log(tot_count_matrix[,2]) )
-'''
+```
 
 Now we set up the data frame for the experimental design. All of the info we need is in the parse_names variable.Let's take a look at parse_names again.
 
@@ -330,9 +335,11 @@ hd_horn == "hdhorn" # Just setting up a logical statement to use to extract the 
 subsetting for hd horn
 ```{r}
 tot_count_hd_horn <- tot_count_matrix[ , hd_horn == "hdhorn"]
+
 experimental_design_hd_horn <- experimental_design[hd_horn == "hdhorn",]
-experimental_design_hd_horn$tissue <- droplevels(experimental_design_hd_horn$tissue)
-experimental_design_hd_horn$sample_names <- droplevels(experimental_design_hd_horn$sample_names)
+
+#experimental_design_hd_horn$tissue <- #droplevels(experimental_design_hd_horn$tissue)
+#experimental_design_hd_horn$sample_names <- #droplevels(experimental_design_hd_horn$sample_names)
 ```
 
 Checking that nothing went amiss 
