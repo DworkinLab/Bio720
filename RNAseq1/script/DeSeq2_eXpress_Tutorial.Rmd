@@ -1,16 +1,13 @@
 ---
+title: "Differential Expression analysis using RNA-Seq and DESeq2"
+author: "Ian Dworkin"
+date: "November 10, 2015"
 output: 
   html_document: 
     keep_md: yes
 ---
 # Bio720 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
 
----
-output: 
-  html_document: 
-    keep_md: yes
-    number_sections: yes
----
 
 ## Background
 In this tutorial I will provide a basic overview of differential expression analysis for transcriptional profiling using RNA-Seq data. We will be using the [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) library in R. This approach utilizes a variant on the assumption of a negative binomially set of counts. This approach assumes that all you have going in are counts, that have not been normalized either for library size (or number of mapped reads), not for transcript length. 
@@ -19,7 +16,7 @@ In this tutorial I will provide a basic overview of differential expression anal
 This is a small part of the data for a project examining how both variation in sex and size (diet manipulations) influences transcriptional profiles for exaggerated traits (hyper-allometric) vs traits with normal allometry. This is from one particular species of rhino beetle where for the full study we extracted RNA from the developing tissues for the head and thoracic horns, wing and genitals.
 
 Here is an example of what these critters looks like from Wikipedia
-![Rhino beetle](https://en.wikipedia.org/wiki/Xylotrupes_ulysses#/media/File:Rhinoceros_Beetle_Side.JPG)
+![Rhino beetle By Joi Ito from Inbamura, Japan (Kabutomushi!) CC BY 2.0 (http://creativecommons.org/licenses/by/2.0), via Wikimedia Commons](https://upload.wikimedia.org/wikipedia/commons/a/a7/Kabutomushi-20070710.jpg)
 
 ## How counts were generated
 
@@ -43,9 +40,9 @@ library("gplots")
 
 
 Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple
-#```{r}
+```{r}
 #setwd("../data")
-#```
+```
 
 ## Loading the count data into R
 
@@ -60,7 +57,7 @@ This just makes an object storing all of the file names we need. We only need th
 in_dir = dir(, pattern="_results.xprs")
 ```
 
-Let's take a look at `{r} in_dir` in the `R` console.
+Let's take a look at `in_dir` in the `R` console.
 
 When loading large data sets into R (something R is not great at), there are a few tricks (including using libraries that help like `data.table` library). The easiest and most helpful thing to speed it up is to specify how many rows the data will have.
 
@@ -107,7 +104,7 @@ Now we need to set up the `R` object for the experimental design,to go along wit
 
 First we start with some data parsing.
 
-I always name my files with an underscore as delimiter to make life easy when I need to break them up for groups. I will know use the `{r} strsplit()` to split the file names based on sex, size and tissue (which we will not use for this tutorial).
+I always name my files with an underscore as delimiter to make life easy when I need to break them up for groups. I will know use the `strsplit()` to split the file names based on sex, size and tissue (which we will not use for this tutorial).
 
 ```{r}
 parse_names <- strsplit(in_dir, split="_")
@@ -148,7 +145,7 @@ dim(tot_count_matrix)
 plot(log(tot_count_matrix[,1]),log(tot_count_matrix[,2]) )
 ```
 
-Now we set up the data frame for the experimental design. All of the info we need is in the parse_names variable.Let's take a look at parse_names again.
+Now we set up the data frame for the experimental design. All of the info we need is in the `parse_names` variable.Let's take a look at `parse_names` again.
 
 ```{r}
 head(parse_names)
@@ -180,8 +177,8 @@ test_lane_effects2 <- DESeq(test_lane_effects) # We know fit the simple model
 ```
 
 This generates a fairly complex object
-```{r, echo=FALSE}
-str(test_lane_effects2)
+```{r, echo=TRUE}
+#str(test_lane_effects2)
 ```
 
 For the moment we can ask whether any genes show evidence of different expression based solely on lane to lane variation.
@@ -205,7 +202,7 @@ Let's talk about what this means.
 ```{r} 
 for_pca <- rlog(test_lane_effects2, blind=TRUE) 
 ```
-`rlog` is one approach to asjusting for both library size and dispersopm among samples. `{r} blind=TRUE`, has it ignore information from the model (in this case lane).
+`rlog` is one approach to asjusting for both library size and dispersopm among samples. `blind=TRUE`, has it ignore information from the model (in this case lane).
 
 ```{r lane effects, echo=TRUE}
 plotPCA(for_pca, intgroup=c("lane")) # no obvious lane effects.
@@ -287,8 +284,7 @@ But we actually observe
 hist(res1$pvalue)
 ```
 
-FDR methods exploit this discepency.
-
+FDR methods exploit this.
 
 
 ### Contrasts with DESeq2 
@@ -338,8 +334,8 @@ tot_count_hd_horn <- tot_count_matrix[ , hd_horn == "hdhorn"]
 
 experimental_design_hd_horn <- experimental_design[hd_horn == "hdhorn",]
 
-#experimental_design_hd_horn$tissue <- #droplevels(experimental_design_hd_horn$tissue)
-#experimental_design_hd_horn$sample_names <- #droplevels(experimental_design_hd_horn$sample_names)
+#experimental_design_hd_horn$tissue <- droplevels(experimental_design_hd_horn$tissue)
+#experimental_design_hd_horn$sample_names <- droplevels(experimental_design_hd_horn$sample_names)
 ```
 
 Checking that nothing went amiss 
@@ -405,5 +401,5 @@ with(hdhorn_dat[hdhorn_dat$padj <0.05, ],
 abline(a=0, b=0 , col="blue")
 ```
 
-# Notice something different about fitting the sex effect as a contrast in a larger model VS as its own model?
+Notice something different about fitting the sex effect as a contrast in a larger model VS as its own model?
    

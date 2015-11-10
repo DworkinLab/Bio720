@@ -1,11 +1,8 @@
+# Differential Expression analysis using RNA-Seq and DESeq2
+Ian Dworkin  
+November 10, 2015  
 # Bio720 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
 
----
-output: 
-  html_document: 
-    keep_md: yes
-    number_sections: yes
----
 
 ## Background
 In this tutorial I will provide a basic overview of differential expression analysis for transcriptional profiling using RNA-Seq data. We will be using the [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) library in R. This approach utilizes a variant on the assumption of a negative binomially set of counts. This approach assumes that all you have going in are counts, that have not been normalized either for library size (or number of mapped reads), not for transcript length. 
@@ -14,7 +11,7 @@ In this tutorial I will provide a basic overview of differential expression anal
 This is a small part of the data for a project examining how both variation in sex and size (diet manipulations) influences transcriptional profiles for exaggerated traits (hyper-allometric) vs traits with normal allometry. This is from one particular species of rhino beetle where for the full study we extracted RNA from the developing tissues for the head and thoracic horns, wing and genitals.
 
 Here is an example of what these critters looks like from Wikipedia
-![Rhino beetle](https://en.wikipedia.org/wiki/Xylotrupes_ulysses#/media/File:Rhinoceros_Beetle_Side.JPG)
+![Rhino beetle By Joi Ito from Inbamura, Japan (Kabutomushi!) CC BY 2.0 (http://creativecommons.org/licenses/by/2.0), via Wikimedia Commons](https://upload.wikimedia.org/wikipedia/commons/a/a7/Kabutomushi-20070710.jpg)
 
 ## How counts were generated
 
@@ -115,9 +112,10 @@ library("gplots")
 
 
 Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple
-#```{r}
+
+```r
 #setwd("../data")
-#```
+```
 
 ## Loading the count data into R
 
@@ -133,7 +131,7 @@ This just makes an object storing all of the file names we need. We only need th
 in_dir = dir(, pattern="_results.xprs")
 ```
 
-Let's take a look at `{r} in_dir` in the `R` console.
+Let's take a look at `in_dir` in the `R` console.
 
 When loading large data sets into R (something R is not great at), there are a few tricks (including using libraries that help like `data.table` library). The easiest and most helpful thing to speed it up is to specify how many rows the data will have.
 
@@ -268,7 +266,7 @@ Now we need to set up the `R` object for the experimental design,to go along wit
 
 First we start with some data parsing.
 
-I always name my files with an underscore as delimiter to make life easy when I need to break them up for groups. I will know use the `{r} strsplit()` to split the file names based on sex, size and tissue (which we will not use for this tutorial).
+I always name my files with an underscore as delimiter to make life easy when I need to break them up for groups. I will know use the `strsplit()` to split the file names based on sex, size and tissue (which we will not use for this tutorial).
 
 
 ```r
@@ -383,7 +381,7 @@ dim(tot_count_matrix)
 
 ![](DeSeq2_eXpress_Tutorial_files/figure-html/simple scatter plot across samples-1.png) 
 
-Now we set up the data frame for the experimental design. All of the info we need is in the parse_names variable.Let's take a look at parse_names again.
+Now we set up the data frame for the experimental design. All of the info we need is in the `parse_names` variable.Let's take a look at `parse_names` again.
 
 
 ```r
@@ -438,172 +436,8 @@ test_lane_effects2 <- DESeq(test_lane_effects) # We know fit the simple model
 
 This generates a fairly complex object
 
-```
-## Formal class 'DESeqDataSet' [package "DESeq2"] with 6 slots
-##   ..@ design            :Class 'formula' length 2 ~lane
-##   .. .. ..- attr(*, ".Environment")=<environment: R_GlobalEnv> 
-##   ..@ dispersionFunction:function (q)  
-##   .. ..- attr(*, "coefficients")= Named num [1:2] 0.187 10.159
-##   .. .. ..- attr(*, "names")= chr [1:2] "asymptDisp" "extraPois"
-##   .. ..- attr(*, "fitType")= chr "parametric"
-##   .. ..- attr(*, "varLogDispEsts")= num 1.62
-##   .. ..- attr(*, "dispPriorVar")= num 1.34
-##   ..@ exptData          :Formal class 'SimpleList' [package "S4Vectors"] with 4 slots
-##   .. .. ..@ listData       : list()
-##   .. .. ..@ elementType    : chr "ANY"
-##   .. .. ..@ elementMetadata: NULL
-##   .. .. ..@ metadata       : list()
-##   ..@ rowData           :Formal class 'GRangesList' [package "GenomicRanges"] with 5 slots
-##   .. .. ..@ unlistData     :Formal class 'GRanges' [package "GenomicRanges"] with 6 slots
-##   .. .. .. .. ..@ seqnames       :Formal class 'Rle' [package "S4Vectors"] with 4 slots
-##   .. .. .. .. .. .. ..@ values         : Factor w/ 0 levels: 
-##   .. .. .. .. .. .. ..@ lengths        : int(0) 
-##   .. .. .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. .. .. ..@ metadata       : list()
-##   .. .. .. .. ..@ ranges         :Formal class 'IRanges' [package "IRanges"] with 6 slots
-##   .. .. .. .. .. .. ..@ start          : int(0) 
-##   .. .. .. .. .. .. ..@ width          : int(0) 
-##   .. .. .. .. .. .. ..@ NAMES          : NULL
-##   .. .. .. .. .. .. ..@ elementType    : chr "integer"
-##   .. .. .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. .. .. ..@ metadata       : list()
-##   .. .. .. .. ..@ strand         :Formal class 'Rle' [package "S4Vectors"] with 4 slots
-##   .. .. .. .. .. .. ..@ values         : Factor w/ 3 levels "+","-","*": 
-##   .. .. .. .. .. .. ..@ lengths        : int(0) 
-##   .. .. .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. .. .. ..@ metadata       : list()
-##   .. .. .. .. ..@ elementMetadata:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-##   .. .. .. .. .. .. ..@ rownames       : NULL
-##   .. .. .. .. .. .. ..@ nrows          : int 0
-##   .. .. .. .. .. .. ..@ listData       : Named list()
-##   .. .. .. .. .. .. ..@ elementType    : chr "ANY"
-##   .. .. .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. .. .. ..@ metadata       : list()
-##   .. .. .. .. ..@ seqinfo        :Formal class 'Seqinfo' [package "GenomeInfoDb"] with 4 slots
-##   .. .. .. .. .. .. ..@ seqnames   : chr(0) 
-##   .. .. .. .. .. .. ..@ seqlengths : int(0) 
-##   .. .. .. .. .. .. ..@ is_circular: logi(0) 
-##   .. .. .. .. .. .. ..@ genome     : chr(0) 
-##   .. .. .. .. ..@ metadata       : list()
-##   .. .. ..@ elementMetadata:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-##   .. .. .. .. ..@ rownames       : NULL
-##   .. .. .. .. ..@ nrows          : int 5076
-##   .. .. .. .. ..@ listData       :List of 57
-##   .. .. .. .. .. ..$ baseMean               : num [1:5076] 422.1 32.4 3697.4 65.7 14.2 ...
-##   .. .. .. .. .. ..$ baseVar                : num [1:5076] 4798 343 7476451 332 128 ...
-##   .. .. .. .. .. ..$ allZero                : logi [1:5076] FALSE FALSE FALSE FALSE FALSE FALSE ...
-##   .. .. .. .. .. ..$ dispGeneEst            : num [1:5076] 0.0249 0.1254 1.0703 0.0455 0.5131 ...
-##   .. .. .. .. .. ..$ dispFit                : num [1:5076] 0.211 0.501 0.19 0.342 0.901 ...
-##   .. .. .. .. .. ..$ dispersion             : num [1:5076] 0.0383 0.1715 0.9022 0.0754 0.5679 ...
-##   .. .. .. .. .. ..$ dispIter               : int [1:5076] 8 9 10 11 5 9 5 9 9 9 ...
-##   .. .. .. .. .. ..$ dispOutlier            : logi [1:5076] FALSE FALSE FALSE FALSE FALSE FALSE ...
-##   .. .. .. .. .. ..$ dispMAP                : num [1:5076] 0.0383 0.1715 0.9022 0.0754 0.5679 ...
-##   .. .. .. .. .. ..$ Intercept              : num [1:5076] 8.71 4.91 11.77 6.01 3.65 ...
-##   .. .. .. .. .. ..$ laneL001               : num [1:5076] 0.16 -0.35 0.329 -0.516 -0.258 ...
-##   .. .. .. .. .. ..$ laneL002               : num [1:5076] -0.13 -0.711 0.0926 0.0979 0.5428 ...
-##   .. .. .. .. .. ..$ laneL003               : num [1:5076] -0.149 0.0884 0.0809 0.3494 0.2776 ...
-##   .. .. .. .. .. ..$ laneL004               : num [1:5076] 0.0185 0.1998 -0.1817 0.1131 0.4096 ...
-##   .. .. .. .. .. ..$ laneL005               : num [1:5076] 0.0334 -0.2167 -0.4563 -0.1141 0.6011 ...
-##   .. .. .. .. .. ..$ laneL006               : num [1:5076] -0.0201 0.0569 0.366 -0.0433 -0.5678 ...
-##   .. .. .. .. .. ..$ laneL007               : num [1:5076] 0.2361 0.9347 0.0774 0.2249 -0.4012 ...
-##   .. .. .. .. .. ..$ laneL008               : num [1:5076] -0.14909 -0.00209 -0.30814 -0.11198 -0.60461 ...
-##   .. .. .. .. .. ..$ SE_Intercept           : num [1:5076] 0.0728 0.1639 0.3426 0.1089 0.2918 ...
-##   .. .. .. .. .. ..$ SE_laneL001            : num [1:5076] 0.182 0.344 0.418 0.262 0.418 ...
-##   .. .. .. .. .. ..$ SE_laneL002            : num [1:5076] 0.183 0.351 0.418 0.257 0.417 ...
-##   .. .. .. .. .. ..$ SE_laneL003            : num [1:5076] 0.185 0.346 0.418 0.259 0.418 ...
-##   .. .. .. .. .. ..$ SE_laneL004            : num [1:5076] 0.182 0.337 0.418 0.254 0.417 ...
-##   .. .. .. .. .. ..$ SE_laneL005            : num [1:5076] 0.182 0.34 0.418 0.255 0.417 ...
-##   .. .. .. .. .. ..$ SE_laneL006            : num [1:5076] 0.183 0.341 0.418 0.258 0.419 ...
-##   .. .. .. .. .. ..$ SE_laneL007            : num [1:5076] 0.183 0.336 0.418 0.257 0.419 ...
-##   .. .. .. .. .. ..$ SE_laneL008            : num [1:5076] 0.184 0.342 0.418 0.26 0.419 ...
-##   .. .. .. .. .. ..$ MLE_Intercept          : num [1:5076] 8.88 4.46 12.44 5.43 3.15 ...
-##   .. .. .. .. .. ..$ MLE_lane_L002_vs_L001  : num [1:5076] -0.306 -0.486 -0.473 0.691 1.423 ...
-##   .. .. .. .. .. ..$ MLE_lane_L003_vs_L001  : num [1:5076] -0.326 0.562 -0.497 0.972 0.992 ...
-##   .. .. .. .. .. ..$ MLE_lane_L004_vs_L001  : num [1:5076] -0.149 0.698 -1.081 0.707 1.201 ...
-##   .. .. .. .. .. ..$ MLE_lane_L005_vs_L001  : num [1:5076] -0.134 0.175 -1.791 0.454 1.505 ...
-##   .. .. .. .. .. ..$ MLE_lane_L006_vs_L001  : num [1:5076] -0.1898 0.5207 0.0703 0.533 -0.6938 ...
-##   .. .. .. .. .. ..$ MLE_lane_L007_vs_L001  : num [1:5076] 0.0798 1.5994 -0.5048 0.8327 -0.314 ...
-##   .. .. .. .. .. ..$ MLE_lane_L008_vs_L001  : num [1:5076] -0.326 0.446 -1.392 0.456 -0.791 ...
-##   .. .. .. .. .. ..$ WaldStatistic_Intercept: num [1:5076] 119.7 30 34.3 55.2 12.5 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL001 : num [1:5076] 0.88 -1.017 0.787 -1.966 -0.616 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL002 : num [1:5076] -0.709 -2.028 0.221 0.381 1.301 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL003 : num [1:5076] -0.805 0.256 0.193 1.35 0.664 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL004 : num [1:5076] 0.102 0.593 -0.434 0.446 0.982 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL005 : num [1:5076] 0.183 -0.637 -1.091 -0.448 1.442 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL006 : num [1:5076] -0.11 0.167 0.875 -0.168 -1.356 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL007 : num [1:5076] 1.291 2.782 0.185 0.874 -0.958 ...
-##   .. .. .. .. .. ..$ WaldStatistic_laneL008 : num [1:5076] -0.81189 -0.00611 -0.73677 -0.43117 -1.4436 ...
-##   .. .. .. .. .. ..$ WaldPvalue_Intercept   : num [1:5076] 0.00 2.23e-197 1.45e-258 0.00 8.04e-36 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL001    : num [1:5076] 0.3789 0.3091 0.4312 0.0493 0.538 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL002    : num [1:5076] 0.4784 0.0425 0.8248 0.7032 0.1933 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL003    : num [1:5076] 0.421 0.798 0.847 0.177 0.507 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL004    : num [1:5076] 0.919 0.553 0.664 0.656 0.326 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL005    : num [1:5076] 0.854 0.524 0.275 0.654 0.149 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL006    : num [1:5076] 0.912 0.868 0.382 0.867 0.175 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL007    : num [1:5076] 0.1966 0.0054 0.8531 0.3824 0.338 ...
-##   .. .. .. .. .. ..$ WaldPvalue_laneL008    : num [1:5076] 0.417 0.995 0.461 0.666 0.149 ...
-##   .. .. .. .. .. ..$ betaConv               : logi [1:5076] TRUE TRUE TRUE TRUE TRUE TRUE ...
-##   .. .. .. .. .. ..$ betaIter               : num [1:5076] 4 8 9 6 10 27 6 10 7 5 ...
-##   .. .. .. .. .. ..$ deviance               : num [1:5076] 177 119 292 130 109 ...
-##   .. .. .. .. .. ..$ maxCooks               : logi [1:5076] NA NA NA NA NA NA ...
-##   .. .. .. .. ..@ elementType    : chr "ANY"
-##   .. .. .. .. ..@ elementMetadata:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-##   .. .. .. .. .. .. ..@ rownames       : NULL
-##   .. .. .. .. .. .. ..@ nrows          : int 57
-##   .. .. .. .. .. .. ..@ listData       :List of 2
-##   .. .. .. .. .. .. .. ..$ type       : chr [1:57] "intermediate" "intermediate" "intermediate" "intermediate" ...
-##   .. .. .. .. .. .. .. ..$ description: chr [1:57] "mean of normalized counts for all samples" "variance of normalized counts for all samples" "all counts for a gene are zero" "gene-wise estimates of dispersion" ...
-##   .. .. .. .. .. .. ..@ elementType    : chr "ANY"
-##   .. .. .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. .. .. ..@ metadata       : list()
-##   .. .. .. .. ..@ metadata       : list()
-##   .. .. ..@ partitioning   :Formal class 'PartitioningByEnd' [package "IRanges"] with 5 slots
-##   .. .. .. .. ..@ end            : int [1:5076] 0 0 0 0 0 0 0 0 0 0 ...
-##   .. .. .. .. ..@ NAMES          : chr [1:5076] "c1_g1_i1&514..1527@gi|91093034|ref|XP_970412.1|" "c100_g1_i1&108..818@gi|91091192|ref|XP_972192.1|" "c10000_g1_i2&1070..1519@gi|189240491|ref|XP_001810703.1|" "c10003_g2_i1&57..953@gi|189237943|ref|XP_001811459.1|" ...
-##   .. .. .. .. ..@ elementType    : chr "integer"
-##   .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. ..@ metadata       : list()
-##   .. .. ..@ elementType    : chr "GRanges"
-##   .. .. ..@ metadata       : list()
-##   ..@ colData           :Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-##   .. .. ..@ rownames       : chr [1:16] "1" "2" "3" "4" ...
-##   .. .. ..@ nrows          : int 16
-##   .. .. ..@ listData       :List of 6
-##   .. .. .. ..$ sample_names: Factor w/ 16 levels "F101_lg_female_hdhorn",..: 1 2 3 4 5 6 7 8 9 10 ...
-##   .. .. .. ..$ individual  : Factor w/ 16 levels "F101","F105",..: 1 2 3 4 5 6 7 8 9 10 ...
-##   .. .. .. ..$ size        : Factor w/ 2 levels "lg","sm": 1 1 1 2 2 2 2 1 2 1 ...
-##   .. .. .. ..$ sex         : Factor w/ 2 levels "female","male": 1 1 1 1 1 1 1 1 2 2 ...
-##   .. .. .. ..$ lane        : Factor w/ 8 levels "L001","L002",..: 8 6 1 3 7 2 4 5 4 6 ...
-##   .. .. .. ..$ sizeFactor  : Named num [1:16] 1.07 1.08 1.07 0.68 0.94 ...
-##   .. .. .. .. ..- attr(*, "names")= chr [1:16] "1" "2" "3" "4" ...
-##   .. .. ..@ elementType    : chr "ANY"
-##   .. .. ..@ elementMetadata:Formal class 'DataFrame' [package "S4Vectors"] with 6 slots
-##   .. .. .. .. ..@ rownames       : NULL
-##   .. .. .. .. ..@ nrows          : int 6
-##   .. .. .. .. ..@ listData       :List of 2
-##   .. .. .. .. .. ..$ type       : chr [1:6] "input" "input" "input" "input" ...
-##   .. .. .. .. .. ..$ description: chr [1:6] "" "" "" "" ...
-##   .. .. .. .. ..@ elementType    : chr "ANY"
-##   .. .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. .. ..@ metadata       : list()
-##   .. .. ..@ metadata       : list()
-##   ..@ assays            :Reference class 'ShallowSimpleListAssays' [package "GenomicRanges"] with 1 field
-##   .. ..$ data:Formal class 'SimpleList' [package "S4Vectors"] with 4 slots
-##   .. .. .. ..@ listData       :List of 3
-##   .. .. .. .. ..$ counts: int [1:5076, 1:16] 441 32 1917 61 7 22 183 1695 2138 1096 ...
-##   .. .. .. .. .. ..- attr(*, "dimnames")=List of 2
-##   .. .. .. .. .. .. ..$ : chr [1:5076] "c1_g1_i1&514..1527@gi|91093034|ref|XP_970412.1|" "c100_g1_i1&108..818@gi|91091192|ref|XP_972192.1|" "c10000_g1_i2&1070..1519@gi|189240491|ref|XP_001810703.1|" "c10003_g2_i1&57..953@gi|189237943|ref|XP_001811459.1|" ...
-##   .. .. .. .. .. .. ..$ : chr [1:16] "1" "2" "3" "4" ...
-##   .. .. .. .. ..$ mu    : num [1:5076, 1:16] 405.54 32.19 3019.22 64.04 8.81 ...
-##   .. .. .. .. .. ..- attr(*, "dimnames")=List of 2
-##   .. .. .. .. .. .. ..$ : chr [1:5076] "c1_g1_i1&514..1527@gi|91093034|ref|XP_970412.1|" "c100_g1_i1&108..818@gi|91091192|ref|XP_972192.1|" "c10000_g1_i2&1070..1519@gi|189240491|ref|XP_001810703.1|" "c10003_g2_i1&57..953@gi|189237943|ref|XP_001811459.1|" ...
-##   .. .. .. .. .. .. ..$ : chr [1:16] "1" "2" "3" "4" ...
-##   .. .. .. .. ..$ cooks : num [1:5076, 1:16] 4.62e-02 4.99e-05 6.11e-02 1.09e-02 1.85e-02 ...
-##   .. .. .. ..@ elementType    : chr "ANY"
-##   .. .. .. ..@ elementMetadata: NULL
-##   .. .. .. ..@ metadata       : list()
-##   .. ..and 14 methods, of which 2 are  possibly relevant:
-##   .. ..  .objectPackage, .objectParent
+```r
+#str(test_lane_effects2)
 ```
 
 For the moment we can ask whether any genes show evidence of different expression based solely on lane to lane variation.
@@ -645,7 +479,7 @@ Let's talk about what this means.
 ```r
 for_pca <- rlog(test_lane_effects2, blind=TRUE) 
 ```
-`rlog` is one approach to asjusting for both library size and dispersopm among samples. `{r} blind=TRUE`, has it ignore information from the model (in this case lane).
+`rlog` is one approach to asjusting for both library size and dispersopm among samples. `blind=TRUE`, has it ignore information from the model (in this case lane).
 
 
 ```r
@@ -661,7 +495,7 @@ and now for sex and size
 plotPCA(for_pca, intgroup=c("sex", "size"))
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-20-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-21-1.png) 
 
 ### We can also use some hierarchical clustering
 
@@ -726,14 +560,14 @@ While everything is stored, by default DESeq2 is evaluating the final term in th
 plotDispEsts(DESeq_data)
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-24-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-25-1.png) 
 
 
 ```r
 plotMA(DESeq_data, ylim=c(-2,2))
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-25-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-26-1.png) 
 
 Let's look at the results
 
@@ -840,10 +674,9 @@ But we actually observe
 hist(res1$pvalue)
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-27-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-28-1.png) 
 
-FDR methods exploit this discepency.
-
+FDR methods exploit this.
 
 
 ### Contrasts with DESeq2 
@@ -985,8 +818,8 @@ tot_count_hd_horn <- tot_count_matrix[ , hd_horn == "hdhorn"]
 
 experimental_design_hd_horn <- experimental_design[hd_horn == "hdhorn",]
 
-#experimental_design_hd_horn$tissue <- #droplevels(experimental_design_hd_horn$tissue)
-#experimental_design_hd_horn$sample_names <- #droplevels(experimental_design_hd_horn$sample_names)
+#experimental_design_hd_horn$tissue <- droplevels(experimental_design_hd_horn$tissue)
+#experimental_design_hd_horn$sample_names <- droplevels(experimental_design_hd_horn$sample_names)
 ```
 
 Checking that nothing went amiss 
@@ -1059,7 +892,7 @@ summary(res_hd_horn, alpha= 0.05)
 plotMA(res_hd_horn, ylim=c(-3,3))
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-37-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-38-1.png) 
 
 And the contrast
 
@@ -1088,7 +921,7 @@ with(hdhorn_dat[hdhorn_dat$padj <0.05, ],
 abline(a=0, b=1 , col="blue")
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-39-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-40-1.png) 
 
 # custom MA plot
 
@@ -1102,7 +935,7 @@ with(hdhorn_dat[hdhorn_dat$padj <0.05, ],
 abline(a=0, b=0 , col="blue")
 ```
 
-![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-40-1.png) 
+![](DeSeq2_eXpress_Tutorial_files/figure-html/unnamed-chunk-41-1.png) 
 
-# Notice something different about fitting the sex effect as a contrast in a larger model VS as its own model?
+Notice something different about fitting the sex effect as a contrast in a larger model VS as its own model?
    
