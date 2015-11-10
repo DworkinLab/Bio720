@@ -1,0 +1,409 @@
+---
+output: 
+  html_document: 
+    keep_md: yes
+---
+# Bio720 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
+
+---
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+---
+
+## Background
+In this tutorial I will provide a basic overview of differential expression analysis for transcriptional profiling using RNA-Seq data. We will be using the [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) library in R. This approach utilizes a variant on the assumption of a negative binomially set of counts. This approach assumes that all you have going in are counts, that have not been normalized either for library size (or number of mapped reads), not for transcript length. 
+
+## Data provenance 
+This is a small part of the data for a project examining how both variation in sex and size (diet manipulations) influences transcriptional profiles for exaggerated traits (hyper-allometric) vs traits with normal allometry. This is from one particular species of rhino beetle where for the full study we extracted RNA from the developing tissues for the head and thoracic horns, wing and genitals.
+
+Here is an example of what these critters looks like from Wikipedia
+![Rhino beetle](https://en.wikipedia.org/wiki/Xylotrupes_ulysses#/media/File:Rhinoceros_Beetle_Side.JPG)
+
+## How counts were generated
+
+While it is not particularly relevant to this tutorial, the reads were mapped to a de novo transcriptome
+
+1. Trimmed using [trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)
+2.mapping using [bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) to the [Trinity](https://github.com/trinityrnaseq/trinityrnaseq/wiki) assembled transcriptome (which was then ran through [transPS](https://bioinformatics.cs.vt.edu/zhanglab/transps/) blastx against another beetle, Tribolium.
+3. counts using [eXpress](http://bio.math.berkeley.edu/eXpress/overview.html).
+
+**Please note:** eXpress does not sort based on the transcript, so pre-sort either in shell or R. Also eXpress files are tab delimited.
+
+## Get `R` loaded, and let's get started.
+
+First we load in libraries in `R`.
+
+```{r}
+library(DESeq2)
+library("RColorBrewer")
+library("gplots")
+```
+
+
+Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple
+#```{r}
+#setwd("../data")
+#```
+
+## Loading the count data into R
+
+DESeq2 and other libraries often have helper functions for getting your count data in. In particular if you are using objects created from other tools that the same authors generated. However, if you are going to make your own pipeline, it is important to know how to write some simple R code to be able to get your data in, and to parse it so that it is in the format you need.
+
+Let's start by looking at one of the files that eXpress generates. As you will see, for each sample we have a whole text file with multiple columns. For this tutorial we only have 16 samples we have to worry about, but even so trying to copy and paste columns would be a horrible idea.
+
+Instead we will read in all of the files and extract what we want.
+
+This just makes an object storing all of the file names we need. We only need the files that end in `_results.xprs` (eXpress generates log files with similar names which we are not interested in).
+```{r}
+in_dir = dir(, pattern="_results.xprs")
+```
+
+Let's take a look at `{r} in_dir` in the `R` console.
+
+When loading large data sets into R (something R is not great at), there are a few tricks (including using libraries that help like `data.table` library). The easiest and most helpful thing to speed it up is to specify how many rows the data will have.
+
+
+So How many genes are there? We ask R to issue a system (i.e. Unix) command for the first file in the `in_dir` object.
+```{r}
+system(paste("wc -l ",in_dir[[1]]))
+```
+
+Now we import all of the data as a list of data frames.
+
+```{r}
+counts_in <- lapply(in_dir, function(x) read.table(x, header=T, sep = "", nrows=5077))
+```
+
+One annoying aspect of using `eXpress` is that it does not sort the data. Let's take a look at this.
+
+```{r}
+head(counts_in[[1]])
+head(counts_in[[2]])
+```
+
+So we go ahead and sort each of the data files based on gene name (the second column of each file).
+
+```{r}
+counts_sorted <- lapply(counts_in, function(x) x <- x[order(x[,2]),])
+#make matrix of counts
+```
+Note I am using total counts, not unique counts for this analysis. Since there were few multi-mapped reads based on the reference transcriptome I used, it seemed the most sensible option. However, this does make sense for most transcriptomes, so beware!!!! We will discuss this issue in detail next week and the costs and benefits of different approaches to dealing with multi-mapped reads. 
+
+
+```{r}
+tot_count_matrix <- matrix(unlist(lapply(counts_sorted, function(x) x$tot_counts)), 
+    nrow=5076, ncol=16)
+```
+
+Let's take a peak at this file
+```{r}
+head(tot_count_matrix)
+```
+
+## Setting up the experimental design object 
+Now we need to set up the `R` object for the experimental design,to go along with the counts.
+
+First we start with some data parsing.
+
+I always name my files with an underscore as delimiter to make life easy when I need to break them up for groups. I will know use the `{r} strsplit()` to split the file names based on sex, size and tissue (which we will not use for this tutorial).
+
+```{r}
+parse_names <- strsplit(in_dir, split="_")
+```
+
+Let's take a look at the object
+```{r}
+parse_names
+```
+
+Now we make a matrix of the names of treatment groups (for our experimental design matrix).
+
+```{r}
+parse_names <- matrix(unlist(parse_names), nrow=16, ncol=7, byrow=T)
+```
+
+Since we need sample names as column names, I reconstructed a simple version of the unique names
+
+```{r}
+col_names_counts <- paste(parse_names[,1], "_", parse_names[,2], "_", parse_names[,3], "_", parse_names[,4], sep="")
+```
+
+Finally I add column names to the counts
+
+```{r}
+colnames(tot_count_matrix) = col_names_counts # sample names as column names
+# add contig names as row names
+rownames(tot_count_matrix) = counts_sorted[[1]]$target_id
+```
+
+We check to make sure the matrix size makes sense.
+```{r}
+dim(tot_count_matrix)
+```
+
+
+```{r simple scatter plot across samples, echo=FALSE}
+plot(log(tot_count_matrix[,1]),log(tot_count_matrix[,2]) )
+```
+
+Now we set up the data frame for the experimental design. All of the info we need is in the parse_names variable.Let's take a look at parse_names again.
+
+```{r}
+head(parse_names)
+```
+
+```{r experimental design}
+experimental_design = data.frame(
+    sample_names = col_names_counts,  # sample name
+    individual = factor(parse_names[,1]), # each individual beetle
+    size = factor(parse_names[,2]),  # small or large beetle
+    sex = factor(parse_names[,3]),   # male or females
+    #tissue = factor(parse_names[,4]),  # tissue type, we don't need it.
+    lane = factor(parse_names[,6])      # Whick lane on the Illumina flowcell.
+    )
+```
+
+## Preliminary Quality Control analysis
+Before we begin any real analysis. It pays to take some looks at the data. I am not going to go through a full exploratory data analysis session here. But some obvious plots
+
+It is well known that there can be substantial lane to lane variation. For this experiment, it was designed so that 8 samples were run in each lane (barcoded), in a complete block randomized design. This enables us to control for lane effects if necessary. So let's take a look.
+
+First we create a DESeq data object using our counts, experimental design and a simple statistical model (more on this later)
+
+```{r}
+test_lane_effects <- DESeqDataSetFromMatrix(tot_count_matrix, experimental_design, 
+    design = formula(~ lane))
+
+test_lane_effects2 <- DESeq(test_lane_effects) # We know fit the simple model
+```
+
+This generates a fairly complex object
+```{r, echo=FALSE}
+str(test_lane_effects2)
+```
+
+For the moment we can ask whether any genes show evidence of different expression based solely on lane to lane variation.
+
+```{r}
+test_lane_effects2_results <- results(test_lane_effects2)
+summary(test_lane_effects2_results) # No evidence, but this is a bit incomplete
+```
+
+We can also plot the mean-dispersion relationship for this data.
+
+```{r plot Dispersion, echo=TRUE }
+plotDispEsts(test_lane_effects2) 
+```
+Let's talk about what this means.
+
+### Principal Components analysis and hierarchical clustering are useful tools to visualize patterns (and to identify potential confounds)
+
+ We can also use some multivariate approaches to look at variation. For PCA (checking it with a "blind" dispersion estimate to look for any funky effects. Not for biological inference).
+
+```{r} 
+for_pca <- rlog(test_lane_effects2, blind=TRUE) 
+```
+`rlog` is one approach to asjusting for both library size and dispersopm among samples. `{r} blind=TRUE`, has it ignore information from the model (in this case lane).
+
+```{r lane effects, echo=TRUE}
+plotPCA(for_pca, intgroup=c("lane")) # no obvious lane effects.
+```
+
+and now for sex and size
+
+```{r, echo=TRUE}
+plotPCA(for_pca, intgroup=c("sex", "size"))
+```
+
+### We can also use some hierarchical clustering
+
+For distance matrix for clustering QC
+```{r}
+rlogMat <- assay(for_pca) # just making a matrix of the counts that have been corrected for over-dispersion in a "blind" fashion
+distsRL <- dist(t(rlogMat)) # Computes a distance matrix (Euclidian Distance)
+mat <- as.matrix(distsRL)  # Make sure it is a matrix
+```
+
+We need to rename our new matrix of distances based on the samples.
+```{r}
+rownames(mat) <- colnames(mat) <-     with(colData(test_lane_effects2), paste(sex, size, lane, sep=" : "))
+    
+hc <- hclust(distsRL)  # performs hierarchical clustering
+hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)  # picking our colours
+```
+
+Now we generate the plot
+```{r heatmap, echo=TRUE}
+heatmap.2(mat, Rowv=as.dendrogram(hc),
+          symm=TRUE, trace="none",
+          col = rev(hmcol), margin=c(13, 13))
+```
+
+ While I checked that there was no evidence of lane effects (see the Likelihood Ratio Test below), I am keeping it in the model as it seems to have little effects. However, it is using up "df" (in the parameter estimation sense), so it may be worth ultimately getting rid of it.
+
+
+
+## Proceeding with the real analysis we care about! 
+Given the results from above, I am removing lane entirely.
+
+```{r}
+DESeq_data <- DESeqDataSetFromMatrix(tot_count_matrix, experimental_design, 
+    design = formula(~ sex + size + sex:size))
+
+DESeq_data <- DESeq(DESeq_data)
+```
+
+While everything is stored, by default DESeq2 is evaluating the final term in the model. In this case evidence of interactions between sex and size. We can look at thse
+
+```{r, echo=TRUE}
+plotDispEsts(DESeq_data)
+```
+
+```{r, echo=TRUE}
+plotMA(DESeq_data, ylim=c(-2,2))
+```
+
+Let's look at the results
+
+```{r}
+res1 <- results(DESeq_data, pAdjustMethod="BH") # How do we deal with correcting for multiple comparisons.
+
+head(res1)
+summary(res1) # only one gene which seems to be showing evidence of significant differences between size and sex
+resultsNames(DESeq_data)
+```
+
+Just to keep in mind. We expect a priori, with no true "signifcant" hits an approximately uniform distribution that looks like
+
+```{r null dist, echo=TRUE}
+p_fake <- rbeta(5076, 1,1) # you could also use runif(5076,1,1)
+hist(p_fake)
+```
+
+But we actually observe
+```{r, echo=TRUE}
+hist(res1$pvalue)
+```
+
+FDR methods exploit this discepency.
+
+
+
+### Contrasts with DESeq2 
+
+We can now look at specific planned contrasts (in this case male VS female). 
+
+```{r}
+res_contrast_sex_hdhorn <- results(DESeq_data, 
+    contrast=list(c("sex_male_vs_female")), 
+    pAdjustMethod="BH")
+```
+
+```{r MA, echo=TRUE}
+plotMA(res_contrast_sex_hdhorn) 
+```
+It looks like many more genes are showing evidence of differential expression.
+
+```{r}
+res_contrast_sex_hdhorn <- res_contrast_sex_hdhorn[order(res_contrast_sex_hdhorn$padj),] # Sorting genes based on "significance"... yuck.
+head(res_contrast_sex_hdhorn)
+```
+
+How many are differentially regulated?
+```{r}
+summary(res_contrast_sex_hdhorn, alpha= 0.05) 
+```
+
+Specifying nominal alpha.. Let's look at the histogram of expected p-values when there is nothing interesting going on.
+
+```{r}
+length(res_contrast_sex_hdhorn$padj[res_contrast_sex_hdhorn$padj < 0.05])
+attr(DESeq_data, "modelMatrixType") 
+```
+Type of model matrix, expanded or treatment contrast. For more complex models this is very important to understand.
+
+
+## Checking results for head horns
+
+```{r}
+hd_horn <- factor(parse_names[,4])
+hd_horn == "hdhorn" # Just setting up a logical statement to use to extract the columns and rows we need.
+```
+
+subsetting for hd horn
+```{r}
+tot_count_hd_horn <- tot_count_matrix[ , hd_horn == "hdhorn"]
+
+experimental_design_hd_horn <- experimental_design[hd_horn == "hdhorn",]
+
+#experimental_design_hd_horn$tissue <- #droplevels(experimental_design_hd_horn$tissue)
+#experimental_design_hd_horn$sample_names <- #droplevels(experimental_design_hd_horn$sample_names)
+```
+
+Checking that nothing went amiss 
+```{r}
+colnames(tot_count_hd_horn) == experimental_design_hd_horn$sample_names
+```
+
+## head horn analysis 
+
+```{r}
+DESeq_hdhorn <- DESeqDataSetFromMatrix(tot_count_hd_horn, experimental_design_hd_horn, 
+    design = formula(~ sex))
+DESeq_hdhorn$sex <- relevel(DESeq_hdhorn$sex, "male" )
+ 
+DESeq_hdhorn <- DESeq(DESeq_hdhorn)
+res_hd_horn <- results(DESeq_hdhorn, alpha=0.05)
+attr(DESeq_hdhorn , "modelMatrixType")
+```
+
+Let's take a look
+
+```{r}
+summary(res_hd_horn, alpha= 0.05)
+```
+
+```{r}
+plotMA(res_hd_horn, ylim=c(-3,3))
+```
+
+And the contrast
+```{r}
+contrast_hd_horn_sex <- results(DESeq_hdhorn, contrast=c("sex", "male", "female"))
+res_hd_horn <- res_hd_horn[order(res_hd_horn$padj),]
+hd_horn_SSD <- res_hd_horn[res_hd_horn$padj < 0.05,]
+hd_horn_SSD_df <- as.data.frame(hd_horn_SSD) # make data frame to make more usable.
+hd_horn_SSD_df$FB.protein <- rownames(hd_horn_SSD_df)
+
+
+hdhorn_dat <- data.frame(res_hd_horn@listData$baseMean, res_hd_horn@listData$log2FoldChange, res_hd_horn@listData$padj )
+colnames(hdhorn_dat) <- c("baseMean", "log2FoldChange", "padj" )
+```
+
+Some expression mean plots
+
+```{r}
+plot(y = log2(res_hd_horn$baseMean), x =(log2(res_hd_horn$baseMean) - res_hd_horn$log2FoldChange ), 
+    ylab = "mean expression males", xlab = "mean expression females", xlim=c(-5, 20), ylim=c(-5, 20),
+    main = "head horn", pch = 20, col ="grey")
+with(hdhorn_dat[hdhorn_dat$padj <0.05, ],
+    points(y = log2(baseMean),x =(log2(baseMean) - log2FoldChange ),
+    pch=20, col = "black" ))  
+abline(a=0, b=1 , col="blue")
+```
+
+# custom MA plot
+```{r}
+plot(y = res_hd_horn$log2FoldChange, x =log2(res_hd_horn$baseMean) , 
+    ylab = "log2 fold change (M/F)", xlab = "mean expression males",
+    main = " MAplot sex differences in the head horn", pch = 20, col ="grey")
+with(hdhorn_dat[hdhorn_dat$padj <0.05, ],
+    points(y = log2FoldChange,x = log2(baseMean),
+    pch=20, col = "black" ))  
+abline(a=0, b=0 , col="blue")
+```
+
+# Notice something different about fitting the sex effect as a contrast in a larger model VS as its own model?
+   
