@@ -13,7 +13,7 @@ At this point you should be able to do this in your sleep...
 ## The files we are working with.
 
 The files we want should be in
-```
+```bash
 /net/infofile2/2/scratch/Bio720_ID/drosophilaReads
  ```
 
@@ -24,7 +24,7 @@ For today, we can actually house all of these smaller files in your home directo
 
 Let's make some directories starting in your home directory
 
-```
+```bash
 cd
 
 mkdir drosophila_rnaseq
@@ -34,7 +34,7 @@ mkdir {reads,trimmed,mapped,counts,references}
 
 Now copy the reads over to the directory `trimmed`
 
-```
+```bash
 cp /net/infofile2/2/scratch/Bio720_ID/drosophilaReads/*.fastq  ~/drosophila_rnaseq/trimmed
 ```
 
@@ -48,7 +48,7 @@ In this case, we’ll download the reference Drosophila genome (`.fa`) and the `
 
 NOTE.. THese steps take a few minutes, so you may wish to skip them and use the pre-computed ones for now.
 
-```
+```bash
 cd ~/drosophila_rnaseq/references
 
 curl -O ftp://ftp.ensembl.org/pub/release-75/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP5.75.dna.toplevel.fa.gz
@@ -67,7 +67,7 @@ Now we’re ready for the first step: mapping our RNA-seq reads to the genome. W
 
 ###QC and trimmming
 Don’t forget that with your reads, you’ll probably want to take care of the usual QC steps before you actually begin your mapping. The cleaned_reads directory contains reads that have already been filtered (adapter removal, etc.) and lightly trimmed. Just as a reminder, for a pair of samples you could run `trimmomatic` as follows: (DON'T RUN)
-```
+```bash
 #java -jar /usr/local/trimmomatic/trimmomatic-0.33.jar PE -threads 8 \
 #SAM_w_r1_ACTTGA_L003_R1_001.fastq \
 #SAM_w_r1_ACTTGA_L003_R2_001.fastq \
@@ -84,13 +84,13 @@ Since we have a lot of files to map, it would take a long time to re-write the m
 
 We will create shell variables to store the location of our reference genome and annotation file. Note that we are leaving off the .fa from the reference genome file name, because some of the later commands will require just the base of the file name.
 
-```
+```bash
 reference=~/drosophila_rnaseq/references/Drosophila_melanogaster.BDGP5.75.dna.toplevel
 annotation=~/drosophila_rnaseq/references/Drosophila_melanogaster.BDGP5.75.gtf
 ```
 
 We can check quickly with an echo command
-```
+```bash
 echo $reference
 echo $annotation
 ```
@@ -103,7 +103,7 @@ cd ~/drosophila_rnaseq
 
 Now we Create an array to hold the names of all our samples. Later, we can then cycle through each sample using a simple for loop. We are actually only doing a subset of all of the files. However, I will provide all of the counts for the full data set at the end, so we can play with it.
 
-```
+```bash
 samples[1]=ORE_wt_rep1_PE
 samples[2]=ORE_wt_rep2_PE
 samples[3]=ORE_sdE3_rep1_PE
@@ -119,7 +119,7 @@ We can check the array variable we have just created
 
 ## Now we can actually do the mapping
 
-```
+```bash
 for i in 1 2 3 4 5 6 7 8 9
 do
     sample=${samples[${i}]}
@@ -135,4 +135,6 @@ done
 ```
 
 ## The counts
-If you navigate to the `./counts` sub-directory (inside the project folder), you will see we have now generated one count file for each of the pairs of samples. Let's take a look at these
+If you navigate to the `./counts` sub-directory (inside the project folder), you will see we have now generated one count file for each of the pairs of samples. Let's take a look at these. All of these files should have the same number of rows, how can you check?  
+
+Use less to open the files, you will see that despite only mapping 250K reads, some genes (FBgn) have quite a number of hits. What genes do you guess these will be?  Go check at [flybase](http://flybase.org/).
