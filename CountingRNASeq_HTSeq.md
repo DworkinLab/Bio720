@@ -3,7 +3,7 @@
 This tutorial is based upon a tutorial I ran with Dr. Chris Chandler at the NGS2015 workshop. The original tutorial can be found [here](http://angus.readthedocs.org/en/2015/drosophila_rnaseq_counting_htseq.html).
 
 ## Background
-In this tutorial, we’ll use some sample data from a project we did on flies (*Drosophila melanogaster*) to illustrate how you can use RNA-Seq data to look for differentially expressed genes. Here’s some brief background on the project: we’re trying to understand how different wild-type genetic backgrounds can influence the phenotypic effects of mutations, using the developing fly wing as our model system. We have several mutations that disrupt wing development, and we’ve backcrossed them into the genetic backgrounds of two different wild-type fly strains (Samarkand/SAM and Oregon-R/ORE). For this tutorial, we’ve taken a subset of the data–we’ll look for expression differences in developing wing tissues between non-mutant and mutant (sd[E3]) flies in each of the two genetic backgrounds, and in flies with a “hybrid” genetic background (i.e., crosses between SAM/ORE flies, again both with and without the mutation). To make things run a little bit faster, we’ve included only 250K reads for each sample.
+In this tutorial, we’ll use some sample data from a project we did on flies (*Drosophila melanogaster*) to illustrate how you can use RNA-Seq data to look for differentially expressed genes. Here’s some brief background on the project: we’re trying to understand how different wild-type genetic backgrounds can influence the phenotypic effects of mutations, using the developing fly wing as our model system. We have several mutations that disrupt wing development, and we’ve backcrossed them into the genetic backgrounds of two different wild-type fly strains (Samarkand/SAM and Oregon-R/ORE). For this tutorial, we’ve taken a subset of the data–we’ll look for expression differences in developing wing tissues between non-mutant and mutant (*sd[E3]*) flies in each of the two genetic backgrounds, and in flies with a “hybrid” genetic background (i.e., crosses between SAM/ORE flies, again both with and without the mutation). To make things run a little bit faster, we’ve included only 250K reads for each sample.
 
 
 ## Connecting to a remote machine using `ssh`
@@ -138,3 +138,10 @@ done
 If you navigate to the `./counts` sub-directory (inside the project folder), you will see we have now generated one count file for each of the pairs of samples. Let's take a look at these. All of these files should have the same number of rows, how can you check?  
 
 Use less to open the files, you will see that despite only mapping 250K reads, some genes (FBgn) have quite a number of hits. What genes do you guess these will be?  Go check at [flybase](http://flybase.org/).
+
+ We can also ask how many "counts" we got
+```bash
+awk '{s+=$2} END{print s}' PickAFile
+```
+
+Let's talk about the results.
