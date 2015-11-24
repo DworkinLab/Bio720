@@ -24,7 +24,7 @@ males <- rnorm(10)
 females <- rnorm(10)
 
 dat <- data.frame(gene1 = c(males, females), 
-                  sex = gl(2, 5, labels = c("M", "F")))
+                  sex = gl(2, 10, labels = c("M", "F")))
 #we go ahead and run a t-test
 
 pval <- t.test(gene1~sex, data=dat)$p.value
@@ -60,6 +60,33 @@ length(pvals_1000genes[pvals_1000genes < adjusted_alpha]) # No significant hits
 # So there are a variety of methods that actually adjust in somewhat more sensible ways. THis includes an important set of approaches based on False Discovery Rates (FDR) as opposed to false positives. Here we are not asking about how many false positives in the full set of comparisons, but how many "false positives" given a set of true positives. The most commonly used approaches in genomics are Benjamini Hochberg, as well as q-values. To a first approximation these methods use the differences between the theoretical expectation of the distribution of p-values (assuming nothing interesting) VS. observed to determine the false discovery rates (and adjustments)
 
 # In R most of these approaches can be
-p.adjust()
+p.adjust(pvals_1000genes, method="holm")
+p.adjust(pvals_1000genes, method="fdr") # false discovery rate/ Benjamini and Hochberg
+p.adjust(pvals_1000genes, method="BY")
 
+# in this case all of them are not-significant.
+
+# Now how about we add in ten genes that have real differential expression (increase of ~ 2 fold)
+
+real.effects <- function(n=10, mean.m=2, mean.f=4){
+males <- rnorm(n, mean=mean.m)
+females <- rnorm(n, mean=mean.f)
+
+dat <- data.frame(gene1 = c(males, females), 
+                  sex = gl(2, 10, labels = c("M", "F")))
+#we go ahead and run a t-test
+
+pval <- t.test(gene1~sex, data=dat)$p.value
+return(pval)
+}
+
+pvals_15genes_real <- replicate(15, real.effects())
+
+# Since we don't know which genes show real differential expression and which do not, we would actually be looking at the complete distribution.
+
+pvals <- c(pvals_1000genes,pvals_10genes_real)
+hist(pvals) # still pretty hard to tell.
+length(pvals[pvals < 0.05])
+length(pvals[pvals < 0.05/1000]) # picks up some, but not all.
+length(pvals[ p.adjust(pvals, method="fdr") < 0.05]) # picks up some but not all.
 # For the q-value approach there is a seperate library in R.
