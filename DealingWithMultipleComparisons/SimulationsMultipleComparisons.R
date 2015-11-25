@@ -11,7 +11,7 @@ males <- rnorm(10)
 females <- rnorm(10)
 
 dat <- data.frame(gene1 = c(males, females), 
-                  sex = gl(2, 5, labels = c("M", "F")))
+                  sex = gl(2, 10, labels = c("M", "F")))
 #we go ahead and run a t-test
 
 t.test(gene1~sex, data=dat)
@@ -84,9 +84,9 @@ pvals_15genes_real <- replicate(15, real.effects())
 
 # Since we don't know which genes show real differential expression and which do not, we would actually be looking at the complete distribution.
 
-pvals <- c(pvals_1000genes,pvals_10genes_real)
+pvals <- c(pvals_1000genes,pvals_15genes_real)
 hist(pvals) # still pretty hard to tell.
 length(pvals[pvals < 0.05])
-length(pvals[pvals < 0.05/1000]) # picks up some, but not all.
-length(pvals[ p.adjust(pvals, method="fdr") < 0.05]) # picks up some but not all.
+length(pvals[pvals < 0.05/1015]) # picks up some, but not all.
+length(pvals[ p.adjust(pvals, method="fdr") < 0.1]) # picks up some but not all.
 # For the q-value approach there is a seperate library in R.
