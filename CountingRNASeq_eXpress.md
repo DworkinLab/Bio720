@@ -135,14 +135,14 @@ bowtie2 -a -X 1200 -p 16 --rdg 6,5 --rfg 6,5 --score-min L,-.6,-.4 --no-discorda
 This will likely take a while to run.
 
 Some of the flags we have set:
-`-a` as we want it to report all alignments
-`-X` setting the maximum fragment length to 1200bp
-`-x` the bowtie2 index file we created
-`--rdg` read gap penalty
-`--rfg` reference gap penalty
-`--score-min` sets options for valid alignments
-`--no-discordant` excludes pairs that are not concordant (are not both contained in the same contig)
-`--no-mixed` only includes matches for full pairs
+- `-a` as we want it to report all alignments
+- `-X` setting the maximum fragment length to 1200bp
+- `-x` the bowtie2 index file we created
+- `--rdg` read gap penalty
+- `--rfg` reference gap penalty
+- `--score-min` sets options for valid alignments
+- `--no-discordant` excludes pairs that are not concordant (are not both contained in the same contig)
+- `--no-mixed` only includes matches for full pairs
 
 These are the recommend `bowtie2` parameters as suggested by the authors of `eXpress`. These include limiting the length of indels and avoiding unlikely splice variants. More info about the individual parameters can be found [here](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)
 
