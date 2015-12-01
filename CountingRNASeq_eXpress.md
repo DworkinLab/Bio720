@@ -146,6 +146,19 @@ Some of the flags we have set:
 
 These are the recommend `bowtie2` parameters as suggested by the authors of `eXpress`. These include limiting the length of indels and avoiding unlikely splice variants. More info about the individual parameters can be found [here](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)
 
+## After mapping
+Hopefully you see something that looks like the following output:
+```bash
+##[samopen] SAM header is present: 30447 sequences.
+##248524 reads; of these:
+##  248524 (100.00%) were paired; of these:
+##    29703 (11.95%) aligned concordantly 0 times
+##    61840 (24.88%) aligned concordantly exactly 1 time
+##    156981 (63.17%) aligned concordantly >1 times
+88.05% overall alignment rate
+```
+
+Do take note of how many of the reads are multi-mapped (63%). Not something we want to just throw out!
 
 ## counting with `eXpress`
 Once we have the .bam files, eXpress is actually pretty quick.
@@ -158,10 +171,10 @@ file_bam=~/drosophila_rnaseq/transcriptome_mapped/ORE_wt_rep1_PE
 ref=~/drosophila_rnaseq/references/dmel-all-transcript-r6.08.fasta
 output_count=~/drosophila_rnaseq/counts_eXpress
 
-express -o ${output_count}/${file_bam}/ ${ref} ${file_bam}_hits.bam
+/usr/local/eXpress/express -o ${output_count}/${file_bam}/ ${ref} ${file_bam}_hits.bam
 ```
 
-`eXpress` does not allow renaming of the two output files `params.xprs` & `results.xprs`. So we rename them ourselves.
+`eXpress` does not allow renaming of the two output files `params.xprs` & `results.xprs`. So we rename them ourselves. You can also use more threads in `eXpress` by using `-p8` to use 8 threads (for instance)
 
 ```
 mv ${output_count}/${file_bam}/params.xprs ${output_count}/${file_bam}_params.xprs
