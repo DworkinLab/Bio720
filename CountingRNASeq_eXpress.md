@@ -125,10 +125,10 @@ Now we Create an array to hold the names of all our samples. Later, we can then 
 
 We can check the array variable we have just created
 
-Now we can actually do the mapping. The `-p 16` flag is how many threads we want to use. If we are all doing it at the same time, I suggest using 4 instead.
+Now we can actually do the mapping. The `-p 8` flag is how many threads we want to use. If we are all doing it at the same time, I suggest using 4 instead.
 
 ```bash
-bowtie2 -a -X 1200 -p 16 --rdg 6,5 --rfg 6,5 --score-min L,-.6,-.4 --no-discordant --no-mixed \
+bowtie2 -a -X 1200 -p 8 --rdg 6,5 --rfg 6,5 --score-min L,-.6,-.4 --no-discordant --no-mixed \
    -x ${ref_transcriptome}.index \
    -1 ${dir_in}/${sample_PE}_1.fastq -2 ${dir_in}/${sample_PE}_2.fastq | samtools view -Sb - >  ${dir_out}/${sample_PE}_hits.bam
 ```
