@@ -120,7 +120,7 @@ We can check the array variable we have just created
 ## Now we can actually do the mapping
 
 ```bash
-for i in 1 2 3 4 5 6 7 8 9
+for i in {1..9}
 do
     sample=${samples[${i}]}
     echo ${sample}
