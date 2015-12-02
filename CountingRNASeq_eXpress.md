@@ -155,7 +155,7 @@ Hopefully you see something that looks like the following output:
 ##    29703 (11.95%) aligned concordantly 0 times
 ##    61840 (24.88%) aligned concordantly exactly 1 time
 ##    156981 (63.17%) aligned concordantly >1 times
-88.05% overall alignment rate
+## 88.05% overall alignment rate
 ```
 
 Do take note of how many of the reads are multi-mapped (63%). Not something we want to just throw out!

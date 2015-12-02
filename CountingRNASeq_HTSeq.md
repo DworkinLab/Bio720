@@ -53,11 +53,13 @@ cd ~/drosophila_rnaseq/references
 
 curl -O ftp://ftp.ensembl.org/pub/release-75/fasta/drosophila_melanogaster/dna/Drosophila_melanogaster.BDGP5.75.dna.toplevel.fa.gz
 gunzip Drosophila_melanogaster.BDGP5.75.dna.toplevel.fa.gz
+mv Drosophila_melanogaster.BDGP5.75.dna.toplevel.fa Drosophila_melanogaster.BDGP5.75.fa
+
 curl -O ftp://ftp.ensembl.org/pub/release-75/gtf/drosophila_melanogaster/Drosophila_melanogaster.BDGP5.75.gtf.gz
 gunzip Drosophila_melanogaster.BDGP5.75.gtf.gz
 
-bowtie-build Drosophila_melanogaster.BDGP5.75.dna.toplevel.fa Drosophila_melanogaster5_75
-samtools faidx Drosophila_melanogaster.BDGP5.75.dna.toplevel.fa
+bowtie-build Drosophila_melanogaster.BDGP5.75.fa Drosophila_melanogaster.BDGP5.75
+samtools faidx Drosophila_melanogaster.BDGP5.75.fa
 ```
 
 Running this block of code may take a bit of time (especially the bowtie-build command). If you don’t want to wait for it, I have included some pre-computed reference files for you.
@@ -85,7 +87,7 @@ Since we have a lot of files to map, it would take a long time to re-write the m
 We will create shell variables to store the location of our reference genome and annotation file. Note that we are leaving off the .fa from the reference genome file name, because some of the later commands will require just the base of the file name.
 
 ```bash
-reference=~/drosophila_rnaseq/references/Drosophila_melanogaster.BDGP5.75.dna.toplevel
+reference=~/drosophila_rnaseq/references/Drosophila_melanogaster.BDGP5.75
 annotation=~/drosophila_rnaseq/references/Drosophila_melanogaster.BDGP5.75.gtf
 ```
 
