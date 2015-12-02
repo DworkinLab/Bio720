@@ -13,7 +13,7 @@ If you plan on using `eXpress` for your own work, I highly recommend working thr
 
 ## The files we are working with.
 
-The files we want should be in.
+We will use some of the same files as for the HTSeq tutorial. If you have not already copied them over to your `trimmed` directory, the files you want should be in.
 ```bash
 /net/infofile2/2/scratch/Bio720_ID/drosophilaReads
  ```
@@ -62,7 +62,7 @@ gunzip dmel-all-transcript-r6.08.fasta.gz
 Now we can index this for the aligner (this is the step that can take 30+ minutes)
 
 ```bash
-bowtie2-build --offrate 1 dmel-all-transcript-r6.08.fasta dmel-all-transcript-r6.08_bowtie2.index
+bowtie2-build --offrate 1 dmel-all-transcript-r6.08.fasta dmel-all-transcript-r6.08
 ```
 
 Running this block of code may take a bit of time (especially the bowtie2-build command). If you don’t want to wait for it, I have included some pre-computed reference files for you. These can be found in...
@@ -72,13 +72,15 @@ Now we’re ready for mapping the reads to the transcriptome.
 
 ###QC and trimmming
 Don’t forget that with your reads, you’ll probably want to take care of the usual QC steps before you actually begin your mapping. The cleaned_reads directory contains reads that have already been filtered (adapter removal, etc.) and lightly trimmed. Just as a reminder, for a pair of samples you could run `trimmomatic` as follows: (DON'T RUN). In this case I did this for the one sample (paired) that we are interested in.
+
+NOTE: For class (as many of the resources on the cluster were tied up) we are not using the full .fastq file, but instead, I have modified it to use the trimmed files that only contain ~250K reads.
 ```bash
-java -jar /usr/local/trimmomatic/trimmomatic-0.33.jar PE -threads 8 \
-ORE_w_r1_ATCACG_L001_R1_001.fastq \
-ORE_w_r1_ATCACG_L001_R2_001.fastq \
-./trimmed/ORE_wt_rep1_PE_1.fastq ./trimmed/ORE_wt_rep1_SE_1.fastq \
-./trimmed/ORE_wt_rep1_PE_2.fastq ./trimmed/ORE_wt_rep1_SE_2.fastq \
-ILLUMINACLIP:/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10
+##java -jar /usr/local/trimmomatic/trimmomatic-0.33.jar PE -threads 8 \
+##ORE_w_r1_ATCACG_L001_R1_001.fastq \
+##ORE_w_r1_ATCACG_L001_R2_001.fastq \
+##./trimmed/ORE_wt_rep1_PE_1.fastq ./trimmed/ORE_wt_rep1_SE_1.fastq \
+##./trimmed/ORE_wt_rep1_PE_2.fastq ./trimmed/ORE_wt_rep1_SE_2.fastq \
+##ILLUMINACLIP:/usr/local/trimmomatic/adapters/TruSeq3-PE.fa:2:30:10
 ```
 
 After a few minutes (5ish with 8 threads going). you should see output like:
@@ -103,7 +105,7 @@ Also note that for a couple of the variables, I have only used partial names. Th
 ```bash
 ref_transcriptome=~/drosophila_rnaseq/references/dmel-all-transcript-r6.08
 sample_PE=ORE_wt_rep1_PE
-dir_in=~/drosophila_rnaseq/trimmed_full
+dir_in=~/drosophila_rnaseq/trimmed
 dir_out=~/drosophila_rnaseq/transcriptome_mapped
 ```
 
@@ -120,7 +122,7 @@ We will store all of our mapped reads in the `transcriptome_mapped` sub-folder i
 cd ~/drosophila_rnaseq
 ```
 
-Now we Create an array to hold the names of all our samples. Later, we can then cycle through each sample using a simple for loop. We are actually only doing a subset of all of the files. However, I will provide all of the counts for the full data set at the end, so we can play with it.
+Now we create an array to hold the names of all our samples. Later, we can then cycle through each sample using a simple for loop. We are actually only doing a subset of all of the files. However, I will provide all of the counts for the full data set at the end, so we can play with it.
 
 
 We can check the array variable we have just created
@@ -129,7 +131,7 @@ Now we can actually do the mapping. The `-p 8` flag is how many threads we want 
 
 ```bash
 bowtie2 -a -X 1200 -p 8 --rdg 6,5 --rfg 6,5 --score-min L,-.6,-.4 --no-discordant --no-mixed \
-   -x ${ref_transcriptome}.index \
+   -x ${ref_transcriptome} \
    -1 ${dir_in}/${sample_PE}_1.fastq -2 ${dir_in}/${sample_PE}_2.fastq | samtools view -Sb - >  ${dir_out}/${sample_PE}_hits.bam
 ```
 This will likely take a while to run.
@@ -169,21 +171,19 @@ keep in mind that express does not allow you to name each output file, just outp
 ```bash
 file_bam=~/drosophila_rnaseq/transcriptome_mapped/ORE_wt_rep1_PE
 ref=~/drosophila_rnaseq/references/dmel-all-transcript-r6.08.fasta
-output_count=~/drosophila_rnaseq/counts_eXpress
 
-/usr/local/eXpress/express -o ${output_count}/${file_bam}/ ${ref} ${file_bam}_hits.bam
+cd ~/drosophila_rnaseq/counts_eXpress
+/usr/local/eXpress/express -o ./${file_bam}/ ${ref} ${file_bam}_hits.bam
 ```
 
 `eXpress` does not allow renaming of the two output files `params.xprs` & `results.xprs`. So we rename them ourselves. You can also use more threads in `eXpress` by using `-p8` to use 8 threads (for instance)
 
-```
-mv ${output_count}/${file_bam}/params.xprs ${output_count}/${file_bam}_params.xprs
-mv ${output_count}/${file_bam}/results.xprs ${output_count}/${file_bam}_results.xprs
-```
+Since eXpress names all of the outputs as results.xprs, you may wish to use `mv` to rename the files.
+
 ## The counts
 If you navigate to the `~/drosophila_rnaseq/counts_eXpress` sub-directory (inside the project folder), you will see we have now generated one count file (results) for each of the pairs of samples. Let's take a look at these. All of these files should have the same number of rows, how can you check?  
 
  We can also ask how many "counts" we have. We should look at the output file first to figure out which column we want.
 ```bash
-awk '{s+=$2} END{print s}' PickAFile
+awk '{s+=$7} END{print s}' PickAFile
 ```

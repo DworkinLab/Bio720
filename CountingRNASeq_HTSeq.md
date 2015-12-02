@@ -59,7 +59,7 @@ curl -O ftp://ftp.ensembl.org/pub/release-75/gtf/drosophila_melanogaster/Drosoph
 gunzip Drosophila_melanogaster.BDGP5.75.gtf.gz
 
 bowtie-build Drosophila_melanogaster.BDGP5.75.fa Drosophila_melanogaster.BDGP5.75
-samtools faidx Drosophila_melanogaster.BDGP5.75.fa
+samtools faidx Drosophila_melanogaster.BDGP5.75.facd r
 ```
 
 Running this block of code may take a bit of time (especially the bowtie-build command). If you don’t want to wait for it, I have included some pre-computed reference files for you.
