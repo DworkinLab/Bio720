@@ -229,7 +229,7 @@ So we go ahead and sort each of the data files based on gene name (the second co
 counts_sorted <- lapply(counts_in, function(x) x <- x[order(x[,2]),])
 #make matrix of counts
 ```
-Note I am using total counts, not unique counts for this analysis. Since there were few multi-mapped reads based on the reference transcriptome I used, it seemed the most sensible option. However, this does make sense for most transcriptomes, so beware!!!! We will discuss this issue in detail next week and the costs and benefits of different approaches to dealing with multi-mapped reads. 
+Note I am using total counts, not unique counts for this analysis. Since there were few multi-mapped reads based on the reference transcriptome I used, it seemed the most sensible option. However, this does not make sense for most transcriptomes, so beware!!!! We will discuss this issue in detail next week and the costs and benefits of different approaches to dealing with multi-mapped reads. 
 
 
 
