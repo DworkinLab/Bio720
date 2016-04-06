@@ -11,6 +11,7 @@ The counts are from a program called [eXpress](http://bio.math.berkeley.edu/eXpr
 Among the issues we have to deal with, the "target_id" names represent the current computationally generated (partially based on blast matches to another closely related beetle) names for genes. We may want to fix those. More importantly, `eXpress` does not sort the genes in any sensible way. So the order of genes in one file (from one sample) is different than the order in another file.
 
 So we will want to:
+
 1. Download the files
 2. Sort the files by the identifier (target_id) so each file is in the same order.
 3. Extract each of the columns for the TPM measure for the 4 files, and place them in a single data frame or matrix.
