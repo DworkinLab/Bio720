@@ -2,7 +2,7 @@
 
 0. If you are not working with a fresh R instance, then use the command:
 ```R
-rm(list=ls()
+rm(list=ls())
 ```
 1. Create a variable `a` for a numeric vector with the following values:
   - ` 3 9 12 17 8 24 3 9 34`
