@@ -18,9 +18,11 @@ The primary goal of this course it to provide graduate students an opportunity t
 
 # Topics (mostly TBD at this point)
 1. Introduction to UNIX and the command line. (Brian)
+
 -- Introduction to basic shell commands, logging onto remote systems
 
 2. Fundamentals of programming using `R`(Ian)
+
 -- week 1. Fundamentals of programming in R.
 -- week 2. How to avoid repetive strain injury while programming. Control flow in R. Using the `apply` family of functions in `R`. Simple  simulations.
 -- week 3. Working with data in `R`. Getting data in. Data munging (subsetting, merging, cleaning). Working with strings in `R`.
