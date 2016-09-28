@@ -18,8 +18,7 @@ The primary goal of this course it to provide graduate students an opportunity t
 
 # Topics (mostly TBD at this point)
 1. Introduction to UNIX and the command line. (Brian)
-
--- Introduction to basic shell commands, logging onto remote systems
+  1. Introduction to basic shell commands, logging onto remote systems
 
 2. Fundamentals of programming using `R`(Ian)
   1. Fundamentals of programming in R.
