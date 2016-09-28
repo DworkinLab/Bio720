@@ -16,7 +16,7 @@ The primary goal of this course it to provide graduate students an opportunity t
 
 ## Learning Objectives
 
-# Topics (mostly TBD at this point)
+# Topics (some TBD)
 1. Introduction to UNIX and the command line. (Brian)
   1. Introduction to basic shell commands, logging onto remote systems
 
