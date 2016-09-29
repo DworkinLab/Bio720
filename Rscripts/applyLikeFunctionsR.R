@@ -6,8 +6,8 @@
 
 
 
-# For this example, we will use the dll.data (if you have a local copy).
-setwd("/Users/ian/R/R scripts/Dll data/") # change to your directory
+# For this example, we will use the dll.data (if you have a local copy on your computer).
+setwd("/Users/ian/R/R scripts/Dll data/") # change to the directory
 dll.data = read.csv("dll.txt", header=TRUE) 
 
 # Or you can just import it from DRYAD (online)
