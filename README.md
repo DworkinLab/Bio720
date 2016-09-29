@@ -5,6 +5,9 @@
 ## Course Summary
 This is the page for Bio720 (2016), a practical introduction to fundamental computational skills for biologists. 
 
+## Class time and location
+Weekly, on Mondays 6 - 8 PM, MDCL 3017
+
 ## Background assumed for students
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers.
 
