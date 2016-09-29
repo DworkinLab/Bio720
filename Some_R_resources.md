@@ -27,7 +27,7 @@ data.table has some amazingly useful functions to import and work with large dat
 Also check out [this list](https://support.rstudio.com/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages) of other suggested packages (some are the same).
 
 Making reports
-In addition to great tools for analysis and plotting, there are great ways of integrating your code and plots into reports. You can do it the standard LaTeX way in `R` using Sweave() and Stangle (both part of the base distribution) to integrate with LaTeX (and make PDFs etc). If you want to use other formats (such as the widely used markdown format I use) then the knitr library is essential.
+In addition to great tools for analysis and plotting, there are great ways of integrating your code and plots into reports. You can do it the standard LaTeX way in `R` using Sweave() and Stangle (both part of the base distribution) to integrate with LaTeX (and make PDFs etc). If you want to use other formats (such as the widely used markdown format I use) then the `knitr` library is essential.
 
 Writing your own R packages
 Roxygen, Shiny,...
