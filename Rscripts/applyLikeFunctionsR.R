@@ -99,7 +99,7 @@ with( dll.data, tapply(SCT, list(temp, genotype), mean))
 
 # As with apply, we can write our own functions and use them in tapply
 cv.SCT <- with( dll.data, tapply(SCT, list(line, genotype), cv))
-plot(cv.SCT, xlim=c(0.05, 0.25), ylim=c(0.05,0.25))
+plot(cv.SCT, xlim=c(0.05, 0.25), ylim=c(0.05,0.25), pch = 16)
 abline(a=0, b=1)
 
 # This result is actually pretty cool if you think about it!
