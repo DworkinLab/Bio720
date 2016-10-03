@@ -2,6 +2,7 @@
 Here I am just providing some links to various `R` resources that may be helpful as you start to learn to program and perform analyses in `R`.
 
 ## R Tutorials
+[R studio tutorials](https://www.rstudio.com/online-learning/)
 
 ### Some of my favourite (general) R books
 (less about understanding and performing analyses, more about programming and using R). There are many many more, but these are just a few I have used and read.
