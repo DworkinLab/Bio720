@@ -3,6 +3,7 @@ Here I am just providing some links to various `R` resources that may be helpful
 
 ## R Tutorials
 [R studio tutorials](https://www.rstudio.com/online-learning/)
+[swirl interactive R tutorials](http://swirlstats.com/)
 
 ### Some of my favourite (general) R books
 (less about understanding and performing analyses, more about programming and using R). There are many many more, but these are just a few I have used and read.
