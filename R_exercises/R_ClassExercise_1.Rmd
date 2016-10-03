@@ -77,6 +77,46 @@ So what are the take home points of these demonstrations?
 Group exercises: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
 
 
+
+### Boolean/logical
+Using TRUE/FALSE (logical, Boolean) as an atomic type is quite important. Often we need to check equality of objects, or elements within our objects (considering vectors are a basic storage type in R). These are particularly (as we will see later) useful when subsetting using the index of a vector (or matrix or data.table).
+
+Let's clean up a bit:
+
+```{r}
+rm(x, y, z, a, b)
+```
+
+As we will see, both T or TRUE can be used. Likewise for F or FALSE. It is also important to know you don't want these to be treated as strings/characters so don't put quotes around them.
+
+```{r}
+x = T
+x
+y = TRUE
+y
+
+x == y
+identical(x, y)
+```
+
+It is also useful to know that TRUE has a numeric value associated with it (1), and FALSE is associated with 0. 
+
+```{r}
+sum(x)
+as.numeric(x)
+
+a = F
+sum(a)
+```
+
+Before running the code to find out, what will the sum of the following vector be `c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6))`
+
+```{r}
+sum(c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6)))
+```
+
+Take home message: Boolean values of TRUE and FALSE have numeric values of 1 and 0 respectively. This can be very useful for subsetting by columns or rows for matrices and data.frames!
+
 ## Building up our data structures. 
 
 Now that we have some better idea (hopefully) of some of the atomic data types, we want to use these to build more complex data structures that may (eventually - like next week) be useful for data analysis, simulations and the like. There are a few important ones that we will use a lot: matrix, list, data.frame, factors, and formula (which we will not cover in Bio720 but is essential for statistical analyses). There are other important ones (like array) but we will cover these other ones first.
@@ -257,7 +297,9 @@ Again R is trying to be smart. It can not coerce words into numbers, but it can 
 ## data structures with heterogeneous objects.
  Clearly we did not want to produce a matrix of strings. So we need some sort of data structures where elements (at least at the level of individual vectors that are being organized together) can be of different atomic types (i.e. a collection of heterogeneous objects). There are two main approaches to this, one is the data.frame, which is the spreadsheet like object that is often the easiest to work with when importing data (for analysis and plotting). THe other is a list. As I mentioned in the video tutorials, the data.frame is really a special kind of list. However it is worth comparing and contrasting both. First remove the old `all_the_data` object and make a new one that is a data frame.
 
+## `data.frames`
 First let's make a data.frame: 
+
 ```{r}
 rm(all_the_data)
 all_the_data <- data.frame(gene1, gene2, gene3, genotype, day)
@@ -269,4 +311,144 @@ mode(all_the_data)
 
 Notice a couple of interesting thing. First it's class is a data.frame, but it is actually a list underneath. Second, without asking or warning us, it has coerced *genotype* and *day* into factors. It is assuming that since you are treating this like regular data (that you will probably want to analyze or plot) you want these as factors. Often this is true. If you don't want this behaviour there is an argument that you can set `stringsAsFactors == FALSE`.
 
+It is really important to note that data.frames are useful for heterogeneous objects **ONLY IF** all objects (vectors) are the **same length**. It is ok to have missing data, as long as R knows there should be missing data (NA) in certain spots. When you need to store a collection of heterogeneous objects, but the objects are of different lengths, then you need to use lists.
+
 As we showed in the video tutorial, you can extract and subset in a couple of ways (like lists or as a matrix). So show three different ways to extract the 2nd, 3rd and 4th column from `all_the_data` 
+
+First way, using standard numeric subsetting:
+
+```{r}
+all_the_data[ ,c(2:4)]
+
+```
+
+
+second, by subsetting using the names of the columns:
+
+```{r}
+all_the_data[c("gene2", "gene3", "genotype")]
+
+```
+
+Third, by using the extraction operator `$` which is how you extract elements from lists:
+
+```{r}
+all_the_data$gene2; all_the_data$gene3; all_the_data$genotype
+
+```
+This approach is useful for single columns, not so useful when you want to extract a bunch though.
+
+You can also use the `[[` approach to grab columns as well
+```{r}
+all_the_data[["gene2"]]
+all_the_data$gene2
+```
+
+We can also use the subset() function, which is far more powerful and we will use alot in the coming weeks. 
+
+```{r}
+subset(all_the_data, select = c("gene2", "gene3", "genotype"))
+
+```
+
+Take home message: This can definitely get confusing, but different programmers still use each, so it is important to recognize what is the same and what is different. Importantly the single `[` can be used to extract more than one element from the object, while `$` and `[[` can only select a single element at a time. 
+
+
+Hopefully it is pretty clear, but there are a couple of ways of adding on new variables. Let's create a gene4 (also of length 6) and add it to the `all_the_data` data.frame
+
+```{r}
+all_the_data$gene4 <- c(10, 11, 7, 11, 2, 3)
+
+all_the_data
+
+str(all_the_data)
+```
+
+### Lists in `R`
+
+When you need to store a collection of heterogeneous objects, but the objects are of different lengths, then you need to use lists. As you saw above with the `$` and the `[[` operators, you can extract things from lists. However, making lists is simpler than unmaking (well unlisting) lists as we will see.
+
+Make a list called `list_the_data` using the same objects that were used to make `all_the_data`. What will the class of the object be? how about the mode of the objects within the list?
+
+```{r}
+list_the_data = list(gene1, gene2, gene3, genotype, day)
+list_the_data
+
+str(list_the_data)
+names(list_the_data)
+
+```
+A couple of things of note:
+- It should be pretty clear that there is something different about the way it is storing the information. Seemingly the names of the original objects have been lost. 
+- Also, as a list, it does not make assumptions about how you will use the underlying objects, so it has not coerced the character vectors to factors. 
+
+How might we get the names of the underlying objects? Annoyingly:
+
+
+```{r}
+list_the_data = list(gene1 = gene1, gene2 = gene2, gene3 = gene3, genotype = genotype, day = day)
+list_the_data
+
+str(list_the_data)
+names(list_the_data)
+
+```
+
+We can also have objects that have different lengths within the list
+
+```{r}
+list_the_data$random_variable = c(T,T,F) 
+
+list_the_data
+
+str(list_the_data)
+```
+ 
+We can extract variables from lists in a slight variant of the approach we have used so far
+
+ 
+```{r}
+list_the_data$gene1
+
+list_the_data[1]
+list_the_data["gene1"]
+
+list_the_data[[1]]
+list_the_data[["gene1"]]
+```
+
+However, these objects are not all equivalent
+
+```{r}
+class(list_the_data$gene1)
+class(list_the_data[1])
+
+class(list_the_data["gene1"])
+class(list_the_data[[1]])
+
+class(list_the_data[["gene1"]])
+
+str(list_the_data$gene1)
+
+str(list_the_data[1])
+str(list_the_data["gene1"])
+
+str(list_the_data[[1]])
+str(list_the_data[["gene1"]])
+```
+
+So using the `[` operator keeps the information (and variable name) as a list, while the `$` or `[[` operators extract just the elements, but do not keep the name. It can not always be coerced in a sensible way as we have done before.
+
+i.e:
+
+```{r}
+as.numeric(list_the_data[1])
+```
+
+You can `unlist` the vector though
+```{r}
+str(as.numeric(unlist(list_the_data[1])))
+```
+
+However, this also strips off the name! So you are best to not use the `[` if you can avoid it when using lists. This is not always possible though, so knowing about unlist is useful!
+
