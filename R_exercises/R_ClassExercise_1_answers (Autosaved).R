@@ -1,0 +1,173 @@
+---
+title: "Bio720 Introduction to `R`, in class exercise"
+author: "Ian Dworkin"
+date: "October 3, 2016"
+output: html_document
+---
+## Overview
+In class tonight we are going to both practice some of the `R` skills you were introduced to in the video tutorials. [Click here](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md) for that list.
+
+The learning objectives for today are as follows:
+1. Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
+2. Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
+3. Practice some of the skills that were introduced in the video tutorials.
+
+## How to organize computational projects.
+
+Please [click here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) to link to a brief discussion on these points.
+
+## Some very basic thoughts on *data structures* in `R`
+We are not going to have a computer science-esque discussion of data structures (there are whole courses on this), but instead try to introduce a few basic concepts to understand why computers need to store different types of data in different ways, and why we need to be aware of that.
+
+### What is the point of data structures? (class discussion)
+- What kind of data do we want the computer to store for us?
+- Why does it matter what kind of data (integers, floating point numbers, strings, Boolean,...)?
+
+### Data structures in R
+
+As was discussed in the video screencasts R has a number of different basic data structures (and more can be made or extended by programmers like you!). We need to start with the so-called *atomic* types that can be stored as vectors (remember R does not have an object to store scalars!). You can google them, but they are logical (Boolean), integer, real (double or floating point) , complex, string (or character) and raw. Let's think about a few of them:
+
+
+
+```{r}
+x <- 1
+```
+
+and you can find out information about this with a variety of functions:
+
+```{r}
+str(x)
+mode(x)
+typeof(x)
+```
+Why does `mode(x)` and `typeof(x)` give different results?
+
+
+Let's create a few more objects and take a look at them
+
+```{r}
+y = c(3, 4, 5)
+```
+
+Will `x` and `y` differ?  Check and explain?
+
+Now let's create a new object z:
+
+```{r}
+z = 3:5
+```
+How should `y` and `z` compare? how would you check?
+
+```{r}
+mode(y)
+mode(z)
+typeof(y)
+typeof(z)
+```
+ Which might suggest they are different. In one case `R` is treating the vector as integers, the other case as floating point (double). So this suggests they might be different. However:
+ 
+```{r}
+y == z
+all.equal(y, z)
+# BUT
+identical(y, z)
+```
+
+Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
+
+
+Ok, let's think about some of the other basic data types we learned about (strings or "character" in R, boolean/logical)
+
+```{r}
+rm( x, y, z) # clean up
+x = 1
+y = "1"
+z = "one"
+a = TRUE
+b = "TRUE"
+```
+
+Before checking, think about what types each of these objects should be. Then check.
+```{r}
+x == y
+all.equal(x, y)
+identical(x, y)
+```
+
+How about `y` and `z`?
+
+```{r}
+y == z
+all.equal(y, z)
+identical(y, z)
+
+# Which might be obvious by
+mode(y)
+mode(z)
+```
+
+
+```{r}
+y == z
+all.equal(y, z)
+identical(y, z)
+
+# Which might be obvious by
+mode(y)
+mode(z)
+```
+
+The same "logic" applies for comparing `a` and `b`
+
+```{r}
+a == b
+all.equal(a, b)
+identical(a, b)
+
+# Which might be obvious
+mode(a); typeof(a)
+mode(b); typeof(b)
+```
+
+So, what are the take home points?
+- Computers can be very exact.
+- R has some confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means.
+
+Group exercises: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
+
+Let's coerce b into a logical/Boolean
+```{r}
+b1 <- as.logical(b)
+is.logical(b1); is.character(b1)
+b == b1
+a == b
+typeof(b1); mode(b1)
+```
+
+Let's coerce a into a character
+```{r}
+a1 <- as.character(a)
+is.character(a1)
+a == a1
+a == b
+typeof(a1); mode(a1)
+```
+
+And, y into a number
+```{r}
+y1 <- as.numeric(y)
+y == y1
+identical(y, y1)
+
+x == y1
+identical(x, y1)
+typeof(y1); mode(y1)
+```
+
+
+You can also embed plots, for example:
+
+# # ```{r, echo=FALSE}
+# plot(cars)
+# ```
+
