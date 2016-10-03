@@ -138,6 +138,7 @@ Group exercises: How would you get `R` to coerce `x` and `y` to be exactly the s
 Let's coerce b into a logical/Boolean
 ```{r}
 b1 <- as.logical(b)
+is.logical(b1); is.character(b1)
 b == b1
 a == b
 typeof(b1); mode(b1)
@@ -146,6 +147,7 @@ typeof(b1); mode(b1)
 Let's coerce a into a character
 ```{r}
 a1 <- as.character(a)
+is.character(a1)
 a == a1
 a == b
 typeof(a1); mode(a1)

@@ -83,7 +83,24 @@ Group exercises: How would you get `R` to coerce `x` and `y` to be exactly the s
 
 ## Building up our data structures. 
 
-Now that we have some better idea (hopefully) of some of the atomic data types, we want to use these to build more complex data structures that may (eventually - like next week) be useful for data analysis.
+Now that we have some better idea (hopefully) of some of the atomic data types, we want to use these to build more complex data structures that may (eventually - like next week) be useful for data analysis, simulations and the like. There are a few important ones that we will use a lot: matrix, list, data.frame, factors, and formula (which we will not cover in Bio720 but is essential for statistical analyses). There are other important ones (like array) but we will cover these other ones first.
+
+Before we get any further and create some new objects, how do we see all of the objects we currently have in our global environment?
+
+```{r}
+ls()
+```
+
+Let's work with a clean slate. How might we remove all of the objects and start fresh? Obviously you could just do a `rm()` command with each object name, but you can also remove all at once.
+
+```{r}
+rm(list=ls())
+ls()
+```
+
+Let's think about what this command has done.
+
+
 
 You can also embed plots, for example:
 
