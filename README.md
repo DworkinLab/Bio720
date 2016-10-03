@@ -23,7 +23,7 @@ The primary goal of this course it to provide graduate students an opportunity t
 1. Introduction to UNIX and the command line. (Brian)
   1. Introduction to basic shell commands, logging onto remote systems
 
-2. Fundamentals of programming using `R`(Ian). [Link to R portal for class](https://github.com/DworkinLab/Bio720/blob/Introduction_to_R.md)
+2. Fundamentals of programming using `R`(Ian). [Link to R portal for class](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md)
   1. Fundamentals of programming in R.
   2. How to avoid repetive strain injury while programming. Control flow in R. Using the `apply` family of functions in `R`. Simple  simulations.
   3. Working with data in `R`. Getting data in. Data munging (subsetting, merging, cleaning). Working with strings in `R`.
