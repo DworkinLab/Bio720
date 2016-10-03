@@ -11,6 +11,7 @@ The learning objectives for today are as follows:
 1. Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
 2. Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
 3. Practice some of the skills that were introduced in the video tutorials.
+4. Get some practice with some of the confusing things that can happen with R objects as you alter their class.
 
 ## How to organize computational projects.
 
@@ -44,7 +45,7 @@ Why does `mode(x)` and `typeof(x)` give different results?
 Let's create a few more objects and take a look at them
 
 ```{r}
-y = c(3, 4, 5)
+y <- c(3, 4, 5)
 ```
 
 Will `x` and `y` differ?  Check and explain?
@@ -52,7 +53,7 @@ Will `x` and `y` differ?  Check and explain?
 Now let's create a new object z:
 
 ```{r}
-z = 3:5
+z <- 3:5
 ```
 How should `y` and `z` compare? how would you check?
 
@@ -199,3 +200,73 @@ as.numeric(as.character(day))
 ```
 
 Take home message: factors are useful for storing names of experimental levels efficiently, but keep in mind they are stored internally as numbers, not strings! 
+
+## Back to our data structures of interest. 
+
+Provide two different ways of combining `gene1`, `gene2` and `gene3` into a matrix (gene_mat1 and gene_mat2)?
+
+```{r}
+gene_mat1 <- cbind(gene1, gene2, gene3)
+gene_mat1
+
+gene_mat2 <- matrix(c(gene1, gene2, gene3), nrow =6, ncol =3, byrow =FALSE)
+```
+Are these the same?
+
+```{r}
+gene_mat1 == gene_mat2
+identical(gene_mat1, gene_mat2)
+```
+
+Using some of the tools we have already used (str, mode, typeof) shows the elements are the same. However, one has stripped the names (gene_mat2), why do you think this has happened?
+
+How might you fix this?
+
+It is pretty easy, since it is just names that differ, you can use `colnames` to rename the columns
+```{r}
+colnames(gene_mat2) <- c("gene1", "gene2", "gene3")
+gene_mat2
+identical(gene_mat1, gene_mat2)
+```
+
+Let's take our (character) vectors for day and genotype and use `cbind()` (treatments). Before starting write down whether you think the object `treatments` will have class `matrix`. What will the mode be? Why?
+```{r}
+genotype <- rep(c("wildtype", "mutant"), each = 3)
+day <- rep(c("3", "6"), times = 3)
+
+genotype
+day
+
+treatments <- cbind(genotype, day)
+class(treatments)
+mode(treatments)
+```
+
+Now let's take all of  objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use cbind on them. Call this object `all_the_data`. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of `all_the_data`?
+
+```{r}
+
+all_the_data <- cbind(gene1, gene2, gene3, genotype, day)
+class(all_the_data)
+mode(all_the_data)
+```
+
+Explain why `all_the_data` is the class and has the mode that it does?
+Again R is trying to be smart. It can not coerce words into numbers, but it can coerce numbers into strings/characters. So, to keep this a matrix, it first coerces everything into character, and then makes a matrix out of them. Take a look at `?matrix` and it gives some information on the coercion hierarchy. It is worth having this in the back of your mind. 
+
+## data structures with heterogeneous objects.
+ Clearly we did not want to produce a matrix of strings. So we need some sort of data structures where elements (at least at the level of individual vectors that are being organized together) can be of different atomic types (i.e. a collection of heterogeneous objects). There are two main approaches to this, one is the data.frame, which is the spreadsheet like object that is often the easiest to work with when importing data (for analysis and plotting). THe other is a list. As I mentioned in the video tutorials, the data.frame is really a special kind of list. However it is worth comparing and contrasting both. First remove the old `all_the_data` object and make a new one that is a data frame.
+
+First let's make a data.frame: 
+```{r}
+rm(all_the_data)
+all_the_data <- data.frame(gene1, gene2, gene3, genotype, day)
+str(all_the_data)
+class(all_the_data)
+mode(all_the_data)
+
+```
+
+Notice a couple of interesting thing. First it's class is a data.frame, but it is actually a list underneath. Second, without asking or warning us, it has coerced *genotype* and *day* into factors. It is assuming that since you are treating this like regular data (that you will probably want to analyze or plot) you want these as factors. Often this is true. If you don't want this behaviour there is an argument that you can set `stringsAsFactors == FALSE`.
+
+As we showed in the video tutorial, you can extract and subset in a couple of ways (like lists or as a matrix). So show three different ways to extract the 2nd, 3rd and 4th column from `all_the_data` 

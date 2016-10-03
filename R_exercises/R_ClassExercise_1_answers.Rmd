@@ -165,9 +165,3 @@ typeof(y1); mode(y1)
 ```
 
 
-You can also embed plots, for example:
-
-# # ```{r, echo=FALSE}
-# plot(cars)
-# ```
-
