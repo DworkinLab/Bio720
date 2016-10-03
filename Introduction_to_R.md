@@ -1,13 +1,13 @@
 #Introduction to Programming with R
 
- We do not have enough "in class" time to really develop all of the `R` programming skills necessary to enable you to independently perform analysis of differential expression using RNAseq data. Therefore, most of the activities will be self-guided, using a combination of video tutorials and practical exercises. It is expected you will have done all of these for class, as we will be doing a larger in class set of activities assuming a basic level of comfort and familiarity.
+Most of the activities for this section of the course will be self-guided, using a combination of video tutorials and practical exercises. In class we will do  It is expected you will have done all of these for class, as we will be doing a larger in class set of activities assuming a basic level of comfort and familiarity. These will then be followed by independent exercises that will be graded.
 
-Readings: From Bioinformatics Data Skills, chapter 8 presents a crash course in programming in `R`. We will not be using any of the functionality in `ggplot2` quite yet, so you can skip those pages (i.e. skip 207-215, 224-227). I suggest that reading a bit, and/or going through the relevant video tutorial & exercises, and then moving onto the next component may work best.
+**Readings**: Unfortunately Practical Computing for Biologists does not have an introduction to `R`. If you did pick up Bioinformatics Data Skills, chapter 8 presents a crash course in programming in `R`. We will not be using any of the functionality in `ggplot2` quite yet, so you can skip those pages (i.e. skip 207-215, 224-227). However, there are plently of amazing [`R` tutorials](https://cran.r-project.org/other-docs.html) (including less amazing ones by me) online. Use the link in the previous sentence to get to some links. I suggest something like [this one](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) to start with. Alternatively McMaster has access to a number of good ebooks. I think that [this one](http://catalogue.mcmaster.ca/catalogue/Record/2702791) by Larry Pace & Joshua Wiley is a good one to start with. You should (while on campus) be able to access the PDF from [here](http://link.springer.com/book/10.1007%2F978-1-4842-0373-6). I am also making a longer list of various `R` resources to help you out, which is currently [here](https://github.com/DworkinLab/Bio720/blob/Bio720_2016/Some_R_resources.md).  I suggest that reading a bit, and/or going through the relevant video tutorial & exercises, and then moving onto the next component may work best.
 
 ## Installing R
-If you do not have a fairly recent version of `R` installed on your local computer (V.3.2.1 or newer), this is required to be able to complete the class activities. There are several versions of `R` you might consider.
+If you do not have a fairly recent version of `R` installed on your local computer (V.3.3.1 or newer), this is required to be able to complete the class activities. There are several versions of `R` you might consider. R works on all major operating systems (Windows, Apple OS X and Linux).
 - You can [download](http://cran.utstat.utoronto.ca/) and install the version of `R` appropriate to your computer. For Mac OS X or Windows you can download them at the page above. For Linux, use `yum`, `apt` or other package management utility you like. For the Mac OS X R GUI, it has a simple script editor that does syntax highlighting, and displays argument flags for functions. I think the Windows R script editor is much more bare bones.
-- Alternatively, you can use [R-studio](https://www.rstudio.com/), which is a pretty nice IDE (integrayed development environment) for `R`, including advanced syntax highlighting (including RMarkdown, which we will use), and integration with github for version control. While I have a few pet peaves with it, most folks love it.
+- Alternatively, you can use [R-studio](https://www.rstudio.com/), which is a pretty nice IDE (integrated development environment) for `R`, including advanced syntax highlighting (including RMarkdown, which we will use), and integration with github for version control. While I have a few pet peaves with it, some definitely prefer it, especially when getting started.
 
 ## R video tutorials and exercises.
 The data set that is used for some of these activities can be found on the [DRYAD Digital repository](http://datadryad.org/) right [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv?sequence=1). You can also set this up (so you do not need a local copy of the data by putting this command in your script or copying and pasting it into the R editor :
@@ -17,7 +17,7 @@ dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll
 
 *Please note, the scripts may look a bit different, as I have edited them a bit after making the screencasts. All of the important parts are still there!*
 
-The first link is to the screencast itself (hosted on youtube). The subsequent links are to the scripts and exercises.
+The first link is to the screencast itself (hosted on youtube). The subsequent links are to the scripts and exercises. For the first week you only need to watch (and do the exercises) for the first seven parts (up through and including regular sequences and indexing). I am going to make some changes for subsequent weeks.
 
 1. Why use `R` (and why learn to program): Motivating example of working counts of expression data from RNAseq (not yet completed, so skip ahead!).
 2. Introduction to `R`: [part 1. `R` as a calculator](https://youtu.be/Kyxx9_NLlUY)
@@ -44,10 +44,10 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
 
 
-## Notes for Ian to add & improve the screencasts
+## Notes for Ian to add & improve the screencasts (students can ignore this for now).
 - seperate "getting data into R" into 3-4 shorter screencasts(with exercises)
 - seperate " control flow" into one on if & ifelse, and another on loops.
-- seperate the apply screencasts (one for apply alone, additional one for tapply, sapply, lapply)
+- seperate the apply screencasts (one for apply alone, additional one for tapply, sapply, lapply, aggregate)
 - new screencast on lists as a class (heterogeneous collections) and working with them
 - new screencast on data.frame as a list, but also relationship to matrix.
 - new screencast on ordering data sets, and the use of the index in R.
