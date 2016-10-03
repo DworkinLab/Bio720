@@ -6,6 +6,8 @@ Here I am just providing some links to various `R` resources that may be helpful
 
 [swirl interactive R tutorials](http://swirlstats.com/)
 
+[R tutorials on R tutor](http://www.r-tutor.com/)
+
 ### Some of my favourite (general) R books
 (less about understanding and performing analyses, more about programming and using R). There are many many more, but these are just a few I have used and read.
 
