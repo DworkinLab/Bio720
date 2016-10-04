@@ -44,7 +44,7 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
 
 ## In class activities
-1. In class R exercises are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md).
+1. In class R exercises are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md). Please go through screencasts 1 - 7 above first (or else it may not make much sense).
 
 ## Assignments
 
