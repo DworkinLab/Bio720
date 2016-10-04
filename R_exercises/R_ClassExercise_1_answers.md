@@ -9,8 +9,8 @@ In class tonight we are going to both practice some of the `R` skills you were i
 
 The learning objectives for today are as follows:
 
-1.  Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
-2.  Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
+1. Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
+2. Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
 3. Practice some of the skills that were introduced in the video tutorials.
 
 ## How to organize computational projects.
@@ -143,7 +143,38 @@ identical(y, z)
 
 Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
 
+### R does its calculations as `double`, even if inputs are integers
+even though `z` is a vector with integer values, if you use z in a calculation, it will be converted to double. In other words::
 
+
+```r
+typeof(z)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(z/z)
+```
+
+```
+## [1] "double"
+```
+
+```r
+#  though weirdly
+typeof(z*z)
+```
+
+```
+## [1] "integer"
+```
+Most of the time this is not an issue, but it is a strange thing.
+
+
+### Some other atomic types in R
 Ok, let's think about some of the other basic data types we learned about (strings or "character" in R, boolean/logical)
 
 
@@ -558,13 +589,7 @@ ls()
 ```
 
 ```
-##  [1] "a"                   "a1"                  "all_the_data"       
-##  [4] "b1"                  "crap"                "day"                
-##  [7] "gene_mat1"           "gene_mat2"           "gene1"              
-## [10] "gene2"               "gene3"               "genotype"           
-## [13] "genotype2"           "genotype2_factor"    "genotype3"          
-## [16] "genotype3_character" "list_the_data"       "treatments"         
-## [19] "x"                   "y"                   "y1"
+## [1] "a"  "a1" "b1" "x"  "y"  "y1"
 ```
 
 Let's work with a clean slate. How might we remove all of the objects and start fresh? Obviously you could just do a `rm()` command with each object name, but you can also remove all at once.

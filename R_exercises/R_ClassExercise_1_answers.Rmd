@@ -76,7 +76,20 @@ identical(y, z)
 
 Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
 
+### R does its calculations as `double`, even if inputs are integers
+even though `z` is a vector with integer values, if you use z in a calculation, it will be converted to double. In other words::
 
+```{r}
+typeof(z)
+typeof(z/z)
+ 
+#  though weirdly
+typeof(z*z)
+```
+Most of the time this is not an issue, but it is a strange thing.
+
+
+### Some other atomic types in R
 Ok, let's think about some of the other basic data types we learned about (strings or "character" in R, boolean/logical)
 
 ```{r}
