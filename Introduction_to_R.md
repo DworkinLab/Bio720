@@ -43,6 +43,10 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ)
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
 
+## In class activities
+1. In class R exercises are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md).
+
+## Assignments
 
 ## Notes for Ian to add & improve the screencasts (students can ignore this for now).
 - seperate "getting data into R" into 3-4 shorter screencasts(with exercises)
