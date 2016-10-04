@@ -26,9 +26,10 @@ identical(y, z)
 
 ## ------------------------------------------------------------------------
 typeof(z)
+# because of how division is computed in R, it converts to double
 typeof(z/z)
  
-#  though weirdly
+#  though, addition, substraction and multiplication do not require this, so stay integer
 typeof(z*z)
 
 ## ------------------------------------------------------------------------

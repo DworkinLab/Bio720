@@ -77,13 +77,14 @@ identical(y, z)
 Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
 
 ### R does its calculations as `double`, even if inputs are integers
-even though `z` is a vector with integer values, if you use z in a calculation, it will be converted to double. In other words::
+even though `z` is a vector with integer values, if you use z in some calculations that require double precision floating point values, it will be converted to double. In other words::
 
 ```{r}
 typeof(z)
+# because of how division is computed in R, it converts to double
 typeof(z/z)
  
-#  though weirdly
+#  though, addition, substraction and multiplication do not require this, so stay integer
 typeof(z*z)
 ```
 Most of the time this is not an issue, but it is a strange thing.
