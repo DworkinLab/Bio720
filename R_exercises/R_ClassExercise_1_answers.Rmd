@@ -275,6 +275,8 @@ all.equal(genotype2, genotype3)
 
 So let's think about what a factor is?
 
+factors in R may appear as `character` but for efficiency are stored as integers. The idea is you will have far fewer factor levels (which you can check with `nlevels()`) than number of observations, so this can save memory and speed up computation. However, this means you need to realize that factors are not a special form of `character`, but a special form of `numeric`!
+
 If we wanted to make genotype2 into a factor (we will call it genotype2_factor) how would you do so?
 
 ```{r}
