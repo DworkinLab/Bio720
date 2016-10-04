@@ -13,7 +13,7 @@ rm(list=ls())
 b <- c(-4, -2, 0, 1, 3, -5, -1, -8)
 ```
 5. What is your result? The result likely does not make sense (check the wikipedia [entry](https://en.wikipedia.org/wiki/Coefficient_of_variation)). 
-6. Fix your function `CoefVar` to fix the bug in the calculation.
+6. Fix your function `CoefVar` to fix the bug in the calculation. (hint use fix(), or use edit, but over-write the original function).
 7.  Save your script you just wrote (with a name like `MyFirstFunction.R`)
 8. Close `R` (do not save your workspace).
 9. Re-open `R` and source in your file `MyFirstFunction.R`. Be careful about making sure it is in the same working directory as you are in using `getwd()`, or setting it with `setwd()`.
