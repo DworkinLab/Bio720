@@ -49,4 +49,4 @@ You are responsible for ordering your own copies of these books. Both are excell
 
 [For Brian's section](http://helix.mcmaster.ca/720.html). This will have pertinent links to Brian's section of the course.
 
-[R tutorial screencasts](https://www.youtube.com/playlist?list=PLgwACOw1w4Eccc3DYzlL0PWIBSbCZl0C0). A link to the playlist for screencasts I have put together for the `R` tutorials. I will be adding more as the semester progresses.
+[R tutorial screencasts](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md). A link to the playlist for screencasts I have put together for the `R` tutorials. I will be adding more as the semester progresses.
