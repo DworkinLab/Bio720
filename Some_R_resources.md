@@ -2,6 +2,8 @@
 Here I am just providing some links to various `R` resources that may be helpful as you start to learn to program and perform analyses in `R`.
 
 ## R Tutorials
+There are many of these, but here are a few...
+
 [R studio tutorials](https://www.rstudio.com/online-learning/)
 
 [swirl interactive R tutorials](http://swirlstats.com/)
@@ -18,6 +20,13 @@ Here I am just providing some links to various `R` resources that may be helpful
 [The art of R programming](https://www.nostarch.com/artofr.htm). A really nice introduction to programming in R. Does not assume you have any background in programming.
 
 [R in a nutshell](http://shop.oreilly.com/product/0636920022008.do). Once you have some basic understanding of programming in general, this is a nice place to look things up quickly and does a good job of explaining what R is doing with respect to data structures.
+
+## R syntax style guides
+[R syntax style guide according to google](https://google.github.io/styleguide/Rguide.xml)
+
+[R syntax style guide according to Hadley Wickham (and thus R-studio)](http://adv-r.had.co.nz/Style.html)
+
+[R syntax style guide according to me](https://msu.edu/~idworkin/ZOL851_style_guide.html)
 
 
 ## how to find libraries that you might need?
