@@ -8,9 +8,9 @@ output: html_document
 In class tonight we are going to both practice some of the `R` skills you were introduced to in the video tutorials. [Click here](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md) for that list.
 
 The learning objectives for today are as follows:
-1 -  Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
-2 -  Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
-3 - Practice some of the skills that were introduced in the video tutorials.
+1.  Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
+2.  Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
+3. Practice some of the skills that were introduced in the video tutorials.
 
 ## How to organize computational projects.
 
