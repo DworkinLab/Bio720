@@ -850,6 +850,8 @@ as.numeric(day)
 
 Seemingly strange behaviour? However think about it for a minute and try to explain it.
 
+The basic idea is that when a variable is stored as a `factor` in R, the first level (which defaults to alphanumeric, so **m**utant before **w**ildtype in this case) will be stored as "1", the second level as "2" and so on. When you ask to convert it to numeric it uses these numbers. So if your factor levels are named with numbers to begin with, this can mess things up. So take care!
+
 So if you want to turn these into the numbers 3 and 6, how would you do it?
 
 ```r
