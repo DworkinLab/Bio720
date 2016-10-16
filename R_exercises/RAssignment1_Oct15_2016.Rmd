@@ -11,8 +11,7 @@ set.seed(21031990)
 
 1. Write a function that takes as input a numeric vector and outputs the mean, median, standard deviation and standard error of the mean.
 
-
-*hint: you will need to make the output a vector and use the `return()` in your function.
+   *hint: you will need to make the output a vector and use the `return()` in your function.
 
 2. Run this function on a vector of 1000 random numbers (from a normal distribution with mean of 10 and sd = 1)
 
