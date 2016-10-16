@@ -18,20 +18,12 @@ set.seed(21031990)
 ```{r}
 gene1 <- rnorm(mean = 10, sd =1, n = 1000)
 ```
-
 3. Make a factor where the first 500 observations are "treatment_A" and the second 500 are "treatmentB".
-
 4. Make an object that is a factor (again of length 1000) where each observation alternates between two treatment levels "wildtype" and "mutant".
-
 5. Make an object that is a factor (again of length 1000) where it alternatives in units of 20 between "highdose" and "lowdose". i.e. first 20 are "highdose" the next 20 are "lowdose" then the next 20 are "highdose" again.
-
 6. Make two more random variables ("gene2" and "gene3") of length 1000. Make gene2 have a mean of 50 and sd = 5. Make gene3 have a mean of 1000 and sd = 50.
-
 7. Combine your three factors and three genes into a single dataframe called "gene_dat"
-
 8. Use the function you created to compute the summary stats as above for gene1, but for gene1, gene2 and gene3 by extracting from the dataframe you created.
-
 9. Repeat question 8, but only include observations which have values less than  the median  for each of the three columns (i.e. you need to compare values in each vector to the median from that vector)
-
 10. Repeat question 8, but only include observations which have values less than or greater than one standard error from the mean  for each of the three columns (i.e. you need to compare values in each vector to the mean plus or minus the standard error from that vector)
 
