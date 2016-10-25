@@ -8,7 +8,7 @@ date: "October 24, 2016"
 ## for loops and the apply family of functions
 This past week for screencasts and exercies, you learned a bit about how to use `for` loops and `apply` family of functions. Now we are going to do some in class practice and extend your understanding of how they work. In case you want some alternative tutorials [here](https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r#gs.FgFVHlY) is one that goes into more detail.
 
-1. What happens to `x` for each of these functions after you run them?
+1 - What happens to `x` for each of these functions after you run them?
 
 
 ```r
@@ -48,7 +48,7 @@ rm(x)
 
 countFun <-function(x)
 {
-  
+
   for (i in 1:10) {
     x <- x + 1
     print(x)
@@ -84,7 +84,7 @@ Why do these behave differently?
 These behave differently because in one case we have assigned a value to the variable `x` in the global environment, while in the second example the variable is assigned within the context of the `countFun` function. This is because the assignment happened within the context of the function. The details of how this work can get complicated, and different programming languages handle it differently. For more information you should look up a bit about *lexical scoping* and the idea of *environments* in `R`. What is important though is that unless you specifically ask for a variable to be returned from a function, *What happens in a function, stays in the function* for `R`. There are a few exceptions, but keep this in mind generally. This [tutorial](https://darrenjw.wordpress.com/2011/11/23/lexical-scope-and-function-closures-in-r/) might give you some more ideas.
 
 
-2. Write a for loop that generates a vector which is the square of all integers from 1 to 10000. Make this all happen within the loop. i.e. We are going to use the `system.time()` function to monitor how long it takes.
+2 - Write a for loop that generates a vector which is the square of all integers from 1 to 10000. Make this all happen within the loop. i.e. We are going to use the `system.time()` function to monitor how long it takes.
 
 *Note: to use system time the for loop all needs to be on one line*
 
@@ -99,15 +99,15 @@ system.time( for (i in 1:10000) {x[i] <- i^2})
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##   0.237   0.012   0.247
 ```
 
-3. Now do the same thing but *pre-allocate* the vector `x` to store the 10000 values, *before* running the for loop.
+3 - Now do the same thing but *pre-allocate* memory for the vector `x` to store the 10000 values, *before* running the for loop.
 
 
 ```r
-# initialize a vector of length 1
+# initialize a vector of length 10000
 rm(x)
 x <- rep(NA, 10000)
 
@@ -117,15 +117,15 @@ system.time( for (i in 1:10000) {x[i] <- i^2})
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##   0.021   0.002   0.021
 ```
 
 Which runs faster? Please explain why?
 
-When we pre-allocate the vector that we are storing all of our calculations in, R only needs to generate the record of this in its memory once. Then it is essentially filling in the values. In the first example, we are replacing the old version of `x` with the new version, and each time `R` needs to allocate memory to do so.
+When we pre-allocate memory for the vector that we are storing all of our calculations in, R only needs to generate the record of this in its memory once. Then it is essentially filling in the values. In the first example, we are replacing the old version of `x` with the new version, and each time `R` needs to allocate memory to do so.
 
-4. Can you think of code that will be even faster?
+4 - Can you think of code that will be even faster?
 
 
 ```r
@@ -135,7 +135,7 @@ system.time(x <- x^2)
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##       0       0       0
 ```
 
@@ -143,9 +143,11 @@ Why is this faster?
 
 This is faster because `R` is vectorized, so we have no need to run a for loop. Instead it does the computation (squaring the values) on the vector itself all simulataneously. Behind the scenes, R is likely sending the computation to some very fast code written in a lower level language (either `C` or `fortran`)
 
-5. So what is the lesson learned from this?
+5 - So what is the lesson learned from this?
 
-6. Compare the following pieces of code for speed (you can wrap this in `system.time()`)
+If you can vectorize your computations do so. The code is cleaner and faster. If you need to use a `for` loop, don't forget to pre-allocate the appropriate amount of space for your object, and don't try to "grow" or repeatedly over-write variables if you can avoid it!
+
+6 - Compare the following pieces of code for speed (you can wrap this in `system.time()`)
 
 
 ```r
@@ -156,7 +158,7 @@ system.time(x <- replicate(n = n, expr = rnorm(1, mean = 5, sd = 5)))
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##   0.051   0.003   0.052
 ```
 
@@ -170,7 +172,7 @@ system.time(for (i in 1:n) x[i] <- rnorm(1, mean = 5, sd = 5))
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##   0.046   0.000   0.046
 ```
 
@@ -180,7 +182,7 @@ Is there a difference in speed? Can you explain why?
 
 The apply like functions are sort of half way between dynamically growing your object, and pre-allocation. As it has not done a pre-allocation, it does not need to dynamically grow things somewhat. However, it does not do so one value at a time. The take home message is that the apply like family of functions are great to use when you have moderate numbers of calculations to do (upto ~100000 or so), but then they get slower relative to the use of a for loop with pre-allocation.
 
-7. Can you think of a faster way to generate the random numbers?
+7 - Can you think of a faster way to generate the random numbers?
 
 
 ```r
@@ -189,7 +191,7 @@ system.time(x <- rnorm(n, mean =5 , sd = 5))
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##   0.001   0.000   0.002
 ```
 
@@ -198,7 +200,7 @@ Again, use the fact that R does its computations in a vectorized fashion to spee
 
 Running a power analysis.
 
-In statistics, we often want to check (before doing an experiment) how likely we will be able to detect "an effect". This is true whether we are doing RNAseq, or a simple t-test. A tests statistical power is a function of three things. First, the magnitude of the oberved effect (i.e. does your experiment have a big effect on gene expression or really small subtle effects). Second the amount of variation within each treatment group (if what you measure is really noisy, it will make it more difficult to get accurate estimates) and of course sample size. So when statistically oriented researchers are testing new methods, or just planning experiments, they will often use simulations to perform power analyses.  These require repeating the same simulations over and over again and checking results against some expectation or some hypothetical threshold (i.e. statistical significance is something some researchers care about... although you should focus on magnitude of effect size and confidence intervals... but that is another conversation).
+In statistics, we often want to check (before doing an experiment) how likely we will be able to detect "an effect". This is true whether we are doing RNAseq, or a simple t-test. A tests statistical power is a function of three things. First, the magnitude of the observed effect (i.e. does your experiment have a big effect on gene expression or really small subtle effects). Second the amount of variation within each treatment group (if what you measure is really noisy, it will make it more difficult to get accurate estimates) and of course sample size. So when statistically oriented researchers are testing new methods, or just planning experiments, they will often use simulations to perform power analyses.  These require repeating the same simulations over and over again and checking results against some expectation or some hypothetical threshold (i.e. statistical significance is something some researchers care about... although you should focus on magnitude of effect size and confidence intervals... but that is another conversation).
 
 Here is an example of a very simple simulation, which generates a linear relationship between two variables (the dependent variable x and the response variable y), simulates values of x based on this relationship and the amount of variation (noise) and then fits a linear regression and extracts the p-value associated with the slope of the relationship.
 
@@ -234,23 +236,23 @@ summary(mod_1) # just to look at.
 ```
 
 ```
-## 
+##
 ## Call:
 ## lm(formula = y ~ x)
-## 
+##
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.33338 -0.69571 -0.06429  0.45381  1.76119 
-## 
+##      Min       1Q   Median       3Q      Max
+## -1.33338 -0.69571 -0.06429  0.45381  1.76119
+##
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)    
 ## (Intercept)   2.1543     0.7841   2.748 0.013238 *  
 ## x             0.3361     0.0788   4.265 0.000466 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
+##
 ## Residual standard error: 0.8883 on 18 degrees of freedom
-## Multiple R-squared:  0.5027,	Adjusted R-squared:  0.475 
+## Multiple R-squared:  0.5027,	Adjusted R-squared:  0.475
 ## F-statistic: 18.19 on 1 and 18 DF,  p-value: 0.0004655
 ```
 
@@ -262,7 +264,7 @@ summary(mod_1) # just to look at.
 ## [1] 0.0004655427
 ```
 
-9. How would you take this idea and create a vector that stores the p_values from these simulations, and repeat the simulation 1000 times using a for loop? Then use this vector to find out what proportion of p-values are less than 0.05.
+8 - How would you take this idea and create a vector that stores the p_values from these simulations, and repeat the simulation 1000 times using a for loop? Then use this vector to find out what proportion of p-values are less than 0.05.
 
 
 ```r
@@ -302,7 +304,7 @@ hist(pvals)
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png)
 
 
-10. How would you do the same thing as in question 9 but by writing a function and using `replicate`?
+9 -  How would you do the same thing as in question 9 but by writing a function and using `replicate`?
 
 
 ```r
@@ -341,7 +343,7 @@ hist(pvals)
 
 Why are the results from question 9 and 10 not the same?
 
-11. Say you wanted to see what would happened if you varied the sample size from n = 10 to n = 100 or varied the slope from 0 to 0.5? How would you do this using both approaches from questions 9 and 10 (you may need to use nested for loops).
+10 - Say you wanted to see what would happened if you varied the sample size from n = 10 to n = 100 or varied the slope from 0 to 0.5? How would you do this using both approaches from questions 9 and 10 (you may need to use nested for loops).
 
 **Here is a slightly more involved example**
 
@@ -350,15 +352,15 @@ First with a set of nested for loops, one to vary the slope, the next (nested wi
 
 ```r
 rm(list=ls())
-N = 200  # Number of simulations for inner loop. You generally want this to be >1000. 
+N = 200  # Number of simulations for inner loop. You generally want this to be >1000.
 
-p = rep(NA, N) # initializing the vector to store the p values in the inner for loop. 
+p = rep(NA, N) # initializing the vector to store the p values in the inner for loop.
 
 #Global Parameter values
 a = 3 # intercept
 b <- seq(from=0, to=0.5, by=0.05)
 
-sample_size <- seq(from = 10 ,to = 100 ,by = 5)  # Incremently increasing sample size 
+sample_size <- seq(from = 10 ,to = 100 ,by = 5)  # Incremently increasing sample size
 
 power.size <- numeric(length(sample_size)) # initializing the vector to store the power at each sample size for the outer for loop.
 
@@ -369,34 +371,34 @@ power.b <- matrix(NA,length(sample_size),length(b))
 system.time(
 for (k in 1:length(b))  # across the different values for the slope
  {
-  
+
   b_b <- b[k]
-  
+
    for (j in 1:length(sample_size))  # looping through the different sample_sizes
 
     {
-   
+
       s_s = sample_size[j]
       for (i in 1:N)
       {
        x <- rnorm(s_s, mean = 10, sd = 2)  # simulate values of predictor
        y_det <- a + b_b*x             # deterministic part of model
        y_sim <- rnorm(s_s, mean = y_det, sd = 2)  # Simulate y|x values
-       lm1 <- lm(y_sim ~ x)                    # fit model given simulation 
+       lm1 <- lm(y_sim ~ x)                    # fit model given simulation
        p[i] <- coef(summary(lm1))[2,4] # You may want to extract a different p-value from the model.
-	  
+
      }
-    
+
       power.size[j] <- length(p[p<0.05])/N   # How many p-values are less than alpha (0.05)
    }
-   
-    power.b[,k] <- power.size 
+
+    power.b[,k] <- power.size
 }
 )
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##  53.088   0.298  53.027
 ```
 
@@ -405,8 +407,8 @@ for (k in 1:length(b))  # across the different values for the slope
 par(mfrow=c(1,2))
 
 #3D perspective plot
-persp(y=b, x=sample_size, z=power.b, col="blue", theta=-65, 
-    shade=0.75, ltheta=45, ylab="slope", xlab="Sample Size", 
+persp(y=b, x=sample_size, z=power.b, col="blue", theta=-65,
+    shade=0.75, ltheta=45, ylab="slope", xlab="Sample Size",
     lphi=30, zlim=c(0,1.25), ticktype = "detailed")
 
 # contour plot
@@ -417,15 +419,15 @@ contour(z=power.b, x=sample_size, y=b, col="blue",  ylab="slope", xlab="Sample S
 
 ```r
 #fancy contour
-filled.contour(z=power.b, x=sample_size, y=b, 
-    ylim=c(min(b),max(b)), xlim=c(min(sample_size), max(sample_size)), 
+filled.contour(z=power.b, x=sample_size, y=b,
+    ylim=c(min(b),max(b)), xlim=c(min(sample_size), max(sample_size)),
     xlab="Sample Size", ylab="slope", color = topo.colors)
 ```
 
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-2.png)
 
 
-### How about in a more `R` like fashion? 
+### How about in a more `R` like fashion?
 
 We could have used replicate instead of the most internal for loop, which would have made this look less messy. However, the `R` way uses some new approaches based on the apply like family. In particular a function, `expand.grid` which helps us make all possible combinations of two vectors.
 
@@ -485,7 +487,7 @@ dim(b_N)
 ```
 
 ```r
-colnames(b_N) <- c("b", "sample_size") 
+colnames(b_N) <- c("b", "sample_size")
 
 # Here is the function to generate the simulation and fit the model given the simulated data.
 SimulatePower <- function(sample_size, b_b, a, std_dev){
@@ -508,9 +510,9 @@ The basic approach works like this. This goes through all combinations of `sampl
 
 
 ```r
-p_values <- mapply(SimulatePower, 
-    sample_size  = b_N$sample_size, b_b = b_N$b, 
-    MoreArgs=list(a = 3, std_dev = 2)) 
+p_values <- mapply(SimulatePower,
+    sample_size  = b_N$sample_size, b_b = b_N$b,
+    MoreArgs=list(a = 3, std_dev = 2))
 ```
 
 How ever, this only runs through the whole set of parameters (slopes and sample sizes) once. So we need to place this function within the context of a replicate function.
@@ -518,14 +520,14 @@ How ever, this only runs through the whole set of parameters (slopes and sample 
 
 ```r
 system.time(
-rep_p <- replicate(n = 200, mapply(SimulatePower, 
+rep_p <- replicate(n = 200, mapply(SimulatePower,
     sample_size  = b_N$sample_size, b_b = b_N$b, # arguments to vectorize across
     MoreArgs=list(a=0, std_dev=1)) )   # other parameters
 )
 ```
 
 ```
-##    user  system elapsed 
+##    user  system elapsed
 ##  53.283   0.298  53.267
 ```
 
@@ -544,7 +546,7 @@ Now we can compute the power. We use the apply function to determine the fractio
 
 
 ```r
-power_lev <- apply(rep_p, MARGIN=1, 
+power_lev <- apply(rep_p, MARGIN=1,
     function(x) length(x[x <= 0.05])/length(x)) # how many p-values are less than 0.05
 ```
 
@@ -559,17 +561,17 @@ Now we can plot it like before.
 
 
 ```r
-persp(x=b ,y=sample_size, z=grid_matrix, col="blue", 
+persp(x=b ,y=sample_size, z=grid_matrix, col="blue",
     theta=-10, shade=0.75, phi=15, d=2, r=0.1,
-    xlab="slope", ylab="sample size", zlab="power", 
+    xlab="slope", ylab="sample size", zlab="power",
     ticktype="detailed")
 ```
 
 ![plot of chunk unnamed-chunk-20](figure/unnamed-chunk-20-1.png)
 
 ```r
-filled.contour(z=grid_matrix, y=sample_size, x=b, 
-    xlim=c(min(b),max(b)), ylim=c(min(sample_size), max(sample_size)), 
+filled.contour(z=grid_matrix, y=sample_size, x=b,
+    xlim=c(min(b),max(b)), ylim=c(min(sample_size), max(sample_size)),
     ylab="Sample Size", xlab="slope", color = topo.colors)
 ```
 

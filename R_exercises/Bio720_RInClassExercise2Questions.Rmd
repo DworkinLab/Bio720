@@ -91,7 +91,7 @@ x <- rep(NA, 10000)
 
 ## Running a power analysis.
 
-In statistics, we often want to check (before doing an experiment) how likely we will be able to detect "an effect". This is true whether we are doing RNAseq, or a simple t-test. A tests statistical power is a function of three things. First, the magnitude of the oberved effect (i.e. does your experiment have a big effect on gene expression or really small subtle effects). Second the amount of variation within each treatment group (if what you measure is really noisy, it will make it more difficult to get accurate estimates) and of course sample size. So when statistically oriented researchers are testing new methods, or just planning experiments, they will often use simulations to perform power analyses.  These require repeating the same simulations over and over again and checking results against some expectation or some hypothetical threshold (i.e. statistical significance is something some researchers care about... although you should focus on magnitude of effect size and confidence intervals... but that is another conversation).
+In statistics, we often want to check (before doing an experiment) how likely we will be able to detect "an effect". This is true whether we are doing RNAseq, or a simple t-test. A tests statistical power is a function of three things. First, the magnitude of the observed effect (i.e. does your experiment have a big effect on gene expression or really small subtle effects). Second the amount of variation within each treatment group (if what you measure is really noisy, it will make it more difficult to get accurate estimates) and of course sample size. So when statistically oriented researchers are testing new methods, or just planning experiments, they will often use simulations to perform power analyses.  These require repeating the same simulations over and over again and checking results against some expectation or some hypothetical threshold (i.e. statistical significance is something some researchers care about... although you should focus on magnitude of effect size and confidence intervals... but that is another conversation).
 
 Here is an example of a very simple simulation, which generates a linear relationship between two variables (the dependent variable x and the response variable y), simulates values of x based on this relationship and the amount of variation (noise) and then fits a linear regression and extracts the p-value associated with the slope of the relationship.
 
@@ -128,6 +128,6 @@ p_val
 
 9 -  How would you do the same thing as in question 9 but by writing a function and using `replicate`?
 
-Why are the results from question 9 and 10 not the same?
+Why are the results from question 8 and 9 not the same?
 
 10 - Say you wanted to see what would happened if you varied the sample size from n = 10 to n = 100 or varied the slope from 0 to 0.5? How would you do this using both approaches from questions 9 and 10 (you may need to use nested for loops).
