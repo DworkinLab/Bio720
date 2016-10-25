@@ -43,6 +43,9 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ)
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
 
+### Access to DataCamp tutorials and exercises
+I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720) for 2016. You should have gotten an email to your McMaster account to use all of their tutorials and exercises.
+
 ## In class activities
 1. In class R exercises are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md). Please go through screencasts 1 - 7 above first (or else it may not make much sense).
 
