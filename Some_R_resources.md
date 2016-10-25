@@ -4,7 +4,7 @@ Here I am just providing some links to various `R` resources that may be helpful
 ## R Tutorials
 There are many of these, but here are a few...
 
-[DataCamp Tutorials](https://www.datacamp.com/home) has nice interactive introductory tutorials for `R`. It has similarly nice  introductory `Python` tutorials
+[DataCamp Tutorials](https://www.datacamp.com/home) has nice very interactive introductory tutorials for `R`. It has similarly nice  introductory `Python` tutorials. I have set up a class page for Bio720 (2016) so you can use the tutorials.
 
 [R studio tutorials](https://www.rstudio.com/online-learning/)
 
