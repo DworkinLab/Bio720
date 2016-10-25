@@ -4,6 +4,8 @@ Here I am just providing some links to various `R` resources that may be helpful
 ## R Tutorials
 There are many of these, but here are a few...
 
+[DataCamp Tutorials](https://www.datacamp.com/home) has nice interactive introductory tutorials for `R`. It has similarly nice  introductory `Python` tutorials
+
 [R studio tutorials](https://www.rstudio.com/online-learning/)
 
 [swirl interactive R tutorials](http://swirlstats.com/)
@@ -12,6 +14,8 @@ There are many of these, but here are a few...
 
 ### Some of my favourite (general) R books
 (less about understanding and performing analyses, more about programming and using R). There are many many more, but these are just a few I have used and read.
+
+Check back on [this page](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md) for a few suggestions of introductory books.
 
 [R programming for bioinformatics](http://www.crcnetbase.com/isbn/9781420063684). Robert Gentleman. A very nice introduction to programming in R. Not much to do about bioinformatics *per se*, but a good way of learning `R`.
 
