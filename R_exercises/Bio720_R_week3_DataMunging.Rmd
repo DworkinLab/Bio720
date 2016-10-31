@@ -25,14 +25,19 @@ We have already spent considerable time in previous tutorials making data frames
 You may wish to install certain `R` libraries that get used a lot. While R-studio has a number of easy ways to install libraries I still prefer having it in the script. You only need to install the libraries once, although it is worth updating them regularly, and I re-install them everytime I update `R`.
 
 ```{r}
-install.packages("data.table")
+#install.packages("data.table")
 ```
 
 ## Data
 
 We will use a number of different data sets to illustrate each of the points, but for the main one, we will use an old *Drosophila melanogaster* data set measuring several traits (lengths) and the number of sex comb teeth (a structure used to clasp females during copulation) for different wild type strains (line) reared at different developmental temperatures, with and without a mutation that effects proximal-distal axis development in limbs (genotype)
 
+
+```{r}
 dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
+
+```
+
 
 Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
  

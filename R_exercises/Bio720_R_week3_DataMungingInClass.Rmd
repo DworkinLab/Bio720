@@ -211,9 +211,7 @@ dim(dll_data_new_subset)
 ### Clean up
 let's remove the data frames we are not using.
 
-```{r}
-rm(dll_data_Dll, dll_data_wt, dll_data_new_subset, matched_set)
-```
+
 
 ## Cleaning variable names
 Let's take a closer look at the names of the different fly strains used.
@@ -312,9 +310,6 @@ tail(line_names3, n = 25)
 
 Say we wanted to call the "sam" line by its proper name "Samarkand". How could we do this?
 
-```{r}
-line_names3 <- sub("sam", "SAMARKAND", line_names3)
-```
 
 #### Clean up
 rm(line_names2, line_names3, line_names, line_names2_mat, line_str, new_rows)
@@ -330,8 +325,9 @@ str(dll_data$temp)
 However we might want to treat this as a factor. Also your PI has decided they want you to encode it at "HighTemp" and "LowTemp". So you have decided to create a new variable to do so. Not surprisingly, you have a few different ways to do this. The most obvious (and what you have done before) is to generate a factor. You can make the variable part of the data frame object, but I am going to keep it seperate for now.
 
 ```{r}
+# What's missing in the next statement
 temp_as_factor <- with(dll_data,
-                      factor(temp, 
+                      (temp, 
                              labels = c("LowTemp", "HighTemp")))
 
 str(temp_as_factor)
@@ -344,7 +340,9 @@ tail(temp_as_factor)
 An alternative approach would be to use the `ifelse()` function.
 
 ```{r}
-temp_as_factor2 <- with(dll_data, ifelse(temp == 25, "LowTemp", 
+
+# What's missing in the next statement?
+temp_as_factor2 <- with(dll_data, ifelse(5, "LowTemp", 
                                          ifelse(temp == 30, "HighTemp", NA)))
 temp_as_factor2 <- factor(temp_as_factor2)
 str(temp_as_factor2)
