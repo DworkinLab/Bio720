@@ -1,0 +1,471 @@
+---
+title: "Bio720_DataMunging"
+author: "Ian Dworkin"
+date: "October 31, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Brief introduction
+One of the most common "programming" activities you will do in genomics and bioinfomatics is to get the data into a format that facilitates (and makes possible) the analyses you are doing. This activity can often occupy very large amounts of your time
+
+These activities have many names: *wrangling data, munging data, cleaning data, data manipulation*. Given how important this is, it will come as no surprise that there are entire R libraries devoted to it. There are several lists that are worth looking at like [here](http://datascienceplus.com/best-packages-for-data-manipulation-in-r/) and [here](https://www.analyticsvidhya.com/blog/2015/12/faster-data-manipulation-7-packages/). Also, books like [Data Manipulation with R](https://www.amazon.ca/Data-Manipulation-R-Phil-Spector/dp/0387747303)!
+
+In class we are going to go through just a few activities that are important.  reshaping, merging, combining variables (paste, interaction),  combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),  sorting (order), creating a dataset from multiple external files (RNAseq example)....
+
+
+## for your own review
+
+We have already spent considerable time in previous tutorials making data frames using cbind, rbind, data.frame, etc.. As we have limited time in class I leave review of that to you from the screencasts and activites at datacamp.
+
+## install packages.
+You may wish to install certain `R` libraries that get used a lot. While R-studio has a number of easy ways to install libraries I still prefer having it in the script. You only need to install the libraries once, although it is worth updating them regularly, and I re-install them everytime I update `R`.
+
+```{r}
+install.packages("data.table")
+```
+
+## Data
+
+We will use a number of different data sets to illustrate each of the points, but for the main one, we will use an old *Drosophila melanogaster* data set measuring several traits (lengths) and the number of sex comb teeth (a structure used to clasp females during copulation) for different wild type strains (line) reared at different developmental temperatures, with and without a mutation that effects proximal-distal axis development in limbs (genotype)
+
+dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
+
+Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
+ 
+```{r}
+summary(dll_data)
+str(dll_data)
+dim(dll_data)
+head(dll_data)
+
+```
+
+## Cleaning data
+### removing missing data
+
+Sometimes your data set has missing data, i.e. for some reason you could not measure one of your variables on a particular object. How you decide to deal with missing data can be a big topic, but for the moment we are going to assume you want to delete rows that contain missing data. 
+
+First let's check if there is any missing data
+
+```{r}
+is.na(dll_data)
+
+# or more easily
+anyNA(dll_data)
+```
+
+We need to decide what to do with the missing data. If you have lots of data, and do not mind removing all cases (rows) that contain **any** missing data then `na.omit` is a useful solution.
+
+```{r}
+dll_data_complete <- na.omit(dll_data)
+
+```
+How would you check?
+
+This has caused us to remove 50 observations. It may be useful to instead look at where the missing data is contained and maybe make a subsetted data set based on that. There are numerous options about how `R` should handle operations if an `NA` is found. You can look at the help under `?NA`. 
+
+For the moment, we are going to accept the approach above, and use it
+
+```{r}
+dll_data <- na.omit(dll_data)
+```
+
+### finding and removing duplicate rows in a data frame.
+The `duplicated()` allows you to see which, if any rows are perfect duplicates of one another.
+
+We can first ask if any rows are duplicates.
+
+This provides a Boolean
+```{r}
+duplicated(dll_data)
+```
+
+So we can do something like:
+
+```{r}
+sum(duplicated(dll_data))
+```
+
+Or if you want it as a Boolean
+```{r}
+any(duplicated(dll_data))
+```
+
+`R` has a convenience function for the above:
+
+```{r}
+anyDuplicated(dll_data)
+```
+So for this example there were no duplicate rows. However let's say an accident happened in generating the data set and a few rows were duplicated. I am going to use the `sample()` function to extract 5 random rows.
+
+```{r}
+new_rows <- dll_data[sample(nrow(dll_data), size = 5, replace = T ),]
+
+dll_data2 <- rbind(dll_data, new_rows)
+str(dll_data2)
+```
+
+Now you don't know which rows, they are.  Please show how you would find whether there are any duplicated rows, and which ones they are
+```{r}
+any(duplicated(dll_data2))
+
+dll_data2[duplicated(dll_data2),]
+
+```
+
+So what should we do? We can use the `unique()` to remove these duplicated rows
+
+```{r}
+dll_data_unique <- unique(dll_data2)
+dim(dll_data_unique)
+dim(dll_data2)
+dim(dll_data)
+```
+
+Let's just do a bit of clean-up.
+
+```{r}
+rm(dll_data_complete, dll_data_unique, dll_data2)
+```
+
+## Subsetting data sets (review)
+
+In some sense this is a review of what we learned during the first week, but there are a few details that are worth considering.
+
+Let's look at the data again:
+
+```{r}
+str(dll_data)
+```
+
+As we can see there are two genotypes. Let's say we wanted to make a data frame (`dll_data_wt`) that was a subset with only the wild type (`wt`) data? How would you do this with the index?
+
+### using the index
+```{r}
+# What's missing
+dll_data_wt <- dll_data[,]
+```
+
+Has this created the appropriate subset of data?
+
+```{r}
+with(dll_data, table(genotype))
+nrow(dll_data_wt)
+```
+
+### subsetting on factors and removing unused levels.
+
+So that seems to match. We should only have one level now in `genotype`. Let's check.
+
+```{r}
+levels(dll_data_wt$genotype)
+```
+
+So what is going on? We know we only have the correct number of observations associated, but it still has the level `Dll` in the factor genotype, why? Because of the way it has been stored, each of these levels is still associated as part of `genotype`. Thankfully it is very easy to fix.
+
+```{r}
+dll_data_wt <- droplevels(dll_data_wt)
+levels(dll_data_wt$genotype)
+```
+
+### using the subset function
+
+Of course the easiest alternative is to use the `subset` function we introduced a few weeks back. Please use this to make a data frame for the `Dll` factor level of genotype and check what has happened to the `wt` factor level. 
+
+
+```{r}
+dll_data_Dll <- subset(dll_data, genotype == "Dll" )
+dim(dll_data_Dll)
+with(dll_data, table(genotype))
+levels(dll_data_Dll$genotype)
+dll_data_Dll <- droplevels(dll_data_Dll)
+```
+
+`subset()` like using the index allows you to select specific columns as well. Create a new version of dll_data_Dll where the only columns that remain are line, genotype, temp and SCT.
+
+```{r}
+dll_data_Dll <- subset(dll_data, 
+                       genotype == "Dll",
+                       select = c(line, genotype, temp, SCT))
+
+dim(dll_data_Dll)
+```
+
+### the `%in%` matching operator can be very useful for finding things in your data set to work on.
+
+The `%in%` is a matching operator (also see `match()`) that returns a boolean (TRUE or FALSE). This can be really useful to find things. Here we will go ahead and find all instances where a couple of the lines are in the data set.
+
+```{r}
+matched_set <- dll_data$line %in% c("line-Sam", "line-1")
+sum(matched_set)
+
+dll_data_new_subset <- dll_data[matched_set,]
+dim(dll_data_new_subset)
+```
+
+
+### Clean up
+let's remove the data frames we are not using.
+
+```{r}
+rm(dll_data_Dll, dll_data_wt, dll_data_new_subset, matched_set)
+```
+
+## Cleaning variable names
+Let's take a closer look at the names of the different fly strains used.
+
+```{r}
+levels(dll_data$line)
+```
+
+Some are numbers, some are letters. We decide, that we need to clean this up a bit. First off, we have no need to have "line-" as a prefix for each of these labels, and may make things confusing down the road. So we want to get rid of them. However we **don't** want to edit the spreadsheet, as it is most importantly bad scientific practice, and would be a lot of work. So how do we do it efficiently?
+
+We actually have a couple of options.
+
+First thing to keep in mind though is that `dll_data$line` is currently stored as an object of class `factor`. Why is this important?
+
+### `substr()`
+Let's try to do some simple string manipulation. There are a few functions that could be useful here. Let's start with `substr()` (substring). This will extract or replace substrings within a character vector. So what do we need to do first?
+
+```{r}
+line_str <- as.character(dll_data$line)
+str(line_str)
+head(line_str)
+```
+
+Now we can use `substr()`
+
+```{r}
+line_names <- substr(line_str, 
+                     start = 6, stop= 1000000L )
+
+head(line_names)
+tail(line_names)
+```
+
+In this case, since the strings we want to keep start at different positions in the original string, we can't use an arbitrary string length (i.e. try `stop  = 7`). So we have left the `stop` single to be as long as possible (upto 10^6) but no longer than the end of the string.
+
+### `strsplit()`
+An alternative way to do this is to use the fact that we (purposefully) used a delimiter character to seperate parts of the name. In this case we used the "-" to seperate the word "line" from the actual line name we car about. As such we can use a second function that can be very valuable, `strsplit()`.
+
+```{r}
+line_names2 <- strsplit(line_str, split = "-")
+head(line_names2)
+
+```
+Here it has created a list, where each list contains the 2 elements ("line" and the name of the line which we want). We are going to convert this list to a matrix so we can extract what we need.
+
+```{r}
+line_names2_mat <- matrix(unlist(line_names2), 
+                          ncol = 2,
+                          byrow = TRUE)
+
+head(line_names2_mat)
+```
+
+And the second column contains what we want (line names) so we could make a new variable.
+
+```{r}
+dll_data$line_names <- factor(line_names2_mat[,2])
+str(dll_data$line_names)
+```
+
+As an aside, in my lab I enforce an approach for imaging where all images, videos, or sequence files have a consistent (and identical within project) naming convention. For instance our wing images have a naming convention like initials_project_line_sex_genotype_rep. So for images it may be something like:
+
+`ID_GBE_SAM_F_WT_01.tif`
+
+Which would be ID = Ian Dworkin (initials), GBE = project name, SAM is line name, etc... This enables me to import the file names as variables and use `strsplit()` like we did above and automatically populate the variables for the experiment. No need to try to seperate things in a spreadsheet program!
+
+### `gsub`
+
+Many times however, there is no consistent delimiter like "-", nor can we assume the variable name we want is in a particular part of the string. So sometimes we need to utilize some simple regular expressions. `R` has a number of useful regular expression tools in the `base` library (`gsub`, `grep`, `grepl`, etc ). I suggest using `?grep` to take a deeper look. Here we will encounter just a few.
+
+`sub()` and `gsub()` are functions that perform replacements for the first match or globally (g) for all matches respectively. If we go back to the names of the original lines, we will see they all have `line-` in common, so perhaps we can search and replace based on that pattern. This is quite easy as well.
+
+```{r}
+str(line_str)
+line_names3 <- gsub(pattern = "line-",
+                    replacement = "",
+                    x = line_str)
+
+head(line_names3)
+tail(line_names3)
+```
+
+What has happened here? Well we looked in the `line_str` object, and found all instances of our pattern (which in this case was the simple "line-"), and then we *replaced* this with "", in other words an emptry string.
+
+`R` can handle POSIX style regular expressions (probably what you learned with Brian) as well PERL style regular expressions by setting the flag `PERL = TRUE`. This enables very flexible pattern searching.
+
+### Some other things to help "clean" up names, etc..
+
+You may have noticed that for the line names which are short words, some are lower case and some are upper case. It could be that this inconsistentcy make cause an issue down the road. So let's say we wanted to take `line_names3` and make all of the words lower case. How would we do that? `R` has some nice functions to help, namely `tolower()` (and `toupper()`) and the more general `chartr()` for character translation.
+
+```{r}
+line_names3 <- tolower(line_names3)
+head(line_names3)
+tail(line_names3, n = 25)
+```
+
+Say we wanted to call the "sam" line by its proper name "Samarkand". How could we do this?
+
+```{r}
+line_names3 <- sub("sam", "SAMARKAND", line_names3)
+```
+
+#### Clean up
+rm(line_names2, line_names3, line_names, line_names2_mat, line_str, new_rows)
+
+### renaming variables, factors etc..
+
+For this experiment, all flies were reared during their development at two temperatures, 25C and 30C. Currently this is kept as an integer. 
+
+```{r}
+str(dll_data$temp)
+```
+
+However we might want to treat this as a factor. Also your PI has decided they want you to encode it at "HighTemp" and "LowTemp". So you have decided to create a new variable to do so. Not surprisingly, you have a few different ways to do this. The most obvious (and what you have done before) is to generate a factor. You can make the variable part of the data frame object, but I am going to keep it seperate for now.
+
+```{r}
+temp_as_factor <- with(dll_data,
+                      factor(temp, 
+                             labels = c("LowTemp", "HighTemp")))
+
+str(temp_as_factor)
+head(temp_as_factor)
+tail(temp_as_factor)
+```
+
+### Using ifelse()
+
+An alternative approach would be to use the `ifelse()` function.
+
+```{r}
+temp_as_factor2 <- with(dll_data, ifelse(temp == 25, "LowTemp", 
+                                         ifelse(temp == 30, "HighTemp", NA)))
+temp_as_factor2 <- factor(temp_as_factor2)
+str(temp_as_factor2)
+```
+
+One issue with this is nested `if` statements, like `for` loops can get messy. Plus there is an internal limit on how much nesting can occur (I think a hierarchy of 5 or 6), so you want to take some care in using this approach.
+
+## Sorting data frames
+
+Sometimes you just want to sort your data frame. While this is rarely necessary for statistical analyses or plotting of the data, it is important to look at the raw data as a double (triple!!!) check that there are no typos, or issues you were not aware of. I would say in genomic analysis this is most important when you are looking at the summary of statistical analyses and you want to sort your output by genes with greatest effects or something else. While there is a `sort()` function in `R` this is not generally the way you want to approach it.
+
+```{r}
+sort(dll_data$SCT)
+```
+This just sorts the vector, which does not help us much. Instead we are going to use the `order()` function which provides information on the index for each observation. So 
+
+```{r}
+order(dll_data$SCT)
+```
+Provides the row numbers. We can use this to sort via the *index*.
+
+```{r}
+dll_data_sorted <- dll_data[order(dll_data$SCT),]
+
+head(dll_data_sorted)
+```
+
+How would you sort on tibia?
+
+### sorting from highest to lowest
+
+So this by default sorts from lowest to highest. Use the help function for `order` and sort the data from highest to lowest
+
+```{r}
+dll_data_sorted <- dll_data[order(-dll_data$SCT),]
+head(dll_data_sorted)
+```
+
+### Sorting on multiple different columns. 
+
+This is a natural extension of what we have already done.
+
+```{r}
+dll_data_sorted <- dll_data[order(dll_data$SCT, dll_data$temp),]
+head(dll_data_sorted)
+head(dll_data)
+```
+
+## Merging data frames
+
+We often end up in a situation where we collect more data on the same set of samples (or in the same locales) that we need to include in our analyses. Again, we do not want to go back and edit the spreadsheets, but instead merge the data frames during the analysis. For instance, let's say we had this new data that related the elevation that each of the 27 lines were originally collected at, and we thought this may explain some important component of the variation in the traits (in this case size). So our collaborator collected this data:
+
+```{r}
+line_names <- dll_data$line
+levels(line_names)
+elevations <- c(100, 300, 270, 250, 500, 900, 500, 1100, 500,
+                3000,500, 570, 150, 800, 600, 500, 1900, 100,
+                300, 270, 250, 500, 900, 500, 1100, 500, 600)
+
+MeanDayTimeTemp <- c(rnorm(27, mean = 20, sd = 5))
+elevation_data <- data.frame(levels(line_names), 
+                             elevations,
+                             MeanDayTimeTemp)
+```
+So how do we combine these?
+
+Using a for loop or ifelse is possible, but would be messy. There are two easier options. First using merge.
+### merge
+
+The `merge()` function is designed for exactly this. It works on matching variable names (exactly is best) from variables with the same name, or where the matching pairs are specified.
+
+In our case
+
+```{r}
+names(dll_data)
+names(elevation_data)
+```
+
+The easiest thing to do would be to rename the variable in `elevation_data` so that it matches that in `dll_data`
+
+```{r}
+names(elevation_data)[1] <- "line"
+str(elevation_data)
+```
+
+Now we can merge the data
+
+```{r}
+merged_data <- merge(x = elevation_data, 
+                     y = dll_data)
+```
+
+How can we check if it merged correctly?
+
+```{r}
+head(merged_data)
+tail(merged_data)
+```
+
+The `merge()` function has a great deal more flexibility, and it is worth looking at the examples in the help function! A word of warning with `merge()` and `reshape()` (below). The functions can result in some odd behaviour when there are non-unique rows which create conflicts. They can also stumble with missing data sometimes. So be on the look out for such things when you are using these functions.
+
+### the power of the index
+
+We can also use the index to do something similar.
+
+Say we measured gene expression of a particular transcript for both genotypes *Dll* and *wt*. We wanted to include that. It would be very easy to use an ifelse, but we can also use the index
+
+```{r}
+geneXpression <- c(Dll=1121, wt = 2051)
+merged_data$geneExp <- geneXpression[dll_data$genotype]
+
+head(dll_data)
+```
+
+Make a new variable based on genotype for geneY = c(200, 500).
+
+#### Clean up
+```{r}
+rm(elevation_data, elevations, MeanDayTimeTemp, temp_as_factor, dll_data_sorted, geneXpression, temp_as_factor2, line_names, stuff, merged_data)
+```
+
+## reshaping data
+
+For next week.
