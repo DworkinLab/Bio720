@@ -1,16 +1,8 @@
----
-title: "Bio720_DataMunging"
-author: "Ian Dworkin"
-date: "October 31, 2016"
-output: 
-  html_document: 
-    keep_md: yes
----
+# Bio720_DataMunging
+Ian Dworkin  
+October 31, 2016  
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-options(digits  = 3)
-```
+
 
 ## Brief introduction
 One of the most common "programming" activities you will do in genomics and bioinfomatics is to get the data into a format that facilitates (and makes possible) the analyses you are doing. This activity can often occupy very large amounts of your time
@@ -27,7 +19,8 @@ We have already spent considerable time in previous tutorials making data frames
 ## install packages.
 You may wish to install certain `R` libraries that get used a lot. While R-studio has a number of easy ways to install libraries I still prefer having it in the script. You only need to install the libraries once, although it is worth updating them regularly, and I re-install them everytime I update `R`.
 
-```{r}
+
+```r
 # remove hash to install.
 #install.packages("data.table")
 ```
@@ -37,19 +30,74 @@ You may wish to install certain `R` libraries that get used a lot. While R-studi
 We will use a number of different data sets to illustrate each of the points, but for the main one, we will use an old *Drosophila melanogaster* data set measuring several traits (lengths) and the number of sex comb teeth (a structure used to clasp females during copulation) for different wild type strains (line) reared at different developmental temperatures, with and without a mutation that effects proximal-distal axis development in limbs (genotype)
 
 
-```{r}
-dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
 
+```r
+dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
 ```
 
 
 Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
  
-```{r}
+
+```r
 summary(dll_data)
+```
+
+```
+##    replicate         line      genotype        temp          femur     
+##  Min.   :1.00   line-7 : 132   Dll: 871   Min.   :25.0   Min.   :0.21  
+##  1st Qu.:1.00   line-18: 121   wt :1102   1st Qu.:25.0   1st Qu.:0.53  
+##  Median :1.00   line-4 : 112              Median :25.0   Median :0.55  
+##  Mean   :1.18   line-8 : 110              Mean   :27.4   Mean   :0.55  
+##  3rd Qu.:1.00   line-2 : 104              3rd Qu.:30.0   3rd Qu.:0.57  
+##  Max.   :2.00   line-11: 100              Max.   :30.0   Max.   :0.70  
+##                 (Other):1294                             NA's   :24    
+##      tibia          tarsus          SCT      
+##  Min.   :0.34   Min.   :0.11   Min.   : 6.0  
+##  1st Qu.:0.46   1st Qu.:0.18   1st Qu.:10.0  
+##  Median :0.48   Median :0.19   Median :11.0  
+##  Mean   :0.48   Mean   :0.19   Mean   :11.2  
+##  3rd Qu.:0.50   3rd Qu.:0.20   3rd Qu.:12.0  
+##  Max.   :0.61   Max.   :0.26   Max.   :32.0  
+##  NA's   :19     NA's   :17     NA's   :25
+```
+
+```r
 str(dll_data)
+```
+
+```
+## 'data.frame':	1973 obs. of  8 variables:
+##  $ replicate: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ line     : Factor w/ 27 levels "line-1","line-11",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ genotype : Factor w/ 2 levels "Dll","wt": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ temp     : int  25 25 25 25 25 25 25 25 25 25 ...
+##  $ femur    : num  0.59 0.55 0.588 0.588 0.596 ...
+##  $ tibia    : num  0.499 0.501 0.488 0.515 0.502 ...
+##  $ tarsus   : num  0.219 0.214 0.211 0.211 0.207 ...
+##  $ SCT      : int  9 13 11 NA 12 14 11 12 10 12 ...
+```
+
+```r
 dim(dll_data)
+```
+
+```
+## [1] 1973    8
+```
+
+```r
 head(dll_data)
+```
+
+```
+##   replicate   line genotype temp femur tibia tarsus SCT
+## 1         1 line-1      Dll   25 0.590 0.499  0.219   9
+## 2         1 line-1      Dll   25 0.550 0.501  0.214  13
+## 3         1 line-1      Dll   25 0.588 0.488  0.211  11
+## 4         1 line-1      Dll   25 0.588 0.515  0.211  NA
+## 5         1 line-1      Dll   25 0.596 0.502  0.207  12
+## 6         1 line-1      Dll   25 0.577 0.499  0.207  14
 ```
 
 ## Cleaning data
@@ -59,20 +107,49 @@ Sometimes your data set has missing data, i.e. for some reason you could not mea
 
 First let's check if there is any missing data
 
-```{r}
-head(is.na(dll_data))
 
+```r
+head(is.na(dll_data))
+```
+
+```
+##      replicate  line genotype  temp femur tibia tarsus   SCT
+## [1,]     FALSE FALSE    FALSE FALSE FALSE FALSE  FALSE FALSE
+## [2,]     FALSE FALSE    FALSE FALSE FALSE FALSE  FALSE FALSE
+## [3,]     FALSE FALSE    FALSE FALSE FALSE FALSE  FALSE FALSE
+## [4,]     FALSE FALSE    FALSE FALSE FALSE FALSE  FALSE  TRUE
+## [5,]     FALSE FALSE    FALSE FALSE FALSE FALSE  FALSE FALSE
+## [6,]     FALSE FALSE    FALSE FALSE FALSE FALSE  FALSE FALSE
+```
+
+```r
 # or more easily
 anyNA(dll_data)
 ```
 
+```
+## [1] TRUE
+```
+
 We need to decide what to do with the missing data. If you have lots of data, and do not mind removing all cases (rows) that contain **any** missing data then `na.omit` is a useful solution.
 
-```{r}
+
+```r
 dll_data_complete <- na.omit(dll_data)
 
 dim(dll_data)
+```
+
+```
+## [1] 1973    8
+```
+
+```r
 dim(dll_data_complete)
+```
+
+```
+## [1] 1918    8
 ```
 
 
@@ -80,7 +157,8 @@ This has caused us to remove 50 observations. It may be useful to instead look a
 
 For the moment, we are going to accept the approach above, and use it
 
-```{r}
+
+```r
 dll_data <- na.omit(dll_data)
 ```
 
@@ -90,56 +168,134 @@ The `duplicated()` allows you to see which, if any rows are perfect duplicates o
 We can first ask if any rows are duplicates.
 
 This provides a Boolean
-```{r}
+
+```r
 head(duplicated(dll_data))
+```
+
+```
+## [1] FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+```r
 tail(duplicated(dll_data))
+```
+
+```
+## [1] FALSE FALSE FALSE FALSE FALSE FALSE
 ```
 
 So we can do something like:
 
-```{r}
+
+```r
 sum(duplicated(dll_data))
 ```
 
+```
+## [1] 0
+```
+
 Or if you want it as a Boolean
-```{r}
+
+```r
 any(duplicated(dll_data))
+```
+
+```
+## [1] FALSE
 ```
 
 `R` has a convenience function for the above:
 
-```{r}
+
+```r
 anyDuplicated(dll_data)
+```
+
+```
+## [1] 0
 ```
 So for this example there were no duplicate rows. However let's say an accident happened in generating the data set and a few rows were duplicated. I am going to use the `sample()` function to extract 5 random rows.
 
-```{r}
+
+```r
 new_rows <- dll_data[sample(nrow(dll_data), size = 5, replace = T ),]
 
 dll_data2 <- rbind(dll_data, new_rows)
 str(dll_data2)
 ```
 
-Now you don't know which rows, they are.  Please show how you would find whether there are any duplicated rows, and which ones they are
-```{r}
-any(duplicated(dll_data2))
+```
+## 'data.frame':	1923 obs. of  8 variables:
+##  $ replicate: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ line     : Factor w/ 27 levels "line-1","line-11",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ genotype : Factor w/ 2 levels "Dll","wt": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ temp     : int  25 25 25 25 25 25 25 25 25 25 ...
+##  $ femur    : num  0.59 0.55 0.588 0.596 0.577 ...
+##  $ tibia    : num  0.499 0.501 0.488 0.502 0.499 ...
+##  $ tarsus   : num  0.219 0.214 0.211 0.207 0.207 ...
+##  $ SCT      : int  9 13 11 12 14 11 12 10 12 13 ...
+##  - attr(*, "na.action")=Class 'omit'  Named int [1:55] 4 61 73 92 93 142 207 268 315 319 ...
+##   .. ..- attr(*, "names")= chr [1:55] "4" "61" "73" "92" ...
+```
 
+Now you don't know which rows, they are.  Please show how you would find whether there are any duplicated rows, and which ones they are
+
+```r
+any(duplicated(dll_data2))
+```
+
+```
+## [1] TRUE
+```
+
+```r
 dll_data2[duplicated(dll_data2),]
+```
+
+```
+##       replicate      line genotype temp femur tibia tarsus SCT
+## 15001         1    line-1       wt   30 0.500 0.425  0.162   9
+## 16611         1   line-19       wt   30 0.483 0.431  0.186  11
+## 19181         1 line-OreR       wt   30 0.564 0.496  0.187  11
+## 5851          1   line-17       wt   25 0.557 0.495  0.185  11
+## 9671          2    line-8       wt   25 0.569 0.481  0.196   9
 ```
 
 So what should we do? We can use the `unique()` to remove these duplicated rows
 
-```{r}
+
+```r
 dll_data_unique <- unique(dll_data2)
 
 dim(dll_data_unique)
+```
+
+```
+## [1] 1918    8
+```
+
+```r
 dim(dll_data2)
+```
+
+```
+## [1] 1923    8
+```
+
+```r
 dim(dll_data)
+```
+
+```
+## [1] 1918    8
 ```
 
 Let's just do a bit of clean-up.
 
-```{r}
+
+```r
 rm(dll_data_complete, dll_data_unique, dll_data2)
 ```
 
@@ -149,37 +305,77 @@ In some sense this is a review of what we learned during the first week, but the
 
 Let's look at the data again:
 
-```{r}
+
+```r
 str(dll_data)
+```
+
+```
+## 'data.frame':	1918 obs. of  8 variables:
+##  $ replicate: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ line     : Factor w/ 27 levels "line-1","line-11",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ genotype : Factor w/ 2 levels "Dll","wt": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ temp     : int  25 25 25 25 25 25 25 25 25 25 ...
+##  $ femur    : num  0.59 0.55 0.588 0.596 0.577 ...
+##  $ tibia    : num  0.499 0.501 0.488 0.502 0.499 ...
+##  $ tarsus   : num  0.219 0.214 0.211 0.207 0.207 ...
+##  $ SCT      : int  9 13 11 12 14 11 12 10 12 13 ...
+##  - attr(*, "na.action")=Class 'omit'  Named int [1:55] 4 61 73 92 93 142 207 268 315 319 ...
+##   .. ..- attr(*, "names")= chr [1:55] "4" "61" "73" "92" ...
 ```
 
 As we can see there are two genotypes. Let's say we wanted to make a data frame (`dll_data_wt`) that was a subset with only the wild type (`wt`) data? How would you do this with the index?
 
 ### using the index
-```{r}
+
+```r
 dll_data_wt <- dll_data[dll_data$genotype == "wt",]
 ```
 
 Has this created the appropriate subset of data?
 
-```{r}
+
+```r
 with(dll_data, table(genotype))
+```
+
+```
+## genotype
+##  Dll   wt 
+##  841 1077
+```
+
+```r
 nrow(dll_data_wt)
+```
+
+```
+## [1] 1077
 ```
 
 ### subsetting on factors and removing unused levels.
 
 So that seems to match. We should only have one level now in `genotype`. Let's check.
 
-```{r}
+
+```r
 levels(dll_data_wt$genotype)
+```
+
+```
+## [1] "Dll" "wt"
 ```
 
 So what is going on? We know we only have the correct number of observations associated, but it still has the level `Dll` in the factor genotype, why? Because of the way it has been stored, each of these levels is still associated as part of `genotype`. Thankfully it is very easy to fix.
 
-```{r}
+
+```r
 dll_data_wt <- droplevels(dll_data_wt)
 levels(dll_data_wt$genotype)
+```
+
+```
+## [1] "wt"
 ```
 
 ### using the subset function
@@ -187,17 +383,42 @@ levels(dll_data_wt$genotype)
 Of course the easiest alternative is to use the `subset` function we introduced a few weeks back. Please use this to make a data frame for the `Dll` factor level of genotype and check what has happened to the `wt` factor level. 
 
 
-```{r}
+
+```r
 dll_data_Dll <- subset(dll_data, genotype == "Dll" )
 dim(dll_data_Dll)
+```
+
+```
+## [1] 841   8
+```
+
+```r
 with(dll_data, table(genotype))
+```
+
+```
+## genotype
+##  Dll   wt 
+##  841 1077
+```
+
+```r
 levels(dll_data_Dll$genotype)
+```
+
+```
+## [1] "Dll" "wt"
+```
+
+```r
 dll_data_Dll <- droplevels(dll_data_Dll)
 ```
 
 `subset()` like using the index allows you to select specific columns as well. Create a new version of dll_data_Dll where the only columns that remain are line, genotype, temp and SCT.
 
-```{r}
+
+```r
 dll_data_Dll <- subset(dll_data, 
                        genotype == "Dll",
                        select = c(line, genotype, temp, SCT))
@@ -205,31 +426,57 @@ dll_data_Dll <- subset(dll_data,
 dim(dll_data_Dll)
 ```
 
+```
+## [1] 841   4
+```
+
 ### the `%in%` matching operator can be very useful for finding things in your data set to work on.
 
 The `%in%` is a matching operator (also see `match()`) that returns a boolean (TRUE or FALSE). This can be really useful to find things. Here we will go ahead and find all instances where a couple of the lines are in the data set.
 
-```{r}
+
+```r
 matched_set <- dll_data$line %in% c("line-Sam", "line-1")
 sum(matched_set)
+```
 
+```
+## [1] 122
+```
+
+```r
 dll_data_new_subset <- dll_data[matched_set,]
 dim(dll_data_new_subset)
+```
+
+```
+## [1] 122   8
 ```
 
 
 ### Clean up
 let's remove the data frames we are not using.
 
-```{r}
+
+```r
 rm(dll_data_Dll, dll_data_wt, dll_data_new_subset, matched_set)
 ```
 
 ## Cleaning variable names
 Let's take a closer look at the names of the different fly strains used.
 
-```{r}
+
+```r
 levels(dll_data$line)
+```
+
+```
+##  [1] "line-1"    "line-11"   "line-12"   "line-13"   "line-15"  
+##  [6] "line-16"   "line-17"   "line-18"   "line-19"   "line-2"   
+## [11] "line-20"   "line-21"   "line-22"   "line-23"   "line-24"  
+## [16] "line-26"   "line-27"   "line-3"    "line-4"    "line-6"   
+## [21] "line-7"    "line-8"    "line-9"    "line-CanS" "line-OreR"
+## [26] "line-Sam"  "line-w"
 ```
 
 Some are numbers, some are letters. We decide, that we need to clean this up a bit. First off, we have no need to have "line-" as a prefix for each of these labels, and may make things confusing down the road. So we want to get rid of them. However we **don't** want to edit the spreadsheet, as it is most importantly bad scientific practice, and would be a lot of work. So how do we do it efficiently?
@@ -241,20 +488,44 @@ First thing to keep in mind though is that `dll_data$line` is currently stored a
 ### `substr()`
 Let's try to do some simple string manipulation. There are a few functions that could be useful here. Let's start with `substr()` (substring). This will extract or replace substrings within a character vector. So what do we need to do first?
 
-```{r}
+
+```r
 line_str <- as.character(dll_data$line)
 str(line_str)
+```
+
+```
+##  chr [1:1918] "line-1" "line-1" "line-1" "line-1" "line-1" ...
+```
+
+```r
 head(line_str)
+```
+
+```
+## [1] "line-1" "line-1" "line-1" "line-1" "line-1" "line-1"
 ```
 
 Now we can use `substr()`
 
-```{r}
+
+```r
 line_names <- substr(line_str, 
                      start = 6, stop= 1000000L )
 
 head(line_names)
+```
+
+```
+## [1] "1" "1" "1" "1" "1" "1"
+```
+
+```r
 tail(line_names)
+```
+
+```
+## [1] "w" "w" "w" "w" "w" "w"
 ```
 
 In this case, since the strings we want to keep start at different positions in the original string, we can't use an arbitrary string length (i.e. try `stop  = 7`). 
@@ -263,14 +534,35 @@ In this case, since the strings we want to keep start at different positions in 
 ### `strsplit()`
 An alternative way to do this is to use the fact that we (purposefully) used a delimiter character to seperate parts of the name. In this case we used the "-" to seperate the word "line" from the actual line name we car about. As such we can use a second function that can be very valuable, `strsplit()`.
 
-```{r}
+
+```r
 line_names2 <- strsplit(line_str, split = "-")
 head(line_names2)
+```
 
+```
+## [[1]]
+## [1] "line" "1"   
+## 
+## [[2]]
+## [1] "line" "1"   
+## 
+## [[3]]
+## [1] "line" "1"   
+## 
+## [[4]]
+## [1] "line" "1"   
+## 
+## [[5]]
+## [1] "line" "1"   
+## 
+## [[6]]
+## [1] "line" "1"
 ```
 Here it has created a list, where each list contains the 2 elements ("line" and the name of the line which we want). We are going to convert this list to a matrix so we can extract what we need.
 
-```{r}
+
+```r
 line_names2_mat <- matrix(unlist(line_names2), 
                           ncol = 2,
                           byrow = TRUE)
@@ -278,11 +570,26 @@ line_names2_mat <- matrix(unlist(line_names2),
 head(line_names2_mat)
 ```
 
+```
+##      [,1]   [,2]
+## [1,] "line" "1" 
+## [2,] "line" "1" 
+## [3,] "line" "1" 
+## [4,] "line" "1" 
+## [5,] "line" "1" 
+## [6,] "line" "1"
+```
+
 And the second column contains what we want (line names) so we could make a new variable.
 
-```{r}
+
+```r
 dll_data$line_names <- factor(line_names2_mat[,2])
 str(dll_data$line_names)
+```
+
+```
+##  Factor w/ 27 levels "1","11","12",..: 1 1 1 1 1 1 1 1 1 1 ...
 ```
 
 As an aside, in my lab I enforce an approach for imaging where all images, videos, or sequence files have a consistent (and identical within project) naming convention. For instance our wing images have a naming convention like initials_project_line_sex_genotype_rep. So for images it may be something like:
@@ -297,14 +604,33 @@ Many times however, there is no consistent delimiter like "-", nor can we assume
 
 `sub()` and `gsub()` are functions that perform replacements for the first match or globally (g) for all matches respectively. If we go back to the names of the original lines, we will see they all have `line-` in common, so perhaps we can search and replace based on that pattern. This is quite easy as well.
 
-```{r}
+
+```r
 str(line_str)
+```
+
+```
+##  chr [1:1918] "line-1" "line-1" "line-1" "line-1" "line-1" ...
+```
+
+```r
 line_names3 <- gsub(pattern = "line-",
                     replacement = "",
                     x = line_str)
 
 head(line_names3)
+```
+
+```
+## [1] "1" "1" "1" "1" "1" "1"
+```
+
+```r
 tail(line_names3)
+```
+
+```
+## [1] "w" "w" "w" "w" "w" "w"
 ```
 
 What has happened here? Well we looked in the `line_str` object, and found all instances of our pattern (which in this case was the simple "line-"), and then we *replaced* this with "", in other words an emptry string.
@@ -315,16 +641,31 @@ What has happened here? Well we looked in the `line_str` object, and found all i
 
 You may have noticed that for the line names which are short words, some are lower case and some are upper case. It could be that this inconsistentcy make cause an issue down the road. So let's say we wanted to take `line_names3` and make all of the words lower case. How would we do that? `R` has some nice functions to help, namely `tolower()` (and `toupper()`) and the more general `chartr()` for character translation.
 
-```{r}
+
+```r
 line_names3 <- tolower(line_names3)
 
 head(line_names3)
+```
+
+```
+## [1] "1" "1" "1" "1" "1" "1"
+```
+
+```r
 tail(line_names3, n = 25)
+```
+
+```
+##  [1] "sam" "sam" "sam" "sam" "sam" "sam" "w"   "w"   "w"   "w"   "w"  
+## [12] "w"   "w"   "w"   "w"   "w"   "w"   "w"   "w"   "w"   "w"   "w"  
+## [23] "w"   "w"   "w"
 ```
 
 Say we wanted to call the "sam" line by its proper name "Samarkand". How could we do this?
 
-```{r}
+
+```r
 line_names3 <- sub("sam", "SAMARKAND", line_names3)
 ```
 
@@ -335,31 +676,62 @@ rm(line_names2, line_names3, line_names, line_names2_mat, line_str, new_rows)
 
 For this experiment, all flies were reared during their development at two temperatures, 25C and 30C. Currently this is kept as an integer. 
 
-```{r}
+
+```r
 str(dll_data$temp)
+```
+
+```
+##  int [1:1918] 25 25 25 25 25 25 25 25 25 25 ...
 ```
 
 However we might want to treat this as a factor. Also your PI has decided they want you to encode it at "HighTemp" and "LowTemp". So you have decided to create a new variable to do so. Not surprisingly, you have a few different ways to do this. The most obvious (and what you have done before) is to generate a factor. You can make the variable part of the data frame object, but I am going to keep it seperate for now.
 
-```{r}
+
+```r
 temp_as_factor <- with(dll_data,
                       factor(temp, 
                              labels = c("LowTemp", "HighTemp")))
 
 str(temp_as_factor)
+```
+
+```
+##  Factor w/ 2 levels "LowTemp","HighTemp": 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+```r
 head(temp_as_factor)
+```
+
+```
+## [1] LowTemp LowTemp LowTemp LowTemp LowTemp LowTemp
+## Levels: LowTemp HighTemp
+```
+
+```r
 tail(temp_as_factor)
+```
+
+```
+## [1] HighTemp HighTemp HighTemp HighTemp HighTemp HighTemp
+## Levels: LowTemp HighTemp
 ```
 
 ### Using ifelse()
 
 An alternative approach would be to use the `ifelse()` function.
 
-```{r}
+
+```r
 temp_as_factor2 <- with(dll_data, ifelse(temp == 25, "LowTemp", 
                                          ifelse(temp == 30, "HighTemp", NA)))
 temp_as_factor2 <- factor(temp_as_factor2)
 str(temp_as_factor2)
+```
+
+```
+##  Factor w/ 2 levels "HighTemp","LowTemp": 2 2 2 2 2 2 2 2 2 2 ...
 ```
 
 One issue with this is nested `if` statements, like `for` loops can get messy. Plus there is an internal limit on how much nesting can occur (I think a hierarchy of 5 or 6), so you want to take some care in using this approach.
@@ -368,24 +740,57 @@ One issue with this is nested `if` statements, like `for` loops can get messy. P
 
 Sometimes you just want to sort your data frame. While this is rarely necessary for statistical analyses or plotting of the data, it is important to look at the raw data as a double (triple!!!) check that there are no typos, or issues you were not aware of. I would say in genomic analysis this is most important when you are looking at the summary of statistical analyses and you want to sort your output by genes with greatest effects or something else. While there is a `sort()` function in `R` this is not generally the way you want to approach it.
 
-```{r}
-head(sort(dll_data$SCT))
 
+```r
+head(sort(dll_data$SCT))
+```
+
+```
+## [1] 6 7 7 7 7 7
+```
+
+```r
 tail(sort(dll_data$SCT))
+```
+
+```
+## [1] 18 18 18 18 20 22
 ```
 This just sorts the vector, which does not help us much. Instead we are going to use the `order()` function which provides information on the index for each observation. So 
 
-```{r}
-head(order(dll_data$SCT))
 
+```r
+head(order(dll_data$SCT))
+```
+
+```
+## [1] 1375 1148 1268 1269 1325 1555
+```
+
+```r
 tail(order(dll_data$SCT))
+```
+
+```
+## [1] 1068 1283 1284 1336   60 1430
 ```
 Provides the row numbers. We can use this to sort via the *index*.
 
-```{r}
+
+```r
 dll_data_sorted <- dll_data[order(dll_data$SCT),]
 
 head(dll_data_sorted)
+```
+
+```
+##      replicate    line genotype temp femur tibia tarsus SCT line_names
+## 1409         1  line-8      Dll   30 0.512 0.468  0.169   6          8
+## 1179         1 line-18      Dll   30 0.527 0.435  0.164   7         18
+## 1300         1 line-23      Dll   30 0.508 0.454  0.170   7         23
+## 1301         1 line-23      Dll   30 0.484 0.422  0.168   7         23
+## 1358         1  line-4      Dll   30 0.541 0.470  0.158   7          4
+## 1601         1 line-16       wt   30 0.559 0.508  0.179   7         16
 ```
 
 How would you sort on tibia?
@@ -394,28 +799,76 @@ How would you sort on tibia?
 
 So this by default sorts from lowest to highest. Use the help function for `order` and sort the data from highest to lowest
 
-```{r}
+
+```r
 dll_data_sorted <- dll_data[order(-dll_data$SCT),]
 head(dll_data_sorted)
+```
+
+```
+##      replicate    line genotype temp femur tibia tarsus SCT line_names
+## 1469         1  line-w      Dll   30 0.506 0.451  0.174  22          w
+## 62           1 line-13      Dll   25 0.583 0.526  0.217  20         13
+## 1099         2 line-13      Dll   30 0.589 0.535  0.169  18         13
+## 1315         1 line-24      Dll   30 0.540 0.470  0.191  18         24
+## 1316         1 line-24      Dll   30 0.534 0.480  0.187  18         24
+## 1369         1  line-6      Dll   30 0.504 0.509  0.175  18          6
 ```
 
 ### Sorting on multiple different columns. 
 
 This is a natural extension of what we have already done.
 
-```{r}
+
+```r
 dll_data_sorted <- dll_data[order(dll_data$SCT, dll_data$temp),]
 head(dll_data_sorted)
+```
+
+```
+##      replicate    line genotype temp femur tibia tarsus SCT line_names
+## 1409         1  line-8      Dll   30 0.512 0.468  0.169   6          8
+## 1179         1 line-18      Dll   30 0.527 0.435  0.164   7         18
+## 1300         1 line-23      Dll   30 0.508 0.454  0.170   7         23
+## 1301         1 line-23      Dll   30 0.484 0.422  0.168   7         23
+## 1358         1  line-4      Dll   30 0.541 0.470  0.158   7          4
+## 1601         1 line-16       wt   30 0.559 0.508  0.179   7         16
+```
+
+```r
 head(dll_data)
+```
+
+```
+##   replicate   line genotype temp femur tibia tarsus SCT line_names
+## 1         1 line-1      Dll   25 0.590 0.499  0.219   9          1
+## 2         1 line-1      Dll   25 0.550 0.501  0.214  13          1
+## 3         1 line-1      Dll   25 0.588 0.488  0.211  11          1
+## 5         1 line-1      Dll   25 0.596 0.502  0.207  12          1
+## 6         1 line-1      Dll   25 0.577 0.499  0.207  14          1
+## 7         1 line-1      Dll   25 0.618 0.494  0.204  11          1
 ```
 
 ## Merging data frames
 
 We often end up in a situation where we collect more data on the same set of samples (or in the same locales) that we need to include in our analyses. Again, we do not want to go back and edit the spreadsheets, but instead merge the data frames during the analysis. For instance, let's say we had this new data that related the elevation that each of the 27 lines were originally collected at, and we thought this may explain some important component of the variation in the traits (in this case size). So our collaborator collected this data:
 
-```{r}
+
+```r
 line_names <- dll_data$line
 levels(line_names)
+```
+
+```
+##  [1] "line-1"    "line-11"   "line-12"   "line-13"   "line-15"  
+##  [6] "line-16"   "line-17"   "line-18"   "line-19"   "line-2"   
+## [11] "line-20"   "line-21"   "line-22"   "line-23"   "line-24"  
+## [16] "line-26"   "line-27"   "line-3"    "line-4"    "line-6"   
+## [21] "line-7"    "line-8"    "line-9"    "line-CanS" "line-OreR"
+## [26] "line-Sam"  "line-w"
+```
+
+```r
 elevations <- c(100, 300, 270, 250, 500, 900, 500, 1100, 500,
                 3000,500, 570, 150, 800, 600, 500, 1900, 100,
                 300, 270, 250, 500, 900, 500, 1100, 500, 600)
@@ -435,30 +888,90 @@ The `merge()` function is designed for exactly this. It works on matching variab
 
 In our case
 
-```{r}
+
+```r
 names(dll_data)
+```
+
+```
+## [1] "replicate"  "line"       "genotype"   "temp"       "femur"     
+## [6] "tibia"      "tarsus"     "SCT"        "line_names"
+```
+
+```r
 names(elevation_data)
+```
+
+```
+## [1] "levels.line_names." "elevations"         "MeanDayTimeTemp"
 ```
 
 The easiest thing to do would be to rename the variable in `elevation_data` so that it matches that in `dll_data`
 
-```{r}
+
+```r
 names(elevation_data)[1] <- "line"
 str(elevation_data)
 ```
 
+```
+## 'data.frame':	27 obs. of  3 variables:
+##  $ line           : Factor w/ 27 levels "line-1","line-11",..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ elevations     : num  100 300 270 250 500 900 500 1100 500 3000 ...
+##  $ MeanDayTimeTemp: num  15.6 24.7 18.6 16.5 17.2 ...
+```
+
 Now we can merge the data
 
-```{r}
+
+```r
 merged_data <- merge(x = elevation_data, 
                      y = dll_data)
 ```
 
 How can we check if it merged correctly?
 
-```{r}
+
+```r
 head(merged_data)
+```
+
+```
+##     line elevations MeanDayTimeTemp replicate genotype temp femur tibia
+## 1 line-1        100            15.6         1      Dll   25 0.590 0.499
+## 2 line-1        100            15.6         1      Dll   25 0.550 0.501
+## 3 line-1        100            15.6         1      Dll   25 0.588 0.488
+## 4 line-1        100            15.6         1      Dll   25 0.596 0.502
+## 5 line-1        100            15.6         1      Dll   25 0.577 0.499
+## 6 line-1        100            15.6         1      Dll   25 0.618 0.494
+##   tarsus SCT line_names
+## 1  0.219   9          1
+## 2  0.214  13          1
+## 3  0.211  11          1
+## 4  0.207  12          1
+## 5  0.207  14          1
+## 6  0.204  11          1
+```
+
+```r
 tail(merged_data)
+```
+
+```
+##        line elevations MeanDayTimeTemp replicate genotype temp femur tibia
+## 1913 line-w        600            17.8         1       wt   30 0.544 0.495
+## 1914 line-w        600            17.8         1       wt   30 0.507 0.480
+## 1915 line-w        600            17.8         1       wt   30 0.528 0.485
+## 1916 line-w        600            17.8         1       wt   30 0.545 0.486
+## 1917 line-w        600            17.8         1       wt   30 0.542 0.504
+## 1918 line-w        600            17.8         1       wt   30 0.511 0.469
+##      tarsus SCT line_names
+## 1913  0.181  12          w
+## 1914  0.181  10          w
+## 1915  0.178   9          w
+## 1916  0.174  12          w
+## 1917  0.167  12          w
+## 1918  0.165  11          w
 ```
 
 The `merge()` function has a great deal more flexibility, and it is worth looking at the examples in the help function! A word of warning with `merge()` and `reshape()` (below). The functions can result in some odd behaviour when there are non-unique rows which create conflicts. They can also stumble with missing data sometimes. So be on the look out for such things when you are using these functions.
@@ -469,18 +982,35 @@ We can also use the index to do something similar.
 
 Say we measured gene expression of a particular transcript for both genotypes *Dll* and *wt*. We wanted to include that. It would be very easy to use an ifelse, but we can also use the index
 
-```{r}
+
+```r
 geneXpression <- c(Dll=1121, wt = 2051)
 merged_data$geneExp <- geneXpression[dll_data$genotype]
 
 head(dll_data)
 ```
 
+```
+##   replicate   line genotype temp femur tibia tarsus SCT line_names
+## 1         1 line-1      Dll   25 0.590 0.499  0.219   9          1
+## 2         1 line-1      Dll   25 0.550 0.501  0.214  13          1
+## 3         1 line-1      Dll   25 0.588 0.488  0.211  11          1
+## 5         1 line-1      Dll   25 0.596 0.502  0.207  12          1
+## 6         1 line-1      Dll   25 0.577 0.499  0.207  14          1
+## 7         1 line-1      Dll   25 0.618 0.494  0.204  11          1
+```
+
 Make a new variable based on genotype for `geneY = c(200, 500)`.
 
 #### Clean up
-```{r}
+
+```r
 rm(elevation_data, elevations, MeanDayTimeTemp, temp_as_factor, dll_data_sorted, geneXpression, temp_as_factor2, line_names, stuff, merged_data)
+```
+
+```
+## Warning in rm(elevation_data, elevations, MeanDayTimeTemp,
+## temp_as_factor, : object 'stuff' not found
 ```
 
 ## reshaping data
