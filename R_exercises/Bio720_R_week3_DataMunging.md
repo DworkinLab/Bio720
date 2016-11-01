@@ -9,9 +9,6 @@ One of the most common "programming" activities you will do in genomics and bioi
 
 These activities have many names: *wrangling data, munging data, cleaning data, data manipulation*. Given how important this is, it will come as no surprise that there are entire R libraries devoted to it. There are several lists that are worth looking at like [here](http://datascienceplus.com/best-packages-for-data-manipulation-in-r/) and [here](https://www.analyticsvidhya.com/blog/2015/12/faster-data-manipulation-7-packages/). Also, books like [Data Manipulation with R](https://www.amazon.ca/Data-Manipulation-R-Phil-Spector/dp/0387747303)!
 
-In class we are going to go through just a few activities that are important.  reshaping, merging, combining variables (paste, interaction),  combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),  sorting (order), creating a dataset from multiple external files (RNAseq example)....
-
-
 ## for your own review
 
 We have already spent considerable time in previous tutorials making data frames using cbind, rbind, data.frame, etc.. As we have limited time in class I leave review of that to you from the screencasts and activites at datacamp.
@@ -255,12 +252,12 @@ dll_data2[duplicated(dll_data2),]
 ```
 
 ```
-##       replicate      line genotype temp femur tibia tarsus SCT
-## 15001         1    line-1       wt   30 0.500 0.425  0.162   9
-## 16611         1   line-19       wt   30 0.483 0.431  0.186  11
-## 19181         1 line-OreR       wt   30 0.564 0.496  0.187  11
-## 5851          1   line-17       wt   25 0.557 0.495  0.185  11
-## 9671          2    line-8       wt   25 0.569 0.481  0.196   9
+##       replicate    line genotype temp femur tibia tarsus SCT
+## 3321          2  line-7      Dll   25 0.571 0.496  0.205  13
+## 6991          1 line-21       wt   25 0.540 0.468  0.196  11
+## 9651          2  line-8       wt   25 0.567 0.476  0.197  11
+## 2121          1 line-22      Dll   25 0.536 0.495  0.175  13
+## 17711         1 line-23       wt   30 0.523 0.467  0.171  12
 ```
 
 So what should we do? We can use the `unique()` to remove these duplicated rows
@@ -918,7 +915,7 @@ str(elevation_data)
 ## 'data.frame':	27 obs. of  3 variables:
 ##  $ line           : Factor w/ 27 levels "line-1","line-11",..: 1 2 3 4 5 6 7 8 9 10 ...
 ##  $ elevations     : num  100 300 270 250 500 900 500 1100 500 3000 ...
-##  $ MeanDayTimeTemp: num  15.6 24.7 18.6 16.5 17.2 ...
+##  $ MeanDayTimeTemp: num  9.17 18.19 14.89 21.75 21.55 ...
 ```
 
 Now we can merge the data
@@ -938,12 +935,12 @@ head(merged_data)
 
 ```
 ##     line elevations MeanDayTimeTemp replicate genotype temp femur tibia
-## 1 line-1        100            15.6         1      Dll   25 0.590 0.499
-## 2 line-1        100            15.6         1      Dll   25 0.550 0.501
-## 3 line-1        100            15.6         1      Dll   25 0.588 0.488
-## 4 line-1        100            15.6         1      Dll   25 0.596 0.502
-## 5 line-1        100            15.6         1      Dll   25 0.577 0.499
-## 6 line-1        100            15.6         1      Dll   25 0.618 0.494
+## 1 line-1        100            9.17         1      Dll   25 0.590 0.499
+## 2 line-1        100            9.17         1      Dll   25 0.550 0.501
+## 3 line-1        100            9.17         1      Dll   25 0.588 0.488
+## 4 line-1        100            9.17         1      Dll   25 0.596 0.502
+## 5 line-1        100            9.17         1      Dll   25 0.577 0.499
+## 6 line-1        100            9.17         1      Dll   25 0.618 0.494
 ##   tarsus SCT line_names
 ## 1  0.219   9          1
 ## 2  0.214  13          1
@@ -959,12 +956,12 @@ tail(merged_data)
 
 ```
 ##        line elevations MeanDayTimeTemp replicate genotype temp femur tibia
-## 1913 line-w        600            17.8         1       wt   30 0.544 0.495
-## 1914 line-w        600            17.8         1       wt   30 0.507 0.480
-## 1915 line-w        600            17.8         1       wt   30 0.528 0.485
-## 1916 line-w        600            17.8         1       wt   30 0.545 0.486
-## 1917 line-w        600            17.8         1       wt   30 0.542 0.504
-## 1918 line-w        600            17.8         1       wt   30 0.511 0.469
+## 1913 line-w        600            16.5         1       wt   30 0.544 0.495
+## 1914 line-w        600            16.5         1       wt   30 0.507 0.480
+## 1915 line-w        600            16.5         1       wt   30 0.528 0.485
+## 1916 line-w        600            16.5         1       wt   30 0.545 0.486
+## 1917 line-w        600            16.5         1       wt   30 0.542 0.504
+## 1918 line-w        600            16.5         1       wt   30 0.511 0.469
 ##      tarsus SCT line_names
 ## 1913  0.181  12          w
 ## 1914  0.181  10          w
@@ -1015,4 +1012,169 @@ rm(elevation_data, elevations, MeanDayTimeTemp, temp_as_factor, dll_data_sorted,
 
 ## reshaping data
 
-For next week.
+There are often times when your data is in a format that is not appropriate for the analyses you need to do. In particular sometimes you need each variable (say each gene whose expression you are monitoring) in its own column (so called *wide* format). Sometimes it is best to have a single column for gene expression, with a second column indexing which gene the measure of expression is for. i.e. all expression data is in a single column, and thus each row has a single measure, but the number of rows will be equal to the number of samples multiplied by the number of genes (lots of rows!!). This is called the *long* format.
+
+This is such a common operation that `R` has a function `reshape()` to do this. Unfortunately (but perhaps well deserved), the arguments and argument names for the `reshape()` function are not so intuitive. Thus while I give an example of it below, this is one of those cases that using an additional package (like `reshape2` or `tidyr`) may be a worthwhile investment in time. 
+
+### `reshape()` function in `R`
+Let's take a quick look at our data again:
+
+```r
+head(dll_data)
+```
+
+```
+##   replicate   line genotype temp femur tibia tarsus SCT line_names
+## 1         1 line-1      Dll   25 0.590 0.499  0.219   9          1
+## 2         1 line-1      Dll   25 0.550 0.501  0.214  13          1
+## 3         1 line-1      Dll   25 0.588 0.488  0.211  11          1
+## 5         1 line-1      Dll   25 0.596 0.502  0.207  12          1
+## 6         1 line-1      Dll   25 0.577 0.499  0.207  14          1
+## 7         1 line-1      Dll   25 0.618 0.494  0.204  11          1
+```
+
+It is clear that we have three variables (femur, tibia and tarsus) which are all measures of size (3 segments of the leg). While we currently have these in the *wide* format, for some analysis (such as in mixed models) we may wish to put them in a *long* format. 
+
+First let me show you the code (and that it worked), and then we will go through the various arguments to make sense of what we have done.
+
+```r
+long_data <- reshape(dll_data,
+                     varying = list(names(dll_data)[5:7]),
+                     direction = "long",
+                     ids = row.names(dll_data),
+                     times = c("femur", "tibia", "tarsus"),
+                     timevar = "leg_segments",
+                     v.names = "length")
+```
+
+Let's check that this worked. How might we do this? What do we expect in terms of number of rows in `long_data`?
+
+
+```r
+# It should have 3 times the number of rows as our original data
+(3*nrow(dll_data)) == nrow(long_data)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+head(long_data, n = 10)
+```
+
+```
+##          replicate   line genotype temp SCT line_names leg_segments length
+## 1.femur          1 line-1      Dll   25   9          1        femur  0.590
+## 2.femur          1 line-1      Dll   25  13          1        femur  0.550
+## 3.femur          1 line-1      Dll   25  11          1        femur  0.588
+## 5.femur          1 line-1      Dll   25  12          1        femur  0.596
+## 6.femur          1 line-1      Dll   25  14          1        femur  0.577
+## 7.femur          1 line-1      Dll   25  11          1        femur  0.618
+## 8.femur          1 line-1      Dll   25  12          1        femur  0.582
+## 9.femur          1 line-1      Dll   25  10          1        femur  0.572
+## 10.femur         1 line-1      Dll   25  12          1        femur  0.568
+## 11.femur         1 line-1      Dll   25  13          1        femur  0.555
+##          id
+## 1.femur   1
+## 2.femur   2
+## 3.femur   3
+## 5.femur   5
+## 6.femur   6
+## 7.femur   7
+## 8.femur   8
+## 9.femur   9
+## 10.femur 10
+## 11.femur 11
+```
+
+```r
+tail(long_data, n = 10)
+```
+
+```
+##             replicate   line genotype temp SCT line_names leg_segments
+## 1963.tarsus         1 line-w       wt   30  11          w       tarsus
+## 1964.tarsus         1 line-w       wt   30  10          w       tarsus
+## 1965.tarsus         1 line-w       wt   30  10          w       tarsus
+## 1966.tarsus         1 line-w       wt   30  10          w       tarsus
+## 1967.tarsus         1 line-w       wt   30  12          w       tarsus
+## 1968.tarsus         1 line-w       wt   30  10          w       tarsus
+## 1969.tarsus         1 line-w       wt   30   9          w       tarsus
+## 1971.tarsus         1 line-w       wt   30  12          w       tarsus
+## 1972.tarsus         1 line-w       wt   30  12          w       tarsus
+## 1973.tarsus         1 line-w       wt   30  11          w       tarsus
+##             length   id
+## 1963.tarsus  0.185 1963
+## 1964.tarsus  0.185 1964
+## 1965.tarsus  0.184 1965
+## 1966.tarsus  0.183 1966
+## 1967.tarsus  0.181 1967
+## 1968.tarsus  0.181 1968
+## 1969.tarsus  0.178 1969
+## 1971.tarsus  0.174 1971
+## 1972.tarsus  0.167 1972
+## 1973.tarsus  0.165 1973
+```
+
+
+
+### some other approaches to using `reshape()`
+
+Sometimes we actually have unique subject identifiers already in the data frame, and we don't need to just use row numbers. These unique identifiers can be a combination of several variables if it generates a unique combination for each row (for data currently in wide format). See the section below on combining names. In turns out that even if we combined line, genotype, temp we would not have unique names, so that strategy does not work here. So we can make a fake identifer
+
+```r
+dll_data$subject <- as.character(1:nrow(dll_data))
+```
+
+
+```r
+long_data2 <- reshape(dll_data,
+                     varying = list(names(dll_data)[5:7]),
+                     direction = "long",
+                     idvar = "subject",
+                     #ids = row.names(dll_data),
+                     times = c("femur", "tibia", "tarsus"),
+                     timevar = "leg_segments",
+                     v.names = "length"
+                     )
+```
+
+Which we can check again
+
+
+```r
+3*nrow(dll_data) == nrow(long_data2)
+```
+
+```
+## [1] TRUE
+```
+
+```r
+head(long_data2)
+```
+
+```
+##         replicate   line genotype temp SCT line_names subject leg_segments
+## 1.femur         1 line-1      Dll   25   9          1       1        femur
+## 2.femur         1 line-1      Dll   25  13          1       2        femur
+## 3.femur         1 line-1      Dll   25  11          1       3        femur
+## 4.femur         1 line-1      Dll   25  12          1       4        femur
+## 5.femur         1 line-1      Dll   25  14          1       5        femur
+## 6.femur         1 line-1      Dll   25  11          1       6        femur
+##         length
+## 1.femur  0.590
+## 2.femur  0.550
+## 3.femur  0.588
+## 4.femur  0.596
+## 5.femur  0.577
+## 6.femur  0.618
+```
+
+In this case, this is really similar to the approach above as we used the same fundamental IDs.
+
+## Combining variables together.
+
+## Please ignore
+In class we are going to go through just a few activities that are important.   combining variables (paste, interaction),  combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),   creating a dataset from multiple external files (RNAseq example)....

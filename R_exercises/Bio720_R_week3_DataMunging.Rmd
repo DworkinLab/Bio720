@@ -486,7 +486,7 @@ There are often times when your data is in a format that is not appropriate for 
 
 This is such a common operation that `R` has a function `reshape()` to do this. Unfortunately (but perhaps well deserved), the arguments and argument names for the `reshape()` function are not so intuitive. Thus while I give an example of it below, this is one of those cases that using an additional package (like `reshape2` or `tidyr`) may be a worthwhile investment in time. 
 
-## `reshape()` function in `R`
+### `reshape()` function in `R`
 Let's take a quick look at our data again:
 ```{r}
 head(dll_data)
