@@ -252,12 +252,12 @@ dll_data2[duplicated(dll_data2),]
 ```
 
 ```
-##       replicate    line genotype temp femur tibia tarsus SCT
-## 3321          2  line-7      Dll   25 0.571 0.496  0.205  13
-## 6991          1 line-21       wt   25 0.540 0.468  0.196  11
-## 9651          2  line-8       wt   25 0.567 0.476  0.197  11
-## 2121          1 line-22      Dll   25 0.536 0.495  0.175  13
-## 17711         1 line-23       wt   30 0.523 0.467  0.171  12
+##       replicate      line genotype temp femur tibia tarsus SCT
+## 16511         1   line-18       wt   30 0.496 0.445  0.167  10
+## 5931          1   line-18       wt   25 0.535 0.473  0.194   9
+## 19671         1    line-w       wt   30 0.544 0.495  0.181  12
+## 4641          2    line-1       wt   25 0.562 0.486  0.170   9
+## 10001         1 line-OreR       wt   25 0.582 0.476  0.200   9
 ```
 
 So what should we do? We can use the `unique()` to remove these duplicated rows
@@ -915,7 +915,7 @@ str(elevation_data)
 ## 'data.frame':	27 obs. of  3 variables:
 ##  $ line           : Factor w/ 27 levels "line-1","line-11",..: 1 2 3 4 5 6 7 8 9 10 ...
 ##  $ elevations     : num  100 300 270 250 500 900 500 1100 500 3000 ...
-##  $ MeanDayTimeTemp: num  9.17 18.19 14.89 21.75 21.55 ...
+##  $ MeanDayTimeTemp: num  27.2 21.8 20.6 27.7 15.6 ...
 ```
 
 Now we can merge the data
@@ -935,12 +935,12 @@ head(merged_data)
 
 ```
 ##     line elevations MeanDayTimeTemp replicate genotype temp femur tibia
-## 1 line-1        100            9.17         1      Dll   25 0.590 0.499
-## 2 line-1        100            9.17         1      Dll   25 0.550 0.501
-## 3 line-1        100            9.17         1      Dll   25 0.588 0.488
-## 4 line-1        100            9.17         1      Dll   25 0.596 0.502
-## 5 line-1        100            9.17         1      Dll   25 0.577 0.499
-## 6 line-1        100            9.17         1      Dll   25 0.618 0.494
+## 1 line-1        100            27.2         1      Dll   25 0.590 0.499
+## 2 line-1        100            27.2         1      Dll   25 0.550 0.501
+## 3 line-1        100            27.2         1      Dll   25 0.588 0.488
+## 4 line-1        100            27.2         1      Dll   25 0.596 0.502
+## 5 line-1        100            27.2         1      Dll   25 0.577 0.499
+## 6 line-1        100            27.2         1      Dll   25 0.618 0.494
 ##   tarsus SCT line_names
 ## 1  0.219   9          1
 ## 2  0.214  13          1
@@ -956,12 +956,12 @@ tail(merged_data)
 
 ```
 ##        line elevations MeanDayTimeTemp replicate genotype temp femur tibia
-## 1913 line-w        600            16.5         1       wt   30 0.544 0.495
-## 1914 line-w        600            16.5         1       wt   30 0.507 0.480
-## 1915 line-w        600            16.5         1       wt   30 0.528 0.485
-## 1916 line-w        600            16.5         1       wt   30 0.545 0.486
-## 1917 line-w        600            16.5         1       wt   30 0.542 0.504
-## 1918 line-w        600            16.5         1       wt   30 0.511 0.469
+## 1913 line-w        600            18.2         1       wt   30 0.544 0.495
+## 1914 line-w        600            18.2         1       wt   30 0.507 0.480
+## 1915 line-w        600            18.2         1       wt   30 0.528 0.485
+## 1916 line-w        600            18.2         1       wt   30 0.545 0.486
+## 1917 line-w        600            18.2         1       wt   30 0.542 0.504
+## 1918 line-w        600            18.2         1       wt   30 0.511 0.469
 ##      tarsus SCT line_names
 ## 1913  0.181  12          w
 ## 1914  0.181  10          w
@@ -1175,6 +1175,95 @@ head(long_data2)
 In this case, this is really similar to the approach above as we used the same fundamental IDs.
 
 ## Combining variables together.
+Sometimes you need to combine several variables together. For instance, we may need to look at combinations of both *genotype* and *temp*
+
+
+```r
+str(dll_data)
+```
+
+```
+## 'data.frame':	1918 obs. of  10 variables:
+##  $ replicate : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ line      : Factor w/ 27 levels "line-1","line-11",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ genotype  : Factor w/ 2 levels "Dll","wt": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ temp      : int  25 25 25 25 25 25 25 25 25 25 ...
+##  $ femur     : num  0.59 0.55 0.588 0.596 0.577 ...
+##  $ tibia     : num  0.499 0.501 0.488 0.502 0.499 ...
+##  $ tarsus    : num  0.219 0.214 0.211 0.207 0.207 ...
+##  $ SCT       : int  9 13 11 12 14 11 12 10 12 13 ...
+##  $ line_names: Factor w/ 27 levels "1","11","12",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ subject   : chr  "1" "2" "3" "4" ...
+##  - attr(*, "na.action")=Class 'omit'  Named int [1:55] 4 61 73 92 93 142 207 268 315 319 ...
+##   .. ..- attr(*, "names")= chr [1:55] "4" "61" "73" "92" ...
+```
+
+What if we wanted to combine these two variables together into a meta-variable? There are a few good options. One is to use paste of course
+
+
+```r
+meta_variable <- with(dll_data,
+                      paste(genotype, temp, 
+                            sep = ":"))
+
+head(meta_variable, n = 20)
+```
+
+```
+##  [1] "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25"
+##  [8] "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25"
+## [15] "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25"
+```
+
+```r
+str(meta_variable)
+```
+
+```
+##  chr [1:1918] "Dll:25" "Dll:25" "Dll:25" "Dll:25" "Dll:25" ...
+```
+Note: you get to choose the character to use as a seperator. ":", "." and "_" are very common!
+
+The only problem is this is now a character vector not a factor, although this is easily fixed.
+
+
+```r
+meta_variable <- as.factor(meta_variable)
+str(meta_variable)
+```
+
+```
+##  Factor w/ 4 levels "Dll:25","Dll:30",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+Great!
+
+The other pretty easy way, especially for factors is to use the `interaction` function.
+
+
+```r
+meta_variable2 <- with(dll_data,
+     interaction(as.factor(temp), genotype,
+                 drop = TRUE,
+                 sep = ":"))
+
+head(meta_variable2, n = 20)
+```
+
+```
+##  [1] 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll
+## [11] 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll
+## Levels: 25:Dll 30:Dll 25:wt 30:wt
+```
+
+```r
+str(meta_variable2)
+```
+
+```
+##  Factor w/ 4 levels "25:Dll","30:Dll",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+
+Please note the `drop = TRUE` flag. You need this if there are combinations of factors that do not exist in the data, and it is almost always the safer choice unless you need all possible combinations (including those that don't occur).
 
 ## Please ignore
-In class we are going to go through just a few activities that are important.   combining variables (paste, interaction),  combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),   creating a dataset from multiple external files (RNAseq example)....
+In class we are going to go through just a few activities that are important. combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),   creating a dataset from multiple external files (RNAseq example)....

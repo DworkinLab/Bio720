@@ -548,6 +548,45 @@ head(long_data2)
 In this case, this is really similar to the approach above as we used the same fundamental IDs.
 
 ## Combining variables together.
+Sometimes you need to combine several variables together. For instance, we may need to look at combinations of both *genotype* and *temp*
+
+```{r}
+str(dll_data)
+```
+
+What if we wanted to combine these two variables together into a meta-variable? There are a few good options. One is to use paste of course
+
+```{r}
+meta_variable <- with(dll_data,
+                      paste(genotype, temp, 
+                            sep = ":"))
+
+head(meta_variable, n = 20)
+str(meta_variable)
+```
+Note: you get to choose the character to use as a seperator. ":", "." and "_" are very common!
+
+The only problem is this is now a character vector not a factor, although this is easily fixed.
+
+```{r}
+meta_variable <- as.factor(meta_variable)
+str(meta_variable)
+```
+Great!
+
+The other pretty easy way, especially for factors is to use the `interaction` function.
+
+```{r}
+meta_variable2 <- with(dll_data,
+     interaction(as.factor(temp), genotype,
+                 drop = TRUE,
+                 sep = ":"))
+
+head(meta_variable2, n = 20)
+str(meta_variable2)
+```
+
+Please note the `drop = TRUE` flag. You need this if there are combinations of factors that do not exist in the data, and it is almost always the safer choice unless you need all possible combinations (including those that don't occur).
 
 ## Please ignore
-In class we are going to go through just a few activities that are important.   combining variables (paste, interaction),  combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),   creating a dataset from multiple external files (RNAseq example)....
+In class we are going to go through just a few activities that are important. combining levels in a factor (grepl factor, ), transform, numeric to factor (cut),   creating a dataset from multiple external files (RNAseq example)....

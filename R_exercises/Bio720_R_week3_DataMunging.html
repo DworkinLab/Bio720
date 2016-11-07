@@ -248,12 +248,12 @@ str(dll_data2)</code></pre>
 <pre class="r"><code>any(duplicated(dll_data2))</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>dll_data2[duplicated(dll_data2),]</code></pre>
-<pre><code>##       replicate    line genotype temp femur tibia tarsus SCT
-## 3321          2  line-7      Dll   25 0.571 0.496  0.205  13
-## 6991          1 line-21       wt   25 0.540 0.468  0.196  11
-## 9651          2  line-8       wt   25 0.567 0.476  0.197  11
-## 2121          1 line-22      Dll   25 0.536 0.495  0.175  13
-## 17711         1 line-23       wt   30 0.523 0.467  0.171  12</code></pre>
+<pre><code>##       replicate      line genotype temp femur tibia tarsus SCT
+## 16511         1   line-18       wt   30 0.496 0.445  0.167  10
+## 5931          1   line-18       wt   25 0.535 0.473  0.194   9
+## 19671         1    line-w       wt   30 0.544 0.495  0.181  12
+## 4641          2    line-1       wt   25 0.562 0.486  0.170   9
+## 10001         1 line-OreR       wt   25 0.582 0.476  0.200   9</code></pre>
 <p>So what should we do? We can use the <code>unique()</code> to remove these duplicated rows</p>
 <pre class="r"><code>dll_data_unique &lt;- unique(dll_data2)
 
@@ -576,19 +576,19 @@ str(elevation_data)</code></pre>
 <pre><code>## 'data.frame':    27 obs. of  3 variables:
 ##  $ line           : Factor w/ 27 levels &quot;line-1&quot;,&quot;line-11&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
 ##  $ elevations     : num  100 300 270 250 500 900 500 1100 500 3000 ...
-##  $ MeanDayTimeTemp: num  9.17 18.19 14.89 21.75 21.55 ...</code></pre>
+##  $ MeanDayTimeTemp: num  27.2 21.8 20.6 27.7 15.6 ...</code></pre>
 <p>Now we can merge the data</p>
 <pre class="r"><code>merged_data &lt;- merge(x = elevation_data, 
                      y = dll_data)</code></pre>
 <p>How can we check if it merged correctly?</p>
 <pre class="r"><code>head(merged_data)</code></pre>
 <pre><code>##     line elevations MeanDayTimeTemp replicate genotype temp femur tibia
-## 1 line-1        100            9.17         1      Dll   25 0.590 0.499
-## 2 line-1        100            9.17         1      Dll   25 0.550 0.501
-## 3 line-1        100            9.17         1      Dll   25 0.588 0.488
-## 4 line-1        100            9.17         1      Dll   25 0.596 0.502
-## 5 line-1        100            9.17         1      Dll   25 0.577 0.499
-## 6 line-1        100            9.17         1      Dll   25 0.618 0.494
+## 1 line-1        100            27.2         1      Dll   25 0.590 0.499
+## 2 line-1        100            27.2         1      Dll   25 0.550 0.501
+## 3 line-1        100            27.2         1      Dll   25 0.588 0.488
+## 4 line-1        100            27.2         1      Dll   25 0.596 0.502
+## 5 line-1        100            27.2         1      Dll   25 0.577 0.499
+## 6 line-1        100            27.2         1      Dll   25 0.618 0.494
 ##   tarsus SCT line_names
 ## 1  0.219   9          1
 ## 2  0.214  13          1
@@ -598,12 +598,12 @@ str(elevation_data)</code></pre>
 ## 6  0.204  11          1</code></pre>
 <pre class="r"><code>tail(merged_data)</code></pre>
 <pre><code>##        line elevations MeanDayTimeTemp replicate genotype temp femur tibia
-## 1913 line-w        600            16.5         1       wt   30 0.544 0.495
-## 1914 line-w        600            16.5         1       wt   30 0.507 0.480
-## 1915 line-w        600            16.5         1       wt   30 0.528 0.485
-## 1916 line-w        600            16.5         1       wt   30 0.545 0.486
-## 1917 line-w        600            16.5         1       wt   30 0.542 0.504
-## 1918 line-w        600            16.5         1       wt   30 0.511 0.469
+## 1913 line-w        600            18.2         1       wt   30 0.544 0.495
+## 1914 line-w        600            18.2         1       wt   30 0.507 0.480
+## 1915 line-w        600            18.2         1       wt   30 0.528 0.485
+## 1916 line-w        600            18.2         1       wt   30 0.545 0.486
+## 1917 line-w        600            18.2         1       wt   30 0.542 0.504
+## 1918 line-w        600            18.2         1       wt   30 0.511 0.469
 ##      tarsus SCT line_names
 ## 1913  0.181  12          w
 ## 1914  0.181  10          w
@@ -748,10 +748,55 @@ head(dll_data)</code></pre>
 </div>
 <div id="combining-variables-together." class="section level2">
 <h2>Combining variables together.</h2>
+<p>Sometimes you need to combine several variables together. For instance, we may need to look at combinations of both <em>genotype</em> and <em>temp</em></p>
+<pre class="r"><code>str(dll_data)</code></pre>
+<pre><code>## 'data.frame':    1918 obs. of  10 variables:
+##  $ replicate : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ line      : Factor w/ 27 levels &quot;line-1&quot;,&quot;line-11&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ genotype  : Factor w/ 2 levels &quot;Dll&quot;,&quot;wt&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ temp      : int  25 25 25 25 25 25 25 25 25 25 ...
+##  $ femur     : num  0.59 0.55 0.588 0.596 0.577 ...
+##  $ tibia     : num  0.499 0.501 0.488 0.502 0.499 ...
+##  $ tarsus    : num  0.219 0.214 0.211 0.207 0.207 ...
+##  $ SCT       : int  9 13 11 12 14 11 12 10 12 13 ...
+##  $ line_names: Factor w/ 27 levels &quot;1&quot;,&quot;11&quot;,&quot;12&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ subject   : chr  &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...
+##  - attr(*, &quot;na.action&quot;)=Class 'omit'  Named int [1:55] 4 61 73 92 93 142 207 268 315 319 ...
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:55] &quot;4&quot; &quot;61&quot; &quot;73&quot; &quot;92&quot; ...</code></pre>
+<p>What if we wanted to combine these two variables together into a meta-variable? There are a few good options. One is to use paste of course</p>
+<pre class="r"><code>meta_variable &lt;- with(dll_data,
+                      paste(genotype, temp, 
+                            sep = &quot;:&quot;))
+
+head(meta_variable, n = 20)</code></pre>
+<pre><code>##  [1] &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot;
+##  [8] &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot;
+## [15] &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot;</code></pre>
+<pre class="r"><code>str(meta_variable)</code></pre>
+<pre><code>##  chr [1:1918] &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; &quot;Dll:25&quot; ...</code></pre>
+<p>Note: you get to choose the character to use as a seperator. “:”, “.” and “_&quot; are very common!</p>
+<p>The only problem is this is now a character vector not a factor, although this is easily fixed.</p>
+<pre class="r"><code>meta_variable &lt;- as.factor(meta_variable)
+str(meta_variable)</code></pre>
+<pre><code>##  Factor w/ 4 levels &quot;Dll:25&quot;,&quot;Dll:30&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>Great!</p>
+<p>The other pretty easy way, especially for factors is to use the <code>interaction</code> function.</p>
+<pre class="r"><code>meta_variable2 &lt;- with(dll_data,
+     interaction(as.factor(temp), genotype,
+                 drop = TRUE,
+                 sep = &quot;:&quot;))
+
+head(meta_variable2, n = 20)</code></pre>
+<pre><code>##  [1] 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll
+## [11] 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll 25:Dll
+## Levels: 25:Dll 30:Dll 25:wt 30:wt</code></pre>
+<pre class="r"><code>str(meta_variable2)</code></pre>
+<pre><code>##  Factor w/ 4 levels &quot;25:Dll&quot;,&quot;30:Dll&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>Please note the <code>drop = TRUE</code> flag. You need this if there are combinations of factors that do not exist in the data, and it is almost always the safer choice unless you need all possible combinations (including those that don’t occur).</p>
 </div>
 <div id="please-ignore" class="section level2">
 <h2>Please ignore</h2>
-<p>In class we are going to go through just a few activities that are important. combining variables (paste, interaction), combining levels in a factor (grepl factor, ), transform, numeric to factor (cut), creating a dataset from multiple external files (RNAseq example)….</p>
+<p>In class we are going to go through just a few activities that are important. combining levels in a factor (grepl factor, ), transform, numeric to factor (cut), creating a dataset from multiple external files (RNAseq example)….</p>
 </div>
 
 
