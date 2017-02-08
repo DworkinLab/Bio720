@@ -39,7 +39,10 @@ backgrounds <- c(rep("ORE", 4), rep("SAM", 4), rep("HYB", 4))
 
 genotypes <- c(rep(c("wt", "wt", "sdE3", "sdE3"), 3))
 
-rna.design <- data.frame(sample=samples, file=files, background=backgrounds, genotype=genotypes)
+rna.design <- data.frame(sample = samples, 
+                         file = files, 
+                         background = backgrounds, 
+                         genotype = genotypes)
 ```
 
 DESeq2 needs a model to load your data; let's create a simple formula to start with, to look for genes that are differentially expressed between two genotypes [wild-type and scalloped-E3 mutants], without accounting for genetic background
@@ -62,6 +65,42 @@ Always a good idea to plot dispersion estimates to make sure they look ok.
 ```{r}
 plotDispEsts(all.data)
 ```
+
+
+```{r}
+for_pca <- rlog(all.data, blind=TRUE)
+dim(for_pca)
+```
+`rlog` is one approach to adjusting for both library size and dispersion among samples. `blind=TRUE`, has it ignore information from the model (in this case lane).
+
+```{r lane effects, echo=TRUE}
+#plotPCA(for_pca, intgroup=c("lane")) 
+```
+
+By default this only examine the top 500 genes. Let's look at 2000 or more to get a sense of the stability of the pattern.
+
+```{r lane effects, echo=TRUE}
+#plotPCA(for_pca, ntop = 2000, intgroup=c("lane")) 
+```
+
+
+### Back to the analysis
+While there is no obvious lane effects based on our initial statistical check, and visual inspection of PC1 VS. PC2. However, there clearly is a pattern here, and it has nothing to do with lane. 
+
+We can quickly take a look to see if this pattern shows anything interesting for our biological interest. However, this is putting the cart before the horse, so be warned.
+
+```{r, echo=TRUE}
+plotPCA(for_pca, 
+        intgroup=c("genotype", "background"))
+
+plotPCA(for_pca, ntop = 100,
+        intgroup=c("genotype", "background"))
+
+plotPCA(for_pca, ntop = 1000,
+        intgroup=c("genotype", "background"))
+```
+
+This is both heartening and enlightening! Let's think about this for a few minutes and discuss it.
 
 Now let's look at differentially expressed genes
 
@@ -86,7 +125,7 @@ sig.genotype.results <- genotype.results[order(genotype.results$padj, decreasing
 as.data.frame(sig.genotype.results)[1:80,]
 ```
 
-Note: FBgn0003345 is sd, which is the gene that is mutated in our non-control treatment group in this sample dataset, so it makes sense that it is at the top of our list of differentially expressed genes
+Note: FBgn0003345 is *sd*, which is the gene that is mutated in our non-control treatment group in this sample dataset, so it makes sense that it is at the top of our list of differentially expressed genes
 
 We can also make a volcano plot
 
@@ -97,9 +136,6 @@ plot(x = genotype.results$log2FoldChange,
      col = ifelse(genotype.results$padj <= 0.05, "red", "black"),
      ylab = "-log10(p)", xlab = "log2 fold change")
 ```
-
-
-
 
 We really should also account for background (and lane) prior to estimating the genotypic effects. 
 
@@ -144,56 +180,33 @@ sig.genotype.2.results <- genotype.results.2[order(genotype.results.2$padj, decr
 
 as.data.frame(sig.genotype.2.results)[1:120,]
 ```
+## Model with interaction
+We could also look at models with interaction effects.  (e.g., in this case, which genes are affected by the sdE3 mutation in a background-dependent way?)
 
-
-Now, let's compare this full model, which includes the effects of both genetic background and genotype, to a reduced model, which has only genetic background Then we can ask: for which genes is expression better explained by the more complex model?
-# (using a likelihood ratio test)
-
-reduced.model <- formula(~ background)
-
-#Note that this line estimates dispersions again using our full and reduced models
-all.data.2 <- DESeq(all.data.2, full=load.model.2, reduced=reduced.model, test="LRT")
-
-#And now for the results
-genotype.results.2 <- as.data.frame(results(all.data.2, alpha=0.05))
-
-sig.genotype.results.2 <- genotype.results.2[(genotype.results.2$padj <= 0.05) & !is.na(genotype.results.2$padj),]
-
-#Sort them
-sig.genotype.results.2 <- sig.genotype.results.2[order(sig.genotype.results.2$padj, decreasing=F),]
-
-#View them
-sig.genotype.results.2
-
-#Note that when we are comparing two models using a likelihood ratio test like this,
-# the meaning of the log2FoldChange column is not immediately obvious
-#We will need to use contrasts to compare two specific treatment groups
-#Here, let's look at the overall effect of genotype
-contrast.results.2 <- as.data.frame(results(all.data.2, contrast=c("genotype", "wt", "sdE3")))
-contrast.results.2 <- contrast.results.2[(contrast.results.2$padj <= 0.05) & !is.na(contrast.results.2$padj),]
-contrast.results.2 <- contrast.results.2[order(contrast.results.2$padj, decreasing=F),]
-
-
-
-
-#We could also look at models with interaction effects
-# (e.g., in this case, which genes are affected by the sdE3 mutation in a background-
-#  dependent way?)
-
+```{r interaction_model}
 load.model.3 <- formula(~ background + genotype + background:genotype)
-all.data.3 <- DESeqDataSetFromHTSeqCount(sampleTable=rna.design, directory="./counts", design=load.model.3)
+
+all.data.3 <- DESeqDataSetFromHTSeqCount(sampleTable=rna.design, directory="./", design=load.model.3)
 all.data.3 <- DESeq(all.data.3)
+results.GxB <- results(all.data.3)
+summary(results.GxB)
+results.GxB <- results.GxB[!is.na(results.GxB$padj), ]
+results.GxB <- results.GxB[order(results.GxB$padj),]
+as.data.frame(results.GxB)[1:35,]
+```
 
-#When we have complex models like this and we're interested in comparing two specific
-# treatment groups, we need to use "contrasts"
-#This can get rather complicated. We'll do one or two examples here, but see the DESeq2
-# tutorial for more details
+When we have complex models like this and we're interested in comparing two specific treatment groups, we need to use "contrasts". This can get rather complicated. We'll do one or two examples here, but see the DESeq2 tutorial for more details.
 
-#Compare ORE-wt to ORE-sdE3
+### Compare ORE-wt to ORE-sdE3
 
-contrast.results.3 <- as.data.frame(results(all.data.3, contrast=list(	c("genotypewt", "backgroundORE.genotypewt") ,
-																		c("genotypesdE3", "backgroundORE.genotypesdE3")
-						)))
+IGNORE FOR THE MOMENT
+```{r}
+
+resultsNames(all.data.3)
+
+contrast.results.3 <- as.data.frame(results(all.data.3, contrast=list(c("backgroundORE.genotypewt", "backgroundORE.genotypewt") ,
+						c("genotypesdE3","backgroundORE.genotypesdE3") )))
 						
 contrast.results.3 <- contrast.results.3[(contrast.results.3$padj <= 0.05) & !is.na(contrast.results.3$padj),]
 contrast.results.3 <- contrast.results.3[order(contrast.results.3$padj, decreasing=F),]
+```
