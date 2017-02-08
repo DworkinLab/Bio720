@@ -65,8 +65,10 @@ Always a good idea to plot dispersion estimates to make sure they look ok
 plotDispEsts(all.data)
 ```
 
-#Now let's look at differentially expressed genes
+Now let's look at differentially expressed genes
+```{r}
 genotype.results <- as.data.frame(results(all.data, alpha=0.05))
+```
 
 #Viewing the top of the results data frame reveals that there's a lot of genes
 # with missing data [no mapped reads]
