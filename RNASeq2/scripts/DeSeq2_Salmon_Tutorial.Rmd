@@ -366,7 +366,7 @@ G_results[1:10,]
 In our case we are as much interested in genes that show an interaction between genotype and background as those that show just an effect of genotype. However for the subset of all of the samples we are looking at, we are going to run into estimation issues.
 
 ```{r, echo=TRUE}
-load.model <- formula(~ lane + background + genotype + genotype:background) # Let me go over the matrix rank issue here
+load.model <- formula(~ background + genotype + genotype:background) # Let me go over the matrix rank issue here
 
 test_GxB_effects <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
@@ -375,7 +375,7 @@ test_GxB_effects2 <- DESeq(test_GxB_effects)
 
 plotDispEsts(test_GxB_effects2)
 
-plotMA(test_GxB_effects2, ylim =c(-2, 2))
+plotMA(test_GxB_effects2, ylim =c(-4, 4))
 
 GxB_results <- results(test_GxB_effects2, alpha = 0.05, pAdjustMethod="BH")
 summary(GxB_results)
@@ -410,7 +410,7 @@ res_contrast_genotype <- results(test_GxB_effects2,
     contrast=c("genotype", "wt", "sdE3"),
     pAdjustMethod="BH")
 summary(res_contrast_genotype, alpha= 0.05)
-                                               ]
+                                               
 attr(test_GxB_effects2, "modelMatrixType")   # how is it setting up the design matrix.
 #Type of model matrix, expanded or treatment contrast. For more complex models this is very important to understand.
 
