@@ -1,0 +1,10 @@
+{
+    "salmon_version": "0.7.0",
+    "index": "salmon_index",
+    "threads": "6",
+    "libType": "A",
+    "mates1": "/home/idworkin/DrosophilaSequences/SAM_w_r2_GAGTGG_L004_R1_001.fastq.gz",
+    "mates2": "/home/idworkin/DrosophilaSequences/SAM_w_r2_GAGTGG_L004_R2_001.fastq.gz",
+    "output": "SAM_w_r2_GAGTGG_L004",
+    "auxDir": "aux_info"
+}

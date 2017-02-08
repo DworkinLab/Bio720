@@ -1,0 +1,10 @@
+{
+    "salmon_version": "0.7.0",
+    "index": "salmon_index",
+    "threads": "6",
+    "libType": "A",
+    "mates1": "/home/idworkin/DrosophilaSequences/ORE_sdE3_r1_GTGGCC_L004_R1_001.fastq.gz",
+    "mates2": "/home/idworkin/DrosophilaSequences/ORE_sdE3_r1_GTGGCC_L004_R2_001.fastq.gz",
+    "output": "ORE_sdE3_r1_GTGGCC_L004",
+    "auxDir": "aux_info"
+}
