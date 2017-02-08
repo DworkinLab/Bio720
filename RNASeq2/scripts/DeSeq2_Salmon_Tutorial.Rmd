@@ -302,22 +302,71 @@ Not much different. A few outliers though, and it may be worth later going in an
 Let's get going with things we are interested in, like looking for differentially expressed genes across genotypes. We can start by doing a visualization using a so-called MA plot (look it up on wikipedia, then will talk)
 
 ```{r MA_plot}
-plotMA(test_genotype_effects2, ylim =c(-1, 1))
+plotMA(test_genotype_effects2, ylim =c(-2, 2))
 ```
- A few things to note. The points coloured in red are the genes that show evidence of differential expression. The triangles are ones whose log2 fold change is greater than or less than 1 ( i.e. 2 fold difference). Please keep in mind that many genes that have small fold changes can still have
+ A few things to note. The points coloured in red are the genes that show evidence of differential expression. The triangles are ones whose log2 fold change is greater than or less than 1 ( i.e. 2 fold difference). Please keep in mind that many genes that have small fold changes can still still be differentially expressed. Don't get overly hung up on either just fold changes alone or a threshold for significance. Look carefully at results to understand them. This takes lots of time!!!
+ 
+Let's actually look at our results. DESeq2 has some functions to make this a bit easier, as the object we generated above (of class `DESeqDataSet`) is quite complex.
 
 ```{r DE_results}
-genotype_results <- results(test_genotype_effects2, alpha = 0.05)
-summary(genotype_results)
+genotype_results <- results(test_genotype_effects2, 
+                            alpha = 0.05)
+print(genotype_results)
 
-# reorder
-genotype_results <- genotype_results[order(genotype_results$padj),]
+head(genotype_results)
+
+summary(genotype_results)
 ```
 
-While everything is stored, by default DESeq2 is evaluating the final term in the model. In this case evidence of interactions between sex and size. We can look at these in the model we actually want to fit
+A few things to note. By default alpha is set at 0.1 This is a pretty liberal "threshold" for assessing "significance". While it is a much larger conversation, I do not recommend getting hung up too much on statistical significance (since you have estimates of effects and estimates of uncertainty). In particular if you have specific questions about specific sets of genes, and if these were planned comparisons (i.e. before you started to analyze your data) you should focus on those.
+
+You will see that DESeq2 also will throw out genes that it deems outliers or have very low counts. It does this so that when it is correcting for multiple comparisons it does not need to include genes that should not be analyzed (as the counts are too few.)
+
+
+Let's take a look at the results.
+
+```{r re_order}
+# reorder
+genotype_results <- genotype_results[order(genotype_results$padj),]
+
+genotype_results[1:10,]
+```
+
+What do you note about the differences. Please compare these different lists of genes.
+
+## More complex models
+
+While everything is stored, by default DESeq2 is printing its evaluation of the final term in the model. We can look at these in the model we actually want to fit (unlike the naively simple model above)
+
+Let's start by examining the effects of genotype (like we did above), but by first taking into account difference in different wild type genetic background and any residual lane effects
+
 
 ```{r, echo=TRUE}
-load.model <- formula(~ genotype + background + genotype:background) # Let me go over the matrix rank issue here
+load.model <- formula(~ lane + background + genotype) # Let me go over the matrix rank issue here
+
+test_G <- DESeqDataSetFromTximport(txi,
+  rna.design, design=load.model)
+
+test_G_2 <- DESeq(test_G)
+
+plotDispEsts(test_G_2)
+
+plotMA(test_G_2, ylim =c(-2, 2))
+
+G_results <- results(test_G_2, alpha = 0.05, pAdjustMethod="BH")
+summary(G_results)
+
+# reorder
+G_results <- G_results[order(G_results$padj),]
+G_results[1:10,]
+
+```
+
+### Interaction terms in models. 
+In our case we are as much interested in genes that show an interaction between genotype and background as those that show just an effect of genotype. However for the subset of all of the samples we are looking at, we are going to run into estimation issues.
+
+```{r, echo=TRUE}
+load.model <- formula(~ lane + background + genotype + genotype:background) # Let me go over the matrix rank issue here
 
 test_GxB_effects <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
@@ -333,11 +382,9 @@ summary(GxB_results)
 
 # reorder
 GxB_results <- GxB_results[order(GxB_results$padj),]
-head(GxB_results)
+GxB_results[1:14,]
 
 ```
-
-
 
 Relatively few "significant" genes. Just to keep in mind. We expect a priori, with no true "significant" hits an approximately uniform distribution that looks like (for 12627 genes)
 
@@ -351,31 +398,37 @@ But we actually observe
 hist(GxB_results$pvalue)
 ```
 
-FDR methods exploit this.
+False Discovery Methods (FDR) exploit this.
 
 
 ### Contrasts with DESeq2
 
-We can now look at specific planned contrasts (in this case male VS female).
+We can now look at specific planned contrasts (in this case wt VS sdE3).
 
-```{r}
+```{r contrasts}
 res_contrast_genotype <- results(test_GxB_effects2,
     contrast=c("genotype", "wt", "sdE3"),
     pAdjustMethod="BH")
 summary(res_contrast_genotype, alpha= 0.05)
-
+                                               ]
 attr(test_GxB_effects2, "modelMatrixType")   # how is it setting up the design matrix.
 #Type of model matrix, expanded or treatment contrast. For more complex models this is very important to understand.
 
+res_contrast_genotype <- res_contrast_genotype[order(res_contrast_genotype$padj),]
+
+res_contrast_genotype[1:10,]                                               
 ```
+
+
 DESeq2 can handle a pretty wide array of contrasts. One thing to note is that the notation for some contrasts is quite different from standard `R` contrasts.
 
 
 ## Comparing a complex and reduced model
 
+** PLEASE IGNORE FOR THE MOMENT**
 ```{r, echo=TRUE}
-full.model <- formula(~ genotype + background + genotype:background) # Let me go over the matrix rank issue here
-reduced.model <- formula(~ genotype + background) # Let me go over the matrix rank issue here
+full.model <- formula(~  genotype + background + genotype:background) # Let me go over the matrix rank issue here
+reduced.model <- formula(~  genotype + background) # Let me go over the matrix rank issue here
 
 test_GxB_effects <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
