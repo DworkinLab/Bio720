@@ -126,7 +126,7 @@ It clearly made some triangles and some circles. But how does it no which ones? 
 
 ```{r}
 plot(femur ~ tibia,
-     pch = c(16,17)[dll_data_subset$temp], # symbol
+     pch = c(16, 17)[dll_data_subset$temp], # symbol
      cex = 0.5, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.4, 0.57),
@@ -137,13 +137,13 @@ plot(femur ~ tibia,
      data = dll_data_subset)
 ```
 
-Now we can do the same thing for colour using genotype. Try it yourself. Make sure to use the full data.
+Now we can do the same thing for colour using genotype. Try it yourself. Make sure to use the full data. Colour is a bit easier as it can accept a factor and convert it to a numeric without any problem.
 
 ```{r}
 plot(femur ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.5, # size of symbol
-     col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
+     col = dll_data_subset$genotype, # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
      xlab = " tibia length",
@@ -161,7 +161,7 @@ Of we would prefer having a legend to do this for us. So how do we make a legend
 plot(femur ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.5, # size of symbol
-     col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
+     col = genotype, # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
      xlab = " tibia length",
@@ -219,18 +219,17 @@ Using the `R` help functions on `jitter`, find out how you would increase or dec
 There are many reasons we would want to add lines (or more points, or more text) to a plot. `R` handles all of these pretty easily. In this case, let's say we wanted to re-plot the previous example but show a certain region of particular interest (say at the means of both values). We can add lines across the graph using the `abline()` specifies the a (intercept)  or "b" (slope of a line), but can also do vertical or horizontal lines.
 
 ```{r}
-plot(jitter(SCT) ~ tibia,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.75, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
-     xlim = c(0.4, 0.57),
      ylim = c(8, 18),
-     xlab = " tibia length",
+     xlab = " tarsus length",
      ylab = "Number of Sex Comb Teeth",
      main = "leg lengths measures",
      data = dll_data_subset)
 
-abline(v = mean(dll_data_subset$tibia))
+abline(v = mean(dll_data_subset$tarsus))
 abline(h = mean(dll_data_subset$SCT))
 ```
 
@@ -239,18 +238,17 @@ Well that's great and all, but those lines are a bit confusing with the axes. So
 First we need to replot the plot (you can do this). Then we can modify our previous call to `abline()`
 
 ```{r}
-plot(jitter(SCT) ~ tibia,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.75, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
-     xlim = c(0.4, 0.57),
      ylim = c(8, 18),
-     xlab = " tibia length",
+     xlab = " tarsus length",
      ylab = "Number of Sex Comb Teeth",
      main = "leg lengths measures",
      data = dll_data_subset)
 
-abline(v = mean(dll_data_subset$tibia),
+abline(v = mean(dll_data_subset$tarsus),
        lwd = 3, # line width,
        lty = 2, # stippling of line
        col = "grey")
@@ -287,6 +285,31 @@ abline(mod1, lwd = 2, lty = 2)
 ```
 ### Exercises
 1 - Make a plot of SCT VS tarsus, but add lines at the mean of SCT and tarsus in grey (solid lines), and the best fit line from the regression in black.
+
+
+### Adding multiple lines for each subgroup
+
+Say we wanted to add different best fit lines for each subgroup (i.e. by genotype)? We can pretty easily modify this, using `lapply()`
+
+
+```{r}
+plot(SCT ~ tarsus,
+     pch = c(16,17)[dll_data_subset$temp],
+     cex = 0.75, 
+     col = dll_data_subset$genotype,
+     xlab = " tarsus length",
+     ylab = "Number of Sex Comb Teeth",
+     main = "SCT VS tarsus",
+     data = dll_data_subset)
+
+abline(lm(SCT ~ tarsus, data = dll_data_subset), lty = 2, lwd =2, col = "grey")
+
+lapply(dll_data_subset$genotype, 
+       function(x) {
+           abline(lm(SCT ~ tarsus, dll_data_subset, subset = (genotype == x)), col = x)
+  })
+```
+
 
 There is **SO MUCH** more to learn about these basic plots, but since we only have one class, I want to show you some other plotting types.
 
