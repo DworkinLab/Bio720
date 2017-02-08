@@ -1,7 +1,7 @@
 ---
-title: "Differential Expression analysis using RNA-Seq data with DESeq2"
+title: "Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)"
 author: "Ian Dworkin"
-date: "August 16th, 2016"
+date: "February 8th 2017"
 output:
   html_document:
     keep_md: yes

@@ -1,17 +1,38 @@
-#Install DESeq2
-# source("http://bioconductor.org/biocLite.R")
-# biocLite("DESeq2")
 
-#Load the DESeq2 library
+---
+title: "Differential Expression analysis using RNA-Seq data with DESeq2 (HTSeq counts)"
+author: "Ian Dworkin"
+date: "February 8, 2017"
+output:
+  html_document:
+    keep_md: yes
+---
+# Modified from my NGS2015 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
+
+Please examine the tutorial for the count data for salmon on instructions on installation of libraries etc..
+
+If you have already run the other tutorial in the currently running session of `R`, then you will not need to re-load the libraries/
+
+
+Load the libraries we are going to use
+```{r}
 library(DESeq2)
+library(tximport)
+library(readr)
+library(RColorBrewer)
+library(gplots)
+```
 
-#Generate a "data frame" to store the information about each of the samples in your
-# RNA-seq experiment
-#We could also have done this by creating a CSV or tab-delimited text file with
-# all of this information and loading it into R with read.csv() or read.table()
-# [That would probably be easier, for example, if we had a complicated design with
-#  many samples and multiple variables]
+Don't forget to set the working directory correctly for your data!
+```{r setwd}
+#setwd("../data/HTseq_counts")
+#setwd("../HTseq_counts")
 
+```
+Generate a "data frame" to store the information about each of the samples in your RNA-seq experiment. We could also have done this by creating a CSV or tab-delimited text file with
+all of this information and loading it into R with read.csv() or read.table().That would probably be easier, for example, if we had a complicated design with many samples and multiple variables.
+
+```{r sample_names}
 samples <- c("ORE_wt_rep1","ORE_wt_rep2","ORE_sdE3_rep1","ORE_sdE3_rep2","SAM_wt_rep1","SAM_wt_rep2","SAM_sdE3_rep1","SAM_sdE3_rep2","HYB_wt_rep1","HYB_wt_rep2","HYB_sdE3_rep1","HYB_sdE3_rep2")
 
 files <- paste(samples, "_htseq_counts.txt", sep="")
@@ -21,22 +42,28 @@ backgrounds <- c(rep("ORE", 4), rep("SAM", 4), rep("HYB", 4))
 genotypes <- c(rep(c("wt", "wt", "sdE3", "sdE3"), 3))
 
 rna.design <- data.frame(sample=samples, file=files, background=backgrounds, genotype=genotypes)
+```
 
-#DESeq2 needs a model to load your data; let's create a simple formula to start with, to look for
-# genes that are differentially expressed between two genotypes [wild-type and scalloped-E3 mutants],
-# without accounting for genetic background
+DESeq2 needs a model to load your data; let's create a simple formula to start with, to look for genes that are differentially expressed between two genotypes [wild-type and scalloped-E3 mutants], without accounting for genetic background
+
+```{r}
 load.model <- formula(~ genotype)
 
 #Now load the data into R
-all.data <- DESeqDataSetFromHTSeqCount(sampleTable=rna.design, directory="./counts", design=load.model)
+all.data <- DESeqDataSetFromHTSeqCount(sampleTable=rna.design, directory="./", design=load.model)
+```
 
-#This next line will handle several steps for us--it will first estimate size factors, to account
-# for differences in library size (total numbers of reads) across samples
-#Then it will generate dispersion estimates
+This next line will handle several steps for us--it will first estimate size factors, to account for differences in library size (total numbers of reads) across samples.Then it will generate dispersion estimates.
+
+```{r}
 all.data <- DESeq(all.data)
+```
 
-#Always a good idea to plot dispersion estimates to make sure they look ok
+Always a good idea to plot dispersion estimates to make sure they look ok
+
+```{r}
 plotDispEsts(all.data)
+```
 
 #Now let's look at differentially expressed genes
 genotype.results <- as.data.frame(results(all.data, alpha=0.05))
