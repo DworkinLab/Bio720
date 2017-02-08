@@ -58,8 +58,8 @@ Depending on the implementation of R you are using (R on mac, R on windows, R st
 Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple.  Just like Unix, R has a current working directory. You can set the working directory using the `setwd()` function. Once you have unzipped the file Rob has provided, you need to navigate to that directory. You will want to be inside the quantification folder. For me this will look like this.
 
 ```{r}
-#setwd("../data")
-#setwd("/Users/ian/NGS_Summer_course/NGS2016/quantification") # This will differ for you!!!
+#setwd("../data/salmon_counts")
+# This will differ for you!!!
 
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path("quants", list.files("quants"), "quant.sf")
@@ -89,7 +89,14 @@ tx2gene <- read.table("txp_to_gene.tsv", col.names=c("TXNAME", "GENEID"))
 
 head(tx2gene)
 ```
+Drosophila genomics and datasets have their own unique gene and transcript identifiers (as well as more universal ones). In this case the column TXNAME are the identifiers for the transcripts and the gene identifier is in the GENEID column. The names for those columns are from when we generated above for the counts using salmon. More information about Drosophila genes, transcripts, etc can be found at [flybase](http://flybase.org/). 
 
+It is probably (before we start) worth asking about how many genes and how many transcripts we have in our list. How might you do this in `R`?
+
+```{R genesVStranscript}
+length(table(tx2gene$TXNAME))
+length(table(tx2gene$GENEID))
+```
 
 Now we can go ahead and read in the input — this will automatically sum results to the gene level.  You can check out the tximport documentation for some other, potentially useful options.
 
@@ -200,20 +207,50 @@ Let's talk about what this means.
 
 ```{r}
 for_pca <- rlog(test_lane_effects2, blind=TRUE)
+dim(for_pca)
 ```
 `rlog` is one approach to adjusting for both library size and dispersion among samples. `blind=TRUE`, has it ignore information from the model (in this case lane).
 
 ```{r lane effects, echo=TRUE}
-plotPCA(for_pca, intgroup=c("lane")) # no obvious lane effects.
+plotPCA(for_pca, intgroup=c("lane")) 
 ```
 
-and now for sex and size
+The `plotPCA()` function is actually just a wrapper for one of the built in functions for performing a principle components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the `plotPCA` function only plots the first couple of Principle components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.
+
+If you want to see what this wrapper is doing we can ask about this particular function
+
+```{R}
+getMethod("plotPCA","DESeqTransform")
+
+# or 
+DESeq2:::plotPCA.DESeqTransform
+```
+It is very easy to modify this function if you need to.
+
+By default this only examine the top 500 genes. Let's look at 2000 or more to get a sense of the stability of the pattern.
+
+```{r lane effects, echo=TRUE}
+plotPCA(for_pca, ntop = 2000, intgroup=c("lane")) 
+```
+
+
+### Back to the analysis
+While there is no obvious lane effects based on our initial statistical check, and visual inspection of PC1 VS. PC2. However, there clearly is a pattern here, and it has nothing to do with lane. 
+
+We can quickly take a look to see if this pattern shows anything interesting for our biological interest. However, this is putting the cart before the horse, so be warned.
 
 ```{r, echo=TRUE}
 plotPCA(for_pca, intgroup=c("genotype", "background"))
 ```
 
-### We can also use some hierarchical clustering
+This is both heartening and enlightening! Let's think about this for a few minutes and discuss it.
+
+By default this examines just the top 500 genes. Let's also check this for just our
+```{r, echo=TRUE}
+plotPCA(for_pca, ntop = 2000, intgroup=c("genotype", "background"))
+```
+
+### We can also use some hierarchical clustering to further check for lane effects or for clustering based
 
 For distance matrix for clustering QC
 ```{r}
@@ -237,13 +274,14 @@ heatmap.2(mat, Rowv=as.dendrogram(hc),
           col = rev(hmcol), margin=c(13, 13))
 ```
 
- While I checked that there was no evidence of lane effects (see the Likelihood Ratio Test below), I am keeping it in the model as it seems to have little effects. However, it is using up "df" (in the parameter estimation sense), so it may be worth ultimately getting rid of it.
+ While we checked that there was no evidence of lane effects , we could keep it in the model as it seems to have little effects. However, it is using up "df" (in the parameter estimation sense), so it may be worth ultimately getting rid of it.
 
 
 
 ## Proceeding with the real analysis we care about!
 Given the results from above, I am removing lane entirely.
 
+Let's fit and run the model.
 ```{r}
 
 load.model <- formula(~ genotype)
@@ -252,11 +290,23 @@ test_genotype_effects <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
 
 test_genotype_effects2 <- DESeq(test_genotype_effects)
+```
 
+Now we can look at some of the results. First we recheck the dispersion estimates estimated in our model
+
+```{r model_dispersion}
 plotDispEsts(test_genotype_effects2)
+```
+Not much different. A few outliers though, and it may be worth later going in and checking these.
 
+Let's get going with things we are interested in, like looking for differentially expressed genes across genotypes. We can start by doing a visualization using a so-called MA plot (look it up on wikipedia, then will talk)
+
+```{r MA_plot}
 plotMA(test_genotype_effects2, ylim =c(-1, 1))
+```
+ A few things to note. The points coloured in red are the genes that show evidence of differential expression. The triangles are ones whose log2 fold change is greater than or less than 1 ( i.e. 2 fold difference). Please keep in mind that many genes that have small fold changes can still have
 
+```{r DE_results}
 genotype_results <- results(test_genotype_effects2, alpha = 0.05)
 summary(genotype_results)
 
