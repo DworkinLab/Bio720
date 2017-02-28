@@ -1,0 +1,131 @@
+---
+title: "A worked example using control flow (for loops, if statements, etc)"
+author: "Ian Dworkin"
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+---
+
+Let's do a little exercise integrating some of the things we have learned. Here are some Illumina HiSeq reads for one of our recent projects:
+
+```{r}
+read_1 <- "CGCGCAGTAGGGCACATGCCAGGTGTCCGCCACTTGGTGGGCACACAGCCGATGACGAACGGGCTCCTTGACTATAATCTGACCCGTTTGCGTTTGGGTGACCAGGGAGAACTGGTGCTCCTGC"
+
+read_2 <- "AAAAAGCCAACCGAGAAATCCGCCAAGCCTGGCGACAAGAAGCCAGAGCAGAAGAAGACTGCTGCGGCTCCCGCTGCCGGCAAGAAGGAGGCTGCTCCCTCGGCTGCCAAGCCAGCTGCCGCTG"
+
+read_3  <- "CAGCACGGACTGGGGCTTCTTGCCGGCGAGGACCTTCTTCTTGGCATCCTTGCTCTTGGCCTTGGCGGCCGCGGTCGTCTTTACGGCCGCGGGCTTCTTGGCAGCAGCACCGGCGGTCGCTGGC"
+```
+
+Question1: what species are these sequences from?
+
+Let's put these reads into a single object ( a vector)
+```{r}
+reads <- c(read_1, read_2, read_3)
+```
+Question 2. What class will the vector `reads` be? Check to make sure!
+
+Say we wanted to print each character from read_1, how do we do this using a for loop? You might try something like""
+```{r}
+for (i in read_1) {
+	print(i)
+}
+```
+
+While this prints out the full string, it does not do so character by character. THis does work in some other languages though.
+
+
+We can make this one string into a vector of strings with each element being a single letter
+
+```{r}
+read_1_split <- strsplit(read_1, split = "", fixed = T) # a list
+```
+
+Since it is a list, which is annoying we want to coerce this into a character vector so we can work with it more easily.
+
+```{r}
+read_1_char <- as.character(unlist(read_1_split))
+mode(read_1_char)
+```
+
+Printing the list once:
+
+```{r}
+for (i in read_1_split){
+	print(i)
+}
+```
+
+**VS** looping through each character
+
+```{r}
+for (i in read_1_char){
+	print(i)
+}
+```
+
+How about if we wanted the number of occurrences of each base? Or their frequencies? Well, to start with the easiest thing to do would be to use the `table()` function!
+
+For a list you could do this:
+
+```{r}
+site_freq <- table(read_1_split)/lengths(read_1_split)
+print(site_freq, digits = 2)
+```
+Note the use of `lengths()` not `length()` for the list above!!!!
+
+For a vector of characters you can use this:
+
+```{r}
+site_freq_alt <- table(read_1_char)/length(read_1_char)
+print(site_freq_alt, digits = 2)
+```
+
+Since this is a vector of characters we can use `length()`
+
+## How would you make this into a nice looking function that can work on either lists or vectors of characters?
+
+You could write a function like:
+
+```{r}
+BaseFrequencies <- function(x) {
+    if (mode(x) == "list") {
+    	tab <- table(x)/lengths(x)}
+    
+    else {
+    	tab <- table(x)/length(x)
+    }	
+   return(tab)
+}
+```
+Question 4. Add into the function what to do if it could also come in as a single multi-character string.
+
+
+## Now try doing it with sapply across the three reads
+
+It may be worth re-writing this function to be a bit more general.
+
+```{r}
+BaseFrequencies <- function(x) {
+    
+    # if it is a single string still
+    if (length(x) == 1 & mode(x) == "character") {
+    	x <- strsplit(x, split = "", fixed = T) 
+        x <- as.character(unlist(x))
+    }     
+    
+    if (mode(x) == "list") {
+    	tab <- table(x)/lengths(x)}
+    
+    else {
+    	tab <- table(x)/length(x)
+    }	
+   return(tab)
+}
+```
+Let's try it out:
+
+```{r}
+basefreq <- sapply(reads, BaseFrequencies, USE.NAMES = F)
+print(basefreq, digits = 2)
+```
