@@ -7,7 +7,7 @@ output:
     keep_md: yes
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(digits  = 3)
 ```
@@ -19,7 +19,7 @@ In todays class we are introducing how to model data when you have multiple cont
 
 You may also need to install the following libraries. If you do not have them remove the '#' to uncomment the lines.
 
-```{r}
+```{r, pkgs, warning=FALSE}
 # install.packages("car")
 # install.packages("geomorph")
 library(car)
@@ -34,7 +34,9 @@ It is also worthwhile to check out the [CRAN Task views](https://cran.r-project.
 ## Source in some custom functions.
 We are also going to need some custom functions for multivariate analysis. We use these a lot, but we have been bad and not made an R library out of them. They are available on both our github pages [here](https://github.com/DworkinLab/PitchersJEB2014_cricket_wings/blob/master/scripts/CGwing_analyses_final_2014.Rmd). We wrote most of them for a paper analyzing multivariate shape of Drosophila wings across altitudinal and latitudinal gradients. [Check here](http://onlinelibrary.wiley.com/doi/10.1111/j.1558-5646.2012.01774.x/full) for the paper and [here](http://datadryad.org/resource/doi:10.5061/dryad.r43k1) for the full data and scripts. Lots of cool multivariate examples.
 
-```{r}
+* [R script to source](MLM_Dworkin.R)
+
+```{r, get_funs}
 source("./BIO708_MLM_Dworkin.R")
 ls()
 ```
@@ -43,13 +45,13 @@ ls()
 We will use an old *Drosophila melanogaster* data set from my PhD work. The associated paper can be found [here](http://onlinelibrary.wiley.com/doi/10.1111/j.1525-142X.2005.05010.x/abstract). This was from a study that was meant to test predictions of a model on how mutational and environmental variation can influence the overall structure of phenotypic variation. For this study I measured several traits (lengths) on the first leg as well as the number of sex comb teeth (a structure used to clasp females during copulation) for different wild type strains (line) reared at different developmental temperatures (temp), with and without a mutation that effects proximal-distal axis development in limbs (genotype).
 
 
-```{r}
+```{r get_data}
 dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
 ```
 
 Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
  
-```{r}
+```{r, summary}
 summary(dll_data)
 str(dll_data)
 dim(dll_data)
@@ -63,32 +65,32 @@ Sometimes your data set has missing data, i.e. for some reason you could not mea
 
 First let's check if there is any missing data
 
-```{r}
+```{r anyNA}
 anyNA(dll_data)
 ```
 
 For the moment we are just going to remove rows containing any missing data
 
-```{r}
+```{r rmNA}
 dll_data <- na.omit(dll_data)
 dim(dll_data)
 ```
 
 For ease of interpretation, let's also make the wild-type level of genotype (`wt`) the base level.
 
-```{r}
+```{r reorder}
 dll_data$genotype <- relevel(dll_data$genotype, "wt")
 levels(dll_data$genotype)
 ```
 
 We will also make temperature (`temp`) a factor (it only has two levels so it does not matter that much).
 
-```{r}
+```{r tempfac}
 dll_data$temp <- as.factor(dll_data$temp)
 ```
 
 Our response variables for this study are *femur, tivia, tarsus and SCT*. Let's check out some basic summary stats for them
-```{r}
+```{r summary2}
 summary(dll_data)
 
 apply(dll_data[,5:8], 2, sd)
@@ -99,23 +101,24 @@ apply(dll_data[,5:8], 2, mean)
 While the three length measurements are on approximately the same scale (and all measured in mm), SCT is count data. So we will probably want to scale each of these to help make comparisons a bit clearer. Before we do that though. Let's ask how these variables co-vary with one another (across the whole data set). In general we prefer working with the variances and covariances, but it is easier to interpret the correlations among variables. We can easily look at both.
 
 For the phenotypic variance-covariance matrix.
-```{r}
+```{r pcov}
 cov(dll_data[ ,5:8])
 ```
 With the variances for each trait along the diagonal, and the covariances along the off-diagonal. Also note that the covariance of two traits (x and y) is the same in both directions. i.e. cov(x,y) = cov(y,x).
 
 For the phenotypic correlation matrix
-```{r}
+```{r pcor}
 cor(dll_data[, 5:8])
 ```
 
 ### Let's visualize this as well.
-```{r}
-pairs(dll_data[, 5:8])
+```{r pairs}
+pairs(dll_data[, 5:8], 
+      pch = 20, cex = 0.2, gap = 0)
 ```
 
 We could do some more plotting to take a look (from the car package). However, there is so much overlap in the data among treatment variables, that it can be hard to see what is going on
-```{r}
+```{r smatrix}
 scatterplotMatrix( ~ femur + tibia + tarsus + SCT | temp, 
                    ellipse = T, data = dll_data,
                    transform = T)
@@ -125,7 +128,7 @@ Not surprising since we have three length measures, but we see a moderate degree
 In general, when we are dealing with a set of multivariate response variables, this is the situation we want to be in. That is, if there is some correlation between our variables, it is not too high. If it was, I would probably consider using Principal Components Analysis or another dimensional reduction technique to get a few axes of variation that account for most of the variation. We could also check to see if the covariance matrix was not of full rank (i.e. for a covariance matrix for 4 variables, do we really have 4 "independent axes"). One quick check (which directly relates to PCA) is to examine the eigenvalues of the covariance matrix, and make sure the final ones are not really small.
 
 We can extract the eigenvalues.
-```{r}
+```{r eigs}
 svd(cov(dll_data[, 5:8]))$d
 ```
 
@@ -138,7 +141,7 @@ Like I mentioned earlier, we need to consider whether we should put all response
 
 For length measures it is common to instead to just log transform variables. This is something that can be helpful (but unnecessary with the current data). However, I will scale them here so you can get a sense of it. 
 
-```{r}
+```{r scale}
 dll_data$femur_s <- scale(dll_data$femur)
 dll_data$tibia_s <- scale(dll_data$tibia)
 dll_data$tarsus_s <- scale(dll_data$tarsus)
@@ -147,14 +150,14 @@ dll_data$SCT_s <- scale(dll_data$SCT)
 
 The variables now all have a mean of zero and a standard deviation of 1.
 
-```{r}
+```{r check_meansd}
 apply(dll_data[,9:12], 2, sd)
 apply(dll_data[,9:12], 2, mean)
 ```
 
 And our co-variance matrix and correlation matrix should be the same.
 
-```{r}
+```{r sc_covcor}
 cov(dll_data[,9:12])
 cor(dll_data[,9:12])
 ```
@@ -163,7 +166,9 @@ cor(dll_data[,9:12])
 
 The multivariate general linear model is:
 
-$\mathbf{Y} = \mathbf{XB} + \mathbf{E}$
+$$ 
+\mathbf{Y} = \mathbf{XB} + \mathbf{E}
+$$
 
 Which you may recognize as being very similar to your univariate linear model. Indeed it is fundamentally the same. However instead of each observation having a single value for its response $y_i$ for an individual $i$, we are now in a situation where each individual has a response **vector**, which we denote as $\mathbf{y}_i$. The vector for that observation is shown in bold as a common way to represent a vector of observations. Since you are using `R` you are actually already pretty familiar with this idea. i.e. if we stored ` y <- 1 ` or `y <- c(1,2,3)` we could recall this vector the same way. The same is true in matrix notation.
 
@@ -175,10 +180,12 @@ Even for a simple multivariate linear model (with only a single quanatitative pr
 
 However, otherwise the same ideas really apply. We use some approach to estimate the slopes. Just like for a single response, the MLE and LS estimators are equivalent under most conditions and can be found with:
 
-$\hat{\mathbf{B}} = (\mathbf{X'X})^{-1} \mathbf{X'Y}$
+$$
+\hat{\mathbf{B}} = (\mathbf{X'X})^{-1} \mathbf{X'Y}
+$$
 
 Let's give it a whirl. We will start with a really simply model with a single predictor with two levels (genotype). Importantly you do need to let `R` know that your response variables are numeric. Otherwise the call is a standard call to `lm`
-```{r}
+```{r mlm1}
 mlm_fit1 <- lm(as.matrix(dll_data[,9:12]) ~ genotype, data = dll_data)
 
 class(mlm_fit1)
@@ -186,13 +193,13 @@ class(mlm_fit1)
 
 So what do we get from this? Summary does not give us what we want. Instead it provides the linear model for each response variable in turn. So not so helpful.
 
-```{r}
+```{r mlmsum1}
 summary(mlm_fit1)
 ```
 
 Instead we need to let R know we want this as a single multivariate linear model.
 
-```{r}
+```{r mlmsum2}
 summary(manova(mlm_fit1))
 ```
 
@@ -205,23 +212,26 @@ The other two things to note is this "Pillai" statistic and the approximate F st
 $\mathbf{HE^{-1}}$ where $\mathbf{E}$ is the matrix of residuals. There are four commonly used test statistics that are derived from the eigenvalues of this matrix. I don't want to get into this here, but do check out inferences for [multivariate linear models](https://journal.r-project.org/archive/2013-1/fox-friendly-weisberg.pdf) for more information, and how it is used in `car`.
 While this defaults to Pillai's trace, many in biology seem to use Wilks's $\lambda$. Most of the time these give pretty similar results. You can easily change it, like so:
 
-```{r}
+```{r wilks}
 summary(manova(mlm_fit1), test = "Wilks")
 ```
 
 In each case a test statistic, an approximation of the F statistic and a p-value. It is worth seeing how the `car` package handles this. For the moment this appears the same.
 
-```{r}
+```{r car_Anova}
 Anova(mlm_fit1)
 ```
 
 ### How about measures of effect size?
 What we would like to start to think about is effect size. This is not something that is universally agreed upon in multivariate statistics. However in both morphometrics and genomics it is typical to use the magnitude or *length* of the vector for coefficients associated with the response. This is sometimes known as the *L2 norm* of the vector, but you can mostly easily think about it as the square root of the sum of squares for each coefficient. i.e:
 
-$|| \mathbf{x} || = \sqrt{\mathbf{x'} \cdot \mathbf{x}}$
+$$
+|| \mathbf{x} || = \sqrt{\mathbf{x'} \cdot \mathbf{x}}
+$$
 
 This is equivalent to:
-$ = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}}$
+$$ || \mathbf{x} || = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}}
+$$
 
 Which you may recognize from the Pythagorean theorem. 
 
@@ -234,28 +244,32 @@ sqrt(t(coef(mlm_fit1)[2,]) %*% coef(mlm_fit1)[2,])
 
 However, this gets annoying to write out each time. So one of the functions in the source file does this for you. `PD()` (for Procrustes Distance) computes the Euclidian Distance between two vectors, but also can compute the length of the vector we want.
 
-```{r}
+```{r PD}
 PD(coef(mlm_fit1)[2,])
 ```
 
 Unfortunately in many fields of biology intepreting this magnitude of effect can be tricky. I will show you one example from [this paper](http://biorxiv.org/content/early/2014/05/19/005322) to give you some ideas. To make sense of it, and what oour expectations are under the null, we generated permutations of the data and computed the length of those vectors to generate a distribution. In some fields (like geometric morphometrics), this measure is used quite commonly so we have an easier time with biological interpretation and comparison. To generate confidence intervals on this we generally utilize non-parametric bootstrapping. 
 
+When deciding on multivariate measures of effect sizes the two things to keep in mind (as discussed in class) are how many response variables you have, and whether or not you have scaled the variables (both response and predictors) to help enable comparisons.
+
 ## How about coefficient of determination?
 We might also like to understand how much variation (of all of the variation) that the model accounts for. As this is multivariate data, there are actually multiple ways of doing this (based on both the trace of the matrix and some based on the determinant). So there is no single $R^2$ measure. However, there is a relatively simple one that we like to employ, recognizing that it does not capture everything. Essentially we take the trace (sum of the elements on the diagonal) of the variance covariance matrix for the observed data as a measure of total variation in the data. We then ask how much of the variation in the trace of the matrix is accounted for by the trace of the fitted values. i.e:
 
-$\frac{Tr(\mathbf{V}_{\hat{Y}})}{Tr(\mathbf{V}_{Y})}$
+$$
+\frac{Tr(\mathbf{V}_{\hat{Y}})}{Tr(\mathbf{V}_{Y})}
+$$
 
 Where $Tr(\mathbf{V}_{\hat{Y}})$ is the trace for the matrix of fitted values, and $Tr(\mathbf{V}_{Y})$ is the trace for the observed.
 
 Since we have scaled all of our observations in our response, then we know that the trace needs to be equal to the number of variables we are using in our response (4 in this case). Let's check
 
-```{r}
+```{r check_trace}
 sum(diag(cov(dll_data[,9:12])))
 ```
 
 How about for our fitted values?
 
-```{r}
+```{r trace_fitted}
 sum(diag(cov(mlm_fit1$fitted)))
 
 sum(diag(cov(mlm_fit1$fitted)))/sum(diag(cov(dll_data[,9:12])))
@@ -265,10 +279,9 @@ So we can account for just under 2% of the variation (based on this measure) in 
 
 Once again, the above code is annoying to write, so we have written a nice function for you, `shapeRsq`
 
-```{r}
+```{r shapeRsq}
 shapeRsq(mlm_fit1)
 ```
-
 
 ## Distance based approaches.
 
@@ -276,9 +289,11 @@ Before we get too complicated with our model, I also want to show you a distance
 
 They have a number of functions in the geomorph library, but for most needs, I suggest starting with `procD.lm`
 
-```{r}
+```{r, results="hide", cache=TRUE}
 mlm_fit2 <- procD.lm(f1 = dll_data[, 9:12] ~ genotype, data = dll_data, iter = 2000 )
+```
 
+```{r mlm_fit2}
 summary(mlm_fit2)
 ```
 
@@ -286,7 +301,7 @@ Of note, this allows for several different types of permutation tests, by defaul
 
 Note that it actually provides the same estimated coefficients, as these are typically used to compare Procrustes Distance (Euclidian Distance) as a measure of effect size
 
-```{r}
+```{r mlm2_coef}
 coef(mlm_fit2)
 ```
 
@@ -300,32 +315,38 @@ As with any other general linear model you want to examine how well the model fi
 
 Let's add some complexity to the model. We have additional predictors, temp (rearing temperature) and line (different wild type strains.)
 
-```{r}
+```{r mlm45}
 mlm_fit4 <- lm(as.matrix(dll_data[,9:12]) ~ temp + genotype, data = dll_data)
 mlm_fit5 <- lm(as.matrix(dll_data[,9:12]) ~ temp*genotype, data = dll_data)
 
 Anova(mlm_fit5)
+```
 
+```{r mlm_45_procD, results = "hide"}
 mlm_fit4_dist <- procD.lm(dll_data[,9:12] ~ genotype*temp,
                           data = dll_data, iter = 2000)
+```
+
+```{r mlm_45_procD_sum}
 summary(mlm_fit4_dist)
 ```
 
 We can look at the lengths of the vectors to get a sense of relative effects of temp, genotype and their interaction.
 
-```{r}
+```{r PD_5}
 PD(coef(mlm_fit5)[2,])
 PD(coef(mlm_fit5)[3,])
 PD(coef(mlm_fit5)[4,])
 ```
 
-How about variance accounted for? We have a slightly more advanced version for this. However, with interaction terms, this can be difficult to interpret (and we tend to only use it for main effects)
+How about variance accounted for? We have a slightly more advanced version for this. However, with interaction terms, this can be difficult to interpret (and we tend to only use it for main effects).
 
-```{r}
+```{r shapeRsq_45}
 shapeRsq(mlm_fit4)
 shapePRsq(mlm_fit4)
 shapePRsq(mlm_fit5)
 ```
+As mentioned in class the partial coefficient of determination calculated this way works well for main effects, but can have problems with interactions. Also, because of the potential for correlations (or lack of balance in the data which induced correlations), the partial $R^2$ do not add up to the model total (nor should they).
 
 ## How about mixed models
 
@@ -333,20 +354,20 @@ Since line should be fit as a random effect, we need to consider our options. In
 
 
 First I find it easier (given the interface of MCMCglmm) to create a formula with the response variables and predictors. This is only for the fixed effects part of the model.
-```{r}
+```{r mod_fm}
 fmla.MMLM1  <- as.formula(paste("cbind(femur_s, tibia_s, tarsus_s, SCT_s)" ,"~", "trait + trait:genotype + trait:temp + trait:genotype:temp - 1"))
 
 fmla.MMLM1
 ```
 Now we need to let `MCMCglmm` know which family (i.e. distribution) the response variables are. Since all are normal (Gaussian), we can specify it the following way.
 
-```{r}
+```{r fam}
 fam.test <- rep("gaussian", 4 )
 ```
 
 Since `MCMCglmm` is fundamentally a Bayesian approach, it needs a prior. If you provide no prior by default, it tries a "flat" prior, although this rarely works. In this case I am providing a relatively flat prior, but just for the random effects of line and for the residual matrix.
 
-```{r} 
+```{r prior} 
 prior.model.1 <- list( R=list(V=diag(4)/4, nu=0.004),  
                        G=list(G1=list(V=diag(4)/4, nu=0.004)))
 ```
@@ -355,7 +376,7 @@ Finally we can fit the model. A couple of things of note. the `fmla.MMLM1` is ju
 
 The `nitt` is how many interations for the MCMC we want to perform, and the burnin is how many should be ignored at the beginning of the random walk.
 
-```{r}
+```{r MCMCglmm_fit}
 MMLM1.fit <- MCMCglmm(fmla.MMLM1,
                       random=~ us(trait):line, 
                       rcov=~ us(trait):units,
@@ -369,7 +390,7 @@ Normally we would spend a fair bit of time on diagnostics of the MCMC, but for n
 
 Let's take a look at a bit. The "Sol" is for solution, which is the term used for fixed effects in MCMCglmm. VCV is for variance covariance matrix.
 
-```{r}
+```{r diag_plots}
 plot(MMLM1.fit$Sol[,1:4])
 plot(MMLM1.fit$Sol[,13:16])
 acf(MMLM1.fit$Sol[,1:2])
@@ -380,18 +401,18 @@ acf(MMLM1.fit$VCV[,1:3])
 
 Nothing terribly worrying.
 
-```{r}
+```{r MCMCglmm_sum}
 summary(MMLM1.fit)
 ```
 
 Sometimes it is easier to look at the fixed and random effects seperately.
 
-```{r}
+```{r summary_fixed}
 summary(MMLM1.fit$Sol)
 ```
 
 And for the random effects.
-```{r}
+```{r summary_random}
 summary(MMLM1.fit$VCV)
 ```
 
@@ -399,9 +420,10 @@ This is not the most friendly output, and it takes a while to get used to. Howev
 
 let's look at the VCV matrix for the random effects of line in a slightly clearer way (as a matrix)
 
-```{r}
+```{r VCV}
 VCV_line <- matrix(summary(MMLM1.fit$VCV)[[1]][1:16], 
                    nrow = 4, ncol = 4)
+VCV_line
 ```
 
 This is only a taste of what to do, and after this we could start asking questions about this genetic variance co-variance matrix. 
