@@ -42,7 +42,21 @@ library(geomorph)
 ## Warning: package 'ape' was built under R version 3.3.2
 ```
 
+```r
+library(MCMCglmm)
+```
+
+```
+## Loading required package: Matrix
+```
+
+```
+## Loading required package: coda
+```
+
 the `car` library has some useful functions for helping to make inferences for [multivariate linear models](https://journal.r-project.org/archive/2013-1/fox-friendly-weisberg.pdf). the `geomorph` library is a specialized library for biological shape analysis (geometric morphometrics), but since this data is inherinently multidimensional, there are many useful functions. Check the [wiki](https://github.com/geomorphR/geomorph/wiki) out. Other useful libraries include the [vegan](https://cran.r-project.org/web/packages/vegan/vegan.pdf), including the distance based multivariate analysis of variance using the `adonis` function in it. geomorph's linear model is a refinement of this.
+
+It is also worthwhile to check out the [CRAN Task views](https://cran.r-project.org/web/views/Multivariate.html) for multivariate statistics, to get some sense of availability of libraries with different functionality.
 
 ## Source in some custom functions.
 We are also going to need some custom functions for multivariate analysis. We use these a lot, but we have been bad and not made an R library out of them. They are available on both our github pages [here](https://github.com/DworkinLab/PitchersJEB2014_cricket_wings/blob/master/scripts/CGwing_analyses_final_2014.Rmd). We wrote most of them for a paper analyzing multivariate shape of Drosophila wings across altitudinal and latitudinal gradients. [Check here](http://onlinelibrary.wiley.com/doi/10.1111/j.1558-5646.2012.01774.x/full) for the paper and [here](http://datadryad.org/resource/doi:10.5061/dryad.r43k1) for the full data and scripts. Lots of cool multivariate examples.
@@ -235,6 +249,7 @@ cov(dll_data[ ,5:8])
 ## tarsus 0.000285 0.000249 0.000319 0.00860
 ## SCT    0.009349 0.010796 0.008597 2.64703
 ```
+With the variances for each trait along the diagonal, and the covariances along the off-diagonal. Also note that the covariance of two traits (x and y) is the same in both directions. i.e. cov(x,y) = cov(y,x).
 
 For the phenotypic correlation matrix
 
@@ -250,7 +265,7 @@ cor(dll_data[, 5:8])
 ## SCT    0.206 0.237  0.296 1.000
 ```
 
-Let's visualize this as well.
+### Let's visualize this as well.
 
 ```r
 pairs(dll_data[, 5:8])
@@ -527,7 +542,7 @@ What we would like to start to think about is effect size. This is not something
 $|| \mathbf{x} || = \sqrt{\mathbf{x'} \cdot \mathbf{x}}$
 
 This is equivalent to:
-$ = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}  }$
+$ = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}}$
 
 Which you may recognize from the Pythagorean theorem. 
 
@@ -889,5 +904,359 @@ shapePRsq(mlm_fit5)
 ## 3 temp:genotype   0.0312535650989142
 ```
 
+## How about mixed models
+
+Since line should be fit as a random effect, we need to consider our options. In R the best choice is to then go ahead and use `MCMCglmm` which has a natural interface for general multivariate mixed models.  It takes a while to get used to the interface, but here is an example. Please check out [here](https://cran.r-project.org/web/packages/MCMCglmm/index.html) for more information about the library, and [here](https://cran.r-project.org/web/packages/MCMCglmm/vignettes/Overview.pdf) for an overview of how to use this library.
 
 
+First I find it easier (given the interface of MCMCglmm) to create a formula with the response variables and predictors. This is only for the fixed effects part of the model.
+
+```r
+fmla.MMLM1  <- as.formula(paste("cbind(femur_s, tibia_s, tarsus_s, SCT_s)" ,"~", "trait + trait:genotype + trait:temp + trait:genotype:temp - 1"))
+
+fmla.MMLM1
+```
+
+```
+## cbind(femur_s, tibia_s, tarsus_s, SCT_s) ~ trait + trait:genotype + 
+##     trait:temp + trait:genotype:temp - 1
+```
+Now we need to let `MCMCglmm` know which family (i.e. distribution) the response variables are. Since all are normal (Gaussian), we can specify it the following way.
+
+
+```r
+fam.test <- rep("gaussian", 4 )
+```
+
+Since `MCMCglmm` is fundamentally a Bayesian approach, it needs a prior. If you provide no prior by default, it tries a "flat" prior, although this rarely works. In this case I am providing a relatively flat prior, but just for the random effects of line and for the residual matrix.
+
+
+```r
+prior.model.1 <- list( R=list(V=diag(4)/4, nu=0.004),  
+                       G=list(G1=list(V=diag(4)/4, nu=0.004)))
+```
+
+Finally we can fit the model. A couple of things of note. the `fmla.MMLM1` is just the formula object we created above. The `trait` term is a reserved word in MCMCglmm, letting it know we want to fit a multivariate mixed model. We need to specify this for both the random effects term (random) and the residual covariances (rcov). the `us(trait):line` asks it to fit an *unstructured* covariance matrix for the line term (i.e the different wild type genotypes we are examining). Unstructured means we are estimating the complete 4 x 4 matrix of covariances (representing the 10 unique elements since the lower diagonal elements are the same as the upper diagonal).
+
+The `nitt` is how many interations for the MCMC we want to perform, and the burnin is how many should be ignored at the beginning of the random walk.
+
+
+```r
+MMLM1.fit <- MCMCglmm(fmla.MMLM1,
+                      random=~ us(trait):line, 
+                      rcov=~ us(trait):units,
+                      prior=  prior.model.1,
+                      data= dll_data, 
+                      family = fam.test, 
+                      nitt= 10000, burnin= 2000, thin=10)
+```
+
+```
+## 
+##                        MCMC iteration = 0
+## 
+##                        MCMC iteration = 1000
+## 
+##                        MCMC iteration = 2000
+## 
+##                        MCMC iteration = 3000
+## 
+##                        MCMC iteration = 4000
+## 
+##                        MCMC iteration = 5000
+## 
+##                        MCMC iteration = 6000
+## 
+##                        MCMC iteration = 7000
+## 
+##                        MCMC iteration = 8000
+## 
+##                        MCMC iteration = 9000
+## 
+##                        MCMC iteration = 10000
+```
+
+Normally we would spend a fair bit of time on diagnostics of the MCMC, but for now we will just take a quick check at the autocorrelation.
+
+Let's take a look at a bit. The "Sol" is for solution, which is the term used for fixed effects in MCMCglmm. VCV is for variance covariance matrix.
+
+
+```r
+plot(MMLM1.fit$Sol[,1:4])
+```
+
+![](Bio708_MultivariateLinearModelsIntro_files/figure-html/unnamed-chunk-37-1.png)<!-- -->
+
+```r
+plot(MMLM1.fit$Sol[,13:16])
+```
+
+![](Bio708_MultivariateLinearModelsIntro_files/figure-html/unnamed-chunk-37-2.png)<!-- -->
+
+```r
+acf(MMLM1.fit$Sol[,1:2])
+```
+
+![](Bio708_MultivariateLinearModelsIntro_files/figure-html/unnamed-chunk-37-3.png)<!-- -->
+
+```r
+plot(MMLM1.fit$VCV[,1:4])
+```
+
+![](Bio708_MultivariateLinearModelsIntro_files/figure-html/unnamed-chunk-37-4.png)<!-- -->
+
+```r
+acf(MMLM1.fit$VCV[,1:3])
+```
+
+![](Bio708_MultivariateLinearModelsIntro_files/figure-html/unnamed-chunk-37-5.png)<!-- -->
+
+Nothing terribly worrying.
+
+
+```r
+summary(MMLM1.fit)
+```
+
+```
+## 
+##  Iterations = 2001:9991
+##  Thinning interval  = 10
+##  Sample size  = 800 
+## 
+##  DIC: 17052 
+## 
+##  G-structure:  ~us(trait):line
+## 
+##                                  post.mean l-95% CI u-95% CI eff.samp
+## traitfemur_s:traitfemur_s.line      0.3183  0.15303    0.520      800
+## traittibia_s:traitfemur_s.line      0.2610  0.11032    0.431      800
+## traittarsus_s:traitfemur_s.line     0.2357  0.10055    0.407      800
+## traitSCT_s:traitfemur_s.line        0.0528 -0.05114    0.169      887
+## traitfemur_s:traittibia_s.line      0.2610  0.11032    0.431      800
+## traittibia_s:traittibia_s.line      0.2775  0.12414    0.449      800
+## traittarsus_s:traittibia_s.line     0.2232  0.10050    0.413      887
+## traitSCT_s:traittibia_s.line        0.0497 -0.03835    0.164      800
+## traitfemur_s:traittarsus_s.line     0.2357  0.10055    0.407      800
+## traittibia_s:traittarsus_s.line     0.2232  0.10050    0.413      887
+## traittarsus_s:traittarsus_s.line    0.2649  0.12208    0.451      800
+## traitSCT_s:traittarsus_s.line       0.0869 -0.00733    0.198      800
+## traitfemur_s:traitSCT_s.line        0.0528 -0.05114    0.169      887
+## traittibia_s:traitSCT_s.line        0.0497 -0.03835    0.164      800
+## traittarsus_s:traitSCT_s.line       0.0869 -0.00733    0.198      800
+## traitSCT_s:traitSCT_s.line          0.1779  0.07786    0.297      800
+## 
+##  R-structure:  ~us(trait):units
+## 
+##                                   post.mean l-95% CI u-95% CI eff.samp
+## traitfemur_s:traitfemur_s.units      0.6067  0.57189   0.6488      714
+## traittibia_s:traitfemur_s.units      0.3669  0.33366   0.3994      800
+## traittarsus_s:traitfemur_s.units     0.1954  0.17031   0.2225      800
+## traitSCT_s:traitfemur_s.units        0.0358  0.00554   0.0654      755
+## traitfemur_s:traittibia_s.units      0.3669  0.33366   0.3994      800
+## traittibia_s:traittibia_s.units      0.6331  0.59543   0.6777      800
+## traittarsus_s:traittibia_s.units     0.1634  0.13571   0.1899      800
+## traitSCT_s:traittibia_s.units        0.0610  0.02824   0.0896      800
+## traitfemur_s:traittarsus_s.units     0.1954  0.17031   0.2225      800
+## traittibia_s:traittarsus_s.units     0.1634  0.13571   0.1899      800
+## traittarsus_s:traittarsus_s.units    0.5235  0.48819   0.5550      800
+## traitSCT_s:traittarsus_s.units       0.0781  0.05427   0.1081      800
+## traitfemur_s:traitSCT_s.units        0.0358  0.00554   0.0654      755
+## traittibia_s:traitSCT_s.units        0.0610  0.02824   0.0896      800
+## traittarsus_s:traitSCT_s.units       0.0781  0.05427   0.1081      800
+## traitSCT_s:traitSCT_s.units          0.7225  0.67663   0.7689     1067
+## 
+##  Location effects: cbind(femur_s, tibia_s, tarsus_s, SCT_s) ~ trait + trait:genotype + trait:temp + trait:genotype:temp - 1 
+## 
+##                                  post.mean l-95% CI u-95% CI eff.samp
+## traitfemur_s                       0.18661 -0.04852  0.39910      997
+## traittibia_s                       0.01309 -0.18439  0.24224      915
+## traittarsus_s                      0.44699  0.22890  0.65526      965
+## traitSCT_s                        -0.06819 -0.22960  0.09813      800
+## traitfemur_s:genotypeDll           0.36919  0.25604  0.45724      800
+## traittibia_s:genotypeDll           0.64569  0.54871  0.74789      800
+## traittarsus_s:genotypeDll          0.17577  0.09451  0.27043      804
+## traitSCT_s:genotypeDll             0.82594  0.70729  0.92121      800
+## traitfemur_s:temp30               -0.50021 -0.60445 -0.40746      800
+## traittibia_s:temp30               -0.32268 -0.41188 -0.22673      800
+## traittarsus_s:temp30              -0.72064 -0.79765 -0.63260      800
+## traitSCT_s:temp30                 -0.11574 -0.21819 -0.00838      800
+## traitfemur_s:genotypeDll:temp30   -0.38983 -0.54250 -0.25309      800
+## traittibia_s:genotypeDll:temp30   -0.50592 -0.64476 -0.36694      800
+## traittarsus_s:genotypeDll:temp30  -0.52642 -0.65467 -0.40113      800
+## traitSCT_s:genotypeDll:temp30     -0.89412 -1.04604 -0.73299      800
+##                                   pMCMC   
+## traitfemur_s                       0.10   
+## traittibia_s                       0.90   
+## traittarsus_s                    <0.001 **
+## traitSCT_s                         0.44   
+## traitfemur_s:genotypeDll         <0.001 **
+## traittibia_s:genotypeDll         <0.001 **
+## traittarsus_s:genotypeDll        <0.001 **
+## traitSCT_s:genotypeDll           <0.001 **
+## traitfemur_s:temp30              <0.001 **
+## traittibia_s:temp30              <0.001 **
+## traittarsus_s:temp30             <0.001 **
+## traitSCT_s:temp30                  0.03 * 
+## traitfemur_s:genotypeDll:temp30  <0.001 **
+## traittibia_s:genotypeDll:temp30  <0.001 **
+## traittarsus_s:genotypeDll:temp30 <0.001 **
+## traitSCT_s:genotypeDll:temp30    <0.001 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+Sometimes it is easier to look at the fixed and random effects seperately.
+
+
+```r
+summary(MMLM1.fit$Sol)
+```
+
+```
+## 
+## Iterations = 2001:9991
+## Thinning interval = 10 
+## Number of chains = 1 
+## Sample size per chain = 800 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##                                     Mean     SD Naive SE Time-series SE
+## traitfemur_s                      0.1866 0.1146  0.00405        0.00363
+## traittibia_s                      0.0131 0.1077  0.00381        0.00356
+## traittarsus_s                     0.4470 0.1067  0.00377        0.00344
+## traitSCT_s                       -0.0682 0.0865  0.00306        0.00306
+## traitfemur_s:genotypeDll          0.3692 0.0522  0.00184        0.00184
+## traittibia_s:genotypeDll          0.6457 0.0524  0.00185        0.00185
+## traittarsus_s:genotypeDll         0.1758 0.0463  0.00164        0.00163
+## traitSCT_s:genotypeDll            0.8259 0.0546  0.00193        0.00193
+## traitfemur_s:temp30              -0.5002 0.0502  0.00178        0.00178
+## traittibia_s:temp30              -0.3227 0.0482  0.00171        0.00171
+## traittarsus_s:temp30             -0.7206 0.0435  0.00154        0.00154
+## traitSCT_s:temp30                -0.1157 0.0537  0.00190        0.00190
+## traitfemur_s:genotypeDll:temp30  -0.3898 0.0740  0.00262        0.00262
+## traittibia_s:genotypeDll:temp30  -0.5059 0.0738  0.00261        0.00261
+## traittarsus_s:genotypeDll:temp30 -0.5264 0.0652  0.00230        0.00230
+## traitSCT_s:genotypeDll:temp30    -0.8941 0.0811  0.00287        0.00287
+## 
+## 2. Quantiles for each variable:
+## 
+##                                     2.5%     25%     50%      75%    97.5%
+## traitfemur_s                     -0.0465  0.1136  0.1924  0.26804  0.40184
+## traittibia_s                     -0.2159 -0.0577  0.0149  0.08616  0.21338
+## traittarsus_s                     0.2327  0.3812  0.4488  0.51571  0.66035
+## traitSCT_s                       -0.2335 -0.1283 -0.0656 -0.00961  0.09775
+## traitfemur_s:genotypeDll          0.2611  0.3338  0.3710  0.40559  0.46645
+## traittibia_s:genotypeDll          0.5450  0.6082  0.6455  0.68150  0.74649
+## traittarsus_s:genotypeDll         0.0843  0.1447  0.1785  0.20578  0.26678
+## traitSCT_s:genotypeDll            0.7126  0.7891  0.8261  0.86311  0.92943
+## traitfemur_s:temp30              -0.6019 -0.5317 -0.4986 -0.46497 -0.40127
+## traittibia_s:temp30              -0.4190 -0.3539 -0.3212 -0.28985 -0.23256
+## traittarsus_s:temp30             -0.7978 -0.7506 -0.7215 -0.69041 -0.63269
+## traitSCT_s:temp30                -0.2183 -0.1542 -0.1156 -0.07881 -0.00917
+## traitfemur_s:genotypeDll:temp30  -0.5339 -0.4431 -0.3898 -0.34283 -0.23680
+## traittibia_s:genotypeDll:temp30  -0.6413 -0.5566 -0.5076 -0.46052 -0.35258
+## traittarsus_s:genotypeDll:temp30 -0.6547 -0.5721 -0.5235 -0.48110 -0.40113
+## traitSCT_s:genotypeDll:temp30    -1.0461 -0.9501 -0.8936 -0.83691 -0.73493
+```
+
+And for the random effects.
+
+```r
+summary(MMLM1.fit$VCV)
+```
+
+```
+## 
+## Iterations = 2001:9991
+## Thinning interval = 10 
+## Number of chains = 1 
+## Sample size per chain = 800 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##                                     Mean     SD Naive SE Time-series SE
+## traitfemur_s:traitfemur_s.line    0.3183 0.1002 0.003544       0.003544
+## traittibia_s:traitfemur_s.line    0.2610 0.0911 0.003219       0.003219
+## traittarsus_s:traitfemur_s.line   0.2357 0.0860 0.003042       0.003042
+## traitSCT_s:traitfemur_s.line      0.0528 0.0554 0.001958       0.001859
+## traitfemur_s:traittibia_s.line    0.2610 0.0911 0.003219       0.003219
+## traittibia_s:traittibia_s.line    0.2775 0.0933 0.003297       0.003297
+## traittarsus_s:traittibia_s.line   0.2232 0.0854 0.003018       0.002867
+## traitSCT_s:traittibia_s.line      0.0497 0.0520 0.001837       0.001837
+## traitfemur_s:traittarsus_s.line   0.2357 0.0860 0.003042       0.003042
+## traittibia_s:traittarsus_s.line   0.2232 0.0854 0.003018       0.002867
+## traittarsus_s:traittarsus_s.line  0.2649 0.0924 0.003268       0.003268
+## traitSCT_s:traittarsus_s.line     0.0869 0.0543 0.001920       0.001920
+## traitfemur_s:traitSCT_s.line      0.0528 0.0554 0.001958       0.001859
+## traittibia_s:traitSCT_s.line      0.0497 0.0520 0.001837       0.001837
+## traittarsus_s:traitSCT_s.line     0.0869 0.0543 0.001920       0.001920
+## traitSCT_s:traitSCT_s.line        0.1779 0.0626 0.002213       0.002213
+## traitfemur_s:traitfemur_s.units   0.6067 0.0202 0.000712       0.000754
+## traittibia_s:traitfemur_s.units   0.3669 0.0168 0.000594       0.000594
+## traittarsus_s:traitfemur_s.units  0.1954 0.0139 0.000491       0.000491
+## traitSCT_s:traitfemur_s.units     0.0358 0.0153 0.000542       0.000558
+## traitfemur_s:traittibia_s.units   0.3669 0.0168 0.000594       0.000594
+## traittibia_s:traittibia_s.units   0.6331 0.0206 0.000728       0.000728
+## traittarsus_s:traittibia_s.units  0.1634 0.0135 0.000479       0.000479
+## traitSCT_s:traittibia_s.units     0.0610 0.0154 0.000544       0.000544
+## traitfemur_s:traittarsus_s.units  0.1954 0.0139 0.000491       0.000491
+## traittibia_s:traittarsus_s.units  0.1634 0.0135 0.000479       0.000479
+## traittarsus_s:traittarsus_s.units 0.5235 0.0174 0.000615       0.000615
+## traitSCT_s:traittarsus_s.units    0.0781 0.0137 0.000485       0.000485
+## traitfemur_s:traitSCT_s.units     0.0358 0.0153 0.000542       0.000558
+## traittibia_s:traitSCT_s.units     0.0610 0.0154 0.000544       0.000544
+## traittarsus_s:traitSCT_s.units    0.0781 0.0137 0.000485       0.000485
+## traitSCT_s:traitSCT_s.units       0.7225 0.0238 0.000843       0.000730
+## 
+## 2. Quantiles for each variable:
+## 
+##                                       2.5%    25%    50%    75%  97.5%
+## traitfemur_s:traitfemur_s.line     0.17235 0.2458 0.3026 0.3705 0.5721
+## traittibia_s:traitfemur_s.line     0.13328 0.1978 0.2450 0.3043 0.4962
+## traittarsus_s:traitfemur_s.line    0.12011 0.1731 0.2203 0.2773 0.4650
+## traitSCT_s:traitfemur_s.line      -0.04890 0.0184 0.0474 0.0840 0.1756
+## traitfemur_s:traittibia_s.line     0.13328 0.1978 0.2450 0.3043 0.4962
+## traittibia_s:traittibia_s.line     0.15042 0.2125 0.2597 0.3252 0.5210
+## traittarsus_s:traittibia_s.line    0.10785 0.1627 0.2065 0.2631 0.4569
+## traitSCT_s:traittibia_s.line      -0.04615 0.0169 0.0451 0.0786 0.1587
+## traitfemur_s:traittarsus_s.line    0.12011 0.1731 0.2203 0.2773 0.4650
+## traittibia_s:traittarsus_s.line    0.10785 0.1627 0.2065 0.2631 0.4569
+## traittarsus_s:traittarsus_s.line   0.14231 0.1990 0.2473 0.3086 0.5064
+## traitSCT_s:traittarsus_s.line      0.00128 0.0497 0.0789 0.1180 0.2105
+## traitfemur_s:traitSCT_s.line      -0.04890 0.0184 0.0474 0.0840 0.1756
+## traittibia_s:traitSCT_s.line      -0.04615 0.0169 0.0451 0.0786 0.1587
+## traittarsus_s:traitSCT_s.line      0.00128 0.0497 0.0789 0.1180 0.2105
+## traitSCT_s:traitSCT_s.line         0.09046 0.1338 0.1659 0.2098 0.3465
+## traitfemur_s:traitfemur_s.units    0.56801 0.5925 0.6056 0.6207 0.6454
+## traittibia_s:traitfemur_s.units    0.33400 0.3554 0.3666 0.3778 0.4008
+## traittarsus_s:traitfemur_s.units   0.17050 0.1858 0.1950 0.2048 0.2232
+## traitSCT_s:traitfemur_s.units      0.00608 0.0254 0.0358 0.0461 0.0661
+## traitfemur_s:traittibia_s.units    0.33400 0.3554 0.3666 0.3778 0.4008
+## traittibia_s:traittibia_s.units    0.59287 0.6205 0.6335 0.6460 0.6754
+## traittarsus_s:traittibia_s.units   0.13662 0.1549 0.1632 0.1718 0.1919
+## traitSCT_s:traittibia_s.units      0.02947 0.0511 0.0610 0.0715 0.0914
+## traitfemur_s:traittarsus_s.units   0.17050 0.1858 0.1950 0.2048 0.2232
+## traittibia_s:traittarsus_s.units   0.13662 0.1549 0.1632 0.1718 0.1919
+## traittarsus_s:traittarsus_s.units  0.49007 0.5113 0.5238 0.5353 0.5587
+## traitSCT_s:traittarsus_s.units     0.05177 0.0694 0.0772 0.0873 0.1056
+## traitfemur_s:traitSCT_s.units      0.00608 0.0254 0.0358 0.0461 0.0661
+## traittibia_s:traitSCT_s.units      0.02947 0.0511 0.0610 0.0715 0.0914
+## traittarsus_s:traitSCT_s.units     0.05177 0.0694 0.0772 0.0873 0.1056
+## traitSCT_s:traitSCT_s.units        0.67755 0.7065 0.7224 0.7386 0.7705
+```
+
+This is not the most friendly output, and it takes a while to get used to. However, we can see that we still have evidence for something interesting going, and we could extract the vectors of effects as we did above.
+
+let's look at the VCV matrix for the random effects of line in a slightly clearer way (as a matrix)
+
+
+```r
+VCV_line <- matrix(summary(MMLM1.fit$VCV)[[1]][1:16], 
+                   nrow = 4, ncol = 4)
+```
+
+This is only a taste of what to do, and after this we could start asking questions about this genetic variance co-variance matrix. 

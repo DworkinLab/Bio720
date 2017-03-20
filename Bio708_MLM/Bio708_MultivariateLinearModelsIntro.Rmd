@@ -24,9 +24,12 @@ You may also need to install the following libraries. If you do not have them re
 # install.packages("geomorph")
 library(car)
 library(geomorph)
+library(MCMCglmm)
 ```
 
 the `car` library has some useful functions for helping to make inferences for [multivariate linear models](https://journal.r-project.org/archive/2013-1/fox-friendly-weisberg.pdf). the `geomorph` library is a specialized library for biological shape analysis (geometric morphometrics), but since this data is inherinently multidimensional, there are many useful functions. Check the [wiki](https://github.com/geomorphR/geomorph/wiki) out. Other useful libraries include the [vegan](https://cran.r-project.org/web/packages/vegan/vegan.pdf), including the distance based multivariate analysis of variance using the `adonis` function in it. geomorph's linear model is a refinement of this.
+
+It is also worthwhile to check out the [CRAN Task views](https://cran.r-project.org/web/views/Multivariate.html) for multivariate statistics, to get some sense of availability of libraries with different functionality.
 
 ## Source in some custom functions.
 We are also going to need some custom functions for multivariate analysis. We use these a lot, but we have been bad and not made an R library out of them. They are available on both our github pages [here](https://github.com/DworkinLab/PitchersJEB2014_cricket_wings/blob/master/scripts/CGwing_analyses_final_2014.Rmd). We wrote most of them for a paper analyzing multivariate shape of Drosophila wings across altitudinal and latitudinal gradients. [Check here](http://onlinelibrary.wiley.com/doi/10.1111/j.1558-5646.2012.01774.x/full) for the paper and [here](http://datadryad.org/resource/doi:10.5061/dryad.r43k1) for the full data and scripts. Lots of cool multivariate examples.
@@ -99,13 +102,14 @@ For the phenotypic variance-covariance matrix.
 ```{r}
 cov(dll_data[ ,5:8])
 ```
+With the variances for each trait along the diagonal, and the covariances along the off-diagonal. Also note that the covariance of two traits (x and y) is the same in both directions. i.e. cov(x,y) = cov(y,x).
 
 For the phenotypic correlation matrix
 ```{r}
 cor(dll_data[, 5:8])
 ```
 
-Let's visualize this as well.
+### Let's visualize this as well.
 ```{r}
 pairs(dll_data[, 5:8])
 ```
@@ -217,7 +221,7 @@ What we would like to start to think about is effect size. This is not something
 $|| \mathbf{x} || = \sqrt{\mathbf{x'} \cdot \mathbf{x}}$
 
 This is equivalent to:
-$ = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}  }$
+$ = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}}$
 
 Which you may recognize from the Pythagorean theorem. 
 
@@ -323,5 +327,81 @@ shapePRsq(mlm_fit4)
 shapePRsq(mlm_fit5)
 ```
 
+## How about mixed models
+
+Since line should be fit as a random effect, we need to consider our options. In R the best choice is to then go ahead and use `MCMCglmm` which has a natural interface for general multivariate mixed models.  It takes a while to get used to the interface, but here is an example. Please check out [here](https://cran.r-project.org/web/packages/MCMCglmm/index.html) for more information about the library, and [here](https://cran.r-project.org/web/packages/MCMCglmm/vignettes/Overview.pdf) for an overview of how to use this library.
 
 
+First I find it easier (given the interface of MCMCglmm) to create a formula with the response variables and predictors. This is only for the fixed effects part of the model.
+```{r}
+fmla.MMLM1  <- as.formula(paste("cbind(femur_s, tibia_s, tarsus_s, SCT_s)" ,"~", "trait + trait:genotype + trait:temp + trait:genotype:temp - 1"))
+
+fmla.MMLM1
+```
+Now we need to let `MCMCglmm` know which family (i.e. distribution) the response variables are. Since all are normal (Gaussian), we can specify it the following way.
+
+```{r}
+fam.test <- rep("gaussian", 4 )
+```
+
+Since `MCMCglmm` is fundamentally a Bayesian approach, it needs a prior. If you provide no prior by default, it tries a "flat" prior, although this rarely works. In this case I am providing a relatively flat prior, but just for the random effects of line and for the residual matrix.
+
+```{r} 
+prior.model.1 <- list( R=list(V=diag(4)/4, nu=0.004),  
+                       G=list(G1=list(V=diag(4)/4, nu=0.004)))
+```
+
+Finally we can fit the model. A couple of things of note. the `fmla.MMLM1` is just the formula object we created above. The `trait` term is a reserved word in MCMCglmm, letting it know we want to fit a multivariate mixed model. We need to specify this for both the random effects term (random) and the residual covariances (rcov). the `us(trait):line` asks it to fit an *unstructured* covariance matrix for the line term (i.e the different wild type genotypes we are examining). Unstructured means we are estimating the complete 4 x 4 matrix of covariances (representing the 10 unique elements since the lower diagonal elements are the same as the upper diagonal).
+
+The `nitt` is how many interations for the MCMC we want to perform, and the burnin is how many should be ignored at the beginning of the random walk.
+
+```{r}
+MMLM1.fit <- MCMCglmm(fmla.MMLM1,
+                      random=~ us(trait):line, 
+                      rcov=~ us(trait):units,
+                      prior=  prior.model.1,
+                      data= dll_data, 
+                      family = fam.test, 
+                      nitt= 10000, burnin= 2000, thin=10)
+```
+
+Normally we would spend a fair bit of time on diagnostics of the MCMC, but for now we will just take a quick check at the autocorrelation.
+
+Let's take a look at a bit. The "Sol" is for solution, which is the term used for fixed effects in MCMCglmm. VCV is for variance covariance matrix.
+
+```{r}
+plot(MMLM1.fit$Sol[,1:4])
+plot(MMLM1.fit$Sol[,13:16])
+acf(MMLM1.fit$Sol[,1:2])
+
+plot(MMLM1.fit$VCV[,1:4])
+acf(MMLM1.fit$VCV[,1:3])
+```
+
+Nothing terribly worrying.
+
+```{r}
+summary(MMLM1.fit)
+```
+
+Sometimes it is easier to look at the fixed and random effects seperately.
+
+```{r}
+summary(MMLM1.fit$Sol)
+```
+
+And for the random effects.
+```{r}
+summary(MMLM1.fit$VCV)
+```
+
+This is not the most friendly output, and it takes a while to get used to. However, we can see that we still have evidence for something interesting going, and we could extract the vectors of effects as we did above.
+
+let's look at the VCV matrix for the random effects of line in a slightly clearer way (as a matrix)
+
+```{r}
+VCV_line <- matrix(summary(MMLM1.fit$VCV)[[1]][1:16], 
+                   nrow = 4, ncol = 4)
+```
+
+This is only a taste of what to do, and after this we could start asking questions about this genetic variance co-variance matrix. 
