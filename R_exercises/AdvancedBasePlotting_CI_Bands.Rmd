@@ -6,6 +6,8 @@ output:
   html_document:
     keep_md: yes
     number_sections: yes
+  html_notebook:
+    number_sections: yes
   pdf_document: default
 ---
 
