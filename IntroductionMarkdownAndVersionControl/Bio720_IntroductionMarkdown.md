@@ -38,6 +38,107 @@ So the best thing to do is decide from the outset on a useful and clear way to o
 For most programming languages there is considerable flexibility on how to you might write your code. However, that can easily mean that everyone uses very different philosophies for naming of variables, functions, etc... Far worse is when an individual changes their approach to naming and coding conventions within a script. This can make even some of the most readable languages (like `python`) very unreadable. So many use *syntax style guides* for programming. This helps to keep your stylistic choices consistent and makes your scripts much more readable. Not only for other people, but for you 6 months down the road when you have completely forgotten what you did. Probably the main two contenders for a syntax style guide are from Hadley Wickham (who develops many libraries in R), which can be found [here](http://adv-r.had.co.nz/Style.html) and the google R style guide [here](https://google.github.io/styleguide/Rguide.xml). I also have my own style guide that I have used in the past for teaching, based largely on the google style guide which is [here](https://msu.edu/~idworkin/ZOL851_style_guide.html). The choice is yours, but use one, and **BE CONSISTENT**.
 
 
+## Version control using git
+
+First off if you have a copy of Vince Buffalo's book [Bioinformatics Data Skills](http://shop.oreilly.com/product/0636920030157.do), read the chapter "Git For Scientists". (Also read chapter 2 about organizing projects.. Just read the whole book really!!!).
+
+Version control is about how to manage and keep track of editing and revisions on any kind of document. This can be code for software, your analysis pipeline, or manuscript editing. The basic idea is that without keeping track of edits and revisions you make can be problematic.
+
+Imagine a situation where you have some functions in a file you wrote `my_functions.R` you have written that work, but are very slow and do not scale up to the genomic analysis you are planning on making. So you revise the computer code to be more efficient (code refactoring), but do the same thing. So you overwrite your
+ original file with the new functions. You now use the functions in this file and see that during your revisions of the functions, you have introduced some unintended behaviour in it. So you want to go back to your original function, but unfortunately you have already overwritten it, so you need to start from scratch.
+
+So next time you are smarter, and when you revise your code you make a new file `my_functions_version2.R`. Everything seems hunky dory, but you realize that some functions are still too slow, and you have learned some new programming techniques to speed things up. As some of these programming techniques are new to you, you are very careful about saving all of your changes in files. However you now end up with a series of files `my_functions_version2.R` to `my_functions_version10.R`. Sadly you realize that one of your new functions has a bug in it, and does not produce the correct results. unfortunately you do not know where you introduced the bug, so it could be anywhere between `my_functions_version3.R` and `my_functions_version10.R`. You end up spending a lot of time tracking this down.
+
+The point of version control is to manage all of these issues by keeping track of the changes you make to a file (the differences), when you made them and also to force you to make a small comment associated with each change to help you find when you made a particular change. This also enables collaborations with other people (with respect to revising code or documents), as you can see what changes they made, and can choose to accept them (or not).
+  There are many version control systems out there, but git is a very popular one, and as we will see it is widely used in genomics as we can easily manage projects with online systems like [github](https://github.com/). Indeed github has a great aspect to it that it renders markdown documents (.md) files, enabling us to get some basic formatting (which is what we have been using for this class.)
+
+## learning git and github.
+
+Now I am at most a basic user of both git and github. Everything I have learned is from the tutorials that they provide (and it is generally enough to get started).
+
+First we need to [setup git](https://help.github.com/articles/set-up-git/)
+
+Next we need to [create a repo](https://help.github.com/articles/create-a-repo/). Importantly the name of the repo must match exactly the name of your folder on your local machine as well.
+
+We will now go ahead and make a local repository (*repo*) at the command line.
+
+We can actually follow along with the instructions on github, by clicking on creating a new repo. Give it a name. For the moment **DO NOT** initialize the repo with a README.
+
+It will actually give you the commands you need to copy and paste.
+
+
+But first at the command line create a folder
+
+```{bash newdir}
+mkdir MyNewProject1
+cd MyNewProject1
+```
+
+Then you can copy and paste what they have.
+
+```{bash copy_git_cmd}
+echo "# MyNewProject1" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/DworkinLab/MyNewProject1.git
+git push -u origin master
+```
+
+the `echo` command is just adding a bit of text to a new file README.md. We will edit this after.
+`git init` is initializing a new repo on your local machine.
+`git add README.md` is telling the computer to add the file README.md to the repo.
+`git commit -m "first commit" is telling the computer to commit changes.
+`git remote add origin https://github.com/DworkinLab/MyNewProject1.git` is linking the location of your local repo to github.
+`git push -u origin master` is pushing the changes we have made locally to github. I always do all of my changes locally, and push to github to avoid issues. When you are working on collaborations, that will not be possible (see your text)
+
+If you go to your github page, you will now see the changes you have made in the repo.
+
+## making changes.
+
+Let's go ahead and make some local changes. In this case we want to edit the `README.md` file.
+
+Assuming your command line is still in the same directory, go ahead and open the file with your texteditor.
+
+```{bash}
+open -a atom README.md
+```
+
+Now make some changes to the file.
+
+Something like this:
+
+```{md}
+# My first repo
+(one number sign acts as a main header, two as a sub-header...)
+
+This is my readme for my first git repo. I am *totally excited* by this. I am also **really** glad Ian likes to write tutorials!.
+
+(put in some code, using md formatting)
+
+That's it
+```
+Once you have finished that, save the changes and close the file.
+
+Now at your command line type:
+
+```{bash}
+touch newfile
+```
+
+Which makes a new empty file (just for demonstration purposes, you don't need to do this each time!)
+
+
+We are now ready to commit our changes:
+
+```{bash}
+git add .
+git commit -m "edited README, added newfile"
+git push
+```
+
+Now go ahead and check things out on the github repo!
+
 ## **IGNORE BELOW FOR NOW **
 
 ## Markdown itself
@@ -46,7 +147,7 @@ For most programming languages there is considerable flexibility on how to you m
 ## Getting started using git and guthub
 - What you [don't want](http://www.phdcomics.com/comics/archive.php?comicid=382)
 - version control for scripts (and small data)
-- 
+-
 
 ## Reproducible research
 - markdown vs. LaTeX
@@ -57,7 +158,7 @@ For most programming languages there is considerable flexibility on how to you m
 
 ## Scripting
 - Philosophy for organizing scripts.
-- Avoid doing [this](http://www.phdcomics.com/comics/archive.php?comicid=1323). 
+- Avoid doing [this](http://www.phdcomics.com/comics/archive.php?comicid=1323).
 - Source scripts (for functions) and analysis scripts.
 - Syntax style guide for [R](https://www.msu.edu/~idworkin/ZOL851_style_guide.html)
 - Syntax style guide for python

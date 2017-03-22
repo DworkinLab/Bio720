@@ -226,20 +226,24 @@ Anova(mlm_fit1)
 What we would like to start to think about is effect size. This is not something that is universally agreed upon in multivariate statistics. However in both morphometrics and genomics it is typical to use the magnitude or *length* of the vector for coefficients associated with the response. This is sometimes known as the *L2 norm* of the vector, but you can mostly easily think about it as the square root of the sum of squares for each coefficient. i.e:
 
 $$
-|| \mathbf{x} || = \sqrt{\mathbf{x'} \cdot \mathbf{x}}
+\lVert \mathbf{x} \rVert = \sqrt{\mathbf{x'} \cdot \mathbf{x}}
 $$
 
 This is equivalent to:
-$$ || \mathbf{x} || = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}}
+$$ \lVert \mathbf{x} \rVert = \sqrt{x^{2}_{1} + x^{2}_{2} + \cdots + x^{2}_{n}}
 $$
 
 Which you may recognize from the Pythagorean theorem. 
 
 For our model we can examine the coefficients easily
-```{r}
+```{r dist}
 coef(mlm_fit1)
 
+# Length/magnitude (L2 norm) of the vector
 sqrt(t(coef(mlm_fit1)[2,]) %*% coef(mlm_fit1)[2,])
+
+# or equivalently
+sqrt(sum(coef(mlm_fit1)[2,]^2))
 ```
 
 However, this gets annoying to write out each time. So one of the functions in the source file does this for you. `PD()` (for Procrustes Distance) computes the Euclidian Distance between two vectors, but also can compute the length of the vector we want.
@@ -251,6 +255,27 @@ PD(coef(mlm_fit1)[2,])
 Unfortunately in many fields of biology intepreting this magnitude of effect can be tricky. I will show you one example from [this paper](http://biorxiv.org/content/early/2014/05/19/005322) to give you some ideas. To make sense of it, and what oour expectations are under the null, we generated permutations of the data and computed the length of those vectors to generate a distribution. In some fields (like geometric morphometrics), this measure is used quite commonly so we have an easier time with biological interpretation and comparison. To generate confidence intervals on this we generally utilize non-parametric bootstrapping. 
 
 When deciding on multivariate measures of effect sizes the two things to keep in mind (as discussed in class) are how many response variables you have, and whether or not you have scaled the variables (both response and predictors) to help enable comparisons.
+
+### Mahalanobis distance
+One approach to deal with this is to use a standardized measure. As with other measures of effect size you could consider multiple options. If one of your treatments is a control, perhaps scale the measure by the magnitude/length of the vector for the mean values for the control. However probably the most common approaches is to scale by a measure of variability. If you think about a common univariate measure of effect size like *Cohen's d*:
+
+$$
+d = \frac{\bar{x}_t - \bar{x}_c}{\sigma_{pooled}}
+$$
+
+Where $\bar{x}_t$ is the estimated (or just mean) treatment mean, $\bar{x}_c$ is the estimated control mean, and \sigma_{pooled} is the pooled standard deviation. 
+
+We can use a multivariate extension of this same approach. As you will see it is essentially the Euclidian distance we examined above but scaled by the pooled variance-covariance matrix, $\mathbf{S}$. The measure is defined as:
+
+$$
+D^{2} = (\mathbf{\bar{x}}_t - \mathbf{\bar{x}}_c )' S^{-1} (\mathbf{\bar{x}}_t - \mathbf{\bar{x}}_c)
+$$
+
+Where $\mathbf{\bar{x}}_t$ is the mean vector for the treatment,$\mathbf{\bar{x}}_c$ is the mean vector for the control and $S^{-1}$ is the inverse of the pooled phenotypic variance-covariance matrix. Great care should be taken with generating the pooled covariance matrix (as with generating the pooled sd for *Cohen's d*). In particular you should first center observations on their treatment means, and then generate the pooled covariance matrix.
+
+You can probably envision other variants of this (in particular which matrix to use for scaling).
+
+`R` has a function to compute this `mahalanobis`.
 
 ## How about coefficient of determination?
 We might also like to understand how much variation (of all of the variation) that the model accounts for. As this is multivariate data, there are actually multiple ways of doing this (based on both the trace of the matrix and some based on the determinant). So there is no single $R^2$ measure. However, there is a relatively simple one that we like to employ, recognizing that it does not capture everything. Essentially we take the trace (sum of the elements on the diagonal) of the variance covariance matrix for the observed data as a measure of total variation in the data. We then ask how much of the variation in the trace of the matrix is accounted for by the trace of the fitted values. i.e:
