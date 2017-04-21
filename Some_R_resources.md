@@ -36,13 +36,19 @@ Check back on [this page](https://github.com/DworkinLab/Bio720/blob/master/Intro
 ## how to find libraries that you might need?
 [CHECK OUT CRAN task views](https://cran.r-project.org/web/views/) to see links to libraries with specialized functions.
 
-For genomics and bioinformatics most R libraries are available through [bioconductor](http://bioconductor.org/). There are hundreds of amazing libraries. One thing to know is that some of the way that data is stored for some bioconductor objects may seem a bit different than other R objects. It takes a bit to get used to it, but they can be very helpful down the road!
+### For genomics and bioinformatics most R libraries
+are available through [bioconductor](http://bioconductor.org/). There are hundreds of amazing libraries. SUper useful tutorials online and example workflows will get you going quickly. One thing to know is that some of the way that data is stored for some bioconductor objects may seem a bit different than other R objects. In particular the two main data structures in bioconductor are the `ExpressionSet` and `SummarizedExperiments`.  It takes a bit to get used to it, but they can be very helpful down the road!
 
-*The Hadley Wickham-verse*. [Hadley Wickham](http://hadley.nz/) has developed some very important and widely used libraries in R, and is one of the chief scientific officers for R-studio. In particular one of his goals was to make doing routine things (data munging, aggregating, cleaning and plotting) in R simpler and more intuitive than is found with standard R syntax, and as such many of his libraries are widely used (https://github.com/hadley). It is worth noting that of his effort to do so, he has created a sort of macro language in R (more like a parallel syntax really) that can be quite different. However, while it can be quite different than base R syntax, the learning curve is less steep (part of the point). These packages include: dplyr, reshape2, tidyr, readr, devtools, stringr, ggplot2, lubridate. All of these are available from his [github](https://github.com/hadley/) page. He has also written several books that cover the gamut of library specific things (ggplot2) to advanced R programming and writing your own packages.
-
+*The Hadley Wickham-verse* (also known as the tidyverse). [Hadley Wickham](http://hadley.nz/) has developed some very important and widely used libraries in R, and is one of the chief scientific officers for R-studio. In particular one of his goals was to make doing routine things (data munging, aggregating, cleaning and plotting) in R simpler and more intuitive than is found with standard R syntax, and as such many of his libraries are widely used (https://github.com/hadley). It is worth noting that of his effort to do so, he has created a sort of macro language in R (more like a parallel syntax really) that can be quite different. However, while it can be quite different than base R syntax, the learning curve is less steep (part of the point). These packages include: dplyr, reshape2, tidyr, readr, devtools, stringr, ggplot2, lubridate, [broom](https://github.com/tidyverse/broom). All of these are available from his [github](https://github.com/hadley/) page. He has also written several books that cover the gamut of library specific things (ggplot2) to advanced R programming and writing your own packages. **NOTE** This approach has been rebranded as the *tidyverse* and links to the goals and libraries can be found [here]
+(http://tidyverse.org/) and also at the github page [here](https://github.com/tidyverse). There also seems to be some other libraries that seem to link closely to the tidyverse philosophy like [`tidytext`](https://www.rdocumentation.org/packages/tidytext/versions/0.1.2) for text mining.
 data.table has some amazingly useful functions to import and work with large data.
 
-Also check out [this list](https://support.rstudio.com/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages) of other suggested packages (some are the same).
+
+One thing to note is that the tidyverse and bioconductor represent two fairly distinct ecosystems in `R`, see this [blog post](https://4dpiecharts.com/2017/04/20/mabbles-the-missing-piece-of-a-unified-theory-of-tidyness/) for some points of comparison (and how to create some tidyverse ideas for bioconductor).
+Also check out [this list](https://support.rstudio.com/hc/en-us/articles/201057987-Quick-list-of-useful-R-packages) of other suggested packages (some are the same). THere is also the [`biobroom`](https://github.com/dgrtwo/biobroom) library for "tidying" bioconductor objects.
+
+
+libraries like [`data.table`](https://github.com/Rdatatable/data.table/wiki) provides a very easy to use approach to reading in large data sets (common in genomics) **very quickly**. `readr` uses a different approach but with similar goals.
 
 Making reports
 In addition to great tools for analysis and plotting, there are great ways of integrating your code and plots into reports. You can do it the standard LaTeX way in `R` using Sweave() and Stangle (both part of the base distribution) to integrate with LaTeX (and make PDFs etc). If you want to use other formats (such as the widely used markdown format I use) then the `knitr` library is essential.
@@ -61,3 +67,6 @@ Not surprisingly, Hadley Wickham has written several important books, including:
   - [Advanced R](http://adv-r.had.co.nz/) focused on really understanding how R works and best programming practices.
   - [R packages](http://r-pkgs.had.co.nz/) on how to write and build `R` packages.
   - Some may get a kick out of John Chambers book "Software for Data Analysis: Programming with R" on the evolution of `S` and `R`, and how to program in it.
+  - [Rcpp](http://www.rcpp.org/) for a great way of integrating c++ code and calling it from `R`
+  - [devtools]() is helpful for developing R libraries
+  - [testthat](https://github.com/hadley/testthat) for units tests
