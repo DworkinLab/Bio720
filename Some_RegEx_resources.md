@@ -4,3 +4,4 @@
 
 - Also check out the resources including interactive exercies at [regexinfo.com](http://www.regular-expressions.info/tutorial.html) regexinfo.com 
 
+- Also here for checking how your Regular expressions are working in real time. http://regexr.com/
