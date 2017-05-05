@@ -1,6 +1,11 @@
 
 Here I am just providing some links to various `R` resources that may be helpful as you start to learn to program and perform analyses in `R`.
 
+
+## R *cheat sheets* (i.e quick summaries of key functions)
+Not surprisingly, R studio has some to [check out](https://www.rstudio.com/resources/cheatsheets/)
+
+
 ## R Tutorials
 There are many of these, but here are a few...
 
