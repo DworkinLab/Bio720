@@ -1,4 +1,4 @@
-#Introduction to Programming with R
+# Introduction to Programming with R
 
 Most of the activities for this section of the course will be self-guided, using a combination of video tutorials and practical exercises. In class we will do  It is expected you will have done all of these for class, as we will be doing a larger in class set of activities assuming a basic level of comfort and familiarity. These will then be followed by independent exercises that will be graded.
 
