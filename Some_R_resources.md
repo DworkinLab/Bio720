@@ -30,6 +30,8 @@ Check back on [this page](https://github.com/DworkinLab/Bio720/blob/master/Intro
 
 [R in a nutshell](http://shop.oreilly.com/product/0636920022008.do). Once you have some basic understanding of programming in general, this is a nice place to look things up quickly and does a good job of explaining what R is doing with respect to data structures.
 
+[R for Data Science](http://r4ds.had.co.nz/). An excellent introduction to importing, munging and plotting data the **tidyverse** way.
+
 ## R syntax style guides
 [R syntax style guide according to google](https://google.github.io/styleguide/Rguide.xml)
 
