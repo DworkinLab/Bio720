@@ -1,5 +1,10 @@
 # Bio720: Practical for the introduction to the `UNIX` shell
 
+
+## A different introduction (probably better than mine!)
+[Command Line bootcamp](http://rik.smith-unna.com/command_line_bootcamp/?id=9xnbkx6eaof)
+
+## Here we go.
 You will need access to a Unix shell (Max OS X or Linux) or use [MobaxTerm](http://mobaxterm.mobatek.net) to login into the info server.
 
 If you have not already done so, read chapter 3 (remedial UNIX skills) in Bioinformatic Data Skills. Alternatively, you could also use a tutorial like this one on using the shell from [software carpentry](http://swcarpentry.github.io/shell-novice/).
