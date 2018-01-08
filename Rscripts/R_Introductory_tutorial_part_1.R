@@ -148,7 +148,7 @@ a + b
 a * b
 
 #if you want to make one big vector out of them
-c <- c(a, b)
+ab <- c(a, b)
 
 
 # how might you make a vector that repeats vector "a" 3 times ?
@@ -159,20 +159,20 @@ c <- c(a, b)
 ############## Simple functions in base R
 
 #you can find out the length of the new vector
-length(c) # This uses one of R's pre-built functions
+length(ab) # This uses one of R's pre-built functions
 
 #length() is an example of a pre-built function in R. Most things in R revolve around using functions to do something, or extract something. We will write our own simple functions soon.
 
 #here are some more common ones that you may use
 
-mean(c)
-sum(c)
-sd(c)  # standard deviation
-var(c)  # variance
+mean(ab)
+sum(ab)
+sd(ab)  # standard deviation
+var(ab)  # variance
 cor(a, b) # Pearson correlation (there are options to change this to other types of correlations, among the arguments for this function.....)
 
 # Say we want to keep the mean of c for later computation we can assign it to a variable
-mean_c <- mean(c)
+mean_ab <- mean(ab)
 
 # We can look at the underlying code of the function (although some times it is buried, in these cases).
 
@@ -194,12 +194,12 @@ class(d)
 #R is an object-oriented language. Everything in R is considered an object. Each object has one or more attributes (which we do not generally need to worry about, but useful for programming.)
 # Most objects in R have an attribute which is the "class" of the object, which is what we will usually care about. R has a bunch of useful classes for statistical programming.
 
-mode(c) # mode of the object. The most basic (atomic?) feature. NOTE this does not mean the "mode" of a distribution
-class(c) # class of the object
-# typeof(c) # internal representation of type
+mode(ab) # mode of the object. The most basic (atomic?) feature. NOTE this does not mean the "mode" of a distribution
+class(ab) # class of the object
+# typeof(ab) # internal representation of type
 
-mode(mean_c) # type of object
-class(mean_c) #
+mode(mean_ab) # type of object
+class(mean_ab) #
 
 
 # as we will see soon, mode and class are not always going to report back the same thing.
@@ -580,8 +580,8 @@ b[b > 20 & b < 80]
 
 
 # Indexing for matrices
-c <- a+b
-q_matrix <- cbind(a,b,c) #cbind "binds" column vectors together into a matrix (also see rbind)
+d <- a+b
+q_matrix <- cbind(a,b,d) #cbind "binds" column vectors together into a matrix (also see rbind)
 q_matrix
 
 # what happens if we ask for the length of q.matrix?
@@ -606,7 +606,7 @@ q_matrix[ 3, ]
 
 
 # we can also pull things out by name
-q_matrix[ ,"c"] # This is an example of indexing via "key" instead of numerical order
+q_matrix[ ,"d"] # This is an example of indexing via "key" instead of numerical order
 
 
 

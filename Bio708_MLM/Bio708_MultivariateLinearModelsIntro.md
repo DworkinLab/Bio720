@@ -971,72 +971,72 @@ summary(MMLM1.fit)
 ##  Thinning interval  = 10
 ##  Sample size  = 800 
 ## 
-##  DIC: 17053 
+##  DIC: 17052 
 ## 
 ##  G-structure:  ~us(trait):line
 ## 
 ##                                  post.mean l-95% CI u-95% CI eff.samp
-## traitfemur_s:traitfemur_s.line      0.3171   0.1556    0.522      800
-## traittibia_s:traitfemur_s.line      0.2589   0.1079    0.433      800
-## traittarsus_s:traitfemur_s.line     0.2325   0.0964    0.413      800
-## traitSCT_s:traitfemur_s.line        0.0491  -0.0698    0.143      800
-## traitfemur_s:traittibia_s.line      0.2589   0.1079    0.433      800
-## traittibia_s:traittibia_s.line      0.2749   0.1304    0.459      800
-## traittarsus_s:traittibia_s.line     0.2212   0.0915    0.379      800
-## traitSCT_s:traittibia_s.line        0.0485  -0.0448    0.153      800
-## traitfemur_s:traittarsus_s.line     0.2325   0.0964    0.413      800
-## traittibia_s:traittarsus_s.line     0.2212   0.0915    0.379      800
-## traittarsus_s:traittarsus_s.line    0.2603   0.1205    0.435      800
-## traitSCT_s:traittarsus_s.line       0.0837  -0.0127    0.190      800
-## traitfemur_s:traitSCT_s.line        0.0491  -0.0698    0.143      800
-## traittibia_s:traitSCT_s.line        0.0485  -0.0448    0.153      800
-## traittarsus_s:traitSCT_s.line       0.0837  -0.0127    0.190      800
-## traitSCT_s:traitSCT_s.line          0.1718   0.0867    0.278      800
+## traitfemur_s:traitfemur_s.line      0.3225   0.1586    0.530      800
+## traittibia_s:traitfemur_s.line      0.2624   0.1139    0.447      800
+## traittarsus_s:traitfemur_s.line     0.2342   0.1015    0.413      800
+## traitSCT_s:traitfemur_s.line        0.0504  -0.0532    0.170      800
+## traitfemur_s:traittibia_s.line      0.2624   0.1139    0.447      800
+## traittibia_s:traittibia_s.line      0.2784   0.1196    0.456      800
+## traittarsus_s:traittibia_s.line     0.2222   0.0887    0.379      800
+## traitSCT_s:traittibia_s.line        0.0489  -0.0494    0.167      800
+## traitfemur_s:traittarsus_s.line     0.2342   0.1015    0.413      800
+## traittibia_s:traittarsus_s.line     0.2222   0.0887    0.379      800
+## traittarsus_s:traittarsus_s.line    0.2587   0.1324    0.424      800
+## traitSCT_s:traittarsus_s.line       0.0832  -0.0146    0.193      800
+## traitfemur_s:traitSCT_s.line        0.0504  -0.0532    0.170      800
+## traittibia_s:traitSCT_s.line        0.0489  -0.0494    0.167      800
+## traittarsus_s:traitSCT_s.line       0.0832  -0.0146    0.193      800
+## traitSCT_s:traitSCT_s.line          0.1781   0.0776    0.302      800
 ## 
 ##  R-structure:  ~us(trait):units
 ## 
 ##                                   post.mean l-95% CI u-95% CI eff.samp
-## traitfemur_s:traitfemur_s.units      0.6070  0.56934   0.6464      800
-## traittibia_s:traitfemur_s.units      0.3660  0.33820   0.4015      800
-## traittarsus_s:traitfemur_s.units     0.1951  0.16976   0.2213      800
-## traitSCT_s:traitfemur_s.units        0.0354  0.00696   0.0671      800
-## traitfemur_s:traittibia_s.units      0.3660  0.33820   0.4015      800
-## traittibia_s:traittibia_s.units      0.6330  0.59710   0.6734     1093
-## traittarsus_s:traittibia_s.units     0.1630  0.13557   0.1892      800
-## traitSCT_s:traittibia_s.units        0.0610  0.03311   0.0943      800
-## traitfemur_s:traittarsus_s.units     0.1951  0.16976   0.2213      800
-## traittibia_s:traittarsus_s.units     0.1630  0.13557   0.1892      800
-## traittarsus_s:traittarsus_s.units    0.5233  0.49343   0.5584      800
-## traitSCT_s:traittarsus_s.units       0.0779  0.04994   0.1069      619
-## traitfemur_s:traitSCT_s.units        0.0354  0.00696   0.0671      800
-## traittibia_s:traitSCT_s.units        0.0610  0.03311   0.0943      800
-## traittarsus_s:traitSCT_s.units       0.0779  0.04994   0.1069      619
-## traitSCT_s:traitSCT_s.units          0.7224  0.68134   0.7699      800
+## traitfemur_s:traitfemur_s.units      0.6061   0.5685   0.6439      800
+## traittibia_s:traitfemur_s.units      0.3663   0.3354   0.4000      800
+## traittarsus_s:traitfemur_s.units     0.1955   0.1669   0.2192      800
+## traitSCT_s:traitfemur_s.units        0.0358   0.0089   0.0660      999
+## traitfemur_s:traittibia_s.units      0.3663   0.3354   0.4000      800
+## traittibia_s:traittibia_s.units      0.6326   0.5950   0.6735      800
+## traittarsus_s:traittibia_s.units     0.1632   0.1360   0.1882      800
+## traitSCT_s:traittibia_s.units        0.0604   0.0315   0.0917      800
+## traitfemur_s:traittarsus_s.units     0.1955   0.1669   0.2192      800
+## traittibia_s:traittarsus_s.units     0.1632   0.1360   0.1882      800
+## traittarsus_s:traittarsus_s.units    0.5241   0.4902   0.5573      800
+## traitSCT_s:traittarsus_s.units       0.0777   0.0508   0.1043      815
+## traitfemur_s:traitSCT_s.units        0.0358   0.0089   0.0660      999
+## traittibia_s:traitSCT_s.units        0.0604   0.0315   0.0917      800
+## traittarsus_s:traitSCT_s.units       0.0777   0.0508   0.1043      815
+## traitSCT_s:traitSCT_s.units          0.7221   0.6754   0.7656      800
 ## 
 ##  Location effects: cbind(femur_s, tibia_s, tarsus_s, SCT_s) ~ trait + trait:genotype + trait:temp + trait:genotype:temp - 1 
 ## 
 ##                                  post.mean l-95% CI u-95% CI eff.samp
-## traitfemur_s                       0.19095 -0.01355  0.42426      800
-## traittibia_s                       0.01570 -0.18607  0.22543      800
-## traittarsus_s                      0.44949  0.25396  0.64183      800
-## traitSCT_s                        -0.06366 -0.23233  0.10307      800
-## traitfemur_s:genotypeDll           0.36674  0.26827  0.46919      907
-## traittibia_s:genotypeDll           0.64522  0.54193  0.74439      800
-## traittarsus_s:genotypeDll          0.17367  0.08637  0.27002      869
-## traitSCT_s:genotypeDll             0.82494  0.71192  0.91729      800
-## traitfemur_s:temp30               -0.50094 -0.60475 -0.40587      883
-## traittibia_s:temp30               -0.32456 -0.42082 -0.21910      800
-## traittarsus_s:temp30              -0.72266 -0.80247 -0.64421      800
-## traitSCT_s:temp30                 -0.11825 -0.20839 -0.00807      800
-## traitfemur_s:genotypeDll:temp30   -0.38663 -0.52487 -0.23754      800
-## traittibia_s:genotypeDll:temp30   -0.50400 -0.63823 -0.35076      800
-## traittarsus_s:genotypeDll:temp30  -0.52808 -0.66169 -0.41105      800
-## traitSCT_s:genotypeDll:temp30     -0.89366 -1.04248 -0.74354      800
+## traitfemur_s                        0.1830  -0.0322   0.3928      800
+## traittibia_s                        0.0121  -0.1786   0.2111      978
+## traittarsus_s                       0.4460   0.2585   0.6531      800
+## traitSCT_s                         -0.0633  -0.2371   0.1083      800
+## traitfemur_s:genotypeDll            0.3704   0.2716   0.4613      800
+## traittibia_s:genotypeDll            0.6466   0.5444   0.7376      800
+## traittarsus_s:genotypeDll           0.1733   0.0749   0.2657      800
+## traitSCT_s:genotypeDll              0.8279   0.7130   0.9273      800
+## traitfemur_s:temp30                -0.4988  -0.5974  -0.4100      800
+## traittibia_s:temp30                -0.3225  -0.4122  -0.2196      800
+## traittarsus_s:temp30               -0.7191  -0.8017  -0.6265     1136
+## traitSCT_s:temp30                  -0.1169  -0.2122  -0.0137      800
+## traitfemur_s:genotypeDll:temp30    -0.3914  -0.5212  -0.2367      800
+## traittibia_s:genotypeDll:temp30    -0.5051  -0.6308  -0.3378      800
+## traittarsus_s:genotypeDll:temp30   -0.5314  -0.6582  -0.3778      800
+## traitSCT_s:genotypeDll:temp30      -0.8995  -1.0446  -0.7325      800
 ##                                   pMCMC   
-## traitfemur_s                      0.085 . 
-## traittibia_s                      0.925   
+## traitfemur_s                       0.10   
+## traittibia_s                       0.93   
 ## traittarsus_s                    <0.001 **
-## traitSCT_s                        0.460   
+## traitSCT_s                         0.47   
 ## traitfemur_s:genotypeDll         <0.001 **
 ## traittibia_s:genotypeDll         <0.001 **
 ## traittarsus_s:genotypeDll        <0.001 **
@@ -1044,7 +1044,7 @@ summary(MMLM1.fit)
 ## traitfemur_s:temp30              <0.001 **
 ## traittibia_s:temp30              <0.001 **
 ## traittarsus_s:temp30             <0.001 **
-## traitSCT_s:temp30                 0.020 * 
+## traitSCT_s:temp30                  0.01 **
 ## traitfemur_s:genotypeDll:temp30  <0.001 **
 ## traittibia_s:genotypeDll:temp30  <0.001 **
 ## traittarsus_s:genotypeDll:temp30 <0.001 **
@@ -1071,42 +1071,42 @@ summary(MMLM1.fit$Sol)
 ##    plus standard error of the mean:
 ## 
 ##                                     Mean     SD Naive SE Time-series SE
-## traitfemur_s                      0.1909 0.1149  0.00406        0.00406
-## traittibia_s                      0.0157 0.1090  0.00385        0.00385
-## traittarsus_s                     0.4495 0.1015  0.00359        0.00359
-## traitSCT_s                       -0.0637 0.0873  0.00309        0.00309
-## traitfemur_s:genotypeDll          0.3667 0.0521  0.00184        0.00173
-## traittibia_s:genotypeDll          0.6452 0.0530  0.00187        0.00187
-## traittarsus_s:genotypeDll         0.1737 0.0474  0.00168        0.00161
-## traitSCT_s:genotypeDll            0.8249 0.0541  0.00191        0.00191
-## traitfemur_s:temp30              -0.5009 0.0509  0.00180        0.00171
-## traittibia_s:temp30              -0.3246 0.0529  0.00187        0.00187
-## traittarsus_s:temp30             -0.7227 0.0424  0.00150        0.00150
-## traitSCT_s:temp30                -0.1182 0.0538  0.00190        0.00190
-## traitfemur_s:genotypeDll:temp30  -0.3866 0.0749  0.00265        0.00265
-## traittibia_s:genotypeDll:temp30  -0.5040 0.0750  0.00265        0.00265
-## traittarsus_s:genotypeDll:temp30 -0.5281 0.0651  0.00230        0.00230
-## traitSCT_s:genotypeDll:temp30    -0.8937 0.0758  0.00268        0.00268
+## traitfemur_s                      0.1830 0.1104  0.00390        0.00390
+## traittibia_s                      0.0121 0.1024  0.00362        0.00328
+## traittarsus_s                     0.4460 0.1002  0.00354        0.00354
+## traitSCT_s                       -0.0633 0.0873  0.00309        0.00309
+## traitfemur_s:genotypeDll          0.3704 0.0499  0.00176        0.00176
+## traittibia_s:genotypeDll          0.6466 0.0518  0.00183        0.00183
+## traittarsus_s:genotypeDll         0.1733 0.0495  0.00175        0.00175
+## traitSCT_s:genotypeDll            0.8279 0.0556  0.00197        0.00197
+## traitfemur_s:temp30              -0.4988 0.0482  0.00170        0.00170
+## traittibia_s:temp30              -0.3225 0.0504  0.00178        0.00178
+## traittarsus_s:temp30             -0.7191 0.0461  0.00163        0.00137
+## traitSCT_s:temp30                -0.1169 0.0539  0.00191        0.00191
+## traitfemur_s:genotypeDll:temp30  -0.3914 0.0742  0.00263        0.00263
+## traittibia_s:genotypeDll:temp30  -0.5051 0.0764  0.00270        0.00270
+## traittarsus_s:genotypeDll:temp30 -0.5314 0.0703  0.00248        0.00248
+## traitSCT_s:genotypeDll:temp30    -0.8995 0.0779  0.00275        0.00275
 ## 
 ## 2. Quantiles for each variable:
 ## 
-##                                     2.5%     25%     50%      75%   97.5%
-## traitfemur_s                     -0.0267  0.1182  0.1889  0.27085  0.4138
-## traittibia_s                     -0.1909 -0.0525  0.0113  0.08927  0.2217
-## traittarsus_s                     0.2492  0.3840  0.4470  0.51408  0.6381
-## traitSCT_s                       -0.2270 -0.1231 -0.0653 -0.00668  0.1241
-## traitfemur_s:genotypeDll          0.2681  0.3317  0.3659  0.40464  0.4688
-## traittibia_s:genotypeDll          0.5426  0.6066  0.6467  0.68122  0.7444
-## traittarsus_s:genotypeDll         0.0771  0.1409  0.1725  0.20678  0.2649
-## traitSCT_s:genotypeDll            0.7184  0.7885  0.8278  0.86282  0.9236
-## traitfemur_s:temp30              -0.5997 -0.5342 -0.5019 -0.46823 -0.3985
-## traittibia_s:temp30              -0.4260 -0.3595 -0.3266 -0.28815 -0.2228
-## traittarsus_s:temp30             -0.8025 -0.7535 -0.7224 -0.69324 -0.6452
-## traitSCT_s:temp30                -0.2199 -0.1557 -0.1202 -0.07983 -0.0161
-## traitfemur_s:genotypeDll:temp30  -0.5266 -0.4371 -0.3880 -0.33623 -0.2386
-## traittibia_s:genotypeDll:temp30  -0.6498 -0.5560 -0.5020 -0.45232 -0.3547
-## traittarsus_s:genotypeDll:temp30 -0.6590 -0.5688 -0.5248 -0.48548 -0.4075
-## traitSCT_s:genotypeDll:temp30    -1.0409 -0.9473 -0.8950 -0.84220 -0.7401
+##                                     2.5%     25%      50%     75%   97.5%
+## traitfemur_s                     -0.0355  0.1120  0.17832  0.2575  0.3910
+## traittibia_s                     -0.1792 -0.0571  0.00853  0.0818  0.2106
+## traittarsus_s                     0.2470  0.3760  0.44728  0.5085  0.6466
+## traitSCT_s                       -0.2360 -0.1236 -0.06204 -0.0047  0.1094
+## traitfemur_s:genotypeDll          0.2724  0.3341  0.36940  0.4054  0.4627
+## traittibia_s:genotypeDll          0.5460  0.6103  0.64701  0.6812  0.7390
+## traittarsus_s:genotypeDll         0.0748  0.1414  0.17106  0.2067  0.2652
+## traitSCT_s:genotypeDll            0.7165  0.7887  0.83025  0.8648  0.9335
+## traitfemur_s:temp30              -0.5953 -0.5298 -0.49849 -0.4669 -0.4079
+## traittibia_s:temp30              -0.4164 -0.3571 -0.32209 -0.2870 -0.2237
+## traittarsus_s:temp30             -0.8066 -0.7507 -0.71760 -0.6889 -0.6299
+## traitSCT_s:temp30                -0.2146 -0.1577 -0.11509 -0.0790 -0.0164
+## traitfemur_s:genotypeDll:temp30  -0.5329 -0.4460 -0.38825 -0.3423 -0.2474
+## traittibia_s:genotypeDll:temp30  -0.6581 -0.5570 -0.50332 -0.4531 -0.3546
+## traittarsus_s:genotypeDll:temp30 -0.6744 -0.5791 -0.53443 -0.4841 -0.3895
+## traitSCT_s:genotypeDll:temp30    -1.0604 -0.9536 -0.89763 -0.8507 -0.7441
 ```
 
 And for the random effects.
@@ -1126,74 +1126,74 @@ summary(MMLM1.fit$VCV)
 ##    plus standard error of the mean:
 ## 
 ##                                     Mean     SD Naive SE Time-series SE
-## traitfemur_s:traitfemur_s.line    0.3171 0.1059 0.003743       0.003743
-## traittibia_s:traitfemur_s.line    0.2589 0.0917 0.003243       0.003243
-## traittarsus_s:traitfemur_s.line   0.2325 0.0847 0.002995       0.002995
-## traitSCT_s:traitfemur_s.line      0.0491 0.0538 0.001904       0.001904
-## traitfemur_s:traittibia_s.line    0.2589 0.0917 0.003243       0.003243
-## traittibia_s:traittibia_s.line    0.2749 0.0922 0.003261       0.003261
-## traittarsus_s:traittibia_s.line   0.2212 0.0797 0.002818       0.002818
-## traitSCT_s:traittibia_s.line      0.0485 0.0506 0.001788       0.001788
-## traitfemur_s:traittarsus_s.line   0.2325 0.0847 0.002995       0.002995
-## traittibia_s:traittarsus_s.line   0.2212 0.0797 0.002818       0.002818
-## traittarsus_s:traittarsus_s.line  0.2603 0.0843 0.002979       0.002979
-## traitSCT_s:traittarsus_s.line     0.0837 0.0526 0.001859       0.001859
-## traitfemur_s:traitSCT_s.line      0.0491 0.0538 0.001904       0.001904
-## traittibia_s:traitSCT_s.line      0.0485 0.0506 0.001788       0.001788
-## traittarsus_s:traitSCT_s.line     0.0837 0.0526 0.001859       0.001859
-## traitSCT_s:traitSCT_s.line        0.1718 0.0554 0.001958       0.001958
-## traitfemur_s:traitfemur_s.units   0.6070 0.0198 0.000701       0.000701
-## traittibia_s:traitfemur_s.units   0.3660 0.0160 0.000567       0.000567
-## traittarsus_s:traitfemur_s.units  0.1951 0.0136 0.000482       0.000482
-## traitSCT_s:traitfemur_s.units     0.0354 0.0155 0.000549       0.000549
-## traitfemur_s:traittibia_s.units   0.3660 0.0160 0.000567       0.000567
-## traittibia_s:traittibia_s.units   0.6330 0.0198 0.000699       0.000598
-## traittarsus_s:traittibia_s.units  0.1630 0.0142 0.000502       0.000502
-## traitSCT_s:traittibia_s.units     0.0610 0.0156 0.000553       0.000553
-## traitfemur_s:traittarsus_s.units  0.1951 0.0136 0.000482       0.000482
-## traittibia_s:traittarsus_s.units  0.1630 0.0142 0.000502       0.000502
-## traittarsus_s:traittarsus_s.units 0.5233 0.0169 0.000599       0.000599
-## traitSCT_s:traittarsus_s.units    0.0779 0.0146 0.000516       0.000587
-## traitfemur_s:traitSCT_s.units     0.0354 0.0155 0.000549       0.000549
-## traittibia_s:traitSCT_s.units     0.0610 0.0156 0.000553       0.000553
-## traittarsus_s:traitSCT_s.units    0.0779 0.0146 0.000516       0.000587
-## traitSCT_s:traitSCT_s.units       0.7224 0.0234 0.000828       0.000828
+## traitfemur_s:traitfemur_s.line    0.3225 0.1079 0.003814       0.003814
+## traittibia_s:traitfemur_s.line    0.2624 0.0934 0.003301       0.003301
+## traittarsus_s:traitfemur_s.line   0.2342 0.0882 0.003118       0.003118
+## traitSCT_s:traitfemur_s.line      0.0504 0.0575 0.002034       0.002034
+## traitfemur_s:traittibia_s.line    0.2624 0.0934 0.003301       0.003301
+## traittibia_s:traittibia_s.line    0.2784 0.0931 0.003291       0.003291
+## traittarsus_s:traittibia_s.line   0.2222 0.0829 0.002930       0.002930
+## traitSCT_s:traittibia_s.line      0.0489 0.0559 0.001975       0.001975
+## traitfemur_s:traittarsus_s.line   0.2342 0.0882 0.003118       0.003118
+## traittibia_s:traittarsus_s.line   0.2222 0.0829 0.002930       0.002930
+## traittarsus_s:traittarsus_s.line  0.2587 0.0885 0.003130       0.003130
+## traitSCT_s:traittarsus_s.line     0.0832 0.0553 0.001957       0.001957
+## traitfemur_s:traitSCT_s.line      0.0504 0.0575 0.002034       0.002034
+## traittibia_s:traitSCT_s.line      0.0489 0.0559 0.001975       0.001975
+## traittarsus_s:traitSCT_s.line     0.0832 0.0553 0.001957       0.001957
+## traitSCT_s:traitSCT_s.line        0.1781 0.0631 0.002229       0.002229
+## traitfemur_s:traitfemur_s.units   0.6061 0.0198 0.000702       0.000702
+## traittibia_s:traitfemur_s.units   0.3663 0.0167 0.000590       0.000590
+## traittarsus_s:traitfemur_s.units  0.1955 0.0137 0.000484       0.000484
+## traitSCT_s:traitfemur_s.units     0.0358 0.0151 0.000535       0.000479
+## traitfemur_s:traittibia_s.units   0.3663 0.0167 0.000590       0.000590
+## traittibia_s:traittibia_s.units   0.6326 0.0203 0.000719       0.000719
+## traittarsus_s:traittibia_s.units  0.1632 0.0137 0.000485       0.000485
+## traitSCT_s:traittibia_s.units     0.0604 0.0158 0.000558       0.000558
+## traitfemur_s:traittarsus_s.units  0.1955 0.0137 0.000484       0.000484
+## traittibia_s:traittarsus_s.units  0.1632 0.0137 0.000485       0.000485
+## traittarsus_s:traittarsus_s.units 0.5241 0.0173 0.000612       0.000612
+## traitSCT_s:traittarsus_s.units    0.0777 0.0143 0.000505       0.000501
+## traitfemur_s:traitSCT_s.units     0.0358 0.0151 0.000535       0.000479
+## traittibia_s:traitSCT_s.units     0.0604 0.0158 0.000558       0.000558
+## traittarsus_s:traitSCT_s.units    0.0777 0.0143 0.000505       0.000501
+## traitSCT_s:traitSCT_s.units       0.7221 0.0230 0.000812       0.000812
 ## 
 ## 2. Quantiles for each variable:
 ## 
 ##                                       2.5%    25%    50%    75%  97.5%
-## traitfemur_s:traitfemur_s.line     0.17136 0.2456 0.2961 0.3653 0.5784
-## traittibia_s:traitfemur_s.line     0.12815 0.1962 0.2437 0.3020 0.4759
-## traittarsus_s:traitfemur_s.line    0.11484 0.1738 0.2181 0.2725 0.4408
-## traitSCT_s:traitfemur_s.line      -0.04376 0.0141 0.0437 0.0779 0.1726
-## traitfemur_s:traittibia_s.line     0.12815 0.1962 0.2437 0.3020 0.4759
-## traittibia_s:traittibia_s.line     0.14711 0.2121 0.2565 0.3155 0.5108
-## traittarsus_s:traittibia_s.line    0.11131 0.1649 0.2041 0.2583 0.4360
-## traitSCT_s:traittibia_s.line      -0.03960 0.0148 0.0435 0.0752 0.1604
-## traitfemur_s:traittarsus_s.line    0.11484 0.1738 0.2181 0.2725 0.4408
-## traittibia_s:traittarsus_s.line    0.11131 0.1649 0.2041 0.2583 0.4360
-## traittarsus_s:traittarsus_s.line   0.14418 0.2027 0.2444 0.3000 0.4777
-## traitSCT_s:traittarsus_s.line     -0.00256 0.0489 0.0786 0.1095 0.2084
-## traitfemur_s:traitSCT_s.line      -0.04376 0.0141 0.0437 0.0779 0.1726
-## traittibia_s:traitSCT_s.line      -0.03960 0.0148 0.0435 0.0752 0.1604
-## traittarsus_s:traitSCT_s.line     -0.00256 0.0489 0.0786 0.1095 0.2084
-## traitSCT_s:traitSCT_s.line         0.09322 0.1324 0.1621 0.2045 0.2950
-## traitfemur_s:traitfemur_s.units    0.56703 0.5943 0.6067 0.6209 0.6449
-## traittibia_s:traitfemur_s.units    0.33511 0.3549 0.3653 0.3767 0.3989
-## traittarsus_s:traitfemur_s.units   0.16974 0.1856 0.1954 0.2043 0.2212
-## traitSCT_s:traitfemur_s.units      0.00625 0.0245 0.0352 0.0460 0.0666
-## traitfemur_s:traittibia_s.units    0.33511 0.3549 0.3653 0.3767 0.3989
-## traittibia_s:traittibia_s.units    0.59709 0.6200 0.6317 0.6456 0.6730
-## traittarsus_s:traittibia_s.units   0.13703 0.1527 0.1626 0.1727 0.1917
-## traitSCT_s:traittibia_s.units      0.03121 0.0506 0.0603 0.0709 0.0928
-## traitfemur_s:traittarsus_s.units   0.16974 0.1856 0.1954 0.2043 0.2212
-## traittibia_s:traittarsus_s.units   0.13703 0.1527 0.1626 0.1727 0.1917
-## traittarsus_s:traittarsus_s.units  0.49027 0.5113 0.5236 0.5351 0.5558
-## traitSCT_s:traittarsus_s.units     0.04846 0.0678 0.0780 0.0880 0.1061
-## traitfemur_s:traitSCT_s.units      0.00625 0.0245 0.0352 0.0460 0.0666
-## traittibia_s:traitSCT_s.units      0.03121 0.0506 0.0603 0.0709 0.0928
-## traittarsus_s:traitSCT_s.units     0.04846 0.0678 0.0780 0.0880 0.1061
-## traitSCT_s:traitSCT_s.units        0.67853 0.7059 0.7220 0.7374 0.7685
+## traitfemur_s:traitfemur_s.line     0.17236 0.2480 0.3022 0.3777 0.5757
+## traittibia_s:traitfemur_s.line     0.13100 0.1958 0.2458 0.3026 0.4839
+## traittarsus_s:traitfemur_s.line    0.11549 0.1725 0.2184 0.2761 0.4457
+## traitSCT_s:traitfemur_s.line      -0.04933 0.0145 0.0464 0.0832 0.1740
+## traitfemur_s:traittibia_s.line     0.13100 0.1958 0.2458 0.3026 0.4839
+## traittibia_s:traittibia_s.line     0.15103 0.2130 0.2579 0.3204 0.5147
+## traittarsus_s:traittibia_s.line    0.11040 0.1658 0.2071 0.2593 0.4304
+## traitSCT_s:traittibia_s.line      -0.04949 0.0146 0.0439 0.0786 0.1663
+## traitfemur_s:traittarsus_s.line    0.11549 0.1725 0.2184 0.2761 0.4457
+## traittibia_s:traittarsus_s.line    0.11040 0.1658 0.2071 0.2593 0.4304
+## traittarsus_s:traittarsus_s.line   0.13658 0.1987 0.2453 0.2972 0.4784
+## traitSCT_s:traittarsus_s.line     -0.00575 0.0461 0.0764 0.1117 0.2094
+## traitfemur_s:traitSCT_s.line      -0.04933 0.0145 0.0464 0.0832 0.1740
+## traittibia_s:traitSCT_s.line      -0.04949 0.0146 0.0439 0.0786 0.1663
+## traittarsus_s:traitSCT_s.line     -0.00575 0.0461 0.0764 0.1117 0.2094
+## traitSCT_s:traitSCT_s.line         0.09452 0.1346 0.1675 0.2074 0.3261
+## traitfemur_s:traitfemur_s.units    0.56955 0.5929 0.6055 0.6184 0.6477
+## traittibia_s:traitfemur_s.units    0.33541 0.3546 0.3665 0.3774 0.4000
+## traittarsus_s:traitfemur_s.units   0.16879 0.1860 0.1954 0.2042 0.2211
+## traitSCT_s:traitfemur_s.units      0.00935 0.0254 0.0348 0.0459 0.0667
+## traitfemur_s:traittibia_s.units    0.33541 0.3546 0.3665 0.3774 0.4000
+## traittibia_s:traittibia_s.units    0.59573 0.6192 0.6316 0.6461 0.6767
+## traittarsus_s:traittibia_s.units   0.13595 0.1539 0.1632 0.1726 0.1879
+## traitSCT_s:traittibia_s.units      0.03053 0.0494 0.0602 0.0710 0.0911
+## traitfemur_s:traittarsus_s.units   0.16879 0.1860 0.1954 0.2042 0.2211
+## traittibia_s:traittarsus_s.units   0.13595 0.1539 0.1632 0.1726 0.1879
+## traittarsus_s:traittarsus_s.units  0.49017 0.5119 0.5243 0.5362 0.5573
+## traitSCT_s:traittarsus_s.units     0.05034 0.0677 0.0769 0.0877 0.1040
+## traitfemur_s:traitSCT_s.units      0.00935 0.0254 0.0348 0.0459 0.0667
+## traittibia_s:traitSCT_s.units      0.03053 0.0494 0.0602 0.0710 0.0911
+## traittarsus_s:traitSCT_s.units     0.05034 0.0677 0.0769 0.0877 0.1040
+## traitSCT_s:traitSCT_s.units        0.67628 0.7073 0.7210 0.7372 0.7672
 ```
 
 This is not the most friendly output, and it takes a while to get used to. However, we can see that we still have evidence for something interesting going, and we could extract the vectors of effects as we did above.
@@ -1209,10 +1209,10 @@ VCV_line
 
 ```
 ##        [,1]   [,2]   [,3]   [,4]
-## [1,] 0.3171 0.2589 0.2325 0.0491
-## [2,] 0.2589 0.2749 0.2212 0.0485
-## [3,] 0.2325 0.2212 0.2603 0.0837
-## [4,] 0.0491 0.0485 0.0837 0.1718
+## [1,] 0.3225 0.2624 0.2342 0.0504
+## [2,] 0.2624 0.2784 0.2222 0.0489
+## [3,] 0.2342 0.2222 0.2587 0.0832
+## [4,] 0.0504 0.0489 0.0832 0.1781
 ```
 
 This is only a taste of what to do, and after this we could start asking questions about this genetic variance co-variance matrix. 
