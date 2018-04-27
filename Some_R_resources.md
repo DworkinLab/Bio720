@@ -74,10 +74,12 @@ for many helpful suggestions.
 
 
 ## Getting more advanced with `R`?
-Not surprisingly, Hadley Wickham has written several important books, including:
+Not surprisingly, Hadley Wickham (and others) have written several important books, including:
   - [Advanced R](http://adv-r.had.co.nz/) focused on really understanding how R works and best programming practices.
   - [R packages](http://r-pkgs.had.co.nz/) on how to write and build `R` packages.
+  
   - Some may get a kick out of John Chambers book "Software for Data Analysis: Programming with R" on the evolution of `S` and `R`, and how to program in it.
   - [Rcpp](http://www.rcpp.org/) for a great way of integrating c++ code and calling it from `R`
   - [devtools]() is helpful for developing R libraries
   - [testthat](https://github.com/hadley/testthat) for units tests
+  - [Efficient R Programming](https://csgillespie.github.io/efficientR/) by Colin Gillespie and Robin Lovelace. Looks like a great book.
