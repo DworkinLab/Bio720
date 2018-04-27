@@ -83,3 +83,4 @@ Not surprisingly, Hadley Wickham (and others) have written several important boo
   - [devtools]() is helpful for developing R libraries
   - [testthat](https://github.com/hadley/testthat) for units tests
   - [Efficient R Programming](https://csgillespie.github.io/efficientR/) by Colin Gillespie and Robin Lovelace. Looks like a great book.
+  - [Data Visualization: A practical introduction, by Kieran Healy](http://socviz.co/)
