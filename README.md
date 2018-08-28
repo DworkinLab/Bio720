@@ -1,15 +1,14 @@
 # Bio720
 
-*Please note: this page is currently a stub with minimal information!!*
-
 ## Course Summary
-This is the page for Bio720 (2016), a practical introduction to fundamental computational skills for biologists. 
+This is the page for Bio720 (2016), a practical introduction to fundamental computational skills for biologists. This is taught through the Biology Department at McMaster University, but most course materials are freely available to anyone interested.
 
 ## Class time and location
-Weekly, on Mondays 6 - 8 PM, MDCL 3017
+TBD. First organizational meeting will be held in the Life Sciences Building (LSB) room 213A
+(off the lounge) at 2:00-2:30pm Friday September 7th, 2018.
 
 ## Background assumed for students
-For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers.
+For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out 
 
 # What students will need
 A laptop with internet access and the ability to install several programs (in particular, `R`, `Python` and a shell emulator in not using a Mac (OS X) or linux.
@@ -37,7 +36,7 @@ The primary goal of this course it to provide graduate students an opportunity t
 
 [Dr. Ian Dworkin](https://scholar.google.com/citations?user=Iium3AEAAAAJ&hl=)
 
-## Recommended books. 
+## Recommended books.
 You are responsible for ordering your own copies of these books. Both are excellent, but we are only highly recommending the first book (PCfB) for this class.
 
 [Practical Computing for Biologists](http://www.amazon.com/s/ref=nb_sb_ss_c_0_24?url=search-alias%3Dstripbooks&field-keywords=practical+computing+for+biologists&sprefix=practical+computing+for+biologists%2Caps%2C144). This book provides a nice, gentle introduction to the basic computational skills all biologists should have. In particular, with introduction to using the UNIX command line, shell scripting, basic `python` programming, regular expressions, working on remote machines and a few other topics. The book is written to be agnostic with respect to discipline (i.e. it is not a bioinformatics book *per se*), but does a great job of being both very accessible and immediately useful. It seems a bit pricy on Amazon.ca, but look around for used copies (it is 4 years old). If you plan to continue in computational research, this is a fantastic resource.

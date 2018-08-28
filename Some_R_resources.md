@@ -1,5 +1,6 @@
+# Some R resources.
 
-Here I am just providing some links to various `R` resources that may be helpful as you start to learn to program and perform analyses in `R`.
+Here I am just providing some links to various `R` resources that may be helpful as you start to learn to program and perform analyses in `R`. A little google-fu and you can find many many more.
 
 
 ## R *cheat sheets* (i.e quick summaries of key functions)
@@ -22,6 +23,8 @@ There are many of these, but here are a few...
 
 Check back on [this page](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md) for a few suggestions of introductory books.
 
+[R for data science](http://r4ds.had.co.nz/). Garrett Grolemund and Hadley Wickham. This is a nice (and free online) book to introduce basic R programming for data analysis within the context of the [tidyverse](https://www.tidyverse.org/).  An excellent introduction to importing, munging and plotting data the **tidyverse** way.
+
 [R programming for bioinformatics](http://www.crcnetbase.com/isbn/9781420063684). Robert Gentleman. A very nice introduction to programming in R. Not much to do about bioinformatics *per se*, but a good way of learning `R` with bioinformatics examples, and some introduction to some of the classes particular to bioconductor.
 
 [The R Book](http://www.mcmu.eblib.com.libaccess.lib.mcmaster.ca/patron/FullRecord.aspx?p=297479). A really nice introduction to using R, data structures in R, plotting and basic statistics. If you are going to be using R, you want to have a copy of this to use!
@@ -29,8 +32,6 @@ Check back on [this page](https://github.com/DworkinLab/Bio720/blob/master/Intro
 [The art of R programming](https://www.nostarch.com/artofr.htm). A really nice introduction to programming in R. Does not assume you have any background in programming.
 
 [R in a nutshell](http://shop.oreilly.com/product/0636920022008.do). Once you have some basic understanding of programming in general, this is a nice place to look things up quickly and does a good job of explaining what R is doing with respect to data structures.
-
-[R for Data Science](http://r4ds.had.co.nz/). An excellent introduction to importing, munging and plotting data the **tidyverse** way.
 
 ## R syntax style guides
 [R syntax style guide according to google](https://google.github.io/styleguide/Rguide.xml)
@@ -65,6 +66,10 @@ libraries like [`data.table`](https://github.com/Rdatatable/data.table/wiki) pro
 In addition to great tools for analysis and plotting, there are great ways of integrating your code and plots into reports. You can do it the standard LaTeX way in `R` using Sweave() and Stangle (both part of the base distribution) to integrate with LaTeX (and make PDFs etc). If you want to use other formats (such as the widely used markdown format I use) then the `knitr` library is essential.
 
 ## Writing your own R packages
+There are a number of tutorials available on writing R packages!
+
+[R Packages](http://r-pkgs.had.co.nz/). Hadley Wickham. A good introduction to writing your own R packages.
+
 Roxygen, Shiny,...
 
 If you are using R-studio, check out
@@ -77,10 +82,11 @@ for many helpful suggestions.
 Not surprisingly, Hadley Wickham (and others) have written several important books, including:
   - [Advanced R](http://adv-r.had.co.nz/) focused on really understanding how R works and best programming practices.
   - [R packages](http://r-pkgs.had.co.nz/) on how to write and build `R` packages.
-  
+
   - Some may get a kick out of John Chambers book "Software for Data Analysis: Programming with R" on the evolution of `S` and `R`, and how to program in it.
   - [Rcpp](http://www.rcpp.org/) for a great way of integrating c++ code and calling it from `R`
   - [devtools]() is helpful for developing R libraries
   - [testthat](https://github.com/hadley/testthat) for units tests
   - [Efficient R Programming](https://csgillespie.github.io/efficientR/) by Colin Gillespie and Robin Lovelace. Looks like a great book.
   - [Data Visualization: A practical introduction, by Kieran Healy](http://socviz.co/)
+  - [Data visualization](https://serialmentor.com/dataviz/). Claus Wilke. This book is as much about good practices on data visualization, along with the `R` code (`ggplot2`) used to generate the visualizations.
