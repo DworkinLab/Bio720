@@ -54,7 +54,7 @@ B. Fundamentals of programming using `R`(Ian). [Link to R portal for class](http
   5. Reproducible research using markdown for reports and git for version control.
   6. An Introduction to bioinformatic tools in R. Primarily an introduction to BioConductor, and genomic range data.
 
-3. **This will likely not be taught this year** Fundamentals of program using `python`.
+C. **This will likely not be taught this year** Fundamentals of program using `python`.
 
 ### Learning outcomes
 
