@@ -24,16 +24,20 @@ The primary goal of this course it to provide graduate students an opportunity t
 ## **What this course is not**
 Because of limitations of time (one two hour lecture a week for 13-14 weeks), we are purposefully making this a course about fundamental skills. As such, this course will not cover in any detail:
     - Genomic analysis pipelines (RNAseq, variant calling and populations genomics). These are covered in the winter-spring in Bio722.
+
     - Theory of computer science (nor theory on programming, algorithms, data structures etc).
+
     - Despite using `R` for much of this course, it is most definitely not a statistics course. Bio708 (taught by Dr. Ben Bolker and Dr. Jonathan Dushoff) is such a course (also using R as the primary programming environmental for statistical modeling.)
+
     - A bioinformatics class (i.e. we will not teach any conceptual or theoretical background in bioinformatics. All examples will be real examples, but mostly to illustrate the computational skills necessary to run an analysis, not the why).
+
 
 ## Learning Objectives
 
 ### Topics (some TBD)
  It is important to note that in order to keep things flexible depending on how things go with the class, these topics are subject to change if necessary. We will discuss in class.
 
-1. Introduction to UNIX and the command line. (Brian)
+A. Introduction to UNIX and the command line. (Brian)
   1. Introduction to basic shell commands, logging onto remote systems
   2. Standard UNIX utilities that make your day to day computer work (and bioinformatics) easier.
   3. using pipes in UNIX (and the model of streaming data), batch processing of data.
@@ -41,7 +45,7 @@ Because of limitations of time (one two hour lecture a week for 13-14 weeks), we
   5. Using your UNIX skills for practical bioinformatic problems (probably setting up a BLAST database, and querying some sequences)
   6. (maybe) Regular expressions are you friend. No really. Using `grep` and its variants (i.e. `agrep`) and `sed` and `awk` for file manipulation and processing
 
-2. Fundamentals of programming using `R`(Ian). [Link to R portal for class](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md)
+B. Fundamentals of programming using `R`(Ian). [Link to R portal for class](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md)
   1. Fundamentals of programming in R.
   2. How to avoid repetitive strain injury while programming. Control flow in R (`for` loops, `if else`, etc). Using the `apply` family of functions in `R`. Simple  simulations.
   3. Working with data in `R`. Getting data in. Data munging (subsetting, merging, cleaning). Working with strings in `R`.
@@ -54,12 +58,19 @@ Because of limitations of time (one two hour lecture a week for 13-14 weeks), we
 ### Learning outcomes
 
 After successfully completing this course you will:
+
     - Have a much higher degree of comfort using your computer!
+
     - Be able to write custom UNIX shell scripts to do file copying, moving, editing, parsing and manipulation.
+
     - Be able to write simple R programs to do simple simulations, data parsing (munging), plotting.
+
     - Be able to perform computationally reproducible research, and use version control on your source code.
+
     - Be able to utilize genomic range data and incorporate simple genomic features.
+
     - Understand the fundamental framework of UNIX programs, scripting and why streaming data is so useful for genomics and bioinformatics.
+    
     - Know that troubleshooting for installing and using programs, and troubleshooting when writing and using code are normal. You will have developed some tenacity in dealing with such issues and have some ideas on how to approach finding solutions (including your *google-fu*).
 
 ## Recommended books.
