@@ -16,7 +16,7 @@ TBD. First organizational meeting will be held in the Life Sciences Building (LS
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out how to install basic software on a Mac (OS X) or a PC (Windows).
 
 # What students will need
-A laptop with internet access and the ability to install several programs (in particular, `R`, `Python` and a shell emulator in not using a Mac (OS X) or linux.
+A laptop with internet access and the ability to install several programs (in particular, `R`, `Python` and a shell emulator if not using a Mac (OS X) or linux.
 
 ## Course goals
 The primary goal of this course it to provide graduate students an opportunity to develop fundamental computational skills necessary to go on and (in the future) develop the appropriate (and more advanced) skills for bioinformatics, genomics, etc.
