@@ -23,6 +23,7 @@ The primary goal of this course it to provide graduate students an opportunity t
 
 ## **What this course is not**
 Because of limitations of time (one two hour lecture a week for 13-14 weeks), we are purposefully making this a course about fundamental skills. As such, this course will not cover in any detail:
+
     - Genomic analysis pipelines (RNAseq, variant calling and populations genomics). These are covered in the winter-spring in Bio722.
 
     - Theory of computer science (nor theory on programming, algorithms, data structures etc).
@@ -70,7 +71,7 @@ After successfully completing this course you will:
     - Be able to utilize genomic range data and incorporate simple genomic features.
 
     - Understand the fundamental framework of UNIX programs, scripting and why streaming data is so useful for genomics and bioinformatics.
-    
+
     - Know that troubleshooting for installing and using programs, and troubleshooting when writing and using code are normal. You will have developed some tenacity in dealing with such issues and have some ideas on how to approach finding solutions (including your *google-fu*).
 
 ## Recommended books.
