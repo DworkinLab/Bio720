@@ -9,8 +9,7 @@ This is the page for Bio720 (2018), a practical introduction to fundamental comp
 [Dr. Ian Dworkin](https://scholar.google.com/citations?user=Iium3AEAAAAJ&hl=)
 
 ## Class time and location
-TBD. First organizational meeting will be held in the Life Sciences Building (LSB) room 213A
-(off the lounge) at 2:00-2:30pm Friday September 7th, 2018.
+Mondays 6-8PM, GS101
 
 ## Background assumed for students
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out how to install basic software on a Mac (OS X) or a PC (Windows).
