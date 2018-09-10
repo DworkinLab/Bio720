@@ -90,4 +90,5 @@ You are responsible for ordering your own copies of these books. Both are excell
 
 ## Readings
 Week 1 - BDS Chapter 1, Chapter 2 pages 21-26, Chapter 3 pages 37-45, Chapter 4 pages 57-59.
-  Also check out [here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) for a review of organizing computational data analysis projects.
+
+Also check out [here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) for a review of organizing computational data analysis projects. You don't need to read about version control **yet**.
