@@ -1,7 +1,7 @@
 # Bio720
 
 ## Course Summary
-This is the page for Bio720 (2016), a practical introduction to fundamental computational skills for biologists. This is taught through the Biology Department at McMaster University, but most course materials are freely available to anyone interested.
+This is the page for Bio720 (2018), a practical introduction to fundamental computational skills for biologists. This is taught through the Biology Department at McMaster University, but most course materials are freely available to anyone interested.
 
 ## Instructors
 [Dr. Brian Golding](http://helix.biology.mcmaster.ca/)
@@ -86,7 +86,7 @@ You are responsible for ordering your own copies of these books. Both are excell
 
 [For Brian's section](http://helix.mcmaster.ca/720.html). This will have pertinent links to Brian's section of the course.
 
-[R tutorial screencasts](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md). A link to the playlist for screencasts I have put together for the `R` tutorials. I will be adding more as the semester progresses. Mostly we will be using the excellent[Datacamp](https://www.datacamp.com/) online interactive 'courses' for the introductory stuff, and moving on from there.
+[R tutorial screencasts](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md). A link to the playlist for screencasts I have put together for the `R` tutorials. I will be adding more as the semester progresses. Mostly we will be using the excellent [Datacamp](https://www.datacamp.com/) online interactive 'courses' for the introductory stuff, and moving on from there.
 
 ## Readings
 Week 1 - BDS Chapter 1, Chapter 2 pages 21-26, Chapter 3 pages 37-45, Chapter 4 pages 57-59.
