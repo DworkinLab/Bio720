@@ -15,7 +15,7 @@ One of the most important things you can do from the get go is organize your pro
 
 ![alt text](http://www.phdcomics.com/comics/archive/phd052810s.gif "PhD Comics 1323, Copyright Jorge Cham")
 
-So the best thing to do is decide from the outset on a useful and clear way to organize your project and your files (and using version control to avoid the problem above). Your book (Bioinformatics Data Skills) goes over this in detail, and another good resource is [here](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000424), [here](http://nicercode.github.io/blog/2013-04-05-projects/), or [here](http://www.carlboettiger.info/2012/05/06/research-workflow.html). However, here is my own short and sweet version of it. Each project should be organized into its own folder, with a specific (and common for all projects) set of sub-folders:
+So the best thing to do is decide from the outset on a useful and clear way to organize your project and your files (and using version control to avoid the problem above). Your book (Bioinformatics Data Skills) goes over this in detail, and other good resources are [here](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000424), [here](http://nicercode.github.io/blog/2013-04-05-projects/), or [here](http://www.carlboettiger.info/2012/05/06/research-workflow.html). However, here is my own short and sweet version of it. Each project should be organized into its own folder, with a specific (and common for all projects) set of sub-folders:
 
 ```bash
 /ProjectName
@@ -27,7 +27,7 @@ So the best thing to do is decide from the outset on a useful and clear way to o
   README
 ```
 
-- The `data` folder contains the raw data (read-only!!), hopefully as flat text files (i.e. ``.csv`, .fastq). You should endevour to not alter the data directly here, but instead any editing of the data should be done in the scripts. It is ok to have additional sub-folders here to help organize your files.
+- The `data` folder contains the raw data (read-only!!), hopefully as flat text files (i.e. ``.csv`, .fastq). You should  not alter the data directly here, but instead any editing of the data should be done in the scripts (where you can also explain any changes made to your data). It is ok to have additional sub-folders here to help organize your files.
 - The `scripts` folder contains each of your analysis scripts. Instead of writing one very long script, sometimes it is best to break it apart into smaller scripts. One to munge and clean data. For one data quality control (and looking for outliers) and one for the analyses themselves. If you have to create a large number of custom functions, it is good to have a seperate source file. Some computational biologists also prefer to have one additional folder in the hierarchy for these (`./src`).
 - The `outputs` folder contains outputs (figures, tables, reports) that can be automatically regenerated from the scripts and the data. THis is not the place for figures that need to be manually (i.e. inkscape, Illustrator) worked on.
 - The `misc` folder is for miscellaneous files (like figures you need to manually fix) that can not be automatically regenerated. It is also potentially a good spot to keep your e-lab notebook for the project (some do it as part of the README)
