@@ -88,6 +88,6 @@ You are responsible for ordering your own copies of these books. Both are excell
 [R tutorial screencasts](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md). A link to the playlist for screencasts I have put together for the `R` tutorials. I will be adding more as the semester progresses. Mostly we will be using the excellent [Datacamp](https://www.datacamp.com/) online interactive 'courses' for the introductory stuff, and moving on from there.
 
 ## Readings
-Week 1 - BDS Chapter 1, Chapter 2 pages 21-26, Chapter 3 pages 37-45, Chapter 4 pages 57-59.
+Week 1 - BDS Chapter 1, Chapter 2 pages 21-30, Chapter 3 pages 37-45, Chapter 4 pages 57-59.
 
 Also check out [here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) for a review of organizing computational data analysis projects. You don't need to read about version control or using markdown **yet**.
