@@ -93,3 +93,5 @@ Week 1 - BDS Chapter 1, Chapter 2 pages 21-30, Chapter 3 pages 37-45, Chapter 4 
 Also check out [here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) for a review of organizing computational data analysis projects. You don't need to read about version control or using markdown **yet**.
 
 Week 2 - Chapter 3 pages 45 - 56, Chapter 7 125 - 156. Maybe also worth looking at pages 395 - 398 in Chapter 12.
+
+Week 3 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
