@@ -97,5 +97,6 @@ Week 2 - Chapter 3 pages 45 - 56, Chapter 7 125 - 156. Maybe also worth looking 
 Week 3 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
 
 Week 6 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365). I also suggest reading chapter 6 (pages 109-115). Also, [here](https://github.com/DworkinLab/EvolveResequencePipeline/blob/master/QC_Software.md) is a link to a few tools for doing QC at various steps. Not meant to be comprehensive, but if you use some google, chances are someone has already written some tool for QC and sanity checks for some steps similar to your own.
+In case you want to see another example [here](https://angus.readthedocs.io/en/2018/running-command-line-blast.html) is a tutorial on making a BLAST database and querying sequences with it.
 
 Week 7 (Beginning R) - Start with DataCamp assignments (Courses **Introduction To R** and **Intermediate R**). Associated readings in BDS chapter 8 pages 175-206.
