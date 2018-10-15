@@ -67,7 +67,7 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   ```
   then copy the information that is printed out and email it to me (along with the information for question 4 below).
 
-  4. Sign up for a Github account (see installation instructions). In
+  4. Sign up for a Github account (see installation instructions).
   5. (optional) Try to install Git (see installation instructions)
   6. (optional) If you really want to be ahead of the curve get git set up with R studio and github (http://happygitwithr.com/). We will do this later.
 
