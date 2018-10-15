@@ -96,4 +96,6 @@ Week 2 - Chapter 3 pages 45 - 56, Chapter 7 125 - 156. Maybe also worth looking 
 
 Week 3 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
 
-Week 5 (Beginning R) - Start with DataCamp assignments (Courses **Introduction To R** and **Intermediate R**). Associated readings in BDS chapter 8 pages 175-206.
+Week 6 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365). I also suggest reading chapter 6 (pages 109-115).
+
+Week 7 (Beginning R) - Start with DataCamp assignments (Courses **Introduction To R** and **Intermediate R**). Associated readings in BDS chapter 8 pages 175-206.
