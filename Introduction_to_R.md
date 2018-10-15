@@ -75,10 +75,10 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 
 
 ## In class activities (not yet updated for 2018)
-1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md). Please go through screencasts 1 - 7 above first (or else it may not make much sense).
-2. In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd) with the answers [here](./R_exercises/Bio720_RInClassExercise2Answers.md).
-3. In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd) with the answers [here](./R_exercises/Bio720_R_week3_DataMunging.md).
-4. In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`) is [here](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd) with the answers [here](./R_exercises/Bio720_R_PlottingBasics.md).
+1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd). Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
+2. In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd).
+3. In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd).
+4. In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
 
 
 ## Notes for Ian to add & improve the screencasts (students can ignore this).
