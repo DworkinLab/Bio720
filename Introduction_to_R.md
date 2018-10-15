@@ -2,6 +2,8 @@
 
 Most of the activities for this section of the course will be self-guided, using a combination of video tutorials and practical exercises. In class we will do  It is expected you will have done all of these for class, as we will be doing a larger in class set of activities assuming a basic level of comfort and familiarity. These will then be followed by independent exercises that will be graded.
 
+**DataCamp tutorials**: We will be using these a lot in the class!
+
 **Readings**: In Bioinformatics Data Skills, chapter 8 presents a crash course in programming in `R`, but this may not be enough detail. We will not be using any of the functionality in `ggplot2` quite yet, so you can skip those pages (i.e. skip 207-215, 224-227). One book which you can access freely is [R for data science](http://r4ds.had.co.nz/index.html) by Garrett Grolemund and Hadley Wickham. It is important to note that it focuses less on programming *per se*, and more on working with data (cleaning, parsing, modifying etc..). It also focuses on using Tidyverse tools in `R` (as opposed to base `R`).
 
 There are plently of other amazing [`R` tutorials](https://cran.r-project.org/other-docs.html) (including less amazing ones by me) online. Use the link in the previous sentence to get to some links. I suggest something like [this one](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) to start with. Alternatively McMaster has access to a number of good ebooks. I think that [this one](http://catalogue.mcmaster.ca/catalogue/Record/2702791) by Larry Pace & Joshua Wiley is a good one to start with. You should (while on campus) be able to access the PDF from [here](http://link.springer.com/book/10.1007%2F978-1-4842-0373-6). I am also making a longer list of various `R` resources to help you out, which is currently [here](https://github.com/DworkinLab/Bio720/blob/master/Some_R_resources.md).  I suggest that reading a bit, and/or going through the relevant video tutorial & exercises, and then moving onto the next component may work best.
@@ -9,7 +11,9 @@ There are plently of other amazing [`R` tutorials](https://cran.r-project.org/ot
 ## Installing R
 Please install the current version of `R` (V.3.5.1 or newer). This is required to be able to complete the class activities. There are several versions of `R` you might consider. R works on all major operating systems (Windows, Apple OS X and Linux).
 - You can [download](http://cran.utstat.utoronto.ca/) and install the version of `R` appropriate to your computer. For Mac OS X or Windows you can download them at the page above. For Linux, use `yum`, `apt` or other package management utility you like. For the Mac OS X R GUI, it has a simple script editor that does syntax highlighting, and displays argument flags for functions. I think the Windows R script editor is much more bare bones.
-- You will likely also need to install the *current* version of [R-studio](https://www.rstudio.com/), version 1.1.456, which is a pretty nice IDE (integrated development environment) for `R`, including advanced syntax highlighting (including RMarkdown, which we will use), and integration with github for version control. While I have a few pet peaves with it, some definitely prefer it, especially when getting started. Certainly makes your research easily reproducible very easily.
+- You will also need to install the *current* version of [R-studio](https://www.rstudio.com/), version 1.1.456, which is a pretty nice IDE (integrated development environment) for `R`, including advanced syntax highlighting (including RMarkdown, which we will use), and integration with github for version control. While I have a few pet peaves with it, some definitely prefer it, especially when getting started. Certainly makes your research easily reproducible very easily.
+- We will be using Git and Github for version control and ultimately assignments in the class. This means you will need to [install git](https://git-scm.com/). I would probably look at [this tutorial](http://happygitwithr.com/install-git.html).
+- You will also need to sign up for a free [Github account](https://github.com/). Don't worry about it for now, but you can contact them for an academic account to get private repositories if you want.
 
 ## R video tutorials and exercises.
 
@@ -58,12 +62,29 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 4. In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`) is [here](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd) with the answers [here](./R_exercises/Bio720_R_PlottingBasics.md).
 
 ## Assignments
-TBD
+For October 22nd (2018):
+1. Complete **Introduction to R** on DataCamp
+2. Complete **Intermediate R** on DataCamp
+3. Make sure you have installed the current version of `R` and `R studio`. See the installation instructions above. To confirm you can open `R` in R studio and run
+```{R}
+sessionInfo()
+Sys.info()[["user"]]
+require(rstudioapi)
+versionInfo()
+```
+then copy the information that is printed out and email it to me (along with the information for question 4 below).
+
+4. Sign up for a Github account (see installation instructions). In
+5. (optional) Try to install Git (see installation instructions)
+6. (optional) If you really want to be ahead of the curve get git set up with R studio and github (http://happygitwithr.com/). We will do this later.
+
+For some getting Git installed and set up will work exactly like it is described in the tutorial. For others you will have difficulties and will need to use your highly honed google schools and Zen like calm to get it working. This is the first stage in computational skills is to get programs installed and working, and is often the most tricky part!
+
 
 ## Notes for Ian to add & improve the screencasts (students can ignore this).
-- seperate "getting data into R" into 3-4 shorter screencasts(with exercises)
-- seperate " control flow" into one on if & ifelse, and another on loops.
-- seperate the apply screencasts (one for apply alone, additional one for tapply, sapply, lapply, aggregate)
+- separate "getting data into R" into 3-4 shorter screencasts(with exercises)
+- separate " control flow" into one on if & ifelse, and another on loops.
+- separate the apply screencasts (one for apply alone, additional one for tapply, sapply, lapply, aggregate)
 - new screencast on lists as a class (heterogeneous collections) and working with them
 - new screencast on data.frame as a list, but also relationship to matrix.
 - new screencast on ordering data sets, and the use of the index in R.

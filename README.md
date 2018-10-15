@@ -85,7 +85,7 @@ You are responsible for ordering your own copies of these books. Both are excell
 
 [For Brian's section](http://helix.mcmaster.ca/720.html). This will have pertinent links to Brian's section of the course.
 
-[R tutorial screencasts](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md). A link to the playlist for screencasts I have put together for the `R` tutorials. I will be adding more as the semester progresses. Mostly we will be using the excellent [Datacamp](https://www.datacamp.com/) online interactive 'courses' for the introductory stuff, and moving on from there.
+[R tutorials and screencasts](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md). A link to the exercises, in-class activities, playlists for screencasts I have put together for the `R` tutorials. I will also be putting assignments up here. I will be adding more as the semester progresses. Mostly we will be using the excellent [Datacamp](https://www.datacamp.com/) online interactive 'courses' for the introductory stuff, and moving on from there.
 
 ## Readings
 Week 1 - BDS Chapter 1, Chapter 2 pages 21-30, Chapter 3 pages 37-45, Chapter 4 pages 57-59.
@@ -95,3 +95,5 @@ Also check out [here](https://github.com/DworkinLab/Bio720/blob/master/Introduct
 Week 2 - Chapter 3 pages 45 - 56, Chapter 7 125 - 156. Maybe also worth looking at pages 395 - 398 in Chapter 12.
 
 Week 3 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
+
+Week 5 (Beginning R) - Start with DataCamp assignments (Courses **Introduction To R** and **Intermediate R**). Associated readings in BDS chapter 8 pages 175-206.
