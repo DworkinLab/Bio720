@@ -74,7 +74,7 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   For some getting Git installed and set up will work exactly like it is described in the tutorial. For others you will have difficulties and will need to use your highly honed google schools and Zen like calm to get it working. This is the first stage in computational skills is to get programs installed and working, and is often the most tricky part!
 
 
-## In class activities
+## In class activities (not yet updated for 2018)
 1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md). Please go through screencasts 1 - 7 above first (or else it may not make much sense).
 2. In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd) with the answers [here](./R_exercises/Bio720_RInClassExercise2Answers.md).
 3. In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd) with the answers [here](./R_exercises/Bio720_R_week3_DataMunging.md).
