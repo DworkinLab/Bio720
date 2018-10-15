@@ -54,31 +54,31 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ)
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
 
+  ## Assignments
+  For October 22nd (2018):
+  1. Complete **Introduction to R** on DataCamp (By 11:59PM Sunday October 21st)
+  2. Complete **Intermediate R** on DataCamp (By 11:59PM Sunday October 21st)
+  3. Make sure you have installed the current version of `R` and `R studio`. See the installation instructions above. To confirm you can open `R` in R studio and run
+  ```{R}
+  sessionInfo()
+  Sys.info()[["user"]]
+  require(rstudioapi)
+  versionInfo()
+  ```
+  then copy the information that is printed out and email it to me (along with the information for question 4 below).
+
+  4. Sign up for a Github account (see installation instructions). In
+  5. (optional) Try to install Git (see installation instructions)
+  6. (optional) If you really want to be ahead of the curve get git set up with R studio and github (http://happygitwithr.com/). We will do this later.
+
+  For some getting Git installed and set up will work exactly like it is described in the tutorial. For others you will have difficulties and will need to use your highly honed google schools and Zen like calm to get it working. This is the first stage in computational skills is to get programs installed and working, and is often the most tricky part!
+
 
 ## In class activities
 1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1.Rmd) and the "answers" are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_answers.md). Please go through screencasts 1 - 7 above first (or else it may not make much sense).
 2. In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd) with the answers [here](./R_exercises/Bio720_RInClassExercise2Answers.md).
 3. In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd) with the answers [here](./R_exercises/Bio720_R_week3_DataMunging.md).
 4. In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`) is [here](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd) with the answers [here](./R_exercises/Bio720_R_PlottingBasics.md).
-
-## Assignments
-For October 22nd (2018):
-1. Complete **Introduction to R** on DataCamp
-2. Complete **Intermediate R** on DataCamp
-3. Make sure you have installed the current version of `R` and `R studio`. See the installation instructions above. To confirm you can open `R` in R studio and run
-```{R}
-sessionInfo()
-Sys.info()[["user"]]
-require(rstudioapi)
-versionInfo()
-```
-then copy the information that is printed out and email it to me (along with the information for question 4 below).
-
-4. Sign up for a Github account (see installation instructions). In
-5. (optional) Try to install Git (see installation instructions)
-6. (optional) If you really want to be ahead of the curve get git set up with R studio and github (http://happygitwithr.com/). We will do this later.
-
-For some getting Git installed and set up will work exactly like it is described in the tutorial. For others you will have difficulties and will need to use your highly honed google schools and Zen like calm to get it working. This is the first stage in computational skills is to get programs installed and working, and is often the most tricky part!
 
 
 ## Notes for Ian to add & improve the screencasts (students can ignore this).
