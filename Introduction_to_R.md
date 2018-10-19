@@ -59,6 +59,7 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   1. Complete **Introduction to R** on DataCamp (By 11:59PM Sunday October 21st)
   2. Complete **Intermediate R** on DataCamp (By 11:59PM Sunday October 21st)
   3. Make sure you have installed the current version of `R` and `R studio`. See the installation instructions above. To confirm you can open `R` in R studio and run
+
   ```{R}
   sessionInfo()
   Sys.info()[["user"]]
@@ -66,6 +67,14 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   versionInfo()
   ```
   then copy the information that is printed out and email it to me (along with the information for question 4 below).
+
+  Note: Some people may (not sure why) not have the `rstudioapi` package already installed. If it gives you an error about this you can install it (and then re-run the code above). i.e.
+
+  ```{R}
+  install.packages("rstudioapi")
+  ```
+
+  and then re-run the set of commands.
 
   4. Sign up for a Github account (see installation instructions).
   5. (optional) Try to install Git (see installation instructions)
