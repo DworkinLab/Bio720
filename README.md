@@ -99,4 +99,4 @@ Week 3 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the
 Week 5 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365). I also suggest reading chapter 6 (pages 109-115). Also, [here](https://github.com/DworkinLab/EvolveResequencePipeline/blob/master/QC_Software.md) is a link to a few tools for doing QC at various steps. Not meant to be comprehensive, but if you use some google, chances are someone has already written some tool for QC and sanity checks for some steps similar to your own.
 In case you want to see another example [here](https://angus.readthedocs.io/en/2018/running-command-line-blast.html) is a tutorial on making a BLAST database and querying sequences with it.
 
-Week 7 (Beginning R) - Start with DataCamp assignments (Courses **Introduction To R** and **Intermediate R**). Associated readings in BDS chapter 8 pages 175-206.
+Week 6 (Beginning R) - Start with DataCamp assignments (Courses **Introduction To R** and **Intermediate R**). Associated readings in BDS chapter 8 pages 175-206.
