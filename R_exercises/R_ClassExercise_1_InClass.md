@@ -38,8 +38,13 @@ Now let's edit this a bit. You need to compute the minimum and maximum values of
 
 While the code embedding is generic, you can specify that you want to use code from another language. For instance you can add (this may not work on windows...)
 
-```{bash}
+
+```bash
 pwd
+```
+
+```
+## /Users/ian/TeachingAndLectures/Bio720/Bio720/R_exercises
 ```
 
 You can also do this via the "Insert" button.
@@ -52,23 +57,14 @@ At a very simple level most (if not all) computer programming languages are ["Tu
 
 Question 2. Is R a low-level or high level programming language? What is the difference?
 
-R is considered a high-level language. It's syntax is portable across operating systems (i.e. platform independent), and is far from machine code.
 
 Question 3. Is R a compiled or interpreted language? What is the difference?
-R is an interpreted language. This means the code does not (generally) write an independent running program that is converted to machine code, but the R code you submit goes through a piece of software (an intepreter) to "run" the R code. In this way, R is no different than all of the other UNIX tools you have used (like grep, sed, awk, sort, cut).
 
 Question 4. R is often described as "slow" or "inefficient". Why? Why would a language with these attributes be so popular? In other words, what were the major goals for the `R` programming language.
-- R was designed with interactive data analysis in mind, not speed.
-- Main factors include stability of use, consistency of use (maintains most backwards compatability).
-- Also it is natively vectorized, which bothers some computer programmers when they start.
 
 Question 5. What computer programming languages is R primarily built in? Why is it not all in `R`
-- R, C and fortran. Only about 20% of the lines of code are written in R.
-- R code is not fast. But using R syntax to call `C` or `fortran` code, which is fast is great. So many of the functions you are calling in `R` are actually written in other languages (including the R language interpreter).
 
 Question 6. Hadley Wickham (the author of many R packages and the R super guru) points out that R is slow in part because of the R language *definition* (such as it is) and in part because of the most commonly used *implementation* `gnu-R`. In very simple terms or analogy descrive what is meant by the *implementation* of a computer language as compared to the *definition*?
-
-- Definition describes the architecture of a language, like its syntax, i.e. `x <- 5`  or `x = 5`, or the types of objects or attributes (and many other things). The implementation describes how syntax, attributes of objects are actually used. If I define a bike as an unmotorized vehicle with two wheels, you could probably implement many different objects that fits this definition but work very differently (pedals VS a sail, or two wheels next to each other with the seat in between, instead of one in the front and one in the back). How good each of these bikes work (in terms of speed, stability of the rider etc..) depends on both the definition, and the actual bike we built (implemented).
 
  ** Now you are a computer wizard **  Woot Woot!
 
@@ -85,30 +81,47 @@ As was discussed in the datacamp video screencasts, R has a number of different 
 
 Question 7. What are the *atomic* types in `R`?
 
--  logical (Boolean), integer, real (double or floating point) , complex, string (or character) and raw. 
-
-
 Let's think about a few of these basic atomic types:
 
 
 
-```{r}
+```r
 x <- 1
 ```
 
 You can find out information about this with a variety of functions:
 
-```{r}
+
+```r
 str(x)
+```
+
+```
+##  num 1
+```
+
+```r
 mode(x)
+```
+
+```
+## [1] "numeric"
+```
+
+```r
 typeof(x)
+```
+
+```
+## [1] "double"
 ```
 Question 8? Why do `mode(x)` and `typeof(x)` give different results?
 
 
 Let's create a few more objects and take a look at them
 
-```{r}
+
+```r
 y = c(3, 4, 5)
 ```
 
@@ -116,54 +129,70 @@ Will `x` and `y` differ?  Check and explain?
 
 Now let's create a new object z:
 
-```{r}
+
+```r
 z = 3:5
 ```
 Question 9: How should `y` and `z` compare? how would you check? How can you compare them to see if `R` is treating them the same?
 
-```{r}
-mode(y)
-mode(z)
-typeof(y)
-typeof(z)
-```
- Which might suggest they are different. In one case `R` is treating the vector as integers, the other case as floating point (double). So this suggests they might be different. However:
- 
-```{r}
-y == z
-all.equal(y, z)
-# BUT
-identical(y, z)
-```
-
-Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
-
-
 Question 10. Note the behaviour here between `z` and some mathematical operations with `z`. Explain what is happening and why.
 
-```{r}
+
+```r
 typeof(z)
+```
+
+```
+## [1] "integer"
+```
+
+```r
 typeof(z+z) # addition
+```
+
+```
+## [1] "integer"
+```
+
+```r
 typeof(z-z) # subtraction
+```
+
+```
+## [1] "integer"
+```
+
+```r
 typeof(z/z) # regular division
+```
+
+```
+## [1] "double"
+```
+
+```r
 typeof(z*z) # regular multiplication
+```
+
+```
+## [1] "integer"
+```
+
+```r
 typeof(z^2) # taking the square
+```
+
+```
+## [1] "double"
+```
+
+```r
 typeof(sqrt(z))
 ```
 
-### R does many calculations as `double`, even if inputs are integers
-even though `z` is a vector with integer values, if you use z in some calculations that require double precision floating point values, it will be converted to double. In other words::
-
-```{r}
-typeof(z)
-# because of how division is computed in R, it converts to double
-typeof(z/z)
- 
-#  though, addition, substraction and multiplication do not require this, so stay integer
-typeof(z*z)
 ```
-Most of the time this is not an issue, but it is a behaviour that is worth getting used to.
-
+## [1] "double"
+```
 
 ### Some other atomic types in R
 Ok, let's think about some of the other basic data types we learned about (strings or "character" in R, boolean/logical)
@@ -171,7 +200,8 @@ Ok, let's think about some of the other basic data types we learned about (strin
 
 First let's clean up our workspace and re-assign our variables.
 
-```{r}
+
+```r
 rm( x, y, z) # clean up
 x = 1
 y = "1"
@@ -180,83 +210,10 @@ a = TRUE
 b = "TRUE"
 ```
 
-Question 11. Before checking, think about what types each of these objects should be? Then check. Which (if any) should be identical to one another? Why?
+Question 11. Before checking, think about what types each of these objects should be? Then check. Which (if any) should be identical to one another? Why? How about `y` and `z`? `a` and `b`?
 
-```{r}
-x == y
-all.equal(x, y)
-identical(x, y)
-```
-
-How about `y` and `z`?
-
-```{r}
-y == z
-all.equal(y, z)
-identical(y, z)
-
-# Which might be obvious by
-mode(y)
-mode(z)
-```
-
-
-```{r}
-y == z
-all.equal(y, z)
-identical(y, z)
-
-# Which might be obvious by
-mode(y)
-mode(z)
-```
-
-The same "logic" applies for comparing `a` and `b`
-
-```{r}
-a == b
-all.equal(a, b)
-identical(a, b)
-
-# Which might be obvious
-mode(a); typeof(a)
-mode(b); typeof(b)
-```
-
-So, what are the take home points?
-- Computers can be very exact.
-- R has some confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means. This isn't because R is confused, but because it is trying to be helpful. It is generally guessing what data types make sense for your variable (but you can specify if you want). However if for some operations it needs variables of certain data types R will *coerce* the variable to the right type.
 
 Question 12: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
-
-Let's coerce b into a logical/Boolean
-```{r}
-b1 <- as.logical(b)
-is.logical(b1); is.character(b1)
-b == b1
-a == b
-typeof(b1); mode(b1)
-```
-
-Let's coerce a into a character
-```{r}
-a1 <- as.character(a)
-is.character(a1)
-a == a1
-a == b
-typeof(a1); mode(a1)
-```
-
-And, y into a number
-```{r}
-y1 <- as.numeric(y)
-y == y1
-identical(y, y1)
-
-x == y1
-identical(x, y1)
-typeof(y1); mode(y1)
-```
 
 ### Making variables of a specific type
 
@@ -264,57 +221,94 @@ So if you want to make sure you are generating variables of a specific type, you
 
 So if I wanted to specify a vector is of type `double` (which is what numeric is)
 
-```{r}
+
+```r
 double_up <- double(length = 10)
 identical(numeric(10), double(10))
 ```
 
-Question 13. How would I specify a vector of integers of length 10? Why are all the numbers for this (or the line of code above) 0?
-
-```{r}
-integer_10 <- integer(10)
+```
+## [1] TRUE
 ```
 
-By default this generates vectors with 0 as placeholders. You need to be aware of this!
+Question 13. How would I specify a vector of integers of length 10? Why are all the numbers for this (or the line of code above) 0?
 
 ### Boolean/logical
 Using TRUE/FALSE (logical, Boolean) as an atomic type is quite important. Often we need to check equality of objects, or elements within our objects (considering vectors are a basic storage type in R). These are particularly (as we will see later) useful when subsetting using the index of a vector (or matrix or data.table).
 
 Let's clean up a bit:
 
-```{r}
+
+```r
 rm(x, y, z, a, b)
 ```
 
 As we will see, both T or TRUE can be used. Likewise for F or FALSE. It is also important to know you don't want these to be treated as strings/characters so don't put quotes around them.
 
-```{r}
+
+```r
 x = T
 x
+```
+
+```
+## [1] TRUE
+```
+
+```r
 y = TRUE
 y
+```
 
+```
+## [1] TRUE
+```
+
+```r
 x == y
+```
+
+```
+## [1] TRUE
+```
+
+```r
 identical(x, y)
+```
+
+```
+## [1] TRUE
 ```
 
 It is also useful to know that TRUE has a numeric value associated with it (1), and FALSE is associated with 0. 
 
-```{r}
-sum(x)
-as.numeric(x)
 
+```r
+sum(x)
+```
+
+```
+## [1] 1
+```
+
+```r
+as.numeric(x)
+```
+
+```
+## [1] 1
+```
+
+```r
 a = F
 sum(a)
 ```
 
-Question 14: Before running the code to find out, what will the sum of the following vector be `c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6))`
-
-```{r}
-sum(c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6)))
+```
+## [1] 0
 ```
 
-Take home message: Boolean values of TRUE and FALSE have numeric values of 1 and 0 respectively. This can be very useful for subsetting by columns or rows for matrices and data.frames!
+Question 14: Before running the code to find out, what will the sum of the following vector be `c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6))`
 
 ## Building up our data structures. 
 
@@ -322,15 +316,25 @@ Now that we have some better idea (hopefully) of some of the atomic data types, 
 
 Before we get any further and create some new objects, how do we see all of the objects we currently have in our global environment?
 
-```{r}
+
+```r
 ls()
+```
+
+```
+## [1] "a"         "double_up" "x"         "y"
 ```
 
 Let's work with a clean slate. How might we remove all of the objects and start fresh? Obviously you could just do a `rm()` command with each object name, but you can also remove all at once.
 
-```{r}
+
+```r
 rm(list=ls())
 ls()
+```
+
+```
+## character(0)
 ```
 
 Q15. Describe what this command has done. 
@@ -338,7 +342,8 @@ Q15. Describe what this command has done.
 
 Now we are going to create a few new objects and use these to examine some of the properties of our more complex data structures
 
-```{r}
+
+```r
 gene1 <- c(3, 4, 7, 9, 12, 6)
 gene2 <- c(11, 17, 12, 25, 23, 7)
 gene3 <- c(100, 103, 97, 94, 106, 111)
@@ -350,40 +355,9 @@ What mode and type should these objects be?
 
 Question 15. Create an object `genotype` of length 6, where the first three observations have the value "wildtype" and the last three are "mutant"
 
-There are at least three options. First the hard way.
-```{r}
-genotype <- c("wildtype", "wildtype", "wildtype", "mutant", "mutant", "mutant")
-genotype
-mode(genotype)
-```
 
-A pretty easy way
-```{r}
-genotype2 <- rep(c("wildtype", "mutant"), each = 3)
-genotype2
-mode(genotype2)
-class(genotype2)
-```
+Compare these different objects, genotype (or genotype2 which is identical) and genotype3 (using gl). Are they the same?
 
-Or if we want to generate factors immediately we can use the `gl()` function (for *generate levels*):
-
-```{r}
-genotype3 <- gl(n = 2, k = 3, labels = c("wildtype", "mutant"))
-genotype3
-mode(genotype3)
-class(genotype3)
-```
-
-Now this last approach is pretty interesting for a couple of reasons. First the `class` of the object is factor not character. Second the mode of the object is numeric. What is going on here?
-
-
-First compare these different objects, genotype (or genotype2 which is identical) and genotype3 (using gl). Are they the same?
-
-```{r}
-genotype2 == genotype3
-identical(genotype2, genotype3)
-all.equal(genotype2, genotype3)
-```
 
 So let's think about what a factor is?
 
@@ -391,114 +365,94 @@ factors in R may appear as `character` but for efficiency are stored as integers
 
 Question 16. If we wanted to make genotype2 into a factor (we will call it genotype2_factor) how would you do so? Is this the same as making it a factor from the very beginning?
 
-```{r}
-genotype2_factor <- as.factor(genotype2)
-class(genotype2_factor)
-mode(genotype2_factor)
-identical(genotype3, genotype2_factor)
-genotype3 == genotype2_factor
-```
-
-So while each attribute is identical, the objects as a whole are not! See `?identical` for more information. This is frankly an unfortunate behaviour of R's. Most other things were done on purpose. I am not sure if this was or was not. However, knowing about it makes it useful!
-
-
 How about if we wanted to make genotype3 into a character vector?
 
-```{r}
+
+```r
 genotype3_character <- as.character(genotype3)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genotype3' not found
+```
+
+```r
 genotype3_character 
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genotype3_character' not found
+```
+
+```r
 class(genotype3_character)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genotype3_character' not found
+```
+
+```r
 mode(genotype3_character)
+```
+
+```
+## Error in mode(genotype3_character): object 'genotype3_character' not found
+```
+
+```r
 identical(genotype3_character, genotype2)
+```
+
+```
+## Error in identical(genotype3_character, genotype2): object 'genotype3_character' not found
+```
+
+```r
 genotype3_character == genotype2
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genotype3_character' not found
 ```
 
 Question 17. Let's say we had a second experimental factor which was the day of sampling (3,6) but we want to treat it as a factor `c(3, 6, 3, 6, 3, 6)` how would you code this?
 
-```{r}
-day <- gl(n = 2, k = 1 , length = 6, labels = c(3, 6))
-day
-class(day)
-mode(day)
-typeof(day)
-```
+Question 18. What happens if you coerce `day` into a character? Seemingly strange behaviour? However think about it for a minute and try to explain it.
 
-Question 18. What happens if you coerce `day` into a character?
 
-```{r}
+```r
 as.character(day)
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'day' not found
+```
+
 Question 19. How about if you coerce day into numeric?
-```{r}
+
+```r
 as.numeric(day)
 ```
 
-Seemingly strange behaviour? However think about it for a minute and try to explain it.
-
-The basic idea is that when a variable is stored as a `factor` in R, the first level (which defaults to alphanumeric, so **m**utant before **w**ildtype in this case) will be stored as "1", the second level as "2" and so on. When you ask to convert it to numeric it uses these numbers. So if your factor levels are named with numbers to begin with, this can mess things up. So take care!
-
-Question 20. So if you want to turn these into the numbers 3 and 6, how would you do it?
-```{r}
-as.numeric(as.character(day))
+```
+## Error in eval(expr, envir, enclos): object 'day' not found
 ```
 
-Take home message: factors are useful for storing names of experimental levels efficiently, but keep in mind they are stored internally as numbers, not strings! 
+
+Question 20. So if you want to turn these into the numbers 3 and 6, how would you do it?
 
 ## Back to our data structures of interest. 
 
 Question 21. Provide two different ways of combining `gene1`, `gene2` and `gene3` into a matrix (gene_mat1 and gene_mat2)? Are these the same?
 
-
-```{r}
-gene_mat1 <- cbind(gene1, gene2, gene3)
-gene_mat1
-
-gene_mat2 <- matrix(c(gene1, gene2, gene3), nrow =6, ncol =3, byrow =FALSE)
-```
-Are these the same?
-
-```{r}
-gene_mat1 == gene_mat2
-identical(gene_mat1, gene_mat2)
-```
-
-Using some of the tools we have already used (str, mode, typeof) shows the elements are the same. However, one has stripped the names (gene_mat2), why do you think this has happened?
-
 Question 22. How might you fix the issue we observed?
 
-It is pretty easy, since it is just names that differ, you can use `colnames` to rename the columns
-```{r}
-colnames(gene_mat2) <- c("gene1", "gene2", "gene3")
-gene_mat2
-identical(gene_mat1, gene_mat2)
-```
-
 Question 23. Let's take our (character) vectors for day and genotype and use `cbind()` (treatments). Before starting write down whether you think the object `treatments` will have class `matrix`. What will the mode be? Why?
-```{r}
-genotype <- rep(c("wildtype", "mutant"), each = 3)
-day <- rep(c("3", "6"), times = 3)
 
-genotype
-day
-
-treatments <- cbind(genotype, day)
-class(treatments)
-mode(treatments)
-```
-
-Question 24. Now let's take all of  objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use cbind on them. Call this object `all_the_data`. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of `all_the_data`?
-
-```{r}
-
-all_the_data <- cbind(gene1, gene2, gene3, genotype, day)
-class(all_the_data)
-mode(all_the_data)
-```
+Question 24. Now let's take all of  objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use `cbind` on them. Call this object `all_the_data`. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of `all_the_data`?
 
 Question 25. Explain why `all_the_data` is the class and has the mode that it does?
-
-Again R is trying to be smart. It can not coerce words into numbers, but it can coerce numbers into strings/characters. So, to keep this a matrix, it first coerces everything into character, and then makes a matrix out of them. Take a look at `?matrix` and it gives some information on the coercion hierarchy. It is worth having this in the back of your mind. 
 
 ## data structures with heterogeneous objects.
  Clearly we did not want to produce a matrix of strings. So we need some sort of data structures where elements (at least at the level of individual vectors that are being organized together) can be of different atomic types (i.e. a collection of heterogeneous objects). There are two main approaches to this, one is the data.frame, which is the spreadsheet like object that is often the easiest to work with when importing data (for analysis and plotting). THe other is a list. As I mentioned in the video tutorials, the data.frame is really a special kind of list. However it is worth comparing and contrasting both. First remove the old `all_the_data` object and make a new one that is a data frame.
@@ -506,13 +460,45 @@ Again R is trying to be smart. It can not coerce words into numbers, but it can 
 ## `data.frames`
 First let's make a data.frame: 
 
-```{r}
-rm(all_the_data)
-all_the_data <- data.frame(gene1, gene2, gene3, genotype, day)
-str(all_the_data)
-class(all_the_data)
-mode(all_the_data)
 
+```r
+rm(all_the_data)
+```
+
+```
+## Warning in rm(all_the_data): object 'all_the_data' not found
+```
+
+```r
+all_the_data <- data.frame(gene1, gene2, gene3, genotype, day)
+```
+
+```
+## Error in data.frame(gene1, gene2, gene3, genotype, day): object 'genotype' not found
+```
+
+```r
+str(all_the_data)
+```
+
+```
+## Error in str(all_the_data): object 'all_the_data' not found
+```
+
+```r
+class(all_the_data)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'all_the_data' not found
+```
+
+```r
+mode(all_the_data)
+```
+
+```
+## Error in mode(all_the_data): object 'all_the_data' not found
 ```
 
 What class is `all_the_data`? How about `mode`? What is going on?
@@ -525,52 +511,45 @@ As we showed in the video tutorials and exercises, you can extract and subset in
 
 Question 26. Using standard numeric subsetting, extract columns 2,3 and 4.
 
-```{r}
-all_the_data[ ,c(2:4)]
-
-```
-
 
 Question 27. Second, subset using the names of the columns:
 
-```{r}
-all_the_data[c("gene2", "gene3", "genotype")]
-
-```
 
 Question 28. Third, by using the extraction operator `$` which is how you extract elements from lists:
 
-```{r}
-all_the_data$gene2; all_the_data$gene3; all_the_data$genotype
-
-```
 This approach is useful for single columns, not so useful when you want to extract a bunch though.
 
-You can also use the `[[` approach to grab columns as well
-```{r}
-all_the_data[["gene2"]]
-all_the_data$gene2
-```
 
-We can also use the subset() function, which is far more powerful and we will use alot in the coming weeks. 
 
-```{r}
-subset(all_the_data, 
-       select = c("gene2", "gene3", "genotype"))
-
-```
 
 Take home message: This can definitely get confusing, but different programmers still use each, so it is important to recognize what is the same and what is different. Importantly the single `[` can be used to extract more than one element from the object, while `$` and `[[` can only select a single element at a time. 
 
 
 Hopefully it is pretty clear, but there are a couple of ways of adding on new variables. Let's create a gene4 (also of length 6) and add it to the `all_the_data` data.frame
 
-```{r}
+
+```r
 all_the_data$gene4 <- c(10, 11, 7, 11, 2, 3)
+```
 
+```
+## Error in all_the_data$gene4 <- c(10, 11, 7, 11, 2, 3): object 'all_the_data' not found
+```
+
+```r
 all_the_data
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'all_the_data' not found
+```
+
+```r
 str(all_the_data)
+```
+
+```
+## Error in str(all_the_data): object 'all_the_data' not found
 ```
 
 ### Lists in `R`
@@ -579,13 +558,37 @@ When you need to store a collection of heterogeneous objects, but the objects ar
 
 Make a list called `list_the_data` using the same objects that were used to make `all_the_data`. What will the class of the object be? how about the mode of the objects within the list?
 
-```{r}
+
+```r
 list_the_data = list(gene1, gene2, gene3, genotype, day)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genotype' not found
+```
+
+```r
 list_the_data
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data)
-names(list_the_data)
+```
 
+```
+## Error in str(list_the_data): object 'list_the_data' not found
+```
+
+```r
+names(list_the_data)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
 ```
 A couple of things of note:
 - It should be pretty clear that there is something different about the way it is storing the information. The names (which is an attribute) of the original objects have been lost. 
@@ -594,69 +597,214 @@ A couple of things of note:
 Question 27. How might we get the names of the underlying objects? 
 
 Annoyingly:
-```{r}
+
+```r
 list_the_data = list(gene1 = gene1, gene2 = gene2, gene3 = gene3, genotype = genotype, day = day)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'genotype' not found
+```
+
+```r
 list_the_data
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data)
-names(list_the_data)
+```
 
+```
+## Error in str(list_the_data): object 'list_the_data' not found
+```
+
+```r
+names(list_the_data)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
 ```
 
 We can also have objects that have different lengths within the list
 
-```{r}
+
+```r
 list_the_data$random_variable = c(T,T,F) 
+```
 
+```
+## Error in list_the_data$random_variable = c(T, T, F): object 'list_the_data' not found
+```
+
+```r
 list_the_data
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data)
+```
+
+```
+## Error in str(list_the_data): object 'list_the_data' not found
 ```
  
 We can extract variables from lists in a slight variant of the approach we have used so far
 
  
-```{r}
+
+```r
 list_the_data$gene1
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 list_the_data[1]
-list_the_data["gene1"]
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
+list_the_data["gene1"]
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 list_the_data[[1]]
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 list_the_data[["gene1"]]
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
 ```
 
 However, these objects are not all equivalent
 
-```{r}
+
+```r
 class(list_the_data$gene1)
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 class(list_the_data[1])
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 class(list_the_data["gene1"])
+```
+
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 class(list_the_data[[1]])
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 class(list_the_data[["gene1"]])
+```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data$gene1)
+```
 
+```
+## Error in str(list_the_data$gene1): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data[1])
-str(list_the_data["gene1"])
+```
 
+```
+## Error in str(list_the_data[1]): object 'list_the_data' not found
+```
+
+```r
+str(list_the_data["gene1"])
+```
+
+```
+## Error in str(list_the_data["gene1"]): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data[[1]])
+```
+
+```
+## Error in str(list_the_data[[1]]): object 'list_the_data' not found
+```
+
+```r
 str(list_the_data[["gene1"]])
+```
+
+```
+## Error in str(list_the_data[["gene1"]]): object 'list_the_data' not found
 ```
 
 So using the `[` operator keeps the information (and variable name) as a list, while the `$` or `[[` operators extract just the elements, but do not keep the name. It can not always be coerced in a sensible way as we have done before.
 
 i.e:
 
-```{r, error=TRUE}
+
+```r
 as.numeric(list_the_data[1]) 
 ```
 
+```
+## Error in eval(expr, envir, enclos): object 'list_the_data' not found
+```
+
 You can `unlist` the vector though
-```{r}
+
+```r
 str(as.numeric(unlist(list_the_data[1])))
+```
+
+```
+## Error in unlist(list_the_data[1]): object 'list_the_data' not found
 ```
 
 However, this also strips off the name! So you are best to not use the `[` if you can avoid it when using lists. This is not always possible though, so knowing about unlist is useful!

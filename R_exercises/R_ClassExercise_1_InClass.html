@@ -136,10 +136,9 @@ $(document).ready(function () {
 <li><a href="#some-very-basic-thoughts-on-data-structures-in-r"><span class="toc-section-number">0.4</span> Some very basic thoughts on <em>data structures</em> in <code>R</code></a><ul>
 <li><a href="#what-is-the-point-of-data-structures-class-discussion"><span class="toc-section-number">0.4.1</span> What is the point of data structures? (class discussion)</a></li>
 <li><a href="#data-structures-in-r"><span class="toc-section-number">0.4.2</span> Data structures in R</a></li>
-<li><a href="#r-does-many-calculations-as-double-even-if-inputs-are-integers"><span class="toc-section-number">0.4.3</span> R does many calculations as <code>double</code>, even if inputs are integers</a></li>
-<li><a href="#some-other-atomic-types-in-r"><span class="toc-section-number">0.4.4</span> Some other atomic types in R</a></li>
-<li><a href="#making-variables-of-a-specific-type"><span class="toc-section-number">0.4.5</span> Making variables of a specific type</a></li>
-<li><a href="#booleanlogical"><span class="toc-section-number">0.4.6</span> Boolean/logical</a></li>
+<li><a href="#some-other-atomic-types-in-r"><span class="toc-section-number">0.4.3</span> Some other atomic types in R</a></li>
+<li><a href="#making-variables-of-a-specific-type"><span class="toc-section-number">0.4.4</span> Making variables of a specific type</a></li>
+<li><a href="#booleanlogical"><span class="toc-section-number">0.4.5</span> Boolean/logical</a></li>
 </ul></li>
 <li><a href="#building-up-our-data-structures."><span class="toc-section-number">0.5</span> Building up our data structures.</a></li>
 <li><a href="#understanding-factors-in-r."><span class="toc-section-number">0.6</span> understanding <code>factors</code> in R.</a></li>
@@ -182,14 +181,10 @@ $(document).ready(function () {
 <h2><span class="header-section-number">0.3</span> Where does <code>R</code> belong in the ecosystem of programming languages.</h2>
 <p>At a very simple level most (if not all) computer programming languages are <a href="https://en.wikipedia.org/wiki/Turing_completeness">“Turing Complete”</a>, which for our purposes mean that they can in principle be used to do most programming tasks. However in some languages how any particular task is programmed (and how efficient it does the task) varies considerably. Thus some programming languages are better suited for some tasks VS. others. To get a sense of where <code>R</code> fits into this ecosystem (i.e. when and where to use <code>R</code>) we need to learn a few things. So time to use your google-fu.</p>
 <p>Question 2. Is R a low-level or high level programming language? What is the difference?</p>
-<p>R is considered a high-level language. It’s syntax is portable across operating systems (i.e. platform independent), and is far from machine code.</p>
-<p>Question 3. Is R a compiled or interpreted language? What is the difference? R is an interpreted language. This means the code does not (generally) write an independent running program that is converted to machine code, but the R code you submit goes through a piece of software (an intepreter) to “run” the R code. In this way, R is no different than all of the other UNIX tools you have used (like grep, sed, awk, sort, cut).</p>
-<p>Question 4. R is often described as “slow” or “inefficient”. Why? Why would a language with these attributes be so popular? In other words, what were the major goals for the <code>R</code> programming language. - R was designed with interactive data analysis in mind, not speed. - Main factors include stability of use, consistency of use (maintains most backwards compatability). - Also it is natively vectorized, which bothers some computer programmers when they start.</p>
-<p>Question 5. What computer programming languages is R primarily built in? Why is it not all in <code>R</code> - R, C and fortran. Only about 20% of the lines of code are written in R. - R code is not fast. But using R syntax to call <code>C</code> or <code>fortran</code> code, which is fast is great. So many of the functions you are calling in <code>R</code> are actually written in other languages (including the R language interpreter).</p>
+<p>Question 3. Is R a compiled or interpreted language? What is the difference?</p>
+<p>Question 4. R is often described as “slow” or “inefficient”. Why? Why would a language with these attributes be so popular? In other words, what were the major goals for the <code>R</code> programming language.</p>
+<p>Question 5. What computer programming languages is R primarily built in? Why is it not all in <code>R</code></p>
 <p>Question 6. Hadley Wickham (the author of many R packages and the R super guru) points out that R is slow in part because of the R language <em>definition</em> (such as it is) and in part because of the most commonly used <em>implementation</em> <code>gnu-R</code>. In very simple terms or analogy descrive what is meant by the <em>implementation</em> of a computer language as compared to the <em>definition</em>?</p>
-<ul>
-<li>Definition describes the architecture of a language, like its syntax, i.e. <code>x &lt;- 5</code> or <code>x = 5</code>, or the types of objects or attributes (and many other things). The implementation describes how syntax, attributes of objects are actually used. If I define a bike as an unmotorized vehicle with two wheels, you could probably implement many different objects that fits this definition but work very differently (pedals VS a sail, or two wheels next to each other with the seat in between, instead of one in the front and one in the back). How good each of these bikes work (in terms of speed, stability of the rider etc..) depends on both the definition, and the actual bike we built (implemented).</li>
-</ul>
 <p>** Now you are a computer wizard ** Woot Woot!</p>
 </div>
 <div id="some-very-basic-thoughts-on-data-structures-in-r" class="section level2">
@@ -206,9 +201,6 @@ $(document).ready(function () {
 <h3><span class="header-section-number">0.4.2</span> Data structures in R</h3>
 <p>As was discussed in the datacamp video screencasts, R has a number of different basic data structures (and more can be made or extended by programmers like you!). We need to start with the so-called <em>atomic</em> types that can be stored as vectors.</p>
 <p>Question 7. What are the <em>atomic</em> types in <code>R</code>?</p>
-<ul>
-<li>logical (Boolean), integer, real (double or floating point) , complex, string (or character) and raw.</li>
-</ul>
 <p>Let’s think about a few of these basic atomic types:</p>
 <pre class="r"><code>x &lt;- 1</code></pre>
 <p>You can find out information about this with a variety of functions:</p>
@@ -225,23 +217,6 @@ $(document).ready(function () {
 <p>Now let’s create a new object z:</p>
 <pre class="r"><code>z = 3:5</code></pre>
 <p>Question 9: How should <code>y</code> and <code>z</code> compare? how would you check? How can you compare them to see if <code>R</code> is treating them the same?</p>
-<pre class="r"><code>mode(y)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>mode(z)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>typeof(y)</code></pre>
-<pre><code>## [1] &quot;double&quot;</code></pre>
-<pre class="r"><code>typeof(z)</code></pre>
-<pre><code>## [1] &quot;integer&quot;</code></pre>
-<p>Which might suggest they are different. In one case <code>R</code> is treating the vector as integers, the other case as floating point (double). So this suggests they might be different. However:</p>
-<pre class="r"><code>y == z</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE</code></pre>
-<pre class="r"><code>all.equal(y, z)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code># BUT
-identical(y, z)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<p>Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like <code>C++</code>) you need to define the type of variable you are creating, R tries to make “guesses” about what you are doing. Sometimes this can result in odd behaviour.</p>
 <p>Question 10. Note the behaviour here between <code>z</code> and some mathematical operations with <code>z</code>. Explain what is happening and why.</p>
 <pre class="r"><code>typeof(z)</code></pre>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
@@ -258,21 +233,8 @@ identical(y, z)</code></pre>
 <pre class="r"><code>typeof(sqrt(z))</code></pre>
 <pre><code>## [1] &quot;double&quot;</code></pre>
 </div>
-<div id="r-does-many-calculations-as-double-even-if-inputs-are-integers" class="section level3">
-<h3><span class="header-section-number">0.4.3</span> R does many calculations as <code>double</code>, even if inputs are integers</h3>
-<p>even though <code>z</code> is a vector with integer values, if you use z in some calculations that require double precision floating point values, it will be converted to double. In other words::</p>
-<pre class="r"><code>typeof(z)</code></pre>
-<pre><code>## [1] &quot;integer&quot;</code></pre>
-<pre class="r"><code># because of how division is computed in R, it converts to double
-typeof(z/z)</code></pre>
-<pre><code>## [1] &quot;double&quot;</code></pre>
-<pre class="r"><code>#  though, addition, substraction and multiplication do not require this, so stay integer
-typeof(z*z)</code></pre>
-<pre><code>## [1] &quot;integer&quot;</code></pre>
-<p>Most of the time this is not an issue, but it is a behaviour that is worth getting used to.</p>
-</div>
 <div id="some-other-atomic-types-in-r" class="section level3">
-<h3><span class="header-section-number">0.4.4</span> Some other atomic types in R</h3>
+<h3><span class="header-section-number">0.4.3</span> Some other atomic types in R</h3>
 <p>Ok, let’s think about some of the other basic data types we learned about (strings or “character” in R, boolean/logical)</p>
 <p>First let’s clean up our workspace and re-assign our variables.</p>
 <pre class="r"><code>rm( x, y, z) # clean up
@@ -281,104 +243,20 @@ y = &quot;1&quot;
 z = &quot;one&quot;
 a = TRUE
 b = &quot;TRUE&quot;</code></pre>
-<p>Question 11. Before checking, think about what types each of these objects should be? Then check. Which (if any) should be identical to one another? Why?</p>
-<pre class="r"><code>x == y</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>all.equal(x, y)</code></pre>
-<pre><code>## [1] &quot;Modes: numeric, character&quot;              
-## [2] &quot;target is numeric, current is character&quot;</code></pre>
-<pre class="r"><code>identical(x, y)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<p>How about <code>y</code> and <code>z</code>?</p>
-<pre class="r"><code>y == z</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>all.equal(y, z)</code></pre>
-<pre><code>## [1] &quot;1 string mismatch&quot;</code></pre>
-<pre class="r"><code>identical(y, z)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code># Which might be obvious by
-mode(y)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>mode(z)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>y == z</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>all.equal(y, z)</code></pre>
-<pre><code>## [1] &quot;1 string mismatch&quot;</code></pre>
-<pre class="r"><code>identical(y, z)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code># Which might be obvious by
-mode(y)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>mode(z)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>The same “logic” applies for comparing <code>a</code> and <code>b</code></p>
-<pre class="r"><code>a == b</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>all.equal(a, b)</code></pre>
-<pre><code>## [1] &quot;Modes: logical, character&quot;              
-## [2] &quot;target is logical, current is character&quot;</code></pre>
-<pre class="r"><code>identical(a, b)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code># Which might be obvious
-mode(a); typeof(a)</code></pre>
-<pre><code>## [1] &quot;logical&quot;</code></pre>
-<pre><code>## [1] &quot;logical&quot;</code></pre>
-<pre class="r"><code>mode(b); typeof(b)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>So, what are the take home points? - Computers can be very exact. - R has some confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what “equals” means. This isn’t because R is confused, but because it is trying to be helpful. It is generally guessing what data types make sense for your variable (but you can specify if you want). However if for some operations it needs variables of certain data types R will <em>coerce</em> the variable to the right type.</p>
+<p>Question 11. Before checking, think about what types each of these objects should be? Then check. Which (if any) should be identical to one another? Why? How about <code>y</code> and <code>z</code>? <code>a</code> and <code>b</code>?</p>
 <p>Question 12: How would you get <code>R</code> to coerce <code>x</code> and <code>y</code> to be exactly the same? How about <code>a</code> and <code>b</code>?</p>
-<p>Let’s coerce b into a logical/Boolean</p>
-<pre class="r"><code>b1 &lt;- as.logical(b)
-is.logical(b1); is.character(b1)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>b == b1</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>a == b</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>typeof(b1); mode(b1)</code></pre>
-<pre><code>## [1] &quot;logical&quot;</code></pre>
-<pre><code>## [1] &quot;logical&quot;</code></pre>
-<p>Let’s coerce a into a character</p>
-<pre class="r"><code>a1 &lt;- as.character(a)
-is.character(a1)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>a == a1</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>a == b</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>typeof(a1); mode(a1)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>And, y into a number</p>
-<pre class="r"><code>y1 &lt;- as.numeric(y)
-y == y1</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>identical(y, y1)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>x == y1</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>identical(x, y1)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>typeof(y1); mode(y1)</code></pre>
-<pre><code>## [1] &quot;double&quot;</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
 </div>
 <div id="making-variables-of-a-specific-type" class="section level3">
-<h3><span class="header-section-number">0.4.5</span> Making variables of a specific type</h3>
+<h3><span class="header-section-number">0.4.4</span> Making variables of a specific type</h3>
 <p>So if you want to make sure you are generating variables of a specific type, you can use the functions <code>as.x()</code> where x is the type of variable. You can also specify them at the beginning.</p>
 <p>So if I wanted to specify a vector is of type <code>double</code> (which is what numeric is)</p>
 <pre class="r"><code>double_up &lt;- double(length = 10)
 identical(numeric(10), double(10))</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Question 13. How would I specify a vector of integers of length 10? Why are all the numbers for this (or the line of code above) 0?</p>
-<pre class="r"><code>integer_10 &lt;- integer(10)</code></pre>
-<p>By default this generates vectors with 0 as placeholders. You need to be aware of this!</p>
 </div>
 <div id="booleanlogical" class="section level3">
-<h3><span class="header-section-number">0.4.6</span> Boolean/logical</h3>
+<h3><span class="header-section-number">0.4.5</span> Boolean/logical</h3>
 <p>Using TRUE/FALSE (logical, Boolean) as an atomic type is quite important. Often we need to check equality of objects, or elements within our objects (considering vectors are a basic storage type in R). These are particularly (as we will see later) useful when subsetting using the index of a vector (or matrix or data.table).</p>
 <p>Let’s clean up a bit:</p>
 <pre class="r"><code>rm(x, y, z, a, b)</code></pre>
@@ -402,9 +280,6 @@ y</code></pre>
 sum(a)</code></pre>
 <pre><code>## [1] 0</code></pre>
 <p>Question 14: Before running the code to find out, what will the sum of the following vector be <code>c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6))</code></p>
-<pre class="r"><code>sum(c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6)))</code></pre>
-<pre><code>## [1] 20</code></pre>
-<p>Take home message: Boolean values of TRUE and FALSE have numeric values of 1 and 0 respectively. This can be very useful for subsetting by columns or rows for matrices and data.frames!</p>
 </div>
 </div>
 <div id="building-up-our-data-structures." class="section level2">
@@ -412,8 +287,7 @@ sum(a)</code></pre>
 <p>Now that we have some better idea (hopefully) of some of the atomic data types, we want to use these to build more complex data structures that may (eventually - like next week) be useful for data analysis, simulations and the like. There are a few important ones that we will use a lot: matrix, list, data.frame, factors, and formula (which we will not cover in Bio720 but is essential for statistical analyses). There are other important ones (like array) but we will cover these other ones first.</p>
 <p>Before we get any further and create some new objects, how do we see all of the objects we currently have in our global environment?</p>
 <pre class="r"><code>ls()</code></pre>
-<pre><code>## [1] &quot;a&quot;          &quot;a1&quot;         &quot;b1&quot;         &quot;double_up&quot;  &quot;integer_10&quot;
-## [6] &quot;x&quot;          &quot;y&quot;          &quot;y1&quot;</code></pre>
+<pre><code>## [1] &quot;a&quot;         &quot;double_up&quot; &quot;x&quot;         &quot;y&quot;</code></pre>
 <p>Let’s work with a clean slate. How might we remove all of the objects and start fresh? Obviously you could just do a <code>rm()</code> command with each object name, but you can also remove all at once.</p>
 <pre class="r"><code>rm(list=ls())
 ls()</code></pre>
@@ -428,147 +302,39 @@ gene3 &lt;- c(100, 103, 97, 94, 106, 111)</code></pre>
 <div id="understanding-factors-in-r." class="section level2">
 <h2><span class="header-section-number">0.6</span> understanding <code>factors</code> in R.</h2>
 <p>Question 15. Create an object <code>genotype</code> of length 6, where the first three observations have the value “wildtype” and the last three are “mutant”</p>
-<p>There are at least three options. First the hard way.</p>
-<pre class="r"><code>genotype &lt;- c(&quot;wildtype&quot;, &quot;wildtype&quot;, &quot;wildtype&quot;, &quot;mutant&quot;, &quot;mutant&quot;, &quot;mutant&quot;)
-genotype</code></pre>
-<pre><code>## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;</code></pre>
-<pre class="r"><code>mode(genotype)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>A pretty easy way</p>
-<pre class="r"><code>genotype2 &lt;- rep(c(&quot;wildtype&quot;, &quot;mutant&quot;), each = 3)
-genotype2</code></pre>
-<pre><code>## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;</code></pre>
-<pre class="r"><code>mode(genotype2)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<pre class="r"><code>class(genotype2)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>Or if we want to generate factors immediately we can use the <code>gl()</code> function (for <em>generate levels</em>):</p>
-<pre class="r"><code>genotype3 &lt;- gl(n = 2, k = 3, labels = c(&quot;wildtype&quot;, &quot;mutant&quot;))
-genotype3</code></pre>
-<pre><code>## [1] wildtype wildtype wildtype mutant   mutant   mutant  
-## Levels: wildtype mutant</code></pre>
-<pre class="r"><code>mode(genotype3)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>class(genotype3)</code></pre>
-<pre><code>## [1] &quot;factor&quot;</code></pre>
-<p>Now this last approach is pretty interesting for a couple of reasons. First the <code>class</code> of the object is factor not character. Second the mode of the object is numeric. What is going on here?</p>
-<p>First compare these different objects, genotype (or genotype2 which is identical) and genotype3 (using gl). Are they the same?</p>
-<pre class="r"><code>genotype2 == genotype3</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
-<pre class="r"><code>identical(genotype2, genotype3)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>all.equal(genotype2, genotype3)</code></pre>
-<pre><code>## [1] &quot;Modes: character, numeric&quot;                      
-## [2] &quot;Attributes: &lt; target is NULL, current is list &gt;&quot;
-## [3] &quot;target is character, current is factor&quot;</code></pre>
+<p>Compare these different objects, genotype (or genotype2 which is identical) and genotype3 (using gl). Are they the same?</p>
 <p>So let’s think about what a factor is?</p>
 <p>factors in R may appear as <code>character</code> but for efficiency are stored as integers. The idea is you will have far fewer factor levels (which you can check with <code>nlevels()</code>) than number of observations, so this can save memory and speed up computation. However, this means you need to realize that factors are not a special form of <code>character</code>, but a special form of <code>numeric</code>!</p>
 <p>Question 16. If we wanted to make genotype2 into a factor (we will call it genotype2_factor) how would you do so? Is this the same as making it a factor from the very beginning?</p>
-<pre class="r"><code>genotype2_factor &lt;- as.factor(genotype2)
-class(genotype2_factor)</code></pre>
-<pre><code>## [1] &quot;factor&quot;</code></pre>
-<pre class="r"><code>mode(genotype2_factor)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>identical(genotype3, genotype2_factor)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<pre class="r"><code>genotype3 == genotype2_factor</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
-<p>So while each attribute is identical, the objects as a whole are not! See <code>?identical</code> for more information. This is frankly an unfortunate behaviour of R’s. Most other things were done on purpose. I am not sure if this was or was not. However, knowing about it makes it useful!</p>
 <p>How about if we wanted to make genotype3 into a character vector?</p>
-<pre class="r"><code>genotype3_character &lt;- as.character(genotype3)
-genotype3_character </code></pre>
-<pre><code>## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;</code></pre>
+<pre class="r"><code>genotype3_character &lt;- as.character(genotype3)</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'genotype3' not found</code></pre>
+<pre class="r"><code>genotype3_character </code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'genotype3_character' not found</code></pre>
 <pre class="r"><code>class(genotype3_character)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'genotype3_character' not found</code></pre>
 <pre class="r"><code>mode(genotype3_character)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
+<pre><code>## Error in mode(genotype3_character): object 'genotype3_character' not found</code></pre>
 <pre class="r"><code>identical(genotype3_character, genotype2)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+<pre><code>## Error in identical(genotype3_character, genotype2): object 'genotype3_character' not found</code></pre>
 <pre class="r"><code>genotype3_character == genotype2</code></pre>
-<pre><code>## [1] TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'genotype3_character' not found</code></pre>
 <p>Question 17. Let’s say we had a second experimental factor which was the day of sampling (3,6) but we want to treat it as a factor <code>c(3, 6, 3, 6, 3, 6)</code> how would you code this?</p>
-<pre class="r"><code>day &lt;- gl(n = 2, k = 1 , length = 6, labels = c(3, 6))
-day</code></pre>
-<pre><code>## [1] 3 6 3 6 3 6
-## Levels: 3 6</code></pre>
-<pre class="r"><code>class(day)</code></pre>
-<pre><code>## [1] &quot;factor&quot;</code></pre>
-<pre class="r"><code>mode(day)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
-<pre class="r"><code>typeof(day)</code></pre>
-<pre><code>## [1] &quot;integer&quot;</code></pre>
-<p>Question 18. What happens if you coerce <code>day</code> into a character?</p>
+<p>Question 18. What happens if you coerce <code>day</code> into a character? Seemingly strange behaviour? However think about it for a minute and try to explain it.</p>
 <pre class="r"><code>as.character(day)</code></pre>
-<pre><code>## [1] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'day' not found</code></pre>
 <p>Question 19. How about if you coerce day into numeric?</p>
 <pre class="r"><code>as.numeric(day)</code></pre>
-<pre><code>## [1] 1 2 1 2 1 2</code></pre>
-<p>Seemingly strange behaviour? However think about it for a minute and try to explain it.</p>
-<p>The basic idea is that when a variable is stored as a <code>factor</code> in R, the first level (which defaults to alphanumeric, so <strong>m</strong>utant before <strong>w</strong>ildtype in this case) will be stored as “1”, the second level as “2” and so on. When you ask to convert it to numeric it uses these numbers. So if your factor levels are named with numbers to begin with, this can mess things up. So take care!</p>
+<pre><code>## Error in eval(expr, envir, enclos): object 'day' not found</code></pre>
 <p>Question 20. So if you want to turn these into the numbers 3 and 6, how would you do it?</p>
-<pre class="r"><code>as.numeric(as.character(day))</code></pre>
-<pre><code>## [1] 3 6 3 6 3 6</code></pre>
-<p>Take home message: factors are useful for storing names of experimental levels efficiently, but keep in mind they are stored internally as numbers, not strings!</p>
 </div>
 <div id="back-to-our-data-structures-of-interest." class="section level2">
 <h2><span class="header-section-number">0.7</span> Back to our data structures of interest.</h2>
 <p>Question 21. Provide two different ways of combining <code>gene1</code>, <code>gene2</code> and <code>gene3</code> into a matrix (gene_mat1 and gene_mat2)? Are these the same?</p>
-<pre class="r"><code>gene_mat1 &lt;- cbind(gene1, gene2, gene3)
-gene_mat1</code></pre>
-<pre><code>##      gene1 gene2 gene3
-## [1,]     3    11   100
-## [2,]     4    17   103
-## [3,]     7    12    97
-## [4,]     9    25    94
-## [5,]    12    23   106
-## [6,]     6     7   111</code></pre>
-<pre class="r"><code>gene_mat2 &lt;- matrix(c(gene1, gene2, gene3), nrow =6, ncol =3, byrow =FALSE)</code></pre>
-<p>Are these the same?</p>
-<pre class="r"><code>gene_mat1 == gene_mat2</code></pre>
-<pre><code>##      gene1 gene2 gene3
-## [1,]  TRUE  TRUE  TRUE
-## [2,]  TRUE  TRUE  TRUE
-## [3,]  TRUE  TRUE  TRUE
-## [4,]  TRUE  TRUE  TRUE
-## [5,]  TRUE  TRUE  TRUE
-## [6,]  TRUE  TRUE  TRUE</code></pre>
-<pre class="r"><code>identical(gene_mat1, gene_mat2)</code></pre>
-<pre><code>## [1] FALSE</code></pre>
-<p>Using some of the tools we have already used (str, mode, typeof) shows the elements are the same. However, one has stripped the names (gene_mat2), why do you think this has happened?</p>
 <p>Question 22. How might you fix the issue we observed?</p>
-<p>It is pretty easy, since it is just names that differ, you can use <code>colnames</code> to rename the columns</p>
-<pre class="r"><code>colnames(gene_mat2) &lt;- c(&quot;gene1&quot;, &quot;gene2&quot;, &quot;gene3&quot;)
-gene_mat2</code></pre>
-<pre><code>##      gene1 gene2 gene3
-## [1,]     3    11   100
-## [2,]     4    17   103
-## [3,]     7    12    97
-## [4,]     9    25    94
-## [5,]    12    23   106
-## [6,]     6     7   111</code></pre>
-<pre class="r"><code>identical(gene_mat1, gene_mat2)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
 <p>Question 23. Let’s take our (character) vectors for day and genotype and use <code>cbind()</code> (treatments). Before starting write down whether you think the object <code>treatments</code> will have class <code>matrix</code>. What will the mode be? Why?</p>
-<pre class="r"><code>genotype &lt;- rep(c(&quot;wildtype&quot;, &quot;mutant&quot;), each = 3)
-day &lt;- rep(c(&quot;3&quot;, &quot;6&quot;), times = 3)
-
-genotype</code></pre>
-<pre><code>## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;</code></pre>
-<pre class="r"><code>day</code></pre>
-<pre><code>## [1] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot;</code></pre>
-<pre class="r"><code>treatments &lt;- cbind(genotype, day)
-class(treatments)</code></pre>
-<pre><code>## [1] &quot;matrix&quot;</code></pre>
-<pre class="r"><code>mode(treatments)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
-<p>Question 24. Now let’s take all of objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use cbind on them. Call this object <code>all_the_data</code>. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of <code>all_the_data</code>?</p>
-<pre class="r"><code>all_the_data &lt;- cbind(gene1, gene2, gene3, genotype, day)
-class(all_the_data)</code></pre>
-<pre><code>## [1] &quot;matrix&quot;</code></pre>
-<pre class="r"><code>mode(all_the_data)</code></pre>
-<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Question 24. Now let’s take all of objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use <code>cbind</code> on them. Call this object <code>all_the_data</code>. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of <code>all_the_data</code>?</p>
 <p>Question 25. Explain why <code>all_the_data</code> is the class and has the mode that it does?</p>
-<p>Again R is trying to be smart. It can not coerce words into numbers, but it can coerce numbers into strings/characters. So, to keep this a matrix, it first coerces everything into character, and then makes a matrix out of them. Take a look at <code>?matrix</code> and it gives some information on the coercion hierarchy. It is worth having this in the back of your mind.</p>
 </div>
 <div id="data-structures-with-heterogeneous-objects." class="section level2">
 <h2><span class="header-section-number">0.8</span> data structures with heterogeneous objects.</h2>
@@ -577,212 +343,101 @@ class(all_the_data)</code></pre>
 <div id="data.frames" class="section level2">
 <h2><span class="header-section-number">0.9</span> <code>data.frames</code></h2>
 <p>First let’s make a data.frame:</p>
-<pre class="r"><code>rm(all_the_data)
-all_the_data &lt;- data.frame(gene1, gene2, gene3, genotype, day)
-str(all_the_data)</code></pre>
-<pre><code>## 'data.frame':    6 obs. of  5 variables:
-##  $ gene1   : num  3 4 7 9 12 6
-##  $ gene2   : num  11 17 12 25 23 7
-##  $ gene3   : num  100 103 97 94 106 111
-##  $ genotype: Factor w/ 2 levels &quot;mutant&quot;,&quot;wildtype&quot;: 2 2 2 1 1 1
-##  $ day     : Factor w/ 2 levels &quot;3&quot;,&quot;6&quot;: 1 2 1 2 1 2</code></pre>
+<pre class="r"><code>rm(all_the_data)</code></pre>
+<pre><code>## Warning in rm(all_the_data): object 'all_the_data' not found</code></pre>
+<pre class="r"><code>all_the_data &lt;- data.frame(gene1, gene2, gene3, genotype, day)</code></pre>
+<pre><code>## Error in data.frame(gene1, gene2, gene3, genotype, day): object 'genotype' not found</code></pre>
+<pre class="r"><code>str(all_the_data)</code></pre>
+<pre><code>## Error in str(all_the_data): object 'all_the_data' not found</code></pre>
 <pre class="r"><code>class(all_the_data)</code></pre>
-<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'all_the_data' not found</code></pre>
 <pre class="r"><code>mode(all_the_data)</code></pre>
-<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre><code>## Error in mode(all_the_data): object 'all_the_data' not found</code></pre>
 <p>What class is <code>all_the_data</code>? How about <code>mode</code>? What is going on?</p>
 <p>Notice a couple of interesting thing. First it’s class is a data.frame, but it is actually a list underneath. Second, without asking or warning us, it has coerced <em>genotype</em> and <em>day</em> into factors. It is assuming that since you are treating this like regular data (that you will probably want to analyze or plot) you want these as factors. Often this is true. If you don’t want this behaviour there is an argument that you can set <code>stringsAsFactors == FALSE</code>.</p>
 <p>It is really important to note that data.frames are useful for heterogeneous objects <strong>ONLY IF</strong> all objects (vectors) are the <strong>same length</strong>. It is ok to have missing data, as long as R knows there should be missing data (NA) in certain spots. When you need to store a collection of heterogeneous objects, but the objects are of different lengths, then you need to use lists.</p>
 <p>As we showed in the video tutorials and exercises, you can extract and subset in a couple of ways (like lists or as a matrix). So show three different ways to extract the 2nd, 3rd and 4th column from <code>all_the_data</code></p>
 <p>Question 26. Using standard numeric subsetting, extract columns 2,3 and 4.</p>
-<pre class="r"><code>all_the_data[ ,c(2:4)]</code></pre>
-<pre><code>##   gene2 gene3 genotype
-## 1    11   100 wildtype
-## 2    17   103 wildtype
-## 3    12    97 wildtype
-## 4    25    94   mutant
-## 5    23   106   mutant
-## 6     7   111   mutant</code></pre>
 <p>Question 27. Second, subset using the names of the columns:</p>
-<pre class="r"><code>all_the_data[c(&quot;gene2&quot;, &quot;gene3&quot;, &quot;genotype&quot;)]</code></pre>
-<pre><code>##   gene2 gene3 genotype
-## 1    11   100 wildtype
-## 2    17   103 wildtype
-## 3    12    97 wildtype
-## 4    25    94   mutant
-## 5    23   106   mutant
-## 6     7   111   mutant</code></pre>
 <p>Question 28. Third, by using the extraction operator <code>$</code> which is how you extract elements from lists:</p>
-<pre class="r"><code>all_the_data$gene2; all_the_data$gene3; all_the_data$genotype</code></pre>
-<pre><code>## [1] 11 17 12 25 23  7</code></pre>
-<pre><code>## [1] 100 103  97  94 106 111</code></pre>
-<pre><code>## [1] wildtype wildtype wildtype mutant   mutant   mutant  
-## Levels: mutant wildtype</code></pre>
 <p>This approach is useful for single columns, not so useful when you want to extract a bunch though.</p>
-<p>You can also use the <code>[[</code> approach to grab columns as well</p>
-<pre class="r"><code>all_the_data[[&quot;gene2&quot;]]</code></pre>
-<pre><code>## [1] 11 17 12 25 23  7</code></pre>
-<pre class="r"><code>all_the_data$gene2</code></pre>
-<pre><code>## [1] 11 17 12 25 23  7</code></pre>
-<p>We can also use the subset() function, which is far more powerful and we will use alot in the coming weeks.</p>
-<pre class="r"><code>subset(all_the_data, 
-       select = c(&quot;gene2&quot;, &quot;gene3&quot;, &quot;genotype&quot;))</code></pre>
-<pre><code>##   gene2 gene3 genotype
-## 1    11   100 wildtype
-## 2    17   103 wildtype
-## 3    12    97 wildtype
-## 4    25    94   mutant
-## 5    23   106   mutant
-## 6     7   111   mutant</code></pre>
 <p>Take home message: This can definitely get confusing, but different programmers still use each, so it is important to recognize what is the same and what is different. Importantly the single <code>[</code> can be used to extract more than one element from the object, while <code>$</code> and <code>[[</code> can only select a single element at a time.</p>
 <p>Hopefully it is pretty clear, but there are a couple of ways of adding on new variables. Let’s create a gene4 (also of length 6) and add it to the <code>all_the_data</code> data.frame</p>
-<pre class="r"><code>all_the_data$gene4 &lt;- c(10, 11, 7, 11, 2, 3)
-
-all_the_data</code></pre>
-<pre><code>##   gene1 gene2 gene3 genotype day gene4
-## 1     3    11   100 wildtype   3    10
-## 2     4    17   103 wildtype   6    11
-## 3     7    12    97 wildtype   3     7
-## 4     9    25    94   mutant   6    11
-## 5    12    23   106   mutant   3     2
-## 6     6     7   111   mutant   6     3</code></pre>
+<pre class="r"><code>all_the_data$gene4 &lt;- c(10, 11, 7, 11, 2, 3)</code></pre>
+<pre><code>## Error in all_the_data$gene4 &lt;- c(10, 11, 7, 11, 2, 3): object 'all_the_data' not found</code></pre>
+<pre class="r"><code>all_the_data</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'all_the_data' not found</code></pre>
 <pre class="r"><code>str(all_the_data)</code></pre>
-<pre><code>## 'data.frame':    6 obs. of  6 variables:
-##  $ gene1   : num  3 4 7 9 12 6
-##  $ gene2   : num  11 17 12 25 23 7
-##  $ gene3   : num  100 103 97 94 106 111
-##  $ genotype: Factor w/ 2 levels &quot;mutant&quot;,&quot;wildtype&quot;: 2 2 2 1 1 1
-##  $ day     : Factor w/ 2 levels &quot;3&quot;,&quot;6&quot;: 1 2 1 2 1 2
-##  $ gene4   : num  10 11 7 11 2 3</code></pre>
+<pre><code>## Error in str(all_the_data): object 'all_the_data' not found</code></pre>
 <div id="lists-in-r" class="section level3">
 <h3><span class="header-section-number">0.9.1</span> Lists in <code>R</code></h3>
 <p>When you need to store a collection of heterogeneous objects, but the objects are of different lengths, then you need to use lists. As you saw above with the <code>$</code> and the <code>[[</code> operators, you can extract things from lists. However, making lists is simpler than unmaking (well unlisting) lists as we will see.</p>
 <p>Make a list called <code>list_the_data</code> using the same objects that were used to make <code>all_the_data</code>. What will the class of the object be? how about the mode of the objects within the list?</p>
-<pre class="r"><code>list_the_data = list(gene1, gene2, gene3, genotype, day)
-list_the_data</code></pre>
-<pre><code>## [[1]]
-## [1]  3  4  7  9 12  6
-## 
-## [[2]]
-## [1] 11 17 12 25 23  7
-## 
-## [[3]]
-## [1] 100 103  97  94 106 111
-## 
-## [[4]]
-## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;  
-## 
-## [[5]]
-## [1] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot;</code></pre>
+<pre class="r"><code>list_the_data = list(gene1, gene2, gene3, genotype, day)</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'genotype' not found</code></pre>
+<pre class="r"><code>list_the_data</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data)</code></pre>
-<pre><code>## List of 5
-##  $ : num [1:6] 3 4 7 9 12 6
-##  $ : num [1:6] 11 17 12 25 23 7
-##  $ : num [1:6] 100 103 97 94 106 111
-##  $ : chr [1:6] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot; ...
-##  $ : chr [1:6] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; ...</code></pre>
+<pre><code>## Error in str(list_the_data): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>names(list_the_data)</code></pre>
-<pre><code>## NULL</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <p>A couple of things of note: - It should be pretty clear that there is something different about the way it is storing the information. The names (which is an attribute) of the original objects have been lost. - Also, as a list, it does not make assumptions about how you will use the underlying objects, so it has not coerced the character vectors to factors.</p>
 <p>Question 27. How might we get the names of the underlying objects?</p>
 <p>Annoyingly:</p>
-<pre class="r"><code>list_the_data = list(gene1 = gene1, gene2 = gene2, gene3 = gene3, genotype = genotype, day = day)
-list_the_data</code></pre>
-<pre><code>## $gene1
-## [1]  3  4  7  9 12  6
-## 
-## $gene2
-## [1] 11 17 12 25 23  7
-## 
-## $gene3
-## [1] 100 103  97  94 106 111
-## 
-## $genotype
-## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;  
-## 
-## $day
-## [1] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot;</code></pre>
+<pre class="r"><code>list_the_data = list(gene1 = gene1, gene2 = gene2, gene3 = gene3, genotype = genotype, day = day)</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'genotype' not found</code></pre>
+<pre class="r"><code>list_the_data</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data)</code></pre>
-<pre><code>## List of 5
-##  $ gene1   : num [1:6] 3 4 7 9 12 6
-##  $ gene2   : num [1:6] 11 17 12 25 23 7
-##  $ gene3   : num [1:6] 100 103 97 94 106 111
-##  $ genotype: chr [1:6] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot; ...
-##  $ day     : chr [1:6] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; ...</code></pre>
+<pre><code>## Error in str(list_the_data): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>names(list_the_data)</code></pre>
-<pre><code>## [1] &quot;gene1&quot;    &quot;gene2&quot;    &quot;gene3&quot;    &quot;genotype&quot; &quot;day&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <p>We can also have objects that have different lengths within the list</p>
-<pre class="r"><code>list_the_data$random_variable = c(T,T,F) 
-
-list_the_data</code></pre>
-<pre><code>## $gene1
-## [1]  3  4  7  9 12  6
-## 
-## $gene2
-## [1] 11 17 12 25 23  7
-## 
-## $gene3
-## [1] 100 103  97  94 106 111
-## 
-## $genotype
-## [1] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot;   &quot;mutant&quot;   &quot;mutant&quot;  
-## 
-## $day
-## [1] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot;
-## 
-## $random_variable
-## [1]  TRUE  TRUE FALSE</code></pre>
+<pre class="r"><code>list_the_data$random_variable = c(T,T,F) </code></pre>
+<pre><code>## Error in list_the_data$random_variable = c(T, T, F): object 'list_the_data' not found</code></pre>
+<pre class="r"><code>list_the_data</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data)</code></pre>
-<pre><code>## List of 6
-##  $ gene1          : num [1:6] 3 4 7 9 12 6
-##  $ gene2          : num [1:6] 11 17 12 25 23 7
-##  $ gene3          : num [1:6] 100 103 97 94 106 111
-##  $ genotype       : chr [1:6] &quot;wildtype&quot; &quot;wildtype&quot; &quot;wildtype&quot; &quot;mutant&quot; ...
-##  $ day            : chr [1:6] &quot;3&quot; &quot;6&quot; &quot;3&quot; &quot;6&quot; ...
-##  $ random_variable: logi [1:3] TRUE TRUE FALSE</code></pre>
+<pre><code>## Error in str(list_the_data): object 'list_the_data' not found</code></pre>
 <p>We can extract variables from lists in a slight variant of the approach we have used so far</p>
 <pre class="r"><code>list_the_data$gene1</code></pre>
-<pre><code>## [1]  3  4  7  9 12  6</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>list_the_data[1]</code></pre>
-<pre><code>## $gene1
-## [1]  3  4  7  9 12  6</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>list_the_data[&quot;gene1&quot;]</code></pre>
-<pre><code>## $gene1
-## [1]  3  4  7  9 12  6</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>list_the_data[[1]]</code></pre>
-<pre><code>## [1]  3  4  7  9 12  6</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>list_the_data[[&quot;gene1&quot;]]</code></pre>
-<pre><code>## [1]  3  4  7  9 12  6</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <p>However, these objects are not all equivalent</p>
 <pre class="r"><code>class(list_the_data$gene1)</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>class(list_the_data[1])</code></pre>
-<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>class(list_the_data[&quot;gene1&quot;])</code></pre>
-<pre><code>## [1] &quot;list&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>class(list_the_data[[1]])</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>class(list_the_data[[&quot;gene1&quot;]])</code></pre>
-<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data$gene1)</code></pre>
-<pre><code>##  num [1:6] 3 4 7 9 12 6</code></pre>
+<pre><code>## Error in str(list_the_data$gene1): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data[1])</code></pre>
-<pre><code>## List of 1
-##  $ gene1: num [1:6] 3 4 7 9 12 6</code></pre>
+<pre><code>## Error in str(list_the_data[1]): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data[&quot;gene1&quot;])</code></pre>
-<pre><code>## List of 1
-##  $ gene1: num [1:6] 3 4 7 9 12 6</code></pre>
+<pre><code>## Error in str(list_the_data[&quot;gene1&quot;]): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data[[1]])</code></pre>
-<pre><code>##  num [1:6] 3 4 7 9 12 6</code></pre>
+<pre><code>## Error in str(list_the_data[[1]]): object 'list_the_data' not found</code></pre>
 <pre class="r"><code>str(list_the_data[[&quot;gene1&quot;]])</code></pre>
-<pre><code>##  num [1:6] 3 4 7 9 12 6</code></pre>
+<pre><code>## Error in str(list_the_data[[&quot;gene1&quot;]]): object 'list_the_data' not found</code></pre>
 <p>So using the <code>[</code> operator keeps the information (and variable name) as a list, while the <code>$</code> or <code>[[</code> operators extract just the elements, but do not keep the name. It can not always be coerced in a sensible way as we have done before.</p>
 <p>i.e:</p>
 <pre class="r"><code>as.numeric(list_the_data[1]) </code></pre>
-<pre><code>## Error in eval(expr, envir, enclos): (list) object cannot be coerced to type 'double'</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object 'list_the_data' not found</code></pre>
 <p>You can <code>unlist</code> the vector though</p>
 <pre class="r"><code>str(as.numeric(unlist(list_the_data[1])))</code></pre>
-<pre><code>##  num [1:6] 3 4 7 9 12 6</code></pre>
+<pre><code>## Error in unlist(list_the_data[1]): object 'list_the_data' not found</code></pre>
 <p>However, this also strips off the name! So you are best to not use the <code>[</code> if you can avoid it when using lists. This is not always possible though, so knowing about unlist is useful!</p>
 </div>
 </div>

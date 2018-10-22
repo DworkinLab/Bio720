@@ -1,21 +1,81 @@
 ---
 title: "Bio720 Introduction to `R`, in class exercise"
 author: "Ian Dworkin"
-date: "October 3, 2016"
-output: html_document
+date: "October 22, 2018"
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+    toc: yes
 ---
 ## Overview
-In class tonight we are going to both practice some of the `R` skills you were introduced to in the video tutorials. [Click here](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md) for that list.
+In class tonight we are going to both practice some of the `R` skills you were introduced to in data camp. You will be working in pairs.
 
 The learning objectives for today are as follows:
 
-1. Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs).
-2. Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`.
-3. Practice some of the skills that were introduced in the video tutorials.
+1. Learn some best practices for organizing computational projects (i.e. any projects with some scripts, data and outputs). *We already went over this*
+2. A brief introduction to markdown and R-markdown to help make your research (and your in class assignments) reproducible and clear. 
+3. Learn a little bit about R as a programming language, and where R fits into the ecosystem of programming languages (what it is best to use it for, and why).
+4. Learn some intuitive (but not necessarily technical) ideas about *data structures* in general, and review some of the data structures in `R`. 
+5. Practice some of the skills that were introduced in the datacamp tutorials. In particular to get a sense that while there are seemingly many ways to accomplish the same task in `R`, they are not always equivalent with respect to speed (and sometimes what they do to the attributes of objects).
+6. Even more practice, time permitting!
 
-## How to organize computational projects.
+## A quick introduction to Markdown (in the How to organize computational projects page).
 
-Please [click here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) to link to a brief discussion on these points.
+Please [click here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#what-is-markdown) to link to a brief discussion on these points.
+
+Question 1 - Create your first markdown document! 
+
+In RStudio, go to File > New file > R Markdown. This will give you a few options (which you can explore on your own. Some useful tricks for making a presentation that is independent of powerpoint or Beamer.). Give it a name (something Pithy like your_initials_Bio720_InClassWeek6), and keep the default output as .html. Look in the folder where you saved all of this. What kinds of files do you see?
+
+Click on this, and go through the code. See how code is embedded in the the triple "```" followed by code and ending with another "```"
+
+While (once you have saved the `.Rmd` file) you can run `knitr()` directly from the console, but we will use the RStudio *graphical user interface* (GUI), click "Knit", and then "Knit to html". You will need to save this in a file (I suggest giving it the same name. Use underscore, no spaces!)
+
+
+Now let's edit this a bit. You need to compute the minimum and maximum values of the `speed` variable in the `cars` object (use just a single function to do this). Then also compute the standard deviation `sd()` of speed.  Before the call to the function add some text describing what you are trying to do with the code. Make it very clear what you are doing by using emphasis (italics) and bold. Then re-knit the document. 
+
+
+While the code embedding is generic, you can specify that you want to use code from another language. For instance you can add (this may not work on windows...)
+
+
+```bash
+pwd
+```
+
+```
+## /Users/ian/TeachingAndLectures/Bio720/Bio720/R_exercises
+```
+
+You can also do this via the "Insert" button.
+
+Finally, I want you to change some of the default options for the knitting of the document.  Click the options button (looks like a weird starfish). Click on output options. Check the box to include a table of contents. Hit advanced, and click on "keep markdown source file". Save the .Rmd file. re-knit, and take a look in the folder, any additional files? (textedit or notepad should be fine to open these) What are the differences between the .md and the .Rmd file?
+
+## Where does `R` belong in the ecosystem of programming languages.
+
+At a very simple level most (if not all) computer programming languages are ["Turing Complete"](https://en.wikipedia.org/wiki/Turing_completeness), which for our purposes mean that they can in principle be used to do most programming tasks. However in some languages how any particular task is programmed (and how efficient it does the task) varies considerably. Thus some programming languages are better suited for some tasks VS. others. To get a sense of where `R` fits into this ecosystem (i.e. when and where to use `R`) we need to learn a few things. So time to use your google-fu.
+
+Question 2. Is R a low-level or high level programming language? What is the difference?
+
+R is considered a high-level language. It's syntax is portable across operating systems (i.e. platform independent), and is far from machine code.
+
+Question 3. Is R a compiled or interpreted language? What is the difference?
+R is an interpreted language. This means the code does not (generally) write an independent running program that is converted to machine code, but the R code you submit goes through a piece of software (an intepreter) to "run" the R code. In this way, R is no different than all of the other UNIX tools you have used (like grep, sed, awk, sort, cut).
+
+Question 4. R is often described as "slow" or "inefficient". Why? Why would a language with these attributes be so popular? In other words, what were the major goals for the `R` programming language.
+- R was designed with interactive data analysis in mind, not speed.
+- Main factors include stability of use, consistency of use (maintains most backwards compatability).
+- Also it is natively vectorized, which bothers some computer programmers when they start.
+
+Question 5. What computer programming languages is R primarily built in? Why is it not all in `R`
+- R, C and fortran. Only about 20% of the lines of code are written in R.
+- R code is not fast. But using R syntax to call `C` or `fortran` code, which is fast is great. So many of the functions you are calling in `R` are actually written in other languages (including the R language interpreter).
+
+Question 6. Hadley Wickham (the author of many R packages and the R super guru) points out that R is slow in part because of the R language *definition* (such as it is) and in part because of the most commonly used *implementation* `gnu-R`. In very simple terms or analogy descrive what is meant by the *implementation* of a computer language as compared to the *definition*?
+
+- Definition describes the architecture of a language, like its syntax, i.e. `x <- 5`  or `x = 5`, or the types of objects or attributes (and many other things). The implementation describes how syntax, attributes of objects are actually used. If I define a bike as an unmotorized vehicle with two wheels, you could probably implement many different objects that fits this definition but work very differently (pedals VS a sail, or two wheels next to each other with the seat in between, instead of one in the front and one in the back). How good each of these bikes work (in terms of speed, stability of the rider etc..) depends on both the definition, and the actual bike we built (implemented).
+
+ ** Now you are a computer wizard **  Woot Woot!
 
 ## Some very basic thoughts on *data structures* in `R`
 We are not going to have a computer science-esque discussion of data structures (there are whole courses on this), but instead try to introduce a few basic concepts to understand why computers need to store different types of data in different ways, and why we need to be aware of that.
@@ -26,7 +86,14 @@ We are not going to have a computer science-esque discussion of data structures 
 
 ### Data structures in R
 
-As was discussed in the video screencasts R has a number of different basic data structures (and more can be made or extended by programmers like you!). We need to start with the so-called *atomic* types that can be stored as vectors (remember R does not have an object to store scalars!). You can google them, but they are logical (Boolean), integer, real (double or floating point) , complex, string (or character) and raw. Let's think about a few of them:
+As was discussed in the datacamp video screencasts, R has a number of different basic data structures (and more can be made or extended by programmers like you!). We need to start with the so-called *atomic* types that can be stored as vectors. 
+
+Question 7. What are the *atomic* types in `R`?
+
+-  logical (Boolean), integer, real (double or floating point) , complex, string (or character) and raw. 
+
+
+Let's think about a few of these basic atomic types:
 
 
 
@@ -35,7 +102,7 @@ As was discussed in the video screencasts R has a number of different basic data
 x <- 1
 ```
 
-and you can find out information about this with a variety of functions:
+You can find out information about this with a variety of functions:
 
 
 ```r
@@ -61,7 +128,7 @@ typeof(x)
 ```
 ## [1] "double"
 ```
-Why does `mode(x)` and `typeof(x)` give different results?
+Question 8? Why do `mode(x)` and `typeof(x)` give different results?
 
 
 Let's create a few more objects and take a look at them
@@ -79,7 +146,7 @@ Now let's create a new object z:
 ```r
 z = 3:5
 ```
-How should `y` and `z` compare? how would you check?
+Question 9: How should `y` and `z` compare? how would you check? How can you compare them to see if `R` is treating them the same?
 
 
 ```r
@@ -143,7 +210,67 @@ identical(y, z)
 
 Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
 
-### R does its calculations as `double`, even if inputs are integers
+
+Question 10. Note the behaviour here between `z` and some mathematical operations with `z`. Explain what is happening and why.
+
+
+```r
+typeof(z)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(z+z) # addition
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(z-z) # subtraction
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(z/z) # regular division
+```
+
+```
+## [1] "double"
+```
+
+```r
+typeof(z*z) # regular multiplication
+```
+
+```
+## [1] "integer"
+```
+
+```r
+typeof(z^2) # taking the square
+```
+
+```
+## [1] "double"
+```
+
+```r
+typeof(sqrt(z))
+```
+
+```
+## [1] "double"
+```
+
+### R does many calculations as `double`, even if inputs are integers
 even though `z` is a vector with integer values, if you use z in some calculations that require double precision floating point values, it will be converted to double. In other words::
 
 
@@ -172,11 +299,14 @@ typeof(z*z)
 ```
 ## [1] "integer"
 ```
-Most of the time this is not an issue, but it is a strange thing.
+Most of the time this is not an issue, but it is a behaviour that is worth getting used to.
 
 
 ### Some other atomic types in R
 Ok, let's think about some of the other basic data types we learned about (strings or "character" in R, boolean/logical)
+
+
+First let's clean up our workspace and re-assign our variables.
 
 
 ```r
@@ -188,7 +318,8 @@ a = TRUE
 b = "TRUE"
 ```
 
-Before checking, think about what types each of these objects should be. Then check.
+Question 11. Before checking, think about what types each of these objects should be? Then check. Which (if any) should be identical to one another? Why?
+
 
 ```r
 x == y
@@ -357,9 +488,9 @@ mode(b); typeof(b)
 
 So, what are the take home points?
 - Computers can be very exact.
-- R has some confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means.
+- R has some confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means. This isn't because R is confused, but because it is trying to be helpful. It is generally guessing what data types make sense for your variable (but you can specify if you want). However if for some operations it needs variables of certain data types R will *coerce* the variable to the right type.
 
-Group exercises: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
+Question 12: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
 
 Let's coerce b into a logical/Boolean
 
@@ -490,6 +621,31 @@ typeof(y1); mode(y1)
 ## [1] "numeric"
 ```
 
+### Making variables of a specific type
+
+So if you want to make sure you are generating variables of a specific type, you can use the functions `as.x()` where x is the type of variable. You can also specify them at the beginning.
+
+So if I wanted to specify a vector is of type `double` (which is what numeric is)
+
+
+```r
+double_up <- double(length = 10)
+identical(numeric(10), double(10))
+```
+
+```
+## [1] TRUE
+```
+
+Question 13. How would I specify a vector of integers of length 10? Why are all the numbers for this (or the line of code above) 0?
+
+
+```r
+integer_10 <- integer(10)
+```
+
+By default this generates vectors with 0 as placeholders. You need to be aware of this!
+
 ### Boolean/logical
 Using TRUE/FALSE (logical, Boolean) as an atomic type is quite important. Often we need to check equality of objects, or elements within our objects (considering vectors are a basic storage type in R). These are particularly (as we will see later) useful when subsetting using the index of a vector (or matrix or data.table).
 
@@ -565,7 +721,7 @@ sum(a)
 ## [1] 0
 ```
 
-Before running the code to find out, what will the sum of the following vector be `c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6))`
+Question 14: Before running the code to find out, what will the sum of the following vector be `c(rep(T, 10), rep(F, 18), rep(T, 10), rep(F, 6))`
 
 
 ```r
@@ -590,7 +746,8 @@ ls()
 ```
 
 ```
-## [1] "a"  "a1" "b1" "x"  "y"  "y1"
+## [1] "a"          "a1"         "b1"         "double_up"  "integer_10"
+## [6] "x"          "y"          "y1"
 ```
 
 Let's work with a clean slate. How might we remove all of the objects and start fresh? Obviously you could just do a `rm()` command with each object name, but you can also remove all at once.
@@ -605,7 +762,7 @@ ls()
 ## character(0)
 ```
 
-Let's think about what this command has done.
+Q15. Describe what this command has done. 
 
 
 Now we are going to create a few new objects and use these to examine some of the properties of our more complex data structures
@@ -621,7 +778,7 @@ What mode and type should these objects be?
 
 ## understanding `factors` in R.
 
-Create an object `genotype` of length 6, where the first three observations have the value "wildtype" and the last three are "mutant"
+Question 15. Create an object `genotype` of length 6, where the first three observations have the value "wildtype" and the last three are "mutant"
 
 There are at least three options. First the hard way.
 
@@ -734,7 +891,7 @@ So let's think about what a factor is?
 
 factors in R may appear as `character` but for efficiency are stored as integers. The idea is you will have far fewer factor levels (which you can check with `nlevels()`) than number of observations, so this can save memory and speed up computation. However, this means you need to realize that factors are not a special form of `character`, but a special form of `numeric`!
 
-If we wanted to make genotype2 into a factor (we will call it genotype2_factor) how would you do so?
+Question 16. If we wanted to make genotype2 into a factor (we will call it genotype2_factor) how would you do so? Is this the same as making it a factor from the very beginning?
 
 
 ```r
@@ -769,7 +926,8 @@ genotype3 == genotype2_factor
 ```
 ## [1] TRUE TRUE TRUE TRUE TRUE TRUE
 ```
-This is frankly an unfortunate behaviour of R's. Most other things were done on purpose. This probably was not!
+
+So while each attribute is identical, the objects as a whole are not! See `?identical` for more information. This is frankly an unfortunate behaviour of R's. Most other things were done on purpose. I am not sure if this was or was not. However, knowing about it makes it useful!
 
 
 How about if we wanted to make genotype3 into a character vector?
@@ -816,7 +974,7 @@ genotype3_character == genotype2
 ## [1] TRUE TRUE TRUE TRUE TRUE TRUE
 ```
 
-Let's say we had a second experimental factor which was the day of sampling (3,6) but we want to treat it as a factor `c(3, 6, 3, 6, 3, 6)` how would you code this?
+Question 17. Let's say we had a second experimental factor which was the day of sampling (3,6) but we want to treat it as a factor `c(3, 6, 3, 6, 3, 6)` how would you code this?
 
 
 ```r
@@ -853,7 +1011,7 @@ typeof(day)
 ## [1] "integer"
 ```
 
-What happens if you coerce day into a character?
+Question 18. What happens if you coerce `day` into a character?
 
 
 ```r
@@ -864,7 +1022,7 @@ as.character(day)
 ## [1] "3" "6" "3" "6" "3" "6"
 ```
 
-How about if you coerce day into numeric?
+Question 19. How about if you coerce day into numeric?
 
 ```r
 as.numeric(day)
@@ -878,7 +1036,7 @@ Seemingly strange behaviour? However think about it for a minute and try to expl
 
 The basic idea is that when a variable is stored as a `factor` in R, the first level (which defaults to alphanumeric, so **m**utant before **w**ildtype in this case) will be stored as "1", the second level as "2" and so on. When you ask to convert it to numeric it uses these numbers. So if your factor levels are named with numbers to begin with, this can mess things up. So take care!
 
-So if you want to turn these into the numbers 3 and 6, how would you do it?
+Question 20. So if you want to turn these into the numbers 3 and 6, how would you do it?
 
 ```r
 as.numeric(as.character(day))
@@ -892,7 +1050,8 @@ Take home message: factors are useful for storing names of experimental levels e
 
 ## Back to our data structures of interest. 
 
-Provide two different ways of combining `gene1`, `gene2` and `gene3` into a matrix (gene_mat1 and gene_mat2)?
+Question 21. Provide two different ways of combining `gene1`, `gene2` and `gene3` into a matrix (gene_mat1 and gene_mat2)? Are these the same?
+
 
 
 ```r
@@ -940,7 +1099,7 @@ identical(gene_mat1, gene_mat2)
 
 Using some of the tools we have already used (str, mode, typeof) shows the elements are the same. However, one has stripped the names (gene_mat2), why do you think this has happened?
 
-How might you fix this?
+Question 22. How might you fix the issue we observed?
 
 It is pretty easy, since it is just names that differ, you can use `colnames` to rename the columns
 
@@ -967,7 +1126,7 @@ identical(gene_mat1, gene_mat2)
 ## [1] TRUE
 ```
 
-Let's take our (character) vectors for day and genotype and use `cbind()` (treatments). Before starting write down whether you think the object `treatments` will have class `matrix`. What will the mode be? Why?
+Question 23. Let's take our (character) vectors for day and genotype and use `cbind()` (treatments). Before starting write down whether you think the object `treatments` will have class `matrix`. What will the mode be? Why?
 
 ```r
 genotype <- rep(c("wildtype", "mutant"), each = 3)
@@ -1005,7 +1164,7 @@ mode(treatments)
 ## [1] "character"
 ```
 
-Now let's take all of  objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use cbind on them. Call this object `all_the_data`. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of `all_the_data`?
+Question 24. Now let's take all of  objects that are vectors of different atomic types (gene1, gene2, gene3, genotype, day) and use cbind on them. Call this object `all_the_data`. Before writing the code, write down what you think the class of the object will be. How about the mode/type of the elements of `all_the_data`?
 
 
 ```r
@@ -1025,7 +1184,8 @@ mode(all_the_data)
 ## [1] "character"
 ```
 
-Explain why `all_the_data` is the class and has the mode that it does?
+Question 25. Explain why `all_the_data` is the class and has the mode that it does?
+
 Again R is trying to be smart. It can not coerce words into numbers, but it can coerce numbers into strings/characters. So, to keep this a matrix, it first coerces everything into character, and then makes a matrix out of them. Take a look at `?matrix` and it gives some information on the coercion hierarchy. It is worth having this in the back of your mind. 
 
 ## data structures with heterogeneous objects.
@@ -1066,13 +1226,15 @@ mode(all_the_data)
 ## [1] "list"
 ```
 
+What class is `all_the_data`? How about `mode`? What is going on?
+
 Notice a couple of interesting thing. First it's class is a data.frame, but it is actually a list underneath. Second, without asking or warning us, it has coerced *genotype* and *day* into factors. It is assuming that since you are treating this like regular data (that you will probably want to analyze or plot) you want these as factors. Often this is true. If you don't want this behaviour there is an argument that you can set `stringsAsFactors == FALSE`.
 
 It is really important to note that data.frames are useful for heterogeneous objects **ONLY IF** all objects (vectors) are the **same length**. It is ok to have missing data, as long as R knows there should be missing data (NA) in certain spots. When you need to store a collection of heterogeneous objects, but the objects are of different lengths, then you need to use lists.
 
-As we showed in the video tutorial, you can extract and subset in a couple of ways (like lists or as a matrix). So show three different ways to extract the 2nd, 3rd and 4th column from `all_the_data` 
+As we showed in the video tutorials and exercises, you can extract and subset in a couple of ways (like lists or as a matrix). So show three different ways to extract the 2nd, 3rd and 4th column from `all_the_data` 
 
-First way, using standard numeric subsetting:
+Question 26. Using standard numeric subsetting, extract columns 2,3 and 4.
 
 
 ```r
@@ -1090,7 +1252,7 @@ all_the_data[ ,c(2:4)]
 ```
 
 
-second, by subsetting using the names of the columns:
+Question 27. Second, subset using the names of the columns:
 
 
 ```r
@@ -1107,7 +1269,7 @@ all_the_data[c("gene2", "gene3", "genotype")]
 ## 6     7   111   mutant
 ```
 
-Third, by using the extraction operator `$` which is how you extract elements from lists:
+Question 28. Third, by using the extraction operator `$` which is how you extract elements from lists:
 
 
 ```r
@@ -1150,7 +1312,8 @@ We can also use the subset() function, which is far more powerful and we will us
 
 
 ```r
-subset(all_the_data, select = c("gene2", "gene3", "genotype"))
+subset(all_the_data, 
+       select = c("gene2", "gene3", "genotype"))
 ```
 
 ```
@@ -1249,12 +1412,12 @@ names(list_the_data)
 ## NULL
 ```
 A couple of things of note:
-- It should be pretty clear that there is something different about the way it is storing the information. Seemingly the names of the original objects have been lost. 
+- It should be pretty clear that there is something different about the way it is storing the information. The names (which is an attribute) of the original objects have been lost. 
 - Also, as a list, it does not make assumptions about how you will use the underlying objects, so it has not coerced the character vectors to factors. 
 
-How might we get the names of the underlying objects? Annoyingly:
+Question 27. How might we get the names of the underlying objects? 
 
-
+Annoyingly:
 
 ```r
 list_the_data = list(gene1 = gene1, gene2 = gene2, gene3 = gene3, genotype = genotype, day = day)
@@ -1479,7 +1642,7 @@ i.e:
 
 
 ```r
-as.numeric(list_the_data[1])
+as.numeric(list_the_data[1]) 
 ```
 
 ```
