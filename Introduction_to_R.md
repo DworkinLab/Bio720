@@ -15,12 +15,21 @@ Please install the current version of `R` (V.3.5.1 or newer). This is required t
 - We will be using Git and Github for version control and ultimately assignments in the class. This means you will need to [install git](https://git-scm.com/). I would probably look at [this tutorial](http://happygitwithr.com/install-git.html).
 - You will also need to sign up for a free [Github account](https://github.com/). Don't worry about it for now, but you can contact them for an academic account to get private repositories if you want.
 
-## R video tutorials and exercises.
-
-### Access to DataCamp tutorials and exercises
+## Access to DataCamp tutorials and exercises
 I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720) for 2018. You should get an email about this soon, and I will provide details about which courses I expect you to do prior to each class. These will provide foundational skills for us to build on during in class activities, and your problem sets.
 
-### other R video tutorials and exercises.
+## Assignments
+[R Assignment 1](./assignments/Bio720_R_Assignment1.md) - Due October 21st and 22nd (see notes)
+
+[R Assignment 2](./assignments/Bio720_R_Assignment2.md) - Due October 28th & 29th 2018 (see notes).
+
+## In class activities
+1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
+2. (Not updated for 2018) In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd).
+3. (Not updated for 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd).
+4. (Not updated for 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
+
+## other R video tutorials and exercises.
 The data set that is used for some of these activities can be found on the [DRYAD Digital repository](http://datadryad.org/) right [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv?sequence=1). You can also set this up (so you do not need a local copy of the data by putting this command in your script or copying and pasting it into the R editor :
 ```R
 dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", h=T)
@@ -53,15 +62,6 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   - The script can be viewed [here](./Rscripts/IntroductionControlFlowR.R)
 11. Introduction to `R`: [part 10. using the apply family of functions in `R`](https://www.youtube.com/watch?v=uL_LdYS-scQ)
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
-
-  ## Assignments
-[R Assignment 1](./assignments/Bio720_R_Assignment1.md) - Due October 21st and 22nd (see notes)
-
-## In class activities
-1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
-2. (Not updated for 2018) In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd).
-3. (Not updated for 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd).
-4. (Not updated for 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
 
 
 ## Notes for Ian to add & improve the screencasts (students can ignore this).
