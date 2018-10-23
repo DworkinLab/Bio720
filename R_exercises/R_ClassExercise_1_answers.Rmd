@@ -20,7 +20,7 @@ The learning objectives for today are as follows:
 5. Practice some of the skills that were introduced in the datacamp tutorials. In particular to get a sense that while there are seemingly many ways to accomplish the same task in `R`, they are not always equivalent with respect to speed (and sometimes what they do to the attributes of objects).
 6. Even more practice, time permitting!
 
-## A quick introduction to Markdown (in the How to organize computational projects page).
+## A quick introduction to Markdown (part of the "How to organize computational projects"" page).
 
 Please [click here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#what-is-markdown) to link to a brief discussion on these points.
 
@@ -28,7 +28,7 @@ Question 1 - Create your first markdown document!
 
 In RStudio, go to File > New file > R Markdown. This will give you a few options (which you can explore on your own. Some useful tricks for making a presentation that is independent of powerpoint or Beamer.). Give it a name (something Pithy like your_initials_Bio720_InClassWeek6), and keep the default output as .html. Look in the folder where you saved all of this. What kinds of files do you see?
 
-Click on this, and go through the code. See how code is embedded in the the triple "```" followed by code and ending with another "```"
+Click on this, and go through the code. See how code is embedded in the blocks of triple backticks.
 
 While (once you have saved the `.Rmd` file) you can run `knitr()` directly from the console, but we will use the RStudio *graphical user interface* (GUI), click "Knit", and then "Knit to html". You will need to save this in a file (I suggest giving it the same name. Use underscore, no spaces!)
 
@@ -52,10 +52,10 @@ At a very simple level most (if not all) computer programming languages are ["Tu
 
 Question 2. Is R a low-level or high level programming language? What is the difference?
 
-R is considered a high-level language. It's syntax is portable across operating systems (i.e. platform independent), and is far from machine code.
+- R is considered a high-level language. It's syntax is portable across operating systems (i.e. platform independent), and is far from machine code.
 
 Question 3. Is R a compiled or interpreted language? What is the difference?
-R is an interpreted language. This means the code does not (generally) write an independent running program that is converted to machine code, but the R code you submit goes through a piece of software (an intepreter) to "run" the R code. In this way, R is no different than all of the other UNIX tools you have used (like grep, sed, awk, sort, cut).
+- R is an interpreted language. This means the code does not (generally) write an independent running program that is converted to machine code, but the R code you submit goes through a piece of software (an intepreter) to "run" the R code. In this way, R is no different than all of the other UNIX tools you have used (like grep, sed, awk, sort, cut).
 
 Question 4. R is often described as "slow" or "inefficient". Why? Why would a language with these attributes be so popular? In other words, what were the major goals for the `R` programming language.
 - R was designed with interactive data analysis in mind, not speed.
@@ -68,7 +68,9 @@ Question 5. What computer programming languages is R primarily built in? Why is 
 
 Question 6. Hadley Wickham (the author of many R packages and the R super guru) points out that R is slow in part because of the R language *definition* (such as it is) and in part because of the most commonly used *implementation* `gnu-R`. In very simple terms or analogy descrive what is meant by the *implementation* of a computer language as compared to the *definition*?
 
-- Definition describes the architecture of a language, like its syntax, i.e. `x <- 5`  or `x = 5`, or the types of objects or attributes (and many other things). The implementation describes how syntax, attributes of objects are actually used. If I define a bike as an unmotorized vehicle with two wheels, you could probably implement many different objects that fits this definition but work very differently (pedals VS a sail, or two wheels next to each other with the seat in between, instead of one in the front and one in the back). How good each of these bikes work (in terms of speed, stability of the rider etc..) depends on both the definition, and the actual bike we built (implemented).
+- Definition describes the architecture of a language, like its syntax, i.e. `x <- 5`  or `x = 5`, or the types of objects or attributes (and many other things).
+
+- The implementation describes how syntax, attributes of objects are actually used. If I define a bike as an unmotorized vehicle with two wheels, you could probably implement many different objects that fits this definition but work very differently (pedals VS a sail, or two wheels next to each other with the seat in between, instead of one in the front and one in the back). How good each of these bikes work (in terms of speed, stability of the rider etc..) depends on both the definition, and the actual bike we built (implemented).
 
  ** Now you are a computer wizard **  Woot Woot!
 
@@ -90,8 +92,6 @@ Question 7. What are the *atomic* types in `R`?
 
 Let's think about a few of these basic atomic types:
 
-
-
 ```{r}
 x <- 1
 ```
@@ -105,6 +105,7 @@ typeof(x)
 ```
 Question 8? Why do `mode(x)` and `typeof(x)` give different results?
 
+- mode gives you information about the storage mode of the object.  type is the atomic type.
 
 Let's create a few more objects and take a look at them
 
@@ -113,6 +114,8 @@ y = c(3, 4, 5)
 ```
 
 Will `x` and `y` differ?  Check and explain?
+
+- Yes, while both numeric vectors, they are of different lengths. 
 
 Now let's create a new object z:
 
@@ -127,6 +130,7 @@ mode(z)
 typeof(y)
 typeof(z)
 ```
+ 
  Which might suggest they are different. In one case `R` is treating the vector as integers, the other case as floating point (double). So this suggests they might be different. However:
  
 ```{r}
@@ -136,7 +140,7 @@ all.equal(y, z)
 identical(y, z)
 ```
 
-Suggests R is treating them the same. This is definitely one of the odd R behaviours. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
+This demonstrates that while element by element, R treats these as the same, the object as a whole (as shown with `identical`) is not. This is definitely one of the odd R behaviours, but a useful one. While in many languages (like `C++`) you need to define the type of variable you are creating, R tries to make "guesses" about what you are doing. Sometimes this can result in odd behaviour.
 
 
 Question 10. Note the behaviour here between `z` and some mathematical operations with `z`. Explain what is happening and why.
@@ -200,7 +204,6 @@ mode(y)
 mode(z)
 ```
 
-
 ```{r}
 y == z
 all.equal(y, z)
@@ -225,17 +228,19 @@ mode(b); typeof(b)
 
 So, what are the take home points?
 - Computers can be very exact.
-- R has some confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means. This isn't because R is confused, but because it is trying to be helpful. It is generally guessing what data types make sense for your variable (but you can specify if you want). However if for some operations it needs variables of certain data types R will *coerce* the variable to the right type.
+- R has some (initially) confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means. This isn't because R is confused, but because it is trying to be helpful. It is generally guessing what data types make sense for your variable (but you can specify if you want). However if for some operations it needs variables of certain data types R will *coerce* the variable to the right type.
 
 Question 12: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
 
 Let's coerce b into a logical/Boolean
 ```{r}
 b1 <- as.logical(b)
-is.logical(b1); is.character(b1)
+is.logical(b1)
+is.character(b1)
 b == b1
 a == b
-typeof(b1); mode(b1)
+typeof(b1)
+mode(b1)
 ```
 
 Let's coerce a into a character
@@ -255,7 +260,8 @@ identical(y, y1)
 
 x == y1
 identical(x, y1)
-typeof(y1); mode(y1)
+typeof(y1)
+mode(y1)
 ```
 
 ### Making variables of a specific type
@@ -273,9 +279,19 @@ Question 13. How would I specify a vector of integers of length 10? Why are all 
 
 ```{r}
 integer_10 <- integer(10)
+integer_10
 ```
 
-By default this generates vectors with 0 as placeholders. You need to be aware of this!
+By default this generates vectors with 0 as placeholders. You need to be aware of this! You don't want to accidently treat those 0 values as real data (or simulated values or whatever), but as placeholders.
+
+I usually recommend if you go this route to generate empty vectors or matrices, that you replace the values immediately with `NA` as follows.
+
+```{r}
+integer_10[] <- NA
+integer_10
+```
+
+A useful question. Why can't you just use `integer_10 <- NA` to do this? What will this type of assignment do instead? I will let you check!
 
 ### Boolean/logical
 Using TRUE/FALSE (logical, Boolean) as an atomic type is quite important. Often we need to check equality of objects, or elements within our objects (considering vectors are a basic storage type in R). These are particularly (as we will see later) useful when subsetting using the index of a vector (or matrix or data.table).
@@ -335,6 +351,8 @@ ls()
 
 Q15. Describe what this command has done. 
 
+- We are generating a list (`list=`) of all objects in the global environment (`ls()`) and placing this within the remove function `rm()`. So it removes all objects that were generated in the global environment.
+
 
 Now we are going to create a few new objects and use these to examine some of the properties of our more complex data structures
 
@@ -345,6 +363,7 @@ gene3 <- c(100, 103, 97, 94, 106, 111)
 ```
 What mode and type should these objects be?
 
+- numeric (double)
 
 ## understanding `factors` in R.
 
@@ -368,7 +387,8 @@ class(genotype2)
 Or if we want to generate factors immediately we can use the `gl()` function (for *generate levels*):
 
 ```{r}
-genotype3 <- gl(n = 2, k = 3, labels = c("wildtype", "mutant"))
+genotype3 <- gl(n = 2, k = 3, 
+                labels = c("wildtype", "mutant"))
 genotype3
 mode(genotype3)
 class(genotype3)
@@ -503,7 +523,7 @@ Again R is trying to be smart. It can not coerce words into numbers, but it can 
 ## data structures with heterogeneous objects.
  Clearly we did not want to produce a matrix of strings. So we need some sort of data structures where elements (at least at the level of individual vectors that are being organized together) can be of different atomic types (i.e. a collection of heterogeneous objects). There are two main approaches to this, one is the data.frame, which is the spreadsheet like object that is often the easiest to work with when importing data (for analysis and plotting). THe other is a list. As I mentioned in the video tutorials, the data.frame is really a special kind of list. However it is worth comparing and contrasting both. First remove the old `all_the_data` object and make a new one that is a data frame.
 
-## `data.frames`
+## `data.frame`
 First let's make a data.frame: 
 
 ```{r}
@@ -525,20 +545,23 @@ As we showed in the video tutorials and exercises, you can extract and subset in
 
 Question 26. Using standard numeric subsetting, extract columns 2,3 and 4.
 
+We will use the operator `[` for indexing and subsetting.
 ```{r}
 all_the_data[ ,c(2:4)]
-
 ```
 
 
 Question 27. Second, subset using the names of the columns:
 
+We can again use the same operator, but this time specify a vector of names (column names in this case).
+
 ```{r}
 all_the_data[c("gene2", "gene3", "genotype")]
-
 ```
 
-Question 28. Third, by using the extraction operator `$` which is how you extract elements from lists:
+It is **very important** to note that the `[` operator is the only way of subsetting more than a single column at a time with the standard three subsetting operators (`[`, `[[`, `$`)
+
+Third, by using the extraction operator `$` which is how you extract elements from lists:
 
 ```{r}
 all_the_data$gene2; all_the_data$gene3; all_the_data$genotype
@@ -546,13 +569,13 @@ all_the_data$gene2; all_the_data$gene3; all_the_data$genotype
 ```
 This approach is useful for single columns, not so useful when you want to extract a bunch though.
 
-You can also use the `[[` approach to grab columns as well
+You can also use the `[[` approach to grab single columns as well
 ```{r}
 all_the_data[["gene2"]]
 all_the_data$gene2
 ```
 
-We can also use the subset() function, which is far more powerful and we will use alot in the coming weeks. 
+We can also use the subset() function, which is far more powerful and we will use in the coming weeks. THere are many other tools (see about the *tidyverse* to do such operations)
 
 ```{r}
 subset(all_the_data, 
@@ -561,6 +584,8 @@ subset(all_the_data,
 ```
 
 Take home message: This can definitely get confusing, but different programmers still use each, so it is important to recognize what is the same and what is different. Importantly the single `[` can be used to extract more than one element from the object, while `$` and `[[` can only select a single element at a time. 
+
+It is also worth remembering that when extracting from a list with a `[` the object it returns remains a list (which may not be what you want). So in those cases, in particular for extracting single variables, you may wish to use `[[` or `$`.
 
 
 Hopefully it is pretty clear, but there are a couple of ways of adding on new variables. Let's create a gene4 (also of length 6) and add it to the `all_the_data` data.frame
@@ -595,7 +620,11 @@ Question 27. How might we get the names of the underlying objects?
 
 Annoyingly:
 ```{r}
-list_the_data = list(gene1 = gene1, gene2 = gene2, gene3 = gene3, genotype = genotype, day = day)
+list_the_data = list(gene1 = gene1, gene2 = gene2, 
+                     gene3 = gene3, 
+                     genotype = genotype, 
+                     day = day)
+
 list_the_data
 
 str(list_the_data)
@@ -646,7 +675,7 @@ str(list_the_data[[1]])
 str(list_the_data[["gene1"]])
 ```
 
-So using the `[` operator keeps the information (and variable name) as a list, while the `$` or `[[` operators extract just the elements, but do not keep the name. It can not always be coerced in a sensible way as we have done before.
+So using the `[` operator keeps the information (and variable name) as a *list*, while the `$` or `[[` operators extract just the elements, but do not keep the name. It can not always be coerced in a sensible way as we have done before.
 
 i.e:
 
