@@ -130,7 +130,7 @@ typeof(x)
 ```
 Question 8? Why do `mode(x)` and `typeof(x)` give different results?
 
-- mode gives you information about the storage mode of the object.  type is the atomic type.
+- mode gives you information about the mode of the object. Not the *storage mode* which I incorrectly stated `storage.mode()` does that  type is the atomic type. Although according to help these are usually the same!
 
 Let's create a few more objects and take a look at them
 
@@ -149,6 +149,7 @@ Now let's create a new object z:
 ```r
 z = 3:5
 ```
+
 Question 9: How should `y` and `z` compare? how would you check? How can you compare them to see if `R` is treating them the same?
 
 
@@ -275,7 +276,8 @@ typeof(sqrt(z))
 ```
 
 ### R does many calculations as `double`, even if inputs are integers
-even though `z` is a vector with integer values, if you use z in some calculations that require double precision floating point values, it will be converted to double. In other words::
+
+Even though `z` is a vector with integer values, if you use z in some calculations that require double precision floating point values, it will be converted to double. In other words::
 
 
 ```r
@@ -303,10 +305,12 @@ typeof(z*z)
 ```
 ## [1] "integer"
 ```
+
 Most of the time this is not an issue, but it is a behaviour that is worth getting used to.
 
 
 ### Some other atomic types in R
+
 Ok, let's think about some of the other basic data types we learned about (strings or "character" in R, boolean/logical)
 
 
@@ -439,6 +443,7 @@ mode(z)
 The same "logic" applies for comparing `a` and `b`
 
 
+
 ```r
 a == b
 ```
@@ -493,9 +498,12 @@ So, what are the take home points?
 - Computers can be very exact.
 - R has some (initially) confusing ideas about storing variables, assigning types to basic variables and you need to think carefully about what "equals" means. This isn't because R is confused, but because it is trying to be helpful. It is generally guessing what data types make sense for your variable (but you can specify if you want). However if for some operations it needs variables of certain data types R will *coerce* the variable to the right type.
 
+
 Question 12: How would you get `R` to coerce `x` and `y` to be exactly the same? How about `a` and `b`? 
 
+
 Let's coerce b into a logical/Boolean
+
 
 ```r
 b1 <- as.logical(b)
@@ -548,6 +556,7 @@ mode(b1)
 
 Let's coerce a into a character
 
+
 ```r
 a1 <- as.character(a)
 is.character(a1)
@@ -586,6 +595,7 @@ typeof(a1); mode(a1)
 ```
 
 And, y into a number
+
 
 ```r
 y1 <- as.numeric(y)
@@ -681,6 +691,7 @@ integer_10
 A useful question. Why can't you just use `integer_10 <- NA` to do this? What will this type of assignment do instead? I will let you check!
 
 ### Boolean/logical
+
 Using TRUE/FALSE (logical, Boolean) as an atomic type is quite important. Often we need to check equality of objects, or elements within our objects (considering vectors are a basic storage type in R). These are particularly (as we will see later) useful when subsetting using the index of a vector (or matrix or data.table).
 
 Let's clean up a bit:
@@ -817,7 +828,9 @@ What mode and type should these objects be?
 
 Question 15. Create an object `genotype` of length 6, where the first three observations have the value "wildtype" and the last three are "mutant"
 
+
 There are at least three options. First the hard way.
+
 
 ```r
 genotype <- c("wildtype", "wildtype", "wildtype", "mutant", "mutant", "mutant")
@@ -837,6 +850,7 @@ mode(genotype)
 ```
 
 A pretty easy way
+
 
 ```r
 genotype2 <- rep(c("wildtype", "mutant"), each = 3)
@@ -927,7 +941,7 @@ all.equal(genotype2, genotype3)
 
 So let's think about what a factor is?
 
-factors in R may appear as `character` but for efficiency are stored as integers. The idea is you will have far fewer factor levels (which you can check with `nlevels()`) than number of observations, so this can save memory and speed up computation. However, this means you need to realize that factors are not a special form of `character`, but a special form of `numeric`!
+Factors in R may appear as `character` but for efficiency are stored as integers. The idea is you will have far fewer factor levels (which you can check with `nlevels()`) than number of observations, so this can save memory and speed up computation. However, this means you need to realize that factors are not a special form of `character`, but a special form of `numeric`!
 
 Question 16. If we wanted to make genotype2 into a factor (we will call it genotype2_factor) how would you do so? Is this the same as making it a factor from the very beginning?
 
@@ -1076,6 +1090,7 @@ The basic idea is that when a variable is stored as a `factor` in R, the first l
 
 Question 20. So if you want to turn these into the numbers 3 and 6, how would you do it?
 
+
 ```r
 as.numeric(as.character(day))
 ```
@@ -1110,6 +1125,7 @@ gene_mat1
 ```r
 gene_mat2 <- matrix(c(gene1, gene2, gene3), nrow =6, ncol =3, byrow =FALSE)
 ```
+
 Are these the same?
 
 
@@ -1137,9 +1153,11 @@ identical(gene_mat1, gene_mat2)
 
 Using some of the tools we have already used (str, mode, typeof) shows the elements are the same. However, one has stripped the names (gene_mat2), why do you think this has happened?
 
+
 Question 22. How might you fix the issue we observed?
 
 It is pretty easy, since it is just names that differ, you can use `colnames` to rename the columns
+
 
 ```r
 colnames(gene_mat2) <- c("gene1", "gene2", "gene3")
@@ -1165,6 +1183,7 @@ identical(gene_mat1, gene_mat2)
 ```
 
 Question 23. Let's take our (character) vectors for day and genotype and use `cbind()` (treatments). Before starting write down whether you think the object `treatments` will have class `matrix`. What will the mode be? Why?
+
 
 ```r
 genotype <- rep(c("wildtype", "mutant"), each = 3)
@@ -1227,6 +1246,7 @@ Question 25. Explain why `all_the_data` is the class and has the mode that it do
 Again R is trying to be smart. It can not coerce words into numbers, but it can coerce numbers into strings/characters. So, to keep this a matrix, it first coerces everything into character, and then makes a matrix out of them. Take a look at `?matrix` and it gives some information on the coercion hierarchy. It is worth having this in the back of your mind. 
 
 ## data structures with heterogeneous objects.
+
  Clearly we did not want to produce a matrix of strings. So we need some sort of data structures where elements (at least at the level of individual vectors that are being organized together) can be of different atomic types (i.e. a collection of heterogeneous objects). There are two main approaches to this, one is the data.frame, which is the spreadsheet like object that is often the easiest to work with when importing data (for analysis and plotting). THe other is a list. As I mentioned in the video tutorials, the data.frame is really a special kind of list. However it is worth comparing and contrasting both. First remove the old `all_the_data` object and make a new one that is a data frame.
 
 ## `data.frame`
@@ -1266,13 +1286,14 @@ mode(all_the_data)
 
 What class is `all_the_data`? How about `mode`? What is going on?
 
-Notice a couple of interesting thing. First it's class is a data.frame, but it is actually a list underneath. Second, without asking or warning us, it has coerced *genotype* and *day* into factors. It is assuming that since you are treating this like regular data (that you will probably want to analyze or plot) you want these as factors. Often this is true. If you don't want this behaviour there is an argument that you can set `stringsAsFactors == FALSE`.
+Notice a couple of interesting thing. First it's class is a `data.frame`, but it is actually a list underneath. Second, without asking or warning us, it has coerced *genotype* and *day* into factors. It is assuming that since you are treating this like regular data (that you will probably want to analyze or plot) you want these as factors. Often this is true. If you don't want this behaviour there is an argument that you can set `stringsAsFactors == FALSE`.
 
 It is really important to note that data.frames are useful for heterogeneous objects **ONLY IF** all objects (vectors) are the **same length**. It is ok to have missing data, as long as R knows there should be missing data (NA) in certain spots. When you need to store a collection of heterogeneous objects, but the objects are of different lengths, then you need to use lists.
 
 As we showed in the video tutorials and exercises, you can extract and subset in a couple of ways (like lists or as a matrix). So show three different ways to extract the 2nd, 3rd and 4th column from `all_the_data` 
 
 Question 26. Using standard numeric subsetting, extract columns 2,3 and 4.
+
 
 We will use the operator `[` for indexing and subsetting.
 
@@ -1289,7 +1310,6 @@ all_the_data[ ,c(2:4)]
 ## 5    23   106   mutant
 ## 6     7   111   mutant
 ```
-
 
 Question 27. Second, subset using the names of the columns:
 
@@ -1331,9 +1351,11 @@ all_the_data$gene2; all_the_data$gene3; all_the_data$genotype
 ## [1] wildtype wildtype wildtype mutant   mutant   mutant  
 ## Levels: mutant wildtype
 ```
+
 This approach is useful for single columns, not so useful when you want to extract a bunch though.
 
-You can also use the `[[` approach to grab single columns as well
+You can also use the `[[` approach to grab single columns as well:
+
 
 ```r
 all_the_data[["gene2"]]
@@ -1373,6 +1395,7 @@ Take home message: This can definitely get confusing, but different programmers 
 
 It is also worth remembering that when extracting from a list with a `[` the object it returns remains a list (which may not be what you want). So in those cases, in particular for extracting single variables, you may wish to use `[[` or `$`.
 
+### Adding new variables into a data.frame
 
 Hopefully it is pretty clear, but there are a couple of ways of adding on new variables. Let's create a gene4 (also of length 6) and add it to the `all_the_data` data.frame
 
@@ -1460,9 +1483,12 @@ A couple of things of note:
 - It should be pretty clear that there is something different about the way it is storing the information. The names (which is an attribute) of the original objects have been lost. 
 - Also, as a list, it does not make assumptions about how you will use the underlying objects, so it has not coerced the character vectors to factors. 
 
+
 Question 27. How might we get the names of the underlying objects? 
 
+
 Annoyingly:
+
 
 ```r
 list_the_data = list(gene1 = gene1, gene2 = gene2, 
@@ -1511,7 +1537,7 @@ names(list_the_data)
 ## [1] "gene1"    "gene2"    "gene3"    "genotype" "day"
 ```
 
-We can also have objects that have different lengths within the list
+We can also have objects that have different lengths within the list:
 
 
 ```r
@@ -1554,7 +1580,7 @@ str(list_the_data)
 ##  $ random_variable: logi [1:3] TRUE TRUE FALSE
 ```
  
-We can extract variables from lists in a slight variant of the approach we have used so far
+We can extract variables from lists in a slight variant of the approach we have used so far:
 
  
 
@@ -1600,7 +1626,7 @@ list_the_data[["gene1"]]
 ## [1]  3  4  7  9 12  6
 ```
 
-However, these objects are not all equivalent
+However, these objects are not all equivalent:
 
 
 ```r
@@ -1698,7 +1724,8 @@ as.numeric(list_the_data[1])
 ## Error in eval(expr, envir, enclos): (list) object cannot be coerced to type 'double'
 ```
 
-You can `unlist` the vector though
+You can `unlist` the vector though:
+
 
 ```r
 str(as.numeric(unlist(list_the_data[1])))
