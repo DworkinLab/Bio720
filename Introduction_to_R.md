@@ -6,7 +6,7 @@ Most of the activities for this section of the course will be self-guided, using
 
 **Readings**: In Bioinformatics Data Skills, chapter 8 presents a crash course in programming in `R`, but this may not be enough detail. We will not be using any of the functionality in `ggplot2` quite yet, so you can skip those pages (i.e. skip 207-215, 224-227). One book which you can access freely is [R for data science](http://r4ds.had.co.nz/index.html) by Garrett Grolemund and Hadley Wickham. It is important to note that it focuses less on programming *per se*, and more on working with data (cleaning, parsing, modifying etc..). It also focuses on using Tidyverse tools in `R` (as opposed to base `R`).
 
-There are plently of other amazing [`R` tutorials](https://cran.r-project.org/other-docs.html) (including less amazing ones by me) online. Use the link in the previous sentence to get to some links. I suggest something like [this one](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) to start with. Alternatively McMaster has access to a number of good ebooks. I think that [this one](http://catalogue.mcmaster.ca/catalogue/Record/2702791) by Larry Pace & Joshua Wiley is a good one to start with. You should (while on campus) be able to access the PDF from [here](http://link.springer.com/book/10.1007%2F978-1-4842-0373-6). I am also making a longer list of various `R` resources to help you out, which is currently [here](https://github.com/DworkinLab/Bio720/blob/master/Some_R_resources.md).  I suggest that reading a bit, and/or going through the relevant video tutorial & exercises, and then moving onto the next component may work best.
+There are plenty of other amazing [`R` tutorials](https://cran.r-project.org/other-docs.html) (including less amazing ones by me) online. Use the link in the previous sentence to get to some links. I suggest something like [this one](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) to start with. Alternatively McMaster has access to a number of good ebooks. I think that [this one](http://catalogue.mcmaster.ca/catalogue/Record/2702791) by Larry Pace & Joshua Wiley is a good one to start with. You should (while on campus) be able to access the PDF from [here](http://link.springer.com/book/10.1007%2F978-1-4842-0373-6). I am also making a longer list of various `R` resources to help you out, which is currently [here](https://github.com/DworkinLab/Bio720/blob/master/Some_R_resources.md).  I suggest that reading a bit, and/or going through the relevant video tutorial & exercises, and then moving onto the next component may work best.
 
 ## Installing R
 Please install the current version of `R` (V.3.5.1 or newer). This is required to be able to complete the class activities. There are several versions of `R` you might consider. R works on all major operating systems (Windows, Apple OS X and Linux).
@@ -55,39 +55,13 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
   - The script can be viewed [here](./Rscripts/applyLikeFunctionsR.R)
 
   ## Assignments
-  For October 22nd (2018):
-  1. Complete **Introduction to R** on DataCamp (By 11:59PM Sunday October 21st)
-  2. Complete **Intermediate R** on DataCamp (By 11:59PM Sunday October 21st)
-  3. Make sure you have installed the current version of `R` and `R studio`. See the installation instructions above. To confirm you can open `R` in R studio and run
+[R Assignment 1](./assignments/Bio720_R_Assignment1.md) - Due October 21st and 22nd (see notes)
 
-  ```{R}
-  sessionInfo()
-  Sys.info()[["user"]]
-  require(rstudioapi)
-  versionInfo()
-  ```
-  then copy the information that is printed out and email it to me (along with the information for question 4 below).
-
-  Note: Some people may (not sure why) not have the `rstudioapi` package already installed. If it gives you an error about this you can install it (and then re-run the code above). i.e.
-
-  ```{R}
-  install.packages("rstudioapi")
-  ```
-
-  and then re-run the set of commands.
-
-  4. Sign up for a Github account (see installation instructions).
-  5. (optional) Try to install Git (see installation instructions)
-  6. (optional) If you really want to be ahead of the curve get git set up with R studio and github (http://happygitwithr.com/). We will do this later.
-
-  For some getting Git installed and set up will work exactly like it is described in the tutorial. For others you will have difficulties and will need to use your highly honed google schools and Zen like calm to get it working. This is the first stage in computational skills is to get programs installed and working, and is often the most tricky part!
-
-
-## In class activities (not yet updated for 2018)
-1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
-2. In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd).
-3. In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd).
-4. In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
+## In class activities
+1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
+2. (Not updated for 2018) In class exercise for control flow in `R` (as well as the apply family of functions) is [here](./R_exercises/Bio720_RInClassExercise2Questions.Rmd).
+3. (Not updated for 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd).
+4. (Not updated for 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
 
 
 ## Notes for Ian to add & improve the screencasts (students can ignore this).
