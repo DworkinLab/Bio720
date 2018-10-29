@@ -25,7 +25,7 @@ I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720)
 
 ## In class activities
 1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
-2. (October 29th 2018) In class R_exercises for control flow in `R` (as well as the apply family of functions) are here [here](./R_exercises/Bio720_R_InClassExercise2.Rmd) and [here](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd).
+2. (October 29th 2018) In class R_exercises for control flow in `R` (as well as the apply family of functions) are [here](./R_exercises/Bio720_R_InClassExercise2.Rmd) and [here](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd).
 3. (Not yet updated for 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMunging.Rmd).
 4. (Not updated for 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
 
