@@ -59,10 +59,7 @@ dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.
 Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
  
 ```{r}
-summary(dll_data)
-str(dll_data)
-dim(dll_data)
-head(dll_data)
+# How do you want to check your data?
 ```
 - Since we are using base *R*, this is a regular data.frame.
 
@@ -71,19 +68,11 @@ head(dll_data)
 
 Sometimes your data set has missing data, i.e. for some reason you could not measure one of your variables on a particular object. How you decide to deal with missing data can be a big topic, but for the moment we are going to assume you want to delete rows that contain missing data. 
 
-First let's check if there is any missing data
-
-```{r}
-head(is.na(dll_data))
-sum(is.na(dll_data))
-```
-So there are rows that contain missing data somewhere. 
+First let's check if there is any missing data. Use `is.na` to see if there is any? How many observations have missing data
 
 
-More generally we can ask:
-```{r}
-anyNA(dll_data)
-```
+More generally we can use `anyNA()`. Try it on this data:
+
 
 ### Why missing data can cause headaches
 ```{r}
@@ -97,16 +86,10 @@ mean(dll_data$femur, na.rm = TRUE)
 
 
 ### What to do with this rows with missing data
-We need to decide what to do with the missing data. If you have lots of data, and do not mind removing all cases (rows) that contain **any** missing data then `na.omit` is a useful solution.
+We need to decide what to do with the missing data. If you have lots of data, and do not mind removing all cases (rows) that contain **any** missing data then `na.omit` is a useful solution. How does using `na.omit()` change the number of observations for *dll.data*? Don't erase the original data!
 
-```{r}
-dll_data_complete <- na.omit(dll_data)
 
-dim(dll_data)
-dim(dll_data_complete)
-```
-
-This has caused us to remove 55 observations. It may be useful to instead look at where the missing data is contained and maybe make a subsetted data set based on that. There are numerous options about how `R` should handle operations if an `NA` is found. You can look at the help under `?NA`. 
+There are numerous options about how `R` should handle operations if an `NA` is found. You can look at the help under `?NA`. 
 
 
 For the moment, we are going to accept the approach above, and use it. However, I don't generally recommend this. Instead, you can first subset the variables you are going to use, and then decide how to deal with the missing data. Or you can allow them into your analysis, but make sure to set the right flags in functions that enable them to deal with missing data.
@@ -120,24 +103,14 @@ mean(dll_data$femur)
 ### finding and removing duplicate rows in a data frame.
 The `duplicated()` allows you to see which, if any rows are perfect duplicates of one another.
 
-We can first ask if any rows are duplicates.
+We can first ask if any rows are duplicates.  Use `duplicated` to check.
 
-This provides a Boolean
-```{r}
-head(duplicated(dll_data))
-tail(duplicated(dll_data))
-```
 
-So we can do something like:
+How might we find how many duplicated?
 
-```{r}
-sum(duplicated(dll_data))
-```
 
-Or if you want it as a Boolean
-```{r}
-any(duplicated(dll_data))
-```
+Or if you want it as a Boolean (hint use `any`)
+
 
 `R` has a convenience function for the above:
 
@@ -146,10 +119,7 @@ anyDuplicated(dll_data)
 ```
 So for this example there was one duplicate rows.
 
-```{r}
-dll_data[anyDuplicated(dll_data),]
-```
-Which in this case, is because there is so much missing data for this observation, and only one variable (SCT) had actually data for a discrete value. So it is likely real.
+How can we use anyDuplicated to pull out the duplicated rows?
 
 However let's say an accident happened in generating the data set and a few rows were duplicated. I am going to use the `sample()` function to extract 5 random rows.
 
@@ -161,13 +131,10 @@ str(dll_data2)
 ```
 
 Now you don't know which rows, they are.  Please show how you would find whether there are any duplicated rows, and which ones they are using `duplicated()`
-```{r}
-any(duplicated(dll_data2))
 
-dll_data2[duplicated(dll_data2),]
-```
 
-So what should we do? We can use the `unique()` to remove these duplicated rows if we know for certain that they do not belong in the data set (i.e. they are duplicated in error).
+
+So what should we do? We can use the `unique()` to remove these duplicated rows if we know for certain that they do not belong in the data set (i.e. they are duplicated in error). 
 
 ```{r}
 dll_data_unique <- unique(dll_data2)
@@ -197,17 +164,11 @@ As we can see there are two genotypes. Let's say we wanted to make a data frame 
 
 ### using the index
 ```{r}
-dll_data_wt <- dll_data[dll_data$genotype == "wt",]
+dll_data_wt <- ?
 ```
 
-Has this created the appropriate subset of data?
+Has this created the appropriate subset of data? How would you check?
 
-```{r}
-with(dll_data, table(genotype))
-nrow(dll_data_wt)
-```
-
-So it seems like it is working.
 
 ### subsetting on factors and removing unused levels.
 
@@ -219,20 +180,20 @@ levels(dll_data_wt$genotype)
 
 So what is going on? 
 
-We know we only have the correct number of observations associated, but it still has the level `Dll` in the factor genotype, why? Because of the way it has been stored, each of these levels is still associated as part of `genotype`. Thankfully it is very easy to fix. Use the `droplevels()` to drop unused levels.
+We know we only have the correct number of observations associated, but it still has the level `Dll` in the factor genotype, why? Because of the way it has been stored, each of these levels is still associated as part of `genotype`. Thankfully it is very easy to fix. Use the `droplevels()` to drop unused levels. 
 
 ```{r}
-dll_data_wt <- droplevels(dll_data_wt)
+dll_data_wt <- 
 levels(dll_data_wt$genotype)
 ```
 
 ### using the subset function
 
-Of course the easiest alternative is to use the `subset` function we introduced a few weeks back. Please use this to make a data frame (`dll_data_Dll`) for the *Dll* factor level of genotype and check what has happened to the *wt* factor level. 
+Of course the easiest alternative is to use the `subset` function we introduced a few weeks back. Please use this to make a data frame (`dll_data_Dll`) for the *Dll* factor level of genotype and check what has happened to the *wt* factor level. Try that here.
 
 
 ```{r}
-dll_data_Dll <- subset(dll_data, genotype == "Dll" )
+dll_data_Dll <- ?
 dim(dll_data_Dll)
 with(dll_data, table(genotype))
 levels(dll_data_Dll$genotype)
@@ -242,9 +203,7 @@ dll_data_Dll <- droplevels(dll_data_Dll)
 `subset()` like using the index allows you to select specific columns as well. Create a new version of dll_data_Dll where the only columns that remain are line, genotype, temp and SCT.
 
 ```{r}
-dll_data_Dll <- subset(dll_data, 
-                       genotype == "Dll",
-                       select = c(line, genotype, temp, SCT))
+dll_data_Dll <- ?
 
 dim(dll_data_Dll)
 ```
@@ -256,10 +215,9 @@ dim(dll_data_Dll)
 The `%in%` is a matching operator (also see `match()`) that returns a boolean (TRUE or FALSE). This can be really useful to find things. Go ahead and find all instances where a couple of the lines `c("line-Sam", "line-1")` are in the data set `dll_data$line`. I recommend first creating a dummy logical variable that can be used to filter via the index`[]`.
 
 ```{r}
-matched_set <- dll_data$line %in% c("line-Sam", "line-1")
-sum(matched_set)
+matched_set <- ?
 
-dll_data_new_subset <- dll_data[matched_set,]
+dll_data_new_subset <- ?
 dim(dll_data_new_subset)
 ```
 
@@ -285,19 +243,18 @@ We actually have a couple of options.
 First thing to keep in mind though is that `dll_data$line` is currently stored as an object of class `factor`. Why is this important?
 
 ### `substr()`
-Let's try to do some simple string manipulation. There are a few functions that could be useful here. Let's start with `substr()` (substring). This will extract or replace substrings within a character vector. So what do we need to do first?
+Let's try to do some simple string manipulation. There are a few functions that could be useful here. Let's start with `substr()` (substring). This will extract or replace substrings within a character vector. So what do we need to do first to this variable (stored as a factor)
 
 ```{r}
-line_str <- as.character(dll_data$line)
+line_str <- ?
 str(line_str)
 head(line_str)
 ```
 
-Now we can use `substr()`. It is by position.
+Now we can use `substr()`. It is by position. Look up `?substr`, in the function you will want to use `stop = 1000000L`
 
 ```{r}
-line_names <- substr(line_str, 
-                     start = 6, stop= 1000000L )
+line_names <- ?
 
 head(line_names)
 tail(line_names)
@@ -310,16 +267,14 @@ In this case, since the strings we want to keep start at different positions in 
 An alternative way to do this is to use the fact that we (purposefully) used a delimiter character to seperate parts of the name. In this case we used the "-" to seperate the word "line" from the actual line name we car about. As such we can use a second function that can be very valuable, `strsplit()`. Use `strsplit` to create a new object splitting on the "-"
 
 ```{r}
-line_names2 <- strsplit(line_str, split = "-")
+line_names2 <- ?
 head(line_names2)
 
 ```
 Here it has created a list, where each list contains the 2 elements ("line" and the name of the line which we want). We are going to convert this list to a matrix so we can extract what we need.
 
 ```{r}
-line_names2_mat <- matrix(unlist(line_names2), 
-                          ncol = 2,
-                          byrow = TRUE)
+line_names2_mat <- ?
 
 head(line_names2_mat)
 ```
@@ -327,7 +282,7 @@ head(line_names2_mat)
 And the second column contains what we want (line names) so we could make a new variable.
 
 ```{r}
-dll_data$line_names <- factor(line_names2_mat[,2])
+dll_data$line_names <- ?
 str(dll_data$line_names)
 ```
 
@@ -345,17 +300,12 @@ Many times however, there is no consistent delimiter like "-", nor can we assume
 
 ```{r}
 str(line_str)
-line_names3 <- gsub(pattern = "line-",
-                    replacement = "",
-                    x = line_str)
+line_names3 <- ?
 
 head(line_names3)
 tail(line_names3)
 ```
 
-What has happened here? Well we looked in the `line_str` object, and found all instances of our pattern (which in this case was the simple "line-"), and then we *replaced* this with "", in other words an emptry string.
-
-`R` can handle POSIX style regular expressions (probably what you learned with Brian) as well PERL style regular expressions by setting the flag `PERL = TRUE`. This enables very flexible pattern searching.
 
 ### Some other things to help "clean" up names, etc..
 
@@ -368,10 +318,10 @@ head(line_names3)
 tail(line_names3, n = 25)
 ```
 
-Say we wanted to call the "sam" line by its proper name "Samarkand". How could we do this?
+Say we wanted to call the "sam" line by its proper name "Samarkand". How could we do this? with `sub`?
 
 ```{r}
-line_names3 <- sub("sam", "SAMARKAND", line_names3)
+line_names3 <- ?
 ```
 
 #### Clean up before moving on.
@@ -390,9 +340,7 @@ However we might want to treat this as a factor. Also your PI has decided they w
 Use the `factor()` function to generate a new variable `temp_as_factor` with factor labels "LowTemp", "HighTemp".
 
 ```{r}
-temp_as_factor <- with(dll_data,
-                      factor(temp, 
-                             labels = c("LowTemp", "HighTemp")))
+temp_as_factor <- ?
 
 str(temp_as_factor)
 head(temp_as_factor)
@@ -404,8 +352,7 @@ tail(temp_as_factor)
 An alternative approach would be to use the `ifelse()` function. Create a new variable (that achieves the same thing) using `ifelse()`
 
 ```{r}
-temp_as_factor2 <- with(dll_data, ifelse(temp == 25, "LowTemp", 
-                                         ifelse(temp == 30, "HighTemp", NA)))
+temp_as_factor2 <- ?
 temp_as_factor2 <- factor(temp_as_factor2)
 str(temp_as_factor2)
 ```
@@ -431,7 +378,7 @@ tail(order(dll_data$SCT))
 Provides the row numbers. We can use this to sort via the *index*. Use the `order()` to sort the dll_data frame into a new object (dll_data_sorted) based on dll_data$SCT.
 
 ```{r}
-dll_data_sorted <- dll_data[order(dll_data$SCT),]
+dll_data_sorted <- ?
 
 head(dll_data_sorted)
 ```
@@ -443,7 +390,7 @@ How would you sort on tibia?
 So this by default sorts from lowest to highest. Use the help function for `order` and sort the data from highest to lowest.
 
 ```{r}
-dll_data_sorted <- dll_data[order(-dll_data$SCT),]
+dll_data_sorted <- ?
 head(dll_data_sorted)
 ```
 
@@ -452,7 +399,7 @@ head(dll_data_sorted)
 This is a natural extension of what we have already done. Sort first on *SCT*, then on *temp*
 
 ```{r}
-dll_data_sorted <- dll_data[order(dll_data$SCT, dll_data$temp),]
+dll_data_sorted <- ?
 head(dll_data_sorted)
 head(dll_data)
 ```
