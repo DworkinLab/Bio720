@@ -30,7 +30,7 @@ I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720)
 
 2. (October 29th 2018) In class R_exercises for control flow in `R` (as well as the apply family of functions) are  [here](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd), with [answers](./R_exercises/Bio720_R_InClass_Control_flow_worked_answers.md) and the second activity is [here](./R_exercises/Bio720_R_InClassExercise2.Rmd), with answers [here](./R_exercises/Bio720_R_InClassExercise2Answers.md).
 
-3. (November 5th 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMungingInClass.Rmd) and answers [here](./R_exercises/Bio720_R_week3_DataMunging.md)).
+3. (November 5th 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMungingInClass.Rmd) and answers [here](./R_exercises/Bio720_R_week3_DataMunging.md).
 
 4. (Not updated for 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`).
 
