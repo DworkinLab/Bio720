@@ -68,8 +68,11 @@ Before we go on, how should we look at the data to make sure it imported correct
 
 Sometimes your data set has missing data, i.e. for some reason you could not measure one of your variables on a particular object. How you decide to deal with missing data can be a big topic, but for the moment we are going to assume you want to delete rows that contain missing data. 
 
-First let's check if there is any missing data. Use `is.na` to see if there is any? How many observations have missing data
+First let's check if there is any missing data. Use `is.na` to see if there is any? How many observations have missing data?
 
+```{r}
+
+```
 
 More generally we can use `anyNA()`. Try it on this data:
 
@@ -105,6 +108,9 @@ The `duplicated()` allows you to see which, if any rows are perfect duplicates o
 
 We can first ask if any rows are duplicates.  Use `duplicated` to check.
 
+```{r}
+
+```
 
 How might we find how many duplicated?
 
@@ -325,7 +331,9 @@ line_names3 <- ?
 ```
 
 #### Clean up before moving on.
+```{r}
 rm(line_names2, line_names3, line_names, line_names2_mat, line_str, new_rows)
+```
 
 ### renaming variables, factors etc..
 

@@ -56,7 +56,7 @@ dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.
 
 
 Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
- 
+
 
 ```r
 summary(dll_data)
@@ -507,7 +507,7 @@ dim(dll_data_Dll)
 ## [1] 841   4
 ```
 
-### the `%in%` matching operator 
+# the `%in%` matching operator 
 
 `%in%` can be very useful for finding things in your data set to work on.
 
