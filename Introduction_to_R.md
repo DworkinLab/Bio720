@@ -23,7 +23,7 @@ I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720)
 
 [R Assignment 2](./assignments/Bio720_R_Assignment2.md) - Due October 28th & 29th 2018 (see notes).
 
-[R Assignment 3](./assignments/Bio720_R_Assignment3.md) - Due November 5th before class.
+[R Assignment 3](./assignments/Bio720_R_Assignment3.md) - Due November 5th before class. Answers are [here](./assignments/Bio720_R_Assignment3_answers.md)
 
 ## In class activities
 1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
