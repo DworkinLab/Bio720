@@ -1,11 +1,27 @@
-# Somewhat more advanced plotting in base `R`: Plotting confidence bands with transparency (and other tricks)
-Ian Dworkin  
+---
+title: 'Somewhat more advanced plotting in base `R`: Plotting confidence bands with
+  transparency (and other tricks)'
+author: "Ian Dworkin"
+output:
+  html_document:
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+  pdf_document: default
+---
+# The anatomy of a more advanced plot.
+
+## Introduction
+Both base *R* and *ggplot2* have amazing plotting capabilities. It is worth going "deep" with one or the other.
+Thankfully there are many online galleries of R plots, with code. [Here](https://www.r-graph-gallery.com/) is a nice general gallery of plots with code for both base *R* and *ggplot2*. [Here](http://www.ggplot2-exts.org/gallery/) are some *ggplot2* specific plots (with the extensions).
 
 Here is just some examples of making nicer and more useful plots all in base R. Most of this can be easily accomplished in `ggplot2` (often pretty easily). However, I often find there are times when it is easier to make the exact modifications using base plots.
 
 Also note (if you are running this in R studio) I highly recommend making high quality figures by generating PDF graphic devices. The ones that are outputted for markdown documents or html are not super high quality. See `?pdf` for this but you basically just need to call `pdf(file = YourFileName.pdf)` before you generate the plot and `dev.off()` after the plot. I am not showing that here. 
 
-## Simulate some data and fit a linear model (simple linear regression)
+## A basic regression with confidence bands
+
+### Simulate some data and fit a linear model (simple linear regression)
 
 ```r
 x <- 1:50
@@ -92,7 +108,7 @@ col2rgb("red")
 ```
 
 ```r
-as.hexmode(255) # We will use fe for each channel in rgb
+as.hexmode(255) # We will use ff for each channel in rgb
 ```
 
 ```
@@ -107,7 +123,7 @@ as.hexmode(50) # For 50% opacity
 ## [1] "32"
 ```
 
-So the final colour we want is `col = "#fe000032"`. The `#` lets it know its hexmode (I think!).
+So the final colour we want is `col = "#ff000032"`. The `#` lets it know its hexmode (I think!).
 
 Anyways, we can now put this all together to make a nicer looking plot:
 
@@ -120,7 +136,7 @@ plot(y ~ x, type = "n",
 
 polygon(x = c(1:nrow(new), nrow(new):1), 
     y = c(pred[,2], rev(pred[,3])), 
-    col= "#fe000032", border = "#fe000032")
+    col= "#ff000032", border = "#ff000032")
 
 points(y ~ x, pch = 20, cex = 2)
 ```
@@ -169,6 +185,7 @@ with(dll.data[dll.data$temp==25,],
     ylab = " # of Sex Comb Teeth", xlab = "Tarsus Length (mm)",
     main = expression(paste(" SCT VS. tarsus length for ", italic(Drosophila), " genotypes" )), 
     cex.lab = 1.4, cex.axis = 1.5, cex.main = 1.5,
+    xaxp = c(0.14, 0.26, 2), yaxp = c(8, 20, 2), # how many "breaks" along axes.
     family = "serif", pch = 20))
 
 # Confidence band for the wild-type flies

@@ -53,7 +53,7 @@ Also, instead of using formula notation for `femur ~ tibia` we can alternatively
 
 Clearly you get a sense that there is some positive relationship between these two variables (likely reflecting how they both covary with overall body size).
 
-However we may wish to make this plot look a bit nicer, and potentially more informative.
+However we may wish to make this plot look a bit nicer, and potentially more informative. When you are trying to get more information about arguments, don't just use `?plot` but also `?plot.default` and `?par`, which have lots of information! 
 
 ```{r}
 plot(femur ~ tibia,
@@ -65,6 +65,7 @@ plot(femur ~ tibia,
      xlab = " tibia length",
      ylab = "femur length",
      main = "leg lengths measures",
+     bty = "n",
      data = dll_data_subset)
 ```
 
@@ -81,6 +82,8 @@ Most of these parameters are easily explained.
 `xlab` "xlabel" labels the x axis.
 
 `main` is for the main title.
+
+`bty` determines the type of box around the plot (if any)
 
 ### Exercise
 
@@ -112,7 +115,7 @@ So let's change the page characters (`pch`) to match the different temperatures.
 ```{r}
 plot(femur ~ tibia,
      pch = c(16,17), # symbol
-     cex = 0.8, # size of symbol
+     cex = 0.95, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
@@ -127,7 +130,7 @@ It clearly made some triangles and some circles. But how does it no which ones? 
 ```{r}
 plot(femur ~ tibia,
      pch = c(16, 17)[dll_data_subset$temp], # symbol
-     cex = 0.5, # size of symbol
+     cex = 0.95, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
@@ -142,7 +145,7 @@ Now we can do the same thing for colour using genotype. Try it yourself. Make su
 ```{r}
 plot(femur ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.5, # size of symbol
+     cex = 0.95, # size of symbol
      col = dll_data_subset$genotype, # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
@@ -160,7 +163,7 @@ Of we would prefer having a legend to do this for us. So how do we make a legend
 ```{r}
 plot(femur ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.5, # size of symbol
+     cex = 0.95, # size of symbol
      col = genotype, # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
@@ -186,7 +189,7 @@ A few minutes ago, I had you plot with the variable `SCT` (sex comb teeth), whic
 ```{r}
 plot(SCT ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.85, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(8, 18),
@@ -198,9 +201,9 @@ plot(SCT ~ tibia,
 Even with only 300 individuals, it can be difficult to discern many of the observations. One standard thing to do is add a bit of "noise" (or jitter) to the values of the integers (in this case the `SCT`)
 
 ```{r}
-plot(jitter(SCT) ~ tibia,
+plot(jitter(SCT, factor = 1) ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.95, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(8, 18),
@@ -221,7 +224,7 @@ There are many reasons we would want to add lines (or more points, or more text)
 ```{r}
 plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.95, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      ylim = c(8, 18),
      xlab = " tarsus length",
@@ -233,6 +236,7 @@ abline(v = mean(dll_data_subset$tarsus))
 abline(h = mean(dll_data_subset$SCT))
 ```
 
+
 Well that's great and all, but those lines are a bit confusing with the axes. So how about we stipple the lines, colour them grey and make them a bit thicker.
 
 First we need to replot the plot (you can do this). Then we can modify our previous call to `abline()`
@@ -240,7 +244,7 @@ First we need to replot the plot (you can do this). Then we can modify our previ
 ```{r}
 plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.95, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      ylim = c(8, 18),
      xlab = " tarsus length",
@@ -249,13 +253,18 @@ plot(jitter(SCT) ~ tarsus,
      data = dll_data_subset)
 
 abline(v = mean(dll_data_subset$tarsus),
-       lwd = 3, # line width,
+       lwd = 2, # line width,
        lty = 2, # stippling of line
-       col = "grey")
+       col = "darkgrey")
 
 abline(h = mean(dll_data_subset$SCT),
-       lwd = 3, lty = 2, col = "grey" )
+       lwd = 2, lty = 2, col = "darkgrey" )
 ```
+
+- `lty` changes the **l**ine **ty**pe. 1 is solid, as you increase you get various dashed or stippled lines.
+
+- `lwd` is **l**ine **w**i**d**th, or line thickness.
+
 This is not the nicest representation of this, but we will come back to it later. 
 
 The real power in the `abline()` is for fitting best fit lines or curves through the data, and then plotting these. 
@@ -270,7 +279,7 @@ mod1 <- lm(SCT ~ tarsus,
 Then we can make the plot we want.
 
 ```{r}
-plot(SCT ~ tarsus,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.75, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
@@ -293,7 +302,7 @@ Say we wanted to add different best fit lines for each subgroup (i.e. by genotyp
 
 
 ```{r}
-plot(SCT ~ tarsus,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp],
      cex = 0.75, 
      col = dll_data_subset$genotype,
@@ -389,8 +398,8 @@ boxplot(SCT ~ genotype,
         ylim = c(8, 20))
 
 with(dll_data_subset,
-     points(y = jitter(SCT, factor = 0.75), 
-            x = jitter(as.numeric(genotype), factor = 0.5),
+     points(y = jitter(SCT, factor = 0.85), 
+            x = jitter(as.numeric(genotype), factor = 1),
             col = "red", pch = 16, cex = 0.5))
 ```
 
@@ -411,7 +420,7 @@ with(dll_data,
      hist(SCT, 
           breaks = 12,
           freq = FALSE, # For prob. densities
-          density = 2, #lines through bars.
+          density = 4, #lines through bars.
           col = "blue"
           ))
 ```
@@ -490,8 +499,7 @@ hist(SCT_wt$SCT,
 
 #Perhaps a legend would also be useful here
 
-legend(x = 15, # The beginning x coordinate for the legend
-       y = 250,
+legend("topright",
        
        # Sometimes for our text we want to use italics or generate a mathematical expression. we use expression()
        # for more details ?text or ?plotmath

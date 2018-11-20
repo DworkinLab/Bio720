@@ -1,6 +1,11 @@
-# Bio720_Rtutorial_Plotting
-Ian Dworkin  
-November 1, 2016  
+---
+title: "Bio720_Rtutorial_Plotting"
+author: "Ian Dworkin"
+date: "November 1, 2016"
+output: 
+  html_document: 
+    keep_md: yes
+---
 
 
 # Plotting in R
@@ -50,7 +55,7 @@ Also, instead of using formula notation for `femur ~ tibia` we can alternatively
 
 Clearly you get a sense that there is some positive relationship between these two variables (likely reflecting how they both covary with overall body size).
 
-However we may wish to make this plot look a bit nicer, and potentially more informative.
+However we may wish to make this plot look a bit nicer, and potentially more informative. When you are trying to get more information about arguments, don't just use `?plot` but also `?plot.default` and `?par`, which have lots of information! 
 
 
 ```r
@@ -63,6 +68,7 @@ plot(femur ~ tibia,
      xlab = " tibia length",
      ylab = "femur length",
      main = "leg lengths measures",
+     bty = "n",
      data = dll_data_subset)
 ```
 
@@ -81,6 +87,8 @@ Most of these parameters are easily explained.
 `xlab` "xlabel" labels the x axis.
 
 `main` is for the main title.
+
+`bty` determines the type of box around the plot (if any)
 
 ### Exercise
 
@@ -113,8 +121,8 @@ str(dll_data)
 ##  $ tibia    : num  0.499 0.501 0.488 0.502 0.499 ...
 ##  $ tarsus   : num  0.219 0.214 0.211 0.207 0.207 ...
 ##  $ SCT      : int  9 13 11 12 14 11 12 10 12 13 ...
-##  - attr(*, "na.action")=Class 'omit'  Named int [1:55] 4 61 73 92 93 142 207 268 315 319 ...
-##   .. ..- attr(*, "names")= chr [1:55] "4" "61" "73" "92" ...
+##  - attr(*, "na.action")= 'omit' Named int  4 61 73 92 93 142 207 268 315 319 ...
+##   ..- attr(*, "names")= chr  "4" "61" "73" "92" ...
 ```
 Currently temperature (`temp`) remains an integer. We will make this a factor. How do you do so?
 
@@ -129,7 +137,7 @@ So let's change the page characters (`pch`) to match the different temperatures.
 ```r
 plot(femur ~ tibia,
      pch = c(16,17), # symbol
-     cex = 0.8, # size of symbol
+     cex = 0.95, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
@@ -146,8 +154,8 @@ It clearly made some triangles and some circles. But how does it no which ones? 
 
 ```r
 plot(femur ~ tibia,
-     pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.5, # size of symbol
+     pch = c(16, 17)[dll_data_subset$temp], # symbol
+     cex = 0.95, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
@@ -159,14 +167,14 @@ plot(femur ~ tibia,
 
 ![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
-Now we can do the same thing for colour using genotype. Try it yourself. Make sure to use the full data.
+Now we can do the same thing for colour using genotype. Try it yourself. Make sure to use the full data. Colour is a bit easier as it can accept a factor and convert it to a numeric without any problem.
 
 
 ```r
 plot(femur ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.5, # size of symbol
-     col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
+     cex = 0.95, # size of symbol
+     col = dll_data_subset$genotype, # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
      xlab = " tibia length",
@@ -186,8 +194,8 @@ Of we would prefer having a legend to do this for us. So how do we make a legend
 ```r
 plot(femur ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.5, # size of symbol
-     col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
+     cex = 0.95, # size of symbol
+     col = genotype, # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
      xlab = " tibia length",
@@ -215,7 +223,7 @@ A few minutes ago, I had you plot with the variable `SCT` (sex comb teeth), whic
 ```r
 plot(SCT ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.85, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(8, 18),
@@ -232,7 +240,7 @@ Even with only 300 individuals, it can be difficult to discern many of the obser
 ```r
 plot(jitter(SCT) ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.95, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(8, 18),
@@ -254,22 +262,22 @@ There are many reasons we would want to add lines (or more points, or more text)
 
 
 ```r
-plot(jitter(SCT) ~ tibia,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.95, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
-     xlim = c(0.4, 0.57),
      ylim = c(8, 18),
-     xlab = " tibia length",
+     xlab = " tarsus length",
      ylab = "Number of Sex Comb Teeth",
      main = "leg lengths measures",
      data = dll_data_subset)
 
-abline(v = mean(dll_data_subset$tibia))
+abline(v = mean(dll_data_subset$tarsus))
 abline(h = mean(dll_data_subset$SCT))
 ```
 
 ![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
 
 Well that's great and all, but those lines are a bit confusing with the axes. So how about we stipple the lines, colour them grey and make them a bit thicker.
 
@@ -277,27 +285,31 @@ First we need to replot the plot (you can do this). Then we can modify our previ
 
 
 ```r
-plot(jitter(SCT) ~ tibia,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
-     cex = 0.75, # size of symbol
+     cex = 0.95, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
-     xlim = c(0.4, 0.57),
      ylim = c(8, 18),
-     xlab = " tibia length",
+     xlab = " tarsus length",
      ylab = "Number of Sex Comb Teeth",
      main = "leg lengths measures",
      data = dll_data_subset)
 
-abline(v = mean(dll_data_subset$tibia),
-       lwd = 3, # line width,
+abline(v = mean(dll_data_subset$tarsus),
+       lwd = 2, # line width,
        lty = 2, # stippling of line
-       col = "grey")
+       col = "darkgrey")
 
 abline(h = mean(dll_data_subset$SCT),
-       lwd = 3, lty = 2, col = "grey" )
+       lwd = 2, lty = 2, col = "darkgrey" )
 ```
 
 ![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+- `lty` changes the **l**ine **ty**pe. 1 is solid, as you increase you get various dashed or stippled lines.
+
+- `lwd` is **l**ine **w**i**d**th, or line thickness.
+
 This is not the nicest representation of this, but we will come back to it later. 
 
 The real power in the `abline()` is for fitting best fit lines or curves through the data, and then plotting these. 
@@ -314,7 +326,7 @@ Then we can make the plot we want.
 
 
 ```r
-plot(SCT ~ tarsus,
+plot(jitter(SCT) ~ tarsus,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.75, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
@@ -332,6 +344,936 @@ abline(mod1, lwd = 2, lty = 2)
 ### Exercises
 1 - Make a plot of SCT VS tarsus, but add lines at the mean of SCT and tarsus in grey (solid lines), and the best fit line from the regression in black.
 
+
+### Adding multiple lines for each subgroup
+
+Say we wanted to add different best fit lines for each subgroup (i.e. by genotype)? We can pretty easily modify this, using `lapply()`
+
+
+
+```r
+plot(jitter(SCT) ~ tarsus,
+     pch = c(16,17)[dll_data_subset$temp],
+     cex = 0.75, 
+     col = dll_data_subset$genotype,
+     xlab = " tarsus length",
+     ylab = "Number of Sex Comb Teeth",
+     main = "SCT VS tarsus",
+     data = dll_data_subset)
+
+abline(lm(SCT ~ tarsus, data = dll_data_subset), lty = 2, lwd =2, col = "grey")
+
+lapply(dll_data_subset$genotype, 
+       function(x) {
+           abline(lm(SCT ~ tarsus, dll_data_subset, subset = (genotype == x)), col = x)
+  })
+```
+
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+```
+## [[1]]
+## NULL
+## 
+## [[2]]
+## NULL
+## 
+## [[3]]
+## NULL
+## 
+## [[4]]
+## NULL
+## 
+## [[5]]
+## NULL
+## 
+## [[6]]
+## NULL
+## 
+## [[7]]
+## NULL
+## 
+## [[8]]
+## NULL
+## 
+## [[9]]
+## NULL
+## 
+## [[10]]
+## NULL
+## 
+## [[11]]
+## NULL
+## 
+## [[12]]
+## NULL
+## 
+## [[13]]
+## NULL
+## 
+## [[14]]
+## NULL
+## 
+## [[15]]
+## NULL
+## 
+## [[16]]
+## NULL
+## 
+## [[17]]
+## NULL
+## 
+## [[18]]
+## NULL
+## 
+## [[19]]
+## NULL
+## 
+## [[20]]
+## NULL
+## 
+## [[21]]
+## NULL
+## 
+## [[22]]
+## NULL
+## 
+## [[23]]
+## NULL
+## 
+## [[24]]
+## NULL
+## 
+## [[25]]
+## NULL
+## 
+## [[26]]
+## NULL
+## 
+## [[27]]
+## NULL
+## 
+## [[28]]
+## NULL
+## 
+## [[29]]
+## NULL
+## 
+## [[30]]
+## NULL
+## 
+## [[31]]
+## NULL
+## 
+## [[32]]
+## NULL
+## 
+## [[33]]
+## NULL
+## 
+## [[34]]
+## NULL
+## 
+## [[35]]
+## NULL
+## 
+## [[36]]
+## NULL
+## 
+## [[37]]
+## NULL
+## 
+## [[38]]
+## NULL
+## 
+## [[39]]
+## NULL
+## 
+## [[40]]
+## NULL
+## 
+## [[41]]
+## NULL
+## 
+## [[42]]
+## NULL
+## 
+## [[43]]
+## NULL
+## 
+## [[44]]
+## NULL
+## 
+## [[45]]
+## NULL
+## 
+## [[46]]
+## NULL
+## 
+## [[47]]
+## NULL
+## 
+## [[48]]
+## NULL
+## 
+## [[49]]
+## NULL
+## 
+## [[50]]
+## NULL
+## 
+## [[51]]
+## NULL
+## 
+## [[52]]
+## NULL
+## 
+## [[53]]
+## NULL
+## 
+## [[54]]
+## NULL
+## 
+## [[55]]
+## NULL
+## 
+## [[56]]
+## NULL
+## 
+## [[57]]
+## NULL
+## 
+## [[58]]
+## NULL
+## 
+## [[59]]
+## NULL
+## 
+## [[60]]
+## NULL
+## 
+## [[61]]
+## NULL
+## 
+## [[62]]
+## NULL
+## 
+## [[63]]
+## NULL
+## 
+## [[64]]
+## NULL
+## 
+## [[65]]
+## NULL
+## 
+## [[66]]
+## NULL
+## 
+## [[67]]
+## NULL
+## 
+## [[68]]
+## NULL
+## 
+## [[69]]
+## NULL
+## 
+## [[70]]
+## NULL
+## 
+## [[71]]
+## NULL
+## 
+## [[72]]
+## NULL
+## 
+## [[73]]
+## NULL
+## 
+## [[74]]
+## NULL
+## 
+## [[75]]
+## NULL
+## 
+## [[76]]
+## NULL
+## 
+## [[77]]
+## NULL
+## 
+## [[78]]
+## NULL
+## 
+## [[79]]
+## NULL
+## 
+## [[80]]
+## NULL
+## 
+## [[81]]
+## NULL
+## 
+## [[82]]
+## NULL
+## 
+## [[83]]
+## NULL
+## 
+## [[84]]
+## NULL
+## 
+## [[85]]
+## NULL
+## 
+## [[86]]
+## NULL
+## 
+## [[87]]
+## NULL
+## 
+## [[88]]
+## NULL
+## 
+## [[89]]
+## NULL
+## 
+## [[90]]
+## NULL
+## 
+## [[91]]
+## NULL
+## 
+## [[92]]
+## NULL
+## 
+## [[93]]
+## NULL
+## 
+## [[94]]
+## NULL
+## 
+## [[95]]
+## NULL
+## 
+## [[96]]
+## NULL
+## 
+## [[97]]
+## NULL
+## 
+## [[98]]
+## NULL
+## 
+## [[99]]
+## NULL
+## 
+## [[100]]
+## NULL
+## 
+## [[101]]
+## NULL
+## 
+## [[102]]
+## NULL
+## 
+## [[103]]
+## NULL
+## 
+## [[104]]
+## NULL
+## 
+## [[105]]
+## NULL
+## 
+## [[106]]
+## NULL
+## 
+## [[107]]
+## NULL
+## 
+## [[108]]
+## NULL
+## 
+## [[109]]
+## NULL
+## 
+## [[110]]
+## NULL
+## 
+## [[111]]
+## NULL
+## 
+## [[112]]
+## NULL
+## 
+## [[113]]
+## NULL
+## 
+## [[114]]
+## NULL
+## 
+## [[115]]
+## NULL
+## 
+## [[116]]
+## NULL
+## 
+## [[117]]
+## NULL
+## 
+## [[118]]
+## NULL
+## 
+## [[119]]
+## NULL
+## 
+## [[120]]
+## NULL
+## 
+## [[121]]
+## NULL
+## 
+## [[122]]
+## NULL
+## 
+## [[123]]
+## NULL
+## 
+## [[124]]
+## NULL
+## 
+## [[125]]
+## NULL
+## 
+## [[126]]
+## NULL
+## 
+## [[127]]
+## NULL
+## 
+## [[128]]
+## NULL
+## 
+## [[129]]
+## NULL
+## 
+## [[130]]
+## NULL
+## 
+## [[131]]
+## NULL
+## 
+## [[132]]
+## NULL
+## 
+## [[133]]
+## NULL
+## 
+## [[134]]
+## NULL
+## 
+## [[135]]
+## NULL
+## 
+## [[136]]
+## NULL
+## 
+## [[137]]
+## NULL
+## 
+## [[138]]
+## NULL
+## 
+## [[139]]
+## NULL
+## 
+## [[140]]
+## NULL
+## 
+## [[141]]
+## NULL
+## 
+## [[142]]
+## NULL
+## 
+## [[143]]
+## NULL
+## 
+## [[144]]
+## NULL
+## 
+## [[145]]
+## NULL
+## 
+## [[146]]
+## NULL
+## 
+## [[147]]
+## NULL
+## 
+## [[148]]
+## NULL
+## 
+## [[149]]
+## NULL
+## 
+## [[150]]
+## NULL
+## 
+## [[151]]
+## NULL
+## 
+## [[152]]
+## NULL
+## 
+## [[153]]
+## NULL
+## 
+## [[154]]
+## NULL
+## 
+## [[155]]
+## NULL
+## 
+## [[156]]
+## NULL
+## 
+## [[157]]
+## NULL
+## 
+## [[158]]
+## NULL
+## 
+## [[159]]
+## NULL
+## 
+## [[160]]
+## NULL
+## 
+## [[161]]
+## NULL
+## 
+## [[162]]
+## NULL
+## 
+## [[163]]
+## NULL
+## 
+## [[164]]
+## NULL
+## 
+## [[165]]
+## NULL
+## 
+## [[166]]
+## NULL
+## 
+## [[167]]
+## NULL
+## 
+## [[168]]
+## NULL
+## 
+## [[169]]
+## NULL
+## 
+## [[170]]
+## NULL
+## 
+## [[171]]
+## NULL
+## 
+## [[172]]
+## NULL
+## 
+## [[173]]
+## NULL
+## 
+## [[174]]
+## NULL
+## 
+## [[175]]
+## NULL
+## 
+## [[176]]
+## NULL
+## 
+## [[177]]
+## NULL
+## 
+## [[178]]
+## NULL
+## 
+## [[179]]
+## NULL
+## 
+## [[180]]
+## NULL
+## 
+## [[181]]
+## NULL
+## 
+## [[182]]
+## NULL
+## 
+## [[183]]
+## NULL
+## 
+## [[184]]
+## NULL
+## 
+## [[185]]
+## NULL
+## 
+## [[186]]
+## NULL
+## 
+## [[187]]
+## NULL
+## 
+## [[188]]
+## NULL
+## 
+## [[189]]
+## NULL
+## 
+## [[190]]
+## NULL
+## 
+## [[191]]
+## NULL
+## 
+## [[192]]
+## NULL
+## 
+## [[193]]
+## NULL
+## 
+## [[194]]
+## NULL
+## 
+## [[195]]
+## NULL
+## 
+## [[196]]
+## NULL
+## 
+## [[197]]
+## NULL
+## 
+## [[198]]
+## NULL
+## 
+## [[199]]
+## NULL
+## 
+## [[200]]
+## NULL
+## 
+## [[201]]
+## NULL
+## 
+## [[202]]
+## NULL
+## 
+## [[203]]
+## NULL
+## 
+## [[204]]
+## NULL
+## 
+## [[205]]
+## NULL
+## 
+## [[206]]
+## NULL
+## 
+## [[207]]
+## NULL
+## 
+## [[208]]
+## NULL
+## 
+## [[209]]
+## NULL
+## 
+## [[210]]
+## NULL
+## 
+## [[211]]
+## NULL
+## 
+## [[212]]
+## NULL
+## 
+## [[213]]
+## NULL
+## 
+## [[214]]
+## NULL
+## 
+## [[215]]
+## NULL
+## 
+## [[216]]
+## NULL
+## 
+## [[217]]
+## NULL
+## 
+## [[218]]
+## NULL
+## 
+## [[219]]
+## NULL
+## 
+## [[220]]
+## NULL
+## 
+## [[221]]
+## NULL
+## 
+## [[222]]
+## NULL
+## 
+## [[223]]
+## NULL
+## 
+## [[224]]
+## NULL
+## 
+## [[225]]
+## NULL
+## 
+## [[226]]
+## NULL
+## 
+## [[227]]
+## NULL
+## 
+## [[228]]
+## NULL
+## 
+## [[229]]
+## NULL
+## 
+## [[230]]
+## NULL
+## 
+## [[231]]
+## NULL
+## 
+## [[232]]
+## NULL
+## 
+## [[233]]
+## NULL
+## 
+## [[234]]
+## NULL
+## 
+## [[235]]
+## NULL
+## 
+## [[236]]
+## NULL
+## 
+## [[237]]
+## NULL
+## 
+## [[238]]
+## NULL
+## 
+## [[239]]
+## NULL
+## 
+## [[240]]
+## NULL
+## 
+## [[241]]
+## NULL
+## 
+## [[242]]
+## NULL
+## 
+## [[243]]
+## NULL
+## 
+## [[244]]
+## NULL
+## 
+## [[245]]
+## NULL
+## 
+## [[246]]
+## NULL
+## 
+## [[247]]
+## NULL
+## 
+## [[248]]
+## NULL
+## 
+## [[249]]
+## NULL
+## 
+## [[250]]
+## NULL
+## 
+## [[251]]
+## NULL
+## 
+## [[252]]
+## NULL
+## 
+## [[253]]
+## NULL
+## 
+## [[254]]
+## NULL
+## 
+## [[255]]
+## NULL
+## 
+## [[256]]
+## NULL
+## 
+## [[257]]
+## NULL
+## 
+## [[258]]
+## NULL
+## 
+## [[259]]
+## NULL
+## 
+## [[260]]
+## NULL
+## 
+## [[261]]
+## NULL
+## 
+## [[262]]
+## NULL
+## 
+## [[263]]
+## NULL
+## 
+## [[264]]
+## NULL
+## 
+## [[265]]
+## NULL
+## 
+## [[266]]
+## NULL
+## 
+## [[267]]
+## NULL
+## 
+## [[268]]
+## NULL
+## 
+## [[269]]
+## NULL
+## 
+## [[270]]
+## NULL
+## 
+## [[271]]
+## NULL
+## 
+## [[272]]
+## NULL
+## 
+## [[273]]
+## NULL
+## 
+## [[274]]
+## NULL
+## 
+## [[275]]
+## NULL
+## 
+## [[276]]
+## NULL
+## 
+## [[277]]
+## NULL
+## 
+## [[278]]
+## NULL
+## 
+## [[279]]
+## NULL
+## 
+## [[280]]
+## NULL
+## 
+## [[281]]
+## NULL
+## 
+## [[282]]
+## NULL
+## 
+## [[283]]
+## NULL
+## 
+## [[284]]
+## NULL
+## 
+## [[285]]
+## NULL
+## 
+## [[286]]
+## NULL
+## 
+## [[287]]
+## NULL
+## 
+## [[288]]
+## NULL
+## 
+## [[289]]
+## NULL
+## 
+## [[290]]
+## NULL
+## 
+## [[291]]
+## NULL
+## 
+## [[292]]
+## NULL
+## 
+## [[293]]
+## NULL
+## 
+## [[294]]
+## NULL
+## 
+## [[295]]
+## NULL
+## 
+## [[296]]
+## NULL
+## 
+## [[297]]
+## NULL
+## 
+## [[298]]
+## NULL
+## 
+## [[299]]
+## NULL
+## 
+## [[300]]
+## NULL
+```
+
+
 There is **SO MUCH** more to learn about these basic plots, but since we only have one class, I want to show you some other plotting types.
 
 ## boxplots
@@ -348,7 +1290,7 @@ boxplot(SCT ~ genotype,
         notch = TRUE)
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 This is pretty simple, but it is easy to modify based on many things, including sample size, range, etc..  I will leave some of these for exercises.
 
@@ -363,7 +1305,7 @@ boxplot(SCT ~ genotype,
         varwidth = TRUE)
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 Another common type of plot related to this is called a stripchart. These are useful for small sample sizes.
 
 
@@ -372,7 +1314,7 @@ stripchart( jitter(SCT) ~ genotype,
             data = dll_data_subset)
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 I happen to really like to add the raw points to boxplots. Here is such an example.First we need to make sure we are suppressing the outliers (which are just outlier observ)
 
@@ -388,7 +1330,7 @@ boxplot(SCT ~ genotype,
         ylim = c(8, 20))
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 Now we "over-plot" new points onto the first plotting window.
 
@@ -409,7 +1351,7 @@ with(dll_data_subset,
             col = "red"))
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 ### Exercise
 
 1- How might you improve this boxplot to make the raw observations a bit clearer?
@@ -426,12 +1368,12 @@ boxplot(SCT ~ genotype,
         ylim = c(8, 20))
 
 with(dll_data_subset,
-     points(y = jitter(SCT, factor = 0.75), 
-            x = jitter(as.numeric(genotype), factor = 0.5),
+     points(y = jitter(SCT, factor = 0.85), 
+            x = jitter(as.numeric(genotype), factor = 1),
             col = "red", pch = 16, cex = 0.5))
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 ## Histograms.
 
@@ -445,7 +1387,7 @@ with(dll_data,
      hist(SCT))
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 There may be a lot of things we would want to change in this figure. The two most obvious is the number of breaks, and whether instead of frequency we get a proportion. These are both pretty straightforward.
 
 
@@ -454,12 +1396,12 @@ with(dll_data,
      hist(SCT, 
           breaks = 12,
           freq = FALSE, # For prob. densities
-          density = 2, #lines through bars.
+          density = 4, #lines through bars.
           col = "blue"
           ))
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 
 ### Exercises
@@ -489,7 +1431,7 @@ with(dll_data[dll_data$genotype == "wt",],
           ))
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 However, sometimes, you may want everything on a single plot.
 
@@ -540,8 +1482,7 @@ hist(SCT_wt$SCT,
 
 #Perhaps a legend would also be useful here
 
-legend(x = 15, # The beginning x coordinate for the legend
-       y = 250,
+legend("topright",
        
        # Sometimes for our text we want to use italics or generate a mathematical expression. we use expression()
        # for more details ?text or ?plotmath
@@ -552,7 +1493,7 @@ legend(x = 15, # The beginning x coordinate for the legend
        lwd=4)   # lwd sets the line width
 ```
 
-![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-27-1.png)<!-- -->
+![](Bio720_R_PlottingBasics_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
 This `add = TRUE ` enables us to overplot on the single graphics window. R sometimes gives grief at trying to do this (which is why so many people prefer ggplot2), although there are many tricks one can do! If you don't decide to go the route of ggplot2, let me know as I have a short tutorial on tricks for over-plotting with base R.
 
 ### Exercise
