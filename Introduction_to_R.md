@@ -32,7 +32,7 @@ I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720)
 
 3. (November 5th 2018) In class exercise on data munging (using base `R`, not with the Wickham-verse libraries) is [here](./R_exercises/Bio720_R_week3_DataMungingInClass.Rmd) and answers [here](./R_exercises/Bio720_R_week3_DataMunging.md).
 
-4. (November 19th 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`). [Basic ideas](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd), and the anatomy of a more advanced example is [here](./R_exercises/AdvancedBasePlotting_CI_Bands.md)
+4. (November 19th 2018) In class exercises on the basics of plotting (using base `R` not `ggplot2` or `lattice`). [Basic ideas](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd), and the full code [here](./R_exercises/Bio720_R_PlottingBasics.md) The anatomy of a more advanced example is [here](./R_exercises/AdvancedBasePlotting_CI_Bands.md)
 
 ## other R video tutorials and exercises.
 The data set that is used for some of these activities can be found on the [DRYAD Digital repository](http://datadryad.org/) right [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv?sequence=1). You can also set this up (so you do not need a local copy of the data by putting this command in your script or copying and pasting it into the R editor :
