@@ -368,7 +368,7 @@ abline(reg = y.sim.1.lm, lty = 2, col = "blue") # estimated values based on simu
 
 ```{r}
 seq1_no_bias <- sample(c("A","C","G", "T"), 
-                       size = 1000, replace = TRUE)
+                       size = 100000, replace = TRUE)
 
 length(seq1_no_bias)
 head(seq1_no_bias)
@@ -379,7 +379,10 @@ head(seq1_no_bias)
 - Now we want to convert this to a single sequence.
 ```{r}
 seq1 <- paste(seq1_no_bias, sep = "", collapse = "")
-seq1
+nchar(seq1)
+
+x <- gregexpr("AACTTTT", seq1, fixed = T, useBytes = T)
+unlist(x)
 ```
 
 ## with some GC bias
@@ -388,12 +391,15 @@ seq1
 
 ```{r}
 seq2_60GCbias <- paste(sample(c("A","C","G", "T"), 
-                       size = 1000, prob = c(20,30,30,20),
+                       size = 100000, prob = c(20,30,30,20),
                        replace = TRUE),
                        sep = "", collapse = "")
 
-seq2_60GCbias
+nchar(seq2_60GCbias)
 
-grep("GGCCA",seq2_60GCbias )
+
+y <- gregexpr("AACTTTT", seq2_60GCbias, fixed = T, useBytes = T)
+unlist(y)
+
 ```
 - How would you check?
