@@ -3,26 +3,31 @@ title: "Bio720 - Simulating Data"
 author: "Ian Dworkin"
 date: "11/19/2018"
 output:
-  slidy_presentation:
-    incremental: yes
+  pdf_document:
+    toc: yes
   ioslides_presentation:
     incremental: yes
     keep_md: yes
     widescreen: yes
+  html_document:
+    keep_md: yes
+    toc: yes
+  slidy_presentation:
+    incremental: yes
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Slide 1
+## Introduction
 
 One of the most important skills in your bag as new computational biologists is the ability to perform simulations. In particular, to simulate data or evaluate models numerically (or both).
 
-## Slide 2
+## Introduction
 In biology mathematical models are the basis for much of the theoretical and conceptual background in disciplines like ecology, evolution, population genetics, molecular evolution & biochemistry.
 
-## Slide 3
+## Introduction
 
 Many of the models that are developed are not *analytically* tractable. That is, without making very strong biological assumptions there are no *closed form solutions*.
 
@@ -202,7 +207,7 @@ haploid.selection(p0 = 0.0001, w1 = 1, w2 = 0.987, n = 1000)
 
 ## Stochastic simulations
 
-- Probably the real power for your computational skills comes from performing stochastic simulations.
+- The real power for your computational skills comes from performing stochastic simulations in a computer.
 - That is adding some sources of random variation at various places in your model, and allowing it to *propogate* and influence your outcomes.
 
 ## Is it really random?
@@ -212,7 +217,7 @@ haploid.selection(p0 = 0.0001, w1 = 1, w2 = 0.987, n = 1000)
 - What does matter is the effect it has.
 
 ## Is it really random?
-- try running this code
+- try running this code and compare your answers with the person next to you.
 
 ```{r}
 x <- rnorm(1000, mean = 5, sd = 1)
@@ -224,7 +229,7 @@ mean(x)
 ```
 
 ## Is it really random?
-Now try it again, but let's seed the *seed* for the random number generator 
+Now try it again, but let's use the *seed* for the random number generator 
 
 ```{r}
 set.seed(720)
@@ -236,7 +241,7 @@ x <- rnorm(1000, mean = 5, sd = 1)
 mean(x)
 ```
 
-or 
+## resetting the seed to the same number each time.
 ```{r}
 set.seed(720)
 x <- rnorm(1000, mean = 5, sd = 1)
@@ -247,12 +252,156 @@ mean(x)
 set.seed(720)
 x <- rnorm(1000, mean = 5, sd = 1)
 mean(x)
+
+rm(x)
 ```
+
+## Can you explain what is happening? 
+- Why did you get different results the first time, the same sequence of results the second time and the exact same results the third time?
 
 ## Is it really random?
 - No, but as long as we are aware of it, this can be very useful to check our work.
 - If you don't specifically set the seed for random number generation, it defaults to the current time and date.
 
+## rolling the dice.
+
+- let's say we want to simulate the rolling of a regular 6-sided die. How would we accomplish this?
+- *R* has the `sample()` function.
+
+`sample(x, size, replace = FALSE, prob = NULL)`
+
+- where `x` is the object that you are sampling from.
+- `size` is how many samples you want from the object `x`
+- `replace` is whether you want to allow sampling with replacement. i.e. with a jar full of jellybeans, do you take one out, record its colour and then put it back before shaking the jar and selecting the next colour? Or once you take it out, you can not select it again (`replace = FALSE`).
+- `prob` will be explained a bit later.
+
+## rolling the dice
+
+- let's try this. A 6 sided die can only land on one face, between 1 and 6 (`1:6`).
+
+So one roll of the die
+```{r}
+sample(1:6, size = 1, replace = TRUE)
+```
+
+- Run this a few times.
+
+## rolling the die many times. 
+- use the replicate function to repeat this roll of the die 100 times.
+- plot the distribution of rolls (how many 1's, 2's etc..)
+
+## rolling the die many times. 
+- use the replicate function to repeat this roll of the die 1000 times.
+
+```{r}
+rolls <- replicate(1000, sample(1:6, size = 1, replace = TRUE))
+```
+
+```{r}
+barplot(table(rolls))
+```
+## Resetting the seed back to "random" based on time and date
+```{r}
+set.seed(NULL)
+```
+
+## A better way to roll the die
+
+- We don't need to invoke the replicate function at all.
+- We can simply change the `size` argument in `sample()`.
+
+```{r}
+more_rolls <- sample(1:6, size = 1000, replace = TRUE)
+barplot(table(more_rolls))
+```
+
+## what happens with `replace = FALSE`?
+```{r, error= TRUE}
+sample(1:6, size = 1000, replace = FALSE)
+```
+
+- Why?
+
+## what happens with `replace = FALSE`?
+```{r, error= TRUE}
+sample(1:6, size = 1000, replace = FALSE)
+```
+
+- Why? Because there are only 6 values, so it is sampling them randomly, but removing them after. So we can only sample 6 times for a vector of length 6.
+
+## How to use `replace = FALSE`
+- This is particularly useful to get a different permutation of the order that you take the jelly beans out, but with the same sample of jelly beans.
+- Try it a few times with the dice example.
+
+```{r}
+sample(1:6, size = 6, replace = FALSE)
+sample(1:6, size = 6, replace = FALSE)
+sample(1:6, size = 6, replace = FALSE)
+```
+
+## How is the sample function useful?
+- There are many times that sampling with or without replacement is extremely useful, and forms the basis for an important computationally intensive statistical approach, known as *empirical resampling methods* these include:
+- randomization/permutation tests (sampling without replacement). Essentially shuffling the order of observations relative to a treatment variable (at its simplest).
+- non-parametric bootstrap (sampling with replacement), is a common method to determine standard errors and confidence intervals on estimated quantities based on properties of the observed distribution.
+- Bio708 may introduce you to these ideas, but I have a series of youtube screencasts on it if you want to know more.
+
+
+## Using the sample function to model genetic drift
+- Genetic drift, a change in allele frequencies not due to natural selection, but to stochastic sampling of which alleles are transmitted from one generation to the next.
+- It is particularly important in small populations, and has important implications in species with conservation concerns.
+
+- Imagine we have two alleles at a given genetic locus, "A" and "a", in a population of diploids (each individual has 2 alleles).
+- There are a total of 20 individuals, and anyone can mate with anyone else.
+- population size stays constant (20 offspring for a total of 40 alleles).
+- If the initial allele frequency for A and a are equal ($f(A)= f(a) = 0.5$), can you write a simulation to see how allele frequencies may change from one generation to the next?
+- What are the allele frequencies in the next generation?
+
+- Things to consider:
+- Obviously using `sample(x, size, replace)`
+- What is your vector of observations in this case (what do we want to sample from)?
+- How many alleles do we want in the next generation, and which argument allows for this?
+- Do we want `replace = TRUE` or `replace = FALSE`?
+- Do you expect to get the same result as the person next to you? Why or why not?
+
+## Using the sample function to model genetic drift
+
+```{r}
+allele_counts <- sample(c("A", "a"),
+                        size = 40, 
+                        replace = TRUE,
+                        prob = NULL)
+
+table(allele_counts)/length(allele_counts)
+```
+
+## How about if we wanted to go one more generation?
+- Now our allele frequencies $f(A) \neq f(A)$ so we have to let our function know that the probability of choosing the "a" and "A" allele differs. 
+- This is where the `prob` argument becomes very important.
+- instead of assuming each element of your input vector (in this case alleles "A" and "a") are sampled with equal probability, we can sample them according to their allele frequencies.
+
+
+```{r}
+allele_counts <- sample(c("a", "A"),
+                        size = 40, 
+                        replace = TRUE,
+                        prob = c(0.5, 0.5))
+
+allele_freq1 <- table(allele_counts)/length(allele_counts)
+allele_freq1
+
+allele_counts2 <- sample(c("a", "A"),
+                        size = 40, 
+                        replace = TRUE,
+                        prob = allele_freq1)
+
+allele_freq2 <- table(allele_counts2)/length(allele_counts2)
+allele_freq2
+```
+
+
+## How might you generalize this function to allow you to alter population size, starting allele frequency and arbitrary number of generations?
+
+- This will be one of the questions on the assignment
 
 ## Numerical stochastic simulations, the basics.
 
@@ -270,7 +419,7 @@ runif(n = 1, min = 0, max = 1)
 - We can actually use the `runif` to generate random draws from all other distributions if we wanted to, but it is unnecessary here.
 
 ## `runif()`
-If we wanted 1000 such numbers we could use a for loop, or the replicate() in R. However the easier way would be to ask for 1000 numbers with the n=1000 argument.
+If we wanted 10000 such numbers we could use a for loop, or the replicate() in R. However the easier way would be to ask for 10000 numbers with the n = 10000 argument.
 
 ```{r}
 ru1 <- runif(n = 10000, min = 0, max = 1)
@@ -297,25 +446,25 @@ With the theoretical uniform distribution on [1,1] in red
 
 ```{r}
 random.normal.100 <- rnorm(n = 100, mean = 5,sd = 2) 
-par(mfrow=c(3,1))  
+par(mfrow=c(2,2))  
 plot(random.normal.100)
-boxplot(random.normal.100)
 hist(random.normal.100)
+qqnorm(y = random.normal.100)
 ```
 
 - repeat this simulation a few times to confirm it is changing...
 
 ## More efficient random sampling using replicate
-- Say I was doing this to get a sense of what would happen in a particular experiment with 100 samples. I may want to repeat this 10 times. How might I do this efficiently?
+- Say I was doing this to get a sense of what would happen in a particular experiment with 100 samples. I may want to repeat this a few times. How might I do this efficiently?
 
 ## More efficient random sampling using replicate
 
-```{r}
-random.normal.100.rep <- replicate(n = 10, 
+```{r results= 'hide'}
+random.normal.100.rep <- replicate(n = 4, 
                                    rnorm(100, 5, 2))
 
 
-par(mfrow=c(4,4))
+par(mfrow=c(2,2))
 apply(X=random.normal.100.rep, 
       MARGIN=2, FUN=hist) 
 
@@ -332,10 +481,12 @@ summary(random.normal.100.rep)
 ```
 
 ## monte carlo methods
-- This is an example of a very simple monte carlo simulation
+- This is an example of a very simple *monte carlo simulation*
 - Let's use this to do something a bit more interesting, simulate from a regression model.
 - $Y \sim N(\mu = a + b*x, \sigma)$
-- We will make the slope $b = 0.7$, the intercept $a= 5$ and residual variation$\sigma = 2$
+- We will make the slope $b = 0.7$, the intercept $a = 5$ and residual variation$\sigma = 2$
+
+## First the deterministic part
 ```{r}
 par(mfrow=c(1,1))
 a = 5 # intercept
@@ -358,48 +509,140 @@ y.sim.1.lm <- lm(y.sim.1 ~ x) # fit a regression with simulated data
 abline(reg = y.sim.1.lm, lty = 2, col = "blue") # estimated values based on simulated data.
 ```
 
+- Re-run this simulation a few times to see how it changes.
 
-## All important `sample()` function.
--Sometimes we don't want to sample from a probability distribution, but for discrete categories (say number of A, C, T and G in a sequence).
+## how about if you wanted to simulate this relationship 25 times?
+- Keeping the same deterministic parameters, but change the residual standard error (stochastic variation) to $\sigma \sim 2.5$
+- plot the deterministic fit first.
+- Simulate the y values 25 times, each time re-fitting the regression and plotting the lines.
+
+
+## how about if you wanted to simulate this relationship 25 times?
+
+```{r, results = 'hide'}
+plot(y_fixed ~ x, col = "black", type = "n") 
+abline(a=5, b=0.7)
+
+simulated_regression <- function() {
+    y.sim.1 <- rnorm(length(x), mean = y_fixed, sd = 2.5)
+    y.sim.1.lm <- lm(y.sim.1 ~ x) 
+    abline(reg = y.sim.1.lm, col = "#FF000032")}
+
+replicate(n =25, simulated_regression())
+
+# or with a for loop instead (in blue)
+for (i in 1:25){
+    y.sim.1 <- rnorm(length(x), mean = y_fixed, sd = 2.5)
+    y.sim.1.lm <- lm(y.sim.1 ~ x) 
+    abline(reg = y.sim.1.lm, col = "#0000FF32")
+}
+```
+
+
+## Back to the all important `sample()` function. Simple simulations of sequences.
+- Sometimes we don't want to sample from a probability distribution, but for discrete categories (say number of A, C, T and G in a sequence). Like we did with the 6 sided die.
 - The all powerful `sample()` is the workhorse function and is incredibly powerful for this!
 
-## sample function in action.
-- Say I wanted to generate a random sequence with 1000 bp, with no GC bias.
+## a random 100000bp sequence with no biases.
+- Say you wanted to generate a random DNA sequence with 100000 base pairs, with no GC bias. Do this with the sample function.
+- Confirm the length of the sequence.
+- What is the distribution of each nucleotide?
+
+## a random 100000bp sequence with no biases.
 
 ```{r}
 seq1_no_bias <- sample(c("A","C","G", "T"), 
                        size = 100000, replace = TRUE)
 
+table(seq1_no_bias)/length(seq1_no_bias)
 length(seq1_no_bias)
 head(seq1_no_bias)
 ```
 - `replace = TRUE` means it can repeatedly draw from the letters ACGT, otherwise it could only use each once (for a maximum of 4 draws)
 
-##
+## Convert this vector to a single string, and check how many "letters" are in it
+
+## Convert this vector to a single string, and check how many "letters" are in it
 - Now we want to convert this to a single sequence.
 ```{r}
 seq1 <- paste(seq1_no_bias, sep = "", collapse = "")
 nchar(seq1)
-
-x <- gregexpr("AACTTTT", seq1, fixed = T, useBytes = T)
-unlist(x)
 ```
+
+## Let's say we wanted to identify how often a simple sequence motif occurs.
+- How many times does AACTTT occur in this simulated sequence?
+- R has many string manipulation functions (see `?grep` and `?regex`). 
+- We will learn more about them, and the powerful *stringi* and *stringr* packages next week.
+- Here we will see just a few.
+- use `gregrexpr()` to count number of occurrences of your pattern.
+- g for global 
+
+## Let's say we wanted to identify how often a simple sequence motif occurs.
+
+```{r}
+x <- gregexpr("AACTTTT", seq1, fixed = T, useBytes = T)
+length(unlist(x))
+```
+
+- `fixed = T`, this means to not treat the pattern as a regular expression, but to interpret as is. This can speed things up at the cost of only allowing fixed expressions.
+- useBytes =T, does byte by byte comparisons. Also speeds up computation, BUT at the cost of generality.
+- In general use the default settings for fixed and useBytes unless speed is really important.
+
 
 ## with some GC bias
 
-- Say our sequence simulation is supposed to be from *Drosophila* with a 60:40 GC:AT bias. We can just add in the prob argument.
+- Say our sequence simulation is supposed to be from *Drosophila* with a 60:40 GC:AT bias. We can just add in the prob argument. Generate a sequence of 100000 base pairs.
 
 ```{r}
-seq2_60GCbias <- paste(sample(c("A","C","G", "T"), 
-                       size = 100000, prob = c(20,30,30,20),
-                       replace = TRUE),
-                       sep = "", collapse = "")
+seq2_60GCbias <- sample(c("A","C","G", "T"), 
+                       size = 100000, 
+                       prob = c(30,20,20,30),
+                       replace = TRUE)
+
+table(seq2_60GCbias)/length(seq2_60GCbias)
+
+seq2_60GCbias <- paste0(seq2_60GCbias, collapse="")
 
 nchar(seq2_60GCbias)
 
 
 y <- gregexpr("AACTTTT", seq2_60GCbias, fixed = T, useBytes = T)
-unlist(y)
+length(unlist(y))
 
 ```
 - How would you check?
+
+## The code I have written is extremely fragile and error prone.
+-Can you think of some reasons?
+
+## The code I have written is extremely fragile and error prone.
+- What happens if there are no matches? Check.
+- `gregexpr()` only includes unique matches, if the pattern is found in overlapping parts of the sequence, it will only count it once.
+- What happens if there is whitespace? My code does not account for it.
+- What happens if some nucleotides are lower case?
+- What happens if ambigous nucleotides are included, or insertions, deletions, Ns?
+- DNA is generally double stranded, so we need to deal with the reverse complement as well.
+
+## So what should we do.
+- We could definitely rewrite this function to handle all such exceptions. Use functions like `toupper()` to make everything upper case, check for other nucleotides remove leading and trailing white space with `trimws()`, which is really just a wrapper around `sub`. From a learning perspective this is a useful exercise, that I leave to you.
+
+- However, if our goal is to manipulate nucleotide sequences, we should be smart about this and use a well developed tool like the Biostrings library. Other than for the purposes of learning the skills to DIY (or when learning to program), or for some specialized purpose that does not exist, using well developed libraries make sense. These have been well vetted by many users and developers and are less buggy and probably more efficient computationally than what most of us would write.
+
+## reverse complement with base R
+
+- the `chartr(old, new, x)` function translates one set of characters to another for a string *x*
+- rev, reverses the order of the elements of the vector (but not if it is a single string)
+
+```{r}
+seq3_60GCbias <- sample(c("A","C","G", "T"), 
+                       size = 20, 
+                       prob = c(30,20,20,30),
+                       replace = TRUE)
+seq3_60GCbias
+seq3_60GCbias_rev <- rev(seq3_60GCbias)
+seq3_60GCbias_revcomp <- chartr("ACTG", "TGAC", seq3_60GCbias_rev)
+seq3_60GCbias_revcomp <- paste0(seq3_60GCbias_revcomp, collapse="")
+```
+
+## Do we care about the reverse complement for this example?
+- For this simulation example, why might the reverse complement not matter much? 
