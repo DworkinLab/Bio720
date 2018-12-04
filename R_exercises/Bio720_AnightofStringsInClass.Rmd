@@ -120,7 +120,7 @@ books$title[1]
 The first one should be the 1st edition, let's download that. The first number is the gutenberg id that we need to use
 
 ```{r}
-species <- gutenberg_download
+species <- gutenberg_download(1228)
 str(species)
 head(species$text)
 

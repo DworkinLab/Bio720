@@ -2,7 +2,10 @@
 title: "BIO720_evening_activity_strings"
 author: "Ian Dworkin"
 date: "12/3/2018"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
+    toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -22,7 +25,7 @@ All functions in *stringi* begin with `stri_..`, where ".." is the name of the f
 You will want to install *stringi*, *stringr* and *tidytext*
 
 ```{r}
-install.packages("tidytext")
+#install.packages("tidytext")
 ```
 
 ```{r}
@@ -64,6 +67,9 @@ We already saw this a bit last week with `paste()` and `paste0`. Default argumen
 
 Make a single string that looks like "x1 + x2 + x3 + x4 + x5" using `paste` or for stringi it is `stri_join()` and `str_c` in *stringr*
 
+```{r}
+paste("x", 1:5, sep="", collapse = " + ")
+```
 
 # How long is your string?
 
@@ -133,7 +139,7 @@ books$title[1]
 The first one should be the 1st edition, let's download that. The first number is the gutenberg id that we need to use
 
 ```{r}
-species <- gutenberg_download
+species <- gutenberg_download(1228)
 str(species)
 head(species$text)
 
@@ -255,9 +261,20 @@ species_tidy %>%
     count(word, sort = TRUE) %>%
     top_n(25) %>%
     mutate(word = reorder(word, n)) %>%
-    with(wordcloud(word, n, random.order = F, max.words  = 25))
-
-
+    with(wordcloud(word, n, random.order = F, max.words  = 25, colors = rainbow(8)))
 ```
 
+or
+
+```{r}
+word_counts_25 <- species_tidy %>% 
+    count(word, sort = TRUE) %>%
+    top_n(25) %>%
+    mutate(word = reorder(word, n)) 
+
+word_counts_25 <- data.frame(word_counts_25)
+
+with(word_counts_25,
+     wordcloud(word, n, random.order = F, max.words = 25, col = rainbow(n = 5)))
+```
 
