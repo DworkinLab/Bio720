@@ -25,7 +25,7 @@ If you are going the R/Bioconductor route, get to know the basics first (Biostri
 
 While I am less familiar with the offerings of bio-perl and Biopython, they absolutely have the same broad set of general tools that one could choose.
 
-### Utilize your local expertise (your lab, department or University) in choosing your path.
+### Utilize your local expertise (your lab, department or University) in choosing your path
 
 In addition to picking a path that best suites your preferences for language/environment, also consider other "experts" nearby. What do other individuals in your lab, or nearby labs use? If there is some local expertise, utilize this to your advantage. This may shape your initial approach, but may also help you gain deeper insights as well. Then once you are more comfortable you can delve further and deeper.
 
@@ -40,10 +40,10 @@ The fact is that many of the libraries that are well used for common tasks have 
 There will be plenty of functions that you will need to write DIY, but for basic operations, chances are there are plenty of functions or command line tools to use. So while writing your own functions is essential for many tasks, don't re-invent the wheel.
 
 
-## Spend the time going through tutorials and examples.
+## Spend the time going through tutorials and examples
   Many of the libraries and software packages have tutorials. Spend the time going through these to get comfortable. Don't be afraid to experiment with them, and then spend some time looking at the documentation to get a better sense of the parameters of the functions or programs and what can (and can't) be accomplished by it.  You don't always need to rush in with your own data, as this will often lead to a mess as you try hard to get the program to spit out any kind of output, even when it might be nonsensical.
 
-## Avoid the GUI version of tools.
+## Avoid the GUI version of tools
   While in genomics there are many GUI versions of tools like BLAST, or Galaxy for NGS data, etc.. I still recommend using your own code. While GUI tools can usually spit out logs (for the underlying code), researchers often forget to do this, and in the end forget how they did the analysis, what parameters they set, and even what versions of the software they used. Keeping your scripts is an important starting point for good reproducible research.
 
 ## Don't blindly trust the computer output
