@@ -7,6 +7,14 @@ You have done your readings through sections of Vince Buffalo's Bioinformatics D
 
 As such here are a few thoughts. Note, these thoughts are just my own opinions based upon my own learning, watching my students learn.  Also, while I give specific examples of tools, these are not meant as recommendations for "best". Indeed I am largely arguing that most tools that you find after a bit of google-fu and reading will serve you, and it pays to spend time learning a few tools well initially for your pipeline. You don't need to know every command line program or *R* library out there!
 
+
+## Be patient with yourself and the software tools, especially at the beginning.
+
+Hopefully as your skills have developed in class, you have seen that things that took you several hours back in September, only take a few minutes. That is fantastic. Keep this in mind as you move forward. Getting started with new analyses, new software or a new programming language with take some time, and there will be challenges in your knowledge and skill development along the way. That is perfectly normal, and the best advice is patience, resilience and practice as you learn. If you have a supervisor (i.e. a PI) who does not regularly do genomic or bioinformatic analyses you may want to send them this link, as they might think this should be as easy as using an Excel spreadsheet.
+
+The good news is (and you probably have already got a sense of this), as you develop some basic UNIX scripting skills and pick up a programming language, learning how new languages, libraries or tools work becomes easier and more familiar, including the language of help or man pages. So [keep on keepin' on!](https://youtu.be/4QDECwqKE0g?t=13)
+
+
 ## choose a path
 
 The fact is that there are many different ways to achieve the same goals for many common bioinformatic analyses. For instance, imagine you are identifying and countring sequence motifs in a set of genomes. You can absolutely accomplish this with command lines tools alone, or using Bioconductor/R, or Biopython. While there might be some very good reasons to pick one (command line tools that work on streaming data may make sense for very large genomes for instance). You will likely be able to accomplish 97.5% of the same tasks with any of these apprroaches. Pick one approach and learn it well.
@@ -38,6 +46,12 @@ One bad habit you could potentially pick up from the activities we have done in 
   ## Avoid the GUI version of tools.
   While in genomics there are many GUI versions of tools like BLAST, or Galaxy for NGS data, etc.. I still recommend using your own code. While GUI tools can usually spit out logs (for the underlying code), researchers often forget to do this, and in the end forget how they did the analysis, what parameters they set, and even what versions of the software they used. Keeping your scripts is an important starting point for good reproducible research.
 
+## Don't blindly trust the computer output
+
+Computers are powerful, but very exacting. So you can easily get unintended output because of a misunderstanding of what the program you are doing is intended for or capable of. All of this is doubly true for bioinformatic/genomic software tools. After hours of grinding through errors, sometimes you are so happy to get any output as an "answer" that you presume it is working. However, most of the time that assumption may not be warranted. So check! That is, you are the biologist, and have a sense of likely and possible values in the results. Do your results make sense? Can you check a little bit by "hand" to confirm you can get the same results? If not can you simulate some data with known properties to check?
+
+This advice also extends to the software. Don't blindly trust it either. These software packages are being developed by researchers like you. In addition to accidental software bugs, in any analysis pipeline decisions are made as are assumptions. So two different software packages ostensibly trying to perform the same process may result in different answers (read mapping tools is a great example of this). This can actually be an advantage. In our lab with some known biases of syntenic read mapping software (we used *bwa* in class as one tool), we only uses polymorphisms that we find in common when we run our pipeline identically except for using two different read mappers.
+
 ## Don't forget to visualize intermediate data
   In a rush to get the finish line of a complete analysis, researchers often skip some important QC & sanity checks along the way. Yes, most people do simple visualizations of reads in a `.fastq` file using `fastqc` before and after trimming, but how about after you have mapped your reads and made your `.sam` or `.bam`? Have you looked at your coverage across the genome? Not only some histograms, but actual coverage across sites?  How about after de-duplication. You don't expect this to change much, but have you checked to make sure? Ditto for removing poorly mapped reads, or repeat masking or when re-align indels in GATK?  It is important that for each step of your pipeline you
 
@@ -64,3 +78,6 @@ If you have a UNIX shell script, most programs enable something like
   fastqc -version
 ```
 Which you can list at the end of your script.
+
+
+Ian Dworkin, with comments by Brian Golding and Ben Bolker

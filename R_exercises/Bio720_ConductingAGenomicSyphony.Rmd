@@ -73,8 +73,8 @@ organism(dm)
 seqinfo(dm)
 isS4(dm)
 seqlengths(BSgenome.Dmelanogaster.UCSC.dm6)
-alphabetFrequency(dm, 
-                  baseOnly = T)
+alphabetFrequency(dm$chr2R, 
+                  baseOnly = T, as.prob = T)
 ```
 
 
@@ -129,15 +129,19 @@ class(HNF4alpha)
 We can generate a position frequency matrix and position weight matrix of these binding sites.
 ```{r}
 pfm <- consensusMatrix(HNF4alpha)
-pfm
+round(pfm[1:4,]/colSums(pfm[1:4,]), 2)
 class(pfm)
 
 pwm <- PWM(pfm)
 
 # or directly
-pwm <- PWM(HNF4alpha)
-round(pwm, 2)
+pwm <- PWM(HNF4alpha, type = "prob")
+round(pwm[1:4,]/colSums(pwm[1:4,]), 2)
 maxWeights(pwm)
+
+conMat <- consensusMatrix(HNF4alpha, as.prob = T)[1:4,]
+seqLogo(conMat)
+seqLogo(pwm[1:4,]/colSums(pwm[1:4,]))
 ```
 
 ## matching these to the X chromosome
