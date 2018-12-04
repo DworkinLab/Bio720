@@ -39,7 +39,7 @@ We also introduced some basic concepts about simulations, and went through a sim
 
 5. (November 20th and 27th 2018). Deterministic and stochastic simulations. markdown is [here](./R_exercises/Bio720_SimulatingData.md), but the [PDF](./R_exercises/Bio720_SimulatingData.pdf) may be easier for the equations. Or download the[.Rmd](./R_exercises/Bio720_SimulatingData.Rmd) and run it yourself.
 
-6. Dec 2nnd [here](./R_exercises/Bio720_AnightofStringsInClass.Rmd)
+6. (Dec 2nd) String exercise [here](./R_exercises/Bio720_AnightofStringsInClass.Rmd) and answers [here](./R_exercises/Bio720_AnightofStrings.Rmd)
 
 ## other R video tutorials and exercises.
 The data set that is used for some of these activities can be found on the [DRYAD Digital repository](http://datadryad.org/) right [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv?sequence=1). You can also set this up (so you do not need a local copy of the data by putting this command in your script or copying and pasting it into the R editor :
