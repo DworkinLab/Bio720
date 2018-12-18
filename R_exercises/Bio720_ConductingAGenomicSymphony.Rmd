@@ -1,0 +1,181 @@
+---
+title: "Bio720_MuckingWithDrosophilaPromoters"
+author: "Ian Dworkin"
+date: "12/3/2018"
+output: html_document
+---
+
+# A little introduction to Bioconductor using Drosophila
+
+
+## A visit to Bioconductor
+You have to give the developers of Bioconductor a little love. They have really gone out of their way to provide very powerful *R* libraries, with lots of tutorials. Let's take a look shall we. The bioconductor home page is [here](http://bioconductor.org/).
+
+## A little introduction with Drosophila
+
+With 1649 packages it is not like I can show you everything. However your book, and the datacamp tutorial has given you a tiny bit of an intro into things.
+
+We will just use a few packages today
+
+```{r}
+#library(BiocInstaller) # old deprecated
+library(BiocManager) # new way
+library(Biostrings)
+library(GenomicRanges)
+library(GenomicFeatures)
+library('BSgenome')
+```
+
+
+## old vs new
+
+In terms of installing BioConductor genomes and libraries they have recently deprecated some functions
+
+deprecated
+```{r}
+#source("https://bioconductor.org/biocLite.R") # deprecated
+#biocLite('BSgenome') # deprecated
+```
+
+New!
+
+```{r}
+BiocManager::install("BSgenome") 
+```
+
+You only need one, and depending on what version you have, it should be easy to figure out, however, you will want to migrate to the newer version soon.
+
+### Downloading the Drosophila genome
+
+First let us take a look at available genomes
+
+```{r}
+available.genomes()
+```
+
+This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the Drosophila melanogaster genome assembly
+
+```{r}
+#biocLite("BSgenome.Dmelanogaster.UCSC.dm6")
+BiocManager::install("BSgenome.Dmelanogaster.UCSC.dm6")
+
+library(BSgenome.Dmelanogaster.UCSC.dm6)
+dm <- BSgenome.Dmelanogaster.UCSC.dm6
+```
+
+
+## Some basic statistics about the genome
+```{r}
+length(dm)
+names(dm)
+show(dm)
+organism(dm)
+seqinfo(dm)
+isS4(dm)
+seqlengths(BSgenome.Dmelanogaster.UCSC.dm6)
+alphabetFrequency(dm$chr2R, 
+                  baseOnly = T, as.prob = T)
+```
+
+
+```{r}
+seqinfo(dm)
+sum(seqlengths(dm))/1e6
+
+
+dm_chrX <- getSeq(dm, "chrX")
+nchar(dm_chrX)/1e6
+```
+
+## Frequencies of nucleotides on the X chromosome
+```{r}
+alphabetFrequency(dm_chrX, baseOnly = T, as.prob = T)
+
+```
+
+
+## Find some simple patterns
+```{r}
+seqs <- c("CCCGGG", "CCCCTTTT", "AAATTT", "TAGCT")
+n = sapply(seqs, function(x) countPattern(x, dm_chrX ))
+n
+which.max(n)
+```
+
+## patterns
+
+In BioStrings, there are a few functions
+
+  - `matchPattern(pattern, subject, max.mismatch = 1)` one string to one string
+  - `vmatchPattern(pattern, subject)`
+    - one set of strings to one string
+    - one string to one set of strings.
+  - `findPalindromes` - finds palindromic regions in a single string.
+ 
+ Other tools for PWMs, dictionaries etc..(?`vcountPDict,BSgenome-method`)
+ - see `?PWM` and also `matchLRPatterns`
+
+
+## a position weight matrix for a Drosophila transcription factor HNF4alpha
+
+THis is a TF that is already in bioconductor (although you may have to install)
+```{r}
+data(HNF4alpha)
+HNF4alpha
+class(HNF4alpha)
+```
+
+
+We can generate a position frequency matrix and position weight matrix of these binding sites.
+```{r}
+pfm <- consensusMatrix(HNF4alpha)
+round(pfm[1:4,]/colSums(pfm[1:4,]), 2)
+class(pfm)
+
+pwm <- PWM(pfm)
+
+# or directly
+pwm <- PWM(HNF4alpha, type = "prob")
+round(pwm[1:4,]/colSums(pwm[1:4,]), 2)
+maxWeights(pwm)
+
+conMat <- consensusMatrix(HNF4alpha, as.prob = T)[1:4,]
+seqLogo(conMat)
+seqLogo(pwm[1:4,]/colSums(pwm[1:4,]))
+```
+
+## matching these to the X chromosome
+
+```{r}
+TF_hits <- matchPWM(pwm, dm_chrX, with.score = TRUE)
+length(TF_hits)
+head(mcols(TF_hits)$score)
+
+hist(mcols(TF_hits)$score)
+```
+
+## How about the reverse complement of the X?
+
+```{r}
+TF_hits_rc <- matchPWM(reverseComplement(pwm), dm_chrX, with.score = TRUE)
+length(TF_hits_rc)
+hist(mcols(TF_hits_rc)$score)
+```
+
+## Extracting upstream sequences from Drosphila melanogaster
+
+Makes a TxDb object (transcript annotations. Again, lots of options depending on how you want to refer to genes. Then extract the upstream sequences from the genes.
+```{r}
+dm_txdb <- makeTxDbFromUCSC("dm6", tablename="refGene") 
+
+up10000seqs <- extractUpstreamSeqs(dm, dm_txdb, width=10000)
+```
+
+How about this pattern?
+
+```{r}
+upstream_hits <- vcountPattern("NGNNCAAAGNNCA", up10000seqs)
+length(upstream_hits)
+```
+
+

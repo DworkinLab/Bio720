@@ -1,0 +1,96 @@
+---
+title: "MakingAndBreakingFunctions"
+author: "Ian Dworkin"
+date: "12/10/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+You all know how to write basic functions. Most of the time (at least when you start) you will be writing these functions just for yourself.
+
+However, if you write some good functions and scripts people will want to use them and edit them for their own purposes. Of course, they (and even you 6 months later) don't always know what the functions are always supposed to do or not do. So it is useful to always build robust functions that spit out warnings and errors, and also to consider unit tests.
+
+As a review [here](https://r4ds.had.co.nz/functions.html#when-should-you-write-a-function) and [here](http://adv-r.had.co.nz/Functions.html)
+
+## When should you write a function
+Have you ever copy and pasted a block of code more than a couple of times? If so, write a function!
+
+## The functions to play with to start
+
+This function computers the [coefficient of variation.](https://en.wikipedia.org/wiki/Coefficient_of_variation), a positive, unitless measure of relative variation. It is nothing more than the ratio of the standard deviation to the mean. 
+
+## Coefficient of variation
+
+```{r}
+CoefVar_v1 <- function(x) {
+    cv <- sd(x)/mean(x)
+}
+```
+
+
+Computing a ration
+```{r}
+ratio_function <- function(x, y) {
+    x/y
+}
+```
+
+
+
+```{r}
+x <- CoefVar_v1(rnorm(100, 10, 3))
+x
+```
+
+```{r}
+ratio1 <- ratio_function(rnorm(100, 10, 3), rnorm(100, 10, 3))
+ratio1
+```
+## Time to break it. 
+In groups of 4, each of you will (one at a time) give your version of the function to one other person in the group, who will write some code to "break" the function in some way. Don't tell your neighbours what the variables are, just let them try and use it and break it...
+
+
+## Things to throw into it
+
+- negative values that give a -ve CV
+- NA
+- non integer or numeric
+- vector of length zero
+
+## Fixes
+- `stop` with an if
+- `break`
+-`stopifnot`
+- checking object class
+- `stop` vs. `warning` vs. message
+-`exist` or `file.exists()`
+
+##
+```{r}
+ratio_function_v2 <- function(x, y) {
+    if (length(x) != length(y)) stop("x and y are not the same length")
+    if (mode(x) != "numeric") stop("x is not numeric")
+    if (mode(y) != "numeric") stop("y is not numeric")
+    if (anyNA(x) || anyNA(y)) warning("missing data present")
+    x/y
+}
+
+```
+
+```{r}
+x <- rnorm(100, 10, 2)
+y <- rnorm(100, 50, 3)
+#x <- sample(c("a", "b", "c"), size = 100, replace = T)
+#y[45] <- NA
+#any(is.na(y))
+
+y <- 1:100
+ratio_function_v2(x, y)
+
+rm(x, y)
+```
+
