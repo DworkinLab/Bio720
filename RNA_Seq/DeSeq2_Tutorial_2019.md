@@ -1,7 +1,7 @@
 ---
 title: "Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)"
 author: "Ian Dworkin"
-date: "January 25th 2019"
+date: "Friday February 8th 2019"
 output:
   html_document:
     keep_md: yes
@@ -10,8 +10,6 @@ output:
 ---
  
  
-
- Modified from my NGS2016 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
 
 
 ## Background
@@ -228,14 +226,14 @@ txi <- tximport(quant_files,
 summary(txi) # why 274560?
 str(txi)
 head(txi$counts) # note these are not integers!
-
+dim(txi$counts)
 
 # We can look at patterns of correlations among samples
-cor(txi$counts)
+cor(txi$counts[,1:3])
 
 
-pairs(txi$counts[,1:2], 
-      pch = 20)
+pairs(log10(txi$counts[,1:6]), 
+      pch = 20, lower.panel = NULL, col = "#00000019")
 ```
 
 ## Setting up our experimental design.
@@ -326,7 +324,8 @@ For the moment we can ask whether any genes show evidence of different expressio
 
 
 ```r
-test_lane_effects2_results <- results(test_lane_effects2, alpha = 0.05)
+test_lane_effects2_results <- results(test_lane_effects2, 
+                                      alpha = 0.05)
 # alpha = 0.05 is the  "cut-off" for significance (not really - I will discuss).
 
 summary(test_lane_effects2_results)
@@ -334,15 +333,21 @@ summary(test_lane_effects2_results)
 
 head(test_lane_effects2_results)
 
-# let's re-order the data to look at the two genes.
+# let's re-order the data to look at genes.
 test_lane_effects2_results <- test_lane_effects2_results[order(test_lane_effects2_results$padj),]
+
+head(test_lane_effects2_results)
 ```
 
 We can also plot the mean-dispersion relationship for this data.
 
 
 ```r
-plotDispEsts(test_lane_effects2)
+plotDispEsts(test_lane_effects2, 
+             legend =F)
+
+plotDispEsts(test_lane_effects2, 
+             CV = T, legend =F)
 ```
 Let's talk about what this means.
 
@@ -356,13 +361,14 @@ for_pca <- rlog(test_lane_effects2,
                 blind = TRUE)
 dim(for_pca)
 ```
-`rlog` is one approach to adjusting for both library size and dispersion among samples. `blind=TRUE`, has it ignore information from the model (in this case lane).
+`rlog` is one approach to adjusting for both library size and dispersion among samples. `blind=TRUE`, has it ignore information from the model (in this case lane). So we want to see `blind=TRUE` when we are doing QC, but if we are using the PCA for downstream analysis, we might want to consider using TRUE.
+
 
 
 ```r
 plotPCA(for_pca, 
         intgroup=c("lane"),
-        ntop = 5000) 
+        ntop = 2000) 
 ```
 
 The `plotPCA()` function is actually just a wrapper for one of the built in functions for performing a principle components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the `plotPCA` function only plots the first couple of Principle components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.
@@ -389,15 +395,23 @@ plotPCA(for_pca, ntop = 1000, intgroup=c("lane"))
 ### Back to the analysis
 While there is some lane effects based on our initial statistical check, and visual inspection of PC1 VS. PC2. However, there clearly is a pattern here, and it has nothing to do with lane. 
 
-We can quickly take a look to see if this pattern shows anything interesting for our biological interest. However, this is putting the cart before the horse, so be warned.
+We can quickly take a look to see if this pattern shows anything interesting for our biological interest. However, this is putting the cart before the horse, so be warned. Also keep in mind the regularized log transformation of the data being used is not accounting for condition effects (we can do this below)
 
 
 ```r
-plotPCA(for_pca, ntop = 5000,
+plotPCA(for_pca, ntop = 1000,
         intgroup=c("tissue", "food", "temperature"))
+
+plotPCA(for_pca, ntop = 500,
+        intgroup=c("tissue"))
+
+plotPCA(for_pca, ntop = 500,
+        intgroup=c("temperature"))
 ```
 
-Not entirely clear patterns of clustering here. Play with this changing the number of genes used. Also keep in mind that it is by default only showing the first two principal components of many, so it may not be giving a very clear picture!
+Not entirely clear patterns of clustering here. Play with this changing the number of genes used. I would say there are some concerning aspects to this (potentially reversed samples). How might we check?
+
+Also keep in mind that it is by default only showing the first two principal components of many, so it may not be giving a very clear picture!
 
 
 ### We can also use some hierarchical clustering to further check for lane effects or for clustering based
@@ -413,7 +427,9 @@ mat <- as.matrix(distsRL)  # Make sure it is a matrix
 We need to rename our new matrix of distances based on the samples.
 
 ```r
-rownames(mat) <- colnames(mat) <-   with(colData(test_lane_effects2), paste(genotype, background, sep=" : "))
+rownames(mat) <- colnames(mat) <-   with(colData(test_lane_effects2), 
+                                         paste(tissue, food, temperature,
+                                               sep=" : "))
 
 hc <- hclust(distsRL)  # performs hierarchical clustering
 hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)  # picking our colours
@@ -424,40 +440,54 @@ Now we generate the plot
 ```r
 heatmap.2(mat, Rowv=as.dendrogram(hc),
           symm = TRUE, trace="none",
-          col = rev(hmcol), margin=c(8,8))
+          col = rev(hmcol), margin=c(10,10))
 ```
 
- While we checked that there was modest evidence of lane effects , we could keep it in the model as it seems to have little effects. However, it is using up "df" (in the parameter estimation sense), so it may be worth ultimately getting rid of it.
+ 
 
 
 
 ## Proceeding with the real analysis we care about!
 Given the results from above, I am removing lane entirely.
 
-Let's fit and run the model.
+Let's fit and run a simple model comparing the two tissue types (ignoring for the fact that we think that two samples are reversed in each tissue.)
 
 ```r
 load.model <- formula(~ lane + tissue)
+```
 
+
+```r
 test_tissue_effects <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
 
 test_tissue_effects2 <- DESeq(test_tissue_effects)
 ```
 
+Quick PCA with blind = F
+
+```r
+for_pca <- rlog(test_tissue_effects2, 
+                blind = FALSE)
+
+plotPCA(for_pca, ntop = 500,
+        intgroup=c("tissue"))
+```
+
 Now we can look at some of the results. First we recheck the dispersion estimates estimated in our model
 
 
 ```r
-plotDispEsts(test_tissue_effects2)
+plotDispEsts(test_tissue_effects2,
+             legend = F)
 ```
 Not much different. A few outliers though, and it may be worth later going in and checking these.
 
-Let's get going with things we are interested in, like looking for differentially expressed genes across genotypes. We can start by doing a visualization using a so-called MA plot (look it up on wikipedia, then will talk)
+Let's get going with things we are interested in, like looking for differentially expressed genes across genotypes. We can start by doing a visualization using a so-called MA plot (look it up on wikipedia, then we will talk)
 
 
 ```r
-plotMA(test_tissue_effects2, ylim =c(-6, 6))
+plotMA(test_tissue_effects2, ylim =c(-8, 8))
 ```
  A few things to note. The points coloured in red are the genes that show evidence of differential expression. The triangles are ones whose log2 fold change is greater than or less than 1 ( i.e. 2 fold difference). Please keep in mind that many genes that have small fold changes can still still be differentially expressed. Don't get overly hung up on either just fold changes alone or a threshold for significance. Look carefully at results to understand them. This takes lots of time!!!
  
@@ -466,7 +496,11 @@ Let's actually look at our results. DESeq2 has some functions to make this a bit
 
 ```r
 tissue_results <- results(test_tissue_effects2, 
+                            contrast = c("tissue", "genital", "wing"),
                             alpha = 0.05)
+
+plotMA(tissue_results, ylim =c(-8, 8))
+
 print(tissue_results)
 
 head(tissue_results)
@@ -484,12 +518,15 @@ Let's take a look at the results.
 
 ```r
 # reorder
-tissue_results <- tissue_results[order(tissue_results$padj),]
+tissue_results <- tissue_results[order(tissue_results$log2FoldChange),]
 
-tissue_results[1:10,]
+resultsNames(tissue_results)
+
+rownames(tissue_results[1:20,])
+tissue_results[1:20,]
 ```
 
-What do you note about the differences. Please compare these different lists of genes.
+
 
 ## More complex models
 
@@ -500,23 +537,36 @@ Let's start by examining the effects of genotype (like we did above), but by fir
 
 
 ```r
-load.model <- formula(~ lane + tissue + food) # Let me go over the matrix rank issue here
+load.model <- formula(~ lane + tissue + food + tissue:food) # Let me go over the matrix rank issue here
 
-test_G <- DESeqDataSetFromTximport(txi,
+test_food_tissue <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
 
-test_G_2 <- DESeq(test_G)
+test_FT_2 <- DESeq(test_food_tissue)
 
-plotDispEsts(test_G_2)
+plotDispEsts(test_FT_2, legend = F)
 
-plotMA(test_G_2, ylim =c(-4, 4))
+resultsNames(test_FT_2)
 
-G_results <- results(test_G_2, alpha = 0.05, pAdjustMethod="BH")
-summary(G_results)
+food_results <- results(test_FT_2, 
+                     contrast = c("food", "fed", "starved"),
+                     alpha = 0.05, pAdjustMethod="BH")
+summary(food_results)
+plotMA(food_results, 
+       ylim =c(-8, 8))
 
 # reorder
-G_results <- G_results[order(G_results$padj),]
-G_results[1:10,]
+food_results <- food_results[order(food_results$padj),]
+food_results[1:10,]
+```
+
+How about just the wing?
+
+```r
+resultsNames(test_FT_2)
+wing_results <- results(test_FT_2,
+                        contrast=list("tissuewing.foodfed", "tissuewing.foodstarved"),
+                        alpha = 0.05, pAdjustMethod="BH")
 ```
 
 ### Interaction terms in models. 
@@ -535,7 +585,9 @@ plotDispEsts(test_FxT_effects2)
 
 plotMA(test_FxT_effects2, ylim =c(-4, 4))
 
-FxT_results <- results(test_FxT_effects2, alpha = 0.05, pAdjustMethod="BH")
+FxT_results <- results(test_FxT_effects2, 
+                       alpha = 0.05, pAdjustMethod="BH"
+                       contrast = )
 summary(FxT_results)
 
 # reorder
