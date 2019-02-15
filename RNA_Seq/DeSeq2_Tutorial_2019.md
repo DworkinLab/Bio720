@@ -232,7 +232,7 @@ dim(txi$counts)
 cor(txi$counts[,1:3])
 
 
-pairs(log10(txi$counts[,1:6]), 
+pairs(log(txi$counts[,1:6]), 
       pch = 20, lower.panel = NULL, col = "#00000019")
 ```
 
@@ -388,7 +388,9 @@ By default this only examine the top 500 genes. Let's look at 2000 or more to ge
 
 
 ```r
-plotPCA(for_pca, ntop = 1000, intgroup=c("lane")) 
+plotPCA(for_pca, 
+        ntop = 1000, 
+        intgroup=c("lane")) 
 ```
 
 
@@ -399,10 +401,10 @@ We can quickly take a look to see if this pattern shows anything interesting for
 
 
 ```r
-plotPCA(for_pca, ntop = 1000,
+plotPCA(for_pca, ntop = 2000,
         intgroup=c("tissue", "food", "temperature"))
 
-plotPCA(for_pca, ntop = 500,
+plotPCA(for_pca, ntop = 2000,
         intgroup=c("tissue"))
 
 plotPCA(for_pca, ntop = 500,
@@ -459,9 +461,11 @@ load.model <- formula(~ lane + tissue)
 
 ```r
 test_tissue_effects <- DESeqDataSetFromTximport(txi,
-  rna.design, design=load.model)
+  rna.design, 
+  design = load.model)
 
 test_tissue_effects2 <- DESeq(test_tissue_effects)
+resultsNames(test_tissue_effects2)
 ```
 
 Quick PCA with blind = F
@@ -471,7 +475,7 @@ for_pca <- rlog(test_tissue_effects2,
                 blind = FALSE)
 
 plotPCA(for_pca, ntop = 500,
-        intgroup=c("tissue"))
+        intgroup=c("tissue", "food"))
 ```
 
 Now we can look at some of the results. First we recheck the dispersion estimates estimated in our model
@@ -487,7 +491,8 @@ Let's get going with things we are interested in, like looking for differentiall
 
 
 ```r
-plotMA(test_tissue_effects2, ylim =c(-8, 8))
+plotMA(test_tissue_effects2, 
+       ylim =c(-4, 4))
 ```
  A few things to note. The points coloured in red are the genes that show evidence of differential expression. The triangles are ones whose log2 fold change is greater than or less than 1 ( i.e. 2 fold difference). Please keep in mind that many genes that have small fold changes can still still be differentially expressed. Don't get overly hung up on either just fold changes alone or a threshold for significance. Look carefully at results to understand them. This takes lots of time!!!
  
@@ -495,17 +500,24 @@ Let's actually look at our results. DESeq2 has some functions to make this a bit
 
 
 ```r
-tissue_results <- results(test_tissue_effects2, 
+tissue_results <- results(test_tissue_effects2,
                             contrast = c("tissue", "genital", "wing"),
-                            alpha = 0.05)
+                            alpha = 0.1)
 
-plotMA(tissue_results, ylim =c(-8, 8))
+mcols(tissue_results)$description
+
+tissue_results2 <- results(test_tissue_effects2,
+                            alpha = 0.1)
+
+mcols(tissue_results2)$description
+
+plotMA(tissue_results, ylim =c(-5, 5))
+
+summary(tissue_results)
 
 print(tissue_results)
 
 head(tissue_results)
-
-summary(tissue_results)
 ```
 
 A few things to note. By default alpha is set at 0.1 This is a pretty liberal "threshold" for assessing "significance". While it is a much larger conversation, I do not recommend getting hung up too much on statistical significance (since you have estimates of effects and estimates of uncertainty). In particular if you have specific questions about specific sets of genes, and if these were planned comparisons (i.e. before you started to analyze your data) you should focus on those.
@@ -518,12 +530,39 @@ Let's take a look at the results.
 
 ```r
 # reorder
-tissue_results <- tissue_results[order(tissue_results$log2FoldChange),]
+tissue_results <- tissue_results[order(tissue_results$padj),]
 
-resultsNames(tissue_results)
 
 rownames(tissue_results[1:20,])
 tissue_results[1:20,]
+
+plotCounts(test_tissue_effects2, 
+           gene = which.min(tissue_results$padj),
+           intgroup="tissue")
+
+plotCounts(test_tissue_effects2, 
+           gene = "FBgn0000015",
+           intgroup="tissue",
+           pch = 20, col = "red")
+
+plotCounts(test_tissue_effects2, 
+           gene = "FBgn0003975",
+           intgroup="tissue",
+           pch = 20, col = "red")
+```
+
+## Shrinking the estimates
+
+
+```r
+tissue_results_shrunk <- lfcShrink(test_tissue_effects2, 
+                                   coef = 2,
+                                   type = "normal",
+                                   lfcThreshold = 0)
+
+plotMA(tissue_results_shrunk, ylim =c(-2, 2))
+
+summary(tissue_results_shrunk)
 ```
 
 
@@ -539,35 +578,54 @@ Let's start by examining the effects of genotype (like we did above), but by fir
 ```r
 load.model <- formula(~ lane + tissue + food + tissue:food) # Let me go over the matrix rank issue here
 
-test_food_tissue <- DESeqDataSetFromTximport(txi,
+test_temp_tissue <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
 
-test_FT_2 <- DESeq(test_food_tissue)
+test_temp_tissue$group <- factor(paste0(test_temp_tissue$tissue,test_temp_tissue$temperature))
+
+design(test_temp_tissue) <- ~ lane + group
+
+test_FT_2 <- DESeq(test_temp_tissue)
+resultsNames(test_FT_2)
 
 plotDispEsts(test_FT_2, legend = F)
 
-resultsNames(test_FT_2)
+temp_results_wing <- results(test_FT_2, 
+                     contrast = c("group", "wing17", "wing24"),
+                     alpha = 0.1, pAdjustMethod="BH")
 
-food_results <- results(test_FT_2, 
-                     contrast = c("food", "fed", "starved"),
-                     alpha = 0.05, pAdjustMethod="BH")
-summary(food_results)
+mcols(food_results_wing)$description
+
+summary(food_results_wing)
+
 plotMA(food_results, 
-       ylim =c(-8, 8))
+       ylim =c(-5, 5))
+
+
+temp_wing_results_shrunk <- lfcShrink(test_FT_2, 
+                                   coef = 2,
+                                   type = "normal",
+                                   lfcThreshold = 0)
+
+plotMA(temp_wing_results_shrunk, ylim =c(-2, 2))
+
+summary(temp_wing_results_shrunk)
+head(temp_wing_results_shrunk)
 
 # reorder
-food_results <- food_results[order(food_results$padj),]
-food_results[1:10,]
-```
+temp_wing_results_shrunk <- temp_wing_results_shrunk[order(temp_wing_results_shrunk$padj),]
+rownames(temp_wing_results_shrunk[1:20,])
 
-How about just the wing?
 
-```r
+plotCounts(test_FT_2, 
+           gene = "FBgn0032282",
+           intgroup="group",
+           pch = 20, col = "red")
+
 resultsNames(test_FT_2)
-wing_results <- results(test_FT_2,
-                        contrast=list("tissuewing.foodfed", "tissuewing.foodstarved"),
-                        alpha = 0.05, pAdjustMethod="BH")
 ```
+
+
 
 ### Interaction terms in models. 
 In our case we are as much interested in genes that show an interaction between genotype and background as those that show just an effect of genotype. However for the subset of all of the samples we are looking at, we are going to run into estimation issues.

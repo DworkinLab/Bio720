@@ -1,0 +1,26 @@
+# remember to load appropriate modules (Python 2.7.9)
+
+module load ifort/2015.1.133-GCC-4.9.2  impi/5.0.2.044 Python/2.7.9
+
+# using http://rseqc.sourceforge.net/#
+# getting the TIN number
+~/bin/RSeQC-2.6.4/scripts/tin.py -i Pairend_nonStrandSpecific_36mer_Human_hg19.bam -r hg19_RefSeq.bed
+
+# Some simple statistics (comparable to what is available in samtools)
+~/bin/RSeQC-2.6.4/scripts/bam_stat.py -i Pairend_nonStrandSpecific_36mer_Human_hg19.bam > BAM_stats.txt
+
+
+# Gene body coverage
+~/bin/RSeQC-2.6.4/scripts/geneBody_coverage.py -i Pairend_nonStrandSpecific_36mer_Human_hg19.bam -r hg19_RefSeq.bed -o output
+
+
+# Read distribution
+~/bin/RSeQC-2.6.4/scripts/read_distribution.py  -i Pairend_nonStrandSpecific_36mer_Human_hg19.bam -r hg19_RefSeq.bed > read_distribution_out
+
+
+# splice junction annotation
+~/bin/RSeQC-2.6.4/scripts/junction_annotation.py  -i Pairend_nonStrandSpecific_36mer_Human_hg19.bam -r hg19_RefSeq.bed -o junction_out
+
+
+# on info
+/usr/local/python2.7/Python-2.7.12/python /usr/local/RSeQC/scripts/bam_stat.py -i subset_samw_17C_gen_fed_R1Aligned.sortedByCoord.out.bam
