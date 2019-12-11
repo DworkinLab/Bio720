@@ -80,4 +80,5 @@ If you have a UNIX shell script, most programs enable something like
 Which you can list at the end of your script.
 
 
-Ian Dworkin, with comments by Brian Golding and Ben Bolker
+Ian Dworkin, with comments by Brian Golding and Ben Bolker.
+Updated Dec 2019.
