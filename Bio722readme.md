@@ -5,7 +5,9 @@ Winter/Spring 2021 (expected to be taught love online via zoom or teams)
 ## Instructors
 
 Dr. Ben Evans
+
 Dr. Brian Golding
+
 Dr. Ian Dworkin (dworkin "at" mcmaster "dot" ca)
 
 ## Course outline
