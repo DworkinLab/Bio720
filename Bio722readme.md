@@ -53,6 +53,15 @@ This course will help graduate students further develop their computational skil
 
 - If you have not taken Bio720, but have a reasonable background in both UNIX shell scripting and a standard scripting language, please contact the Instructors.
 
+## What you will need for this Class
+
+All students will be given access to the Golding cluster (info), although you can choose to use other computational resources if you have access as well. Students should be familiar with the UNIX terminal and how to remote login into a server. For windows users, students are expected to already have and be familiar with a terminal emulator or other tool to login into a UNIX server.
+
+## readings for Class
+
+We will provide readings for classes (papers, tutorials etc). However, if students do not already have it, we do recommend considering to get Vince Buffalo's excellent book [Bioinformatics Data Skills](https://www.amazon.ca/Bioinformatics-Data-Skills-Reproducible-Research/dp/1449367372/) which you will probably want to keep under your pillow to allow all of the excellent advice to seep into your brain. Seriously, a very useful book!
+
+If you want any additional specific recommendations on books for UNIX, R or python scripting contact Dr. Dworkin. If you are choosing perl, contact Dr. Evans or Dr. Golding. If you are using another scripting language (julia, ruby etc) you might be on your own...
 
 ## Course evaluation
 
