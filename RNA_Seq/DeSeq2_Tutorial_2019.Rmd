@@ -127,7 +127,7 @@ While for `tximport` you will need to do this via bioconductor:
 Note only run this if tximport did not install!
 ```{r, eval = FALSE}
 source("http://bioconductor.org/biocLite.R")
-biocLite("tximport")
+biocManager("tximport")
 ```
 
 Depending on the implementation of R you are using (R on mac, R on windows, R studio), there may be some slight differences, so grab an instructor.
@@ -139,7 +139,7 @@ The folder that contains all of the sub-folders with the quantifications should 
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
-setwd("~/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
+setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 

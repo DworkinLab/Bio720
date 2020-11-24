@@ -154,7 +154,7 @@ How many lines are empty, check using the `stri_isempty`. What proportion of lin
 
 ```{r}
 empty <- sum(stri_isempty(species_text))/length(species_text)
-empty
+dim(empty)
 ```
 
 ## removing the introduction
@@ -223,7 +223,7 @@ species_filtered <- species %>%
 ```{r}
 species_filtered$text <- toupper(species_filtered$text)
 
-species_filtered$text 
+head(species_filtered$text)
 ```
 
 ## tidytext

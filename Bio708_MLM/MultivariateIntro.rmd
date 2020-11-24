@@ -1,0 +1,498 @@
+---
+title: "Very Simple Introduction To Multivariate Linear Models"
+author: "Ian Dworkin"
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(digits  = 3)
+```
+# Introduction
+
+In today's class we are introducing how to model data when you have multiple continuous response variables. This can be done with a relatively simple extension of the linear models you learned previously (regression, ANOVA, ANCOVA style models).
+
+
+## Packages
+
+You may also need to install the following packages. If you do not have them remove the '#' to uncomment the lines.
+
+```{r pkgs,warning=FALSE,message=FALSE}
+# install.packages("car")
+# install.packages("geomorph")
+library(car)
+library(geomorph)
+library(heplots)
+```
+
+the `car` package has some useful functions for helping to make inferences for [multivariate linear models](https://journal.r-project.org/archive/2013-1/fox-friendly-weisberg.pdf). the `geomorph` package is a specialized package for biological shape analysis (geometric morphometrics), but since this data is inherently multidimensional, there are many useful functions. Check the [wiki](https://github.com/geomorphR/geomorph/wiki) out. 
+
+Other useful packages include the [vegan](https://cran.r-project.org/web/packages/vegan/vegan.pdf) package, including the distance based multivariate analysis of variance using the `adonis` function in it. geomorph's linear model is a refinement of this.
+
+## Source in some custom functions
+
+We are also going to need some custom functions for multivariate analysis. We use these a lot, but we have been bad and not made an R package out of them. They are available on both our github pages [here](https://github.com/DworkinLab/PitchersJEB2014_cricket_wings/blob/master/scripts/CGwing_analyses_final_2014.Rmd). We wrote most of them for a paper analyzing multivariate shape of *Drosophila* wings across altitudinal and latitudinal gradients. [Check here](http://onlinelibrary.wiley.com/doi/10.1111/j.1558-5646.2012.01774.x/full) for the paper and [here](http://datadryad.org/resource/doi:10.5061/dryad.r43k1) for the full data and scripts. Lots of cool multivariate examples.
+
+* [R script to source](MLM_Dworkin.R)
+
+```{r get_funs}
+source("./MLM_Dworkin.R")
+ls()
+```
+
+# Data
+We will use an old *Drosophila melanogaster* data set from my PhD work. The associated paper can be found [here](http://onlinelibrary.wiley.com/doi/10.1111/j.1525-142X.2005.05010.x/abstract). This was from a study that was meant to test predictions of a model on how mutational and environmental variation can influence the overall structure of phenotypic variation. For this study I measured several traits (lengths) on the first leg as well as the number of sex comb teeth (a structure used to clasp females during copulation) for different wild type strains (line) reared at different developmental temperatures (temp), with and without a mutation that effects proximal-distal axis development in limbs (genotype).
+
+
+```{r get_data}
+dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
+```
+
+
+## Check the data
+Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
+ 
+ 
+```{r summary}
+summary(dll_data)
+str(dll_data)
+dim(dll_data)
+head(dll_data)
+```
+
+## Cleaning data
+### removing missing data
+
+Sometimes your data set has missing data, i.e. for some reason you could not measure one of your variables on a particular object. How you decide to deal with missing data can be a big topic, but for the moment we are going to assume you want to delete rows that contain missing data. 
+
+First let's check if there is any missing data
+
+```{r anyNA}
+anyNA(dll_data)
+```
+
+For the moment we are just going to remove rows containing any missing data
+
+```{r rmNA}
+dll_data <- na.omit(dll_data)
+dim(dll_data)
+```
+
+For ease of interpretation, let's also make the wild-type level of genotype (`wt`) the base level.
+
+```{r reorder}
+dll_data$genotype <- relevel(dll_data$genotype, "wt")
+levels(dll_data$genotype)
+```
+
+We will also make temperature (`temp`) a factor (it only has two levels so it does not matter that much).
+
+```{r tempfac}
+dll_data$temp <- as.factor(dll_data$temp)
+```
+
+## Numeric and graphical summaries of the data
+
+Our response variables for this study are `femur`, `tibia`, `tarsus` and `SCT`. Let's check out some basic summary stats for them
+
+
+```{r summary2}
+summary(dll_data)
+apply(dll_data[,5:8], 2, sd)
+apply(dll_data[,5:8], 2, mean)
+```
+
+While the three length measurements are on approximately the same scale (and all measured in mm), SCT is count data. So we will probably want to scale each of these to help make comparisons a bit clearer. Before we do that though. Let's ask how these variables co-vary with one another (across the whole data set). In general we prefer working with the variances and covariances, but it is easier to interpret the correlations among variables. We can easily look at both.
+
+## Variance Covariance matrix
+
+The phenotypic variance-covariance matrix:
+
+```{r pcov}
+cov(dll_data[ ,5:8])
+```
+
+With the variances for each trait along the diagonal, and the covariances along the off-diagonal. Also note that the covariance of two traits (x and y) is the same in both directions. i.e. $cov(x,y) = cov(y,x)$.
+
+The phenotypic correlation matrix:
+```{r pcor}
+cor(dll_data[, 5:8])
+```
+
+Let's visualize this as well.
+
+```{r pairs}
+pairs(dll_data[, 5:8],
+      pch = ".", gap = 0)
+```
+
+## Some graphical views.
+
+We could do some more plotting to take a look (from the `car` package). However, there is so much overlap in the data among treatment variables, that it can be hard to see what is going on.
+```{r smatrix, warning=FALSE}
+scatterplotMatrix( ~ femur + tibia + tarsus + SCT | interaction(genotype, temp), 
+                  ellipse = TRUE, data = dll_data, gap = 0,
+                  plot.points = T, pch = 20, cex  = 0.5)
+```
+
+```{r smatrix_2, warning=FALSE}
+scatterplotMatrix( ~ femur + tibia + tarsus + SCT | interaction(genotype, temp), 
+                  ellipse = TRUE, data = dll_data, gap = 0,
+                  plot.points = F)
+```
+
+
+We see a moderate degree of correlation among these traits, likely reflecting a common factor (overall size). However, they are certainly not perfectly correlated with one another.  In general, when we are dealing with a set of multivariate response variables, this is the situation we want to be in. That is, some (but not too much) correlation between our variables. If correlations were very high I would probably consider using Principal Components Analysis or another dimensional reduction technique to get a few axes of variation that account for most of the variation. 
+
+We do also see that some of the patterns of covariances (the direction of covariation) does differ, which is something we need to bear in mind. I will return to this later.
+
+### Checking rank of the matrix
+
+We could also check to see if the covariance matrix was not of full rank (i.e. for a covariance matrix for 4 variables, do we really have 4 "independent axes"). One quick check (which directly relates to PCA) is to examine the eigenvalues of the covariance matrix, and make sure the final ones are not really small.
+
+## Eigenvalues of a variance-covariance matrix.
+
+Many methods in multivariate statistics, depend on *eigenvalues*. I am not going to go over the details of *eigendecomposition* at the moment, but you will see we use them alot. We can extract the eigenvalues (usually denoted as $\lambda$) from our covariance matrix. We get as many eigenvalues as we have variables ($k$) in the covariance matrix (4 in this case), ordered from largest ($\lambda_1$ sometimes called the principal eigenvalue) to the smallest ($\lambda_k$). What we want to watch for is that none of the eigenvalues are equal to zero (that's where we can have problems).
+
+To get the eigenvalues, we will use a *singular value decomposition* this can also be done using an *eigendecomposition* for this matrix (a symmetric one) and the results should be the same.
+
+Note what I am doing.
+- First computing the variance-covariance matrix (VCV), a symmetric matrix.
+
+- Then extracting the eigenvalues from that matrix. 
+
+- I am also calculating the determinant of the matrix (I won't explain here, but for simple 2x2 matrices like the area of the shape the matrix defines). 
+
+For our purposes at the moment, as long as the determinant can be estimated (it is not so small that the computer spits out a warning) we are ok. Also note that this determinant is equal to $\prod{\lambda_i}$
+
+
+```{r eigs}
+eig_vals <- svd(cov(dll_data[, 5:8]))$d
+
+det(cov(dll_data[, 5:8]))
+
+prod(eig_vals)
+```
+
+This all looks fine. The final eigenvalue is not vanishingly small, nor the determinant.
+
+For what it is worth the determinant (or the product of the eigenvalues if you prefer) of the VCV is called the *generalized variance*. The other common single number (scalar) measure derived from a variance-covariance matrix is the *total variance*, the sum of the eigenvalues. This is actually equal to the sum of the variances for each individual trait (the values on the diagonal of the VCV)
+
+```{r}
+sum(eig_vals)
+sum(diag(cov(dll_data[, 5:8])))
+```
+
+These are both pretty commonly used in evolutionary biology.
+
+## Should we scale the response variables?
+
+Like I mentioned earlier, we need to consider whether we should put all response variables on a common scale. This certainly can aid in comparisons with our vector of coefficients. However, if all of your data is already on a pretty similar scale, it may not matter much. In this case, because of SCT I think it is probably worthwhile.
+
+For length measures it is common to instead to just log transform variables. This is something that can be helpful (but unnecessary with the current data). However, I will scale them here so you can get a sense of it. 
+
+```{r scale}
+dll_data$femur_s <- scale(dll_data$femur)
+dll_data$tibia_s <- scale(dll_data$tibia)
+dll_data$tarsus_s <- scale(dll_data$tarsus)
+dll_data$SCT_s <- scale(dll_data$SCT)
+```
+
+The variables now all have a mean of zero and a standard deviation of 1.
+
+```{r check_meansd}
+apply(dll_data[,9:12], 2, sd)
+
+round(apply(dll_data[,9:12], 2, mean))  ## very small 
+```
+
+And our co-variance matrix and correlation matrix should now be identical.
+
+```{r sc_covcor}
+cov(dll_data[,9:12])
+cor(dll_data[,9:12])
+```
+
+# Multivariate linear models, let's begin ...
+
+The multivariate general linear model is:
+
+$$
+\mathbf{Y} = \mathbf{XB} + \mathbf{E}
+$$
+
+Which you may recognize as being very similar to your univariate linear model. Indeed it is fundamentally the same. However instead of each observation having a single value for its response $y_i$ for an individual $i$, we are now in a situation where each individual has a response **vector**, which we denote as $\mathbf{y}_i$. The vector for that observation is shown in bold as a common way to represent a vector of observations. Since you are using R you are actually already pretty familiar with this idea. i.e. if we stored `y <- 1` or `y <- c(1,2,3)` we could recall this vector the same way. The same is true in matrix notation.
+
+However, you see that instead of a lowercase bold $\mathbf{y_i}$, I have instead represented this as an uppercase $\mathbf{Y}$. This is matrix notation to denote a matrix of values. In this case it is meant to represent the $( n x m)$ matrix, for the $n$ observations in rows, and the $m$ response variables we have, which in this case is 4 (femur, tibia, tarsus, SCT). It is standard matrix notation to always talk about 2 dimensional matrices in rows by columns.
+
+How about the right hand side of the equation? Our $\mathbf{X}$ is the design matrix (or model matrix). We will come back to that in a second. Our $\mathbf{B}$ matrix is the matrix of regression coefficients from our model. If you were fitting a simple linear regression, you are used to estimating a slope $(\beta)$ for the model $y = \beta_0 + \beta_1 x + \epsilon$.
+
+Even for a simple multivariate linear model (with only a single quantitative predictor variable), we estimate a coefficient **for each** response variable (i.e. a vector). As we add more predictors, this generalizes to a matrix of coefficients. Finally the $\mathbf{E}$ is just a generalization of the residual variation unaccounted for by the model. i.e. it is the same idea as $\epsilon$ for a simple linear model, but we have a vector $\mathbf{e_i}$ of residuals for each observation ($i$) instead of a single value.
+
+However, otherwise the same ideas really apply. We use some approach to estimate the slopes. Just like for a single response, the MLE and LS estimators are equivalent under most conditions and can be found with:
+
+$$
+\hat{\mathbf{B}} = (\mathbf{X'X})^{-1} \mathbf{X'Y}
+$$
+
+## Our first multivariate linear model
+Let's give it a whirl. We will start with a really simple model with a single predictor with two levels (genotype). Since genotype only has two levels this is equivalent to a simple MANOVA or a Hotelling's $T^2$.
+
+Importantly **you do need to let R know that your response variables are numeric**.  Otherwise the call is a standard call to `lm`
+
+
+```{r mlm1}
+mlm_fit1 <- lm(as.matrix(dll_data[,9:12]) ~ genotype, data = dll_data)
+class(mlm_fit1)
+```
+
+So what do we get from this? Summary does not give us what we want. Instead it provides the linear model for each response variable in turn. So not so helpful.
+
+```{r mlmsum1}
+summary(mlm_fit1)
+```
+
+Instead we need to let R know we want this as a single multivariate linear model.
+
+```{r mlmsum2}
+summary(manova(mlm_fit1))
+heplot(mlm_fit1, fill = c(TRUE, TRUE), variables = c(1,2))
+heplot(mlm_fit1, fill = c(TRUE, TRUE), variables = c(3,4))
+```
+
+Unfortunately, by default this spits out a minimal amount of useful information. While the object contains a few additional bits of information that are useful, mostly this is all about getting a p-value (boo!). Before we go on to something more useful, let's talk about what is going on with this output.
+
+While we have just estimated a single predictor variable (`genotype`) you can see we are not using just one degree of freedom, but 4 (`num Df`). This is because we have 4 response variables that we are estimating. This is the first (and one of the most important) things to keep in mind with a multivariate linear model. We will be estimating a lot more parameters, so we need to keep in mind how much we can estimate in a model. As we will see below, this is why distance based approaches (like in adonis/vegan and geomorph) are often used. 
+
+## Test statistics for multivariate linear models (and back to eigenvalues)
+
+The other two things to note is this "Pillai" statistic and the approximate $F$ statistic. It turns out that with the matrices that are used for inference ($\mathbf{H}$ the *hypothesis matrix*) in a multivariate test, there are multiple possible test statistics that can be evaluated based on the eigenvalues. Essentially we want to examine the eigenvalues of $\mathbf{A} = \mathbf{HE^{-1}}$ where $\mathbf{E}$ is the matrix of "residuals". Generally the different approaches then take the eigenvalues of $\mathbf{A}$ to generate a test statistic There are four commonly used test statistics that are derived from the eigenvalues of this matrix. If you are so inclined, check out inferences for [multivariate linear models](https://journal.r-project.org/archive/2013-1/fox-friendly-weisberg.pdf) for more information, and how it is used in `car`.
+
+### Various test statistics for multivariate linear models. Or, fun with eigenvalues
+
+While this defaults to Pillai's trace ($\Lambda_{Pillai}$), which is the trace (sum of the diagonals of $\mathbf{H}(\mathbf{H}+\mathbf{E})^{-1}$.This is basically generating a matrix where the between group VCV is "divided" by the overall VCV. However, it is also equivalent to $$\Lambda_{Pillai} = \sum_{n=1}^{k} \frac{\lambda_k}{1+ \lambda_k}$$  
+
+Many in biology seem to use  $\Lambda_{Wilks}$, which is.
+
+$$\Lambda_{Wilks} = \prod_{n=1}^{k} \frac{1}{1+ \lambda_k}$$  
+
+Most of the time these give pretty similar results (when compared to the appropriate distributions). What you care about is you can easily change it, like so:
+
+### Wilks $\Lambda$
+
+```{r wilks}
+summary(manova(mlm_fit1), 
+        test = "Wilks")
+```
+
+In each case a test statistic, and an approximation of the F statistic and a p-value. It is worth seeing how the `car` package handles this (more for complex models, as we will see).
+
+```{r car_Anova}
+Anova(mlm_fit1)
+```
+
+# Measures of effect size?
+
+## Some background & review
+
+### Euclidian Distance, or the magnitude of the treatment contrast vector.
+
+What we would like to start to think about is effect size. This is not something that is universally agreed upon in multivariate statistics. However in both morphometrics and genomics it is typical to use the magnitude or *length* of the vector for coefficients associated with the response. This is sometimes known as the *L2 norm* of the vector, but you can mostly easily think about it as the square root of the sum of squares for each coefficient. i.e:
+
+$$
+\lVert \mathbf{\hat{x}} \rVert = \sqrt{\mathbf{\hat{x}'} \cdot \mathbf{\hat{x}}}
+$$
+
+This is equivalent to:
+$$ \lVert \mathbf{\hat{x}} \rVert = \sqrt{\hat{x}^{2}_{1} + \hat{x}^{2}_{2} + \cdots + \hat{x}^{2}_{n}}
+$$
+
+Which you may recognize from the Pythagorean theorem. For clarity, I want to make it clear that the vector $\mathbf{\hat{x}}$ we are defining above is the vector of coefficients expressed as a *treatment contrast* (the default in `R`). This is basically equivalent to the vector defined as the difference between $\mathbf{\bar{x}}_{Dll}$, the mean vector in the treatment condition (i.e the *Dll* mutant) and $\mathbf{\bar{x}}_{wt}$, the mean vector for wild type. So in this case we can think of it like this
+
+$$
+\mathbf{\hat{x}} = \mathbf{\bar{x}}_{Dll} - \mathbf{\bar{x}}_{wt}
+$$
+
+
+### multivariate effect size in R
+
+For our model we can examine the coefficients easily
+
+```{r mlm_coefs}
+coef(mlm_fit1)
+```
+With the second row (genotypeDll) representing the treatment contrasts (differences) compared to the intercept, which in this case is simply the mean values for the wild type for the 4 traits.
+
+How about a single effect size for our treatment contrast? Well, we can start with magnitude of the treatment contrast vector
+
+```{r mlm_effect_coefs}
+# Length/magnitude (L2 norm) of the vector
+sqrt(t(coef(mlm_fit1)[2,]) %*% coef(mlm_fit1)[2,])
+
+# or equivalently
+sqrt(sum(coef(mlm_fit1)[2,]^2))
+```
+
+However, this gets annoying to write out each time. So one of the functions in the source file does this for you. `PD()` (for Procrustes Distance) computes the Euclidean Distance between two vectors, but also can compute the length of the vector we want.
+
+```{r PD}
+PD(coef(mlm_fit1)[2,])
+```
+
+Unfortunately in many fields of biology interpreting this magnitude of effect can be tricky. I will show you one example from [this paper](http://biorxiv.org/content/early/2014/05/19/005322) to give you some ideas. To make sense of it, and what your expectations are under the null, we generated permutations of the data and computed the length of those vectors to generate a distribution. In some fields (like geometric morphometrics), this measure is used quite commonly so we have an easier time with biological interpretation and comparison. To generate confidence intervals on this we generally utilize non-parametric bootstrapping. 
+
+## Mahalanobis distance 
+
+One approach to deal with this is to use a standardized measure. As with other measures of effect size you have multiple options. If one of your treatments is a control, perhaps scale the measure by the magnitude/length of the mean vector for the control group. That would look something like this:
+
+```{r scaledEffect}
+PD(coef(mlm_fit1)[2,])/PD(coef(mlm_fit1)[1,])
+```
+
+Then as long as you scale other measures of effect size by the multivariate mean for the "control", they can be broadly compared. Not many folks seem to use this.
+
+### *Cohen's d* and *Mahalanobis distance*
+
+However probably the most common approaches is to scale the treatment effect by a measure of biological variability like the standard deviation. If you think about a common univariate measure of effect size like *Cohen's d*:
+
+$$
+d = \frac{\bar{x}_t - \bar{x}_c}{\sigma_{pooled}}
+$$
+
+Where $\bar{x}_t$ is the estimated (or just mean) treatment mean, $\bar{x}_c$ is the estimated control mean, and $\sigma_{pooled}$ is the pooled standard deviation. Don't confuse this pooled standard deviation with the standard error (a measure of uncertainty due to sampling). Indeed if you replace the denominator in *Cohen's d* with the standard error, you get a *t* statistic ( a measure of the magnitude of your effect relative to your uncertainty in your estimate). 
+
+We can use a multivariate extension of this same approach. As you will see it is essentially the Euclidian distance we examined above but scaled by the pooled variance-covariance matrix, $\mathbf{S}_{pooled}$. This is known as the *Mahalanobis Distance*. The measure is defined as:
+
+$$
+D^{2} = (\mathbf{\bar{x}}_t - \mathbf{\bar{x}}_c )' \mathbf{S}^{-1}_{pl} (\mathbf{\bar{x}}_t - \mathbf{\bar{x}}_c)
+$$
+
+Where $\mathbf{\bar{x}}_t$ is the mean vector for the treatment,$\mathbf{\bar{x}}_c$ is the mean vector for the control and $\mathbf{S}^{-1}_{pl}$ is the inverse of the pooled phenotypic variance-covariance matrix. Great care should be taken with generating the pooled covariance matrix. In particular you should first center observations on their treatment means, and then generate the pooled covariance matrix (this is true for *Cohen's d* with respect to the pooled standard deviation as well). This is what Ben mentioned in class. Or you can use the formula I showed in class.
+
+You can probably envision other variants of this (in particular which matrix to use for scaling).
+
+`R` has a function to compute this `mahalanobis()`.
+
+## How about coefficient of determination ($R^2$)?
+
+We might also like to understand how much variation (of all of the variation) that the model accounts for. As this is multivariate data, there are actually multiple ways of doing this (based on both the trace of the matrix and some based on the determinant). So there is no single $R^2$ measure. However, there is a relatively simple one that we like to employ, recognizing that it does not capture everything. Essentially we take the trace (sum of the elements on the diagonal) of the VCV for the observed data as a measure of total variation in the data. We then ask how much of the variation in the trace of the matrix is accounted for by the trace of the fitted values. i.e:
+
+$$\frac{Tr(\mathbf{V}_{\hat{Y}})}{Tr(\mathbf{V}_{Y})}$$
+
+Where $Tr(\mathbf{V}_{\hat{Y}})$ is the trace for the matrix of model fitted values, and $Tr(\mathbf{V}_{Y})$ is the trace for the observed data.
+
+Since we have scaled all of our observations in our response, then we know that the trace needs to be equal to the number of variables we are using in our response (4 in this case). Let's check
+
+```{r check_trace}
+sum(diag(cov(dll_data[,9:12])))
+```
+
+How about for our fitted values?
+
+```{r trace_fitted}
+sum(diag(cov(mlm_fit1$fitted)))
+
+sum(diag(cov(mlm_fit1$fitted)))/sum(diag(cov(dll_data[,9:12])))
+```
+
+So we can account for just under 2% of the variation (based on this measure) in all of our response variables, using genotype as the sole predictor.
+
+Once again, the above code is annoying to write, so we have written a nice function, `shapeRsq`:
+
+```{r shapeRsq}
+shapeRsq(mlm_fit1)
+```
+
+
+# Distance based approaches
+
+Before we get too complicated with our model, I also want to show you a distance based approach, as implemented in geomorph. This is useful because we are computing distances (essentially Euclidean distances) between observations (although not the raw distances, but based on the mean estimates within and between treatment levels). This means we are ultimately estimating far fewer coefficients, so can be very helpful when we have large numbers of response traits relative to number of observations.
+
+They have a number of functions in the geomorph package, but for most needs, I suggest starting with `procD.lm`
+
+```{r mlm2,results="hide",cache=TRUE}
+mlm_fit2 <- procD.lm(f1 = dll_data[, 9:12] ~ genotype, 
+                     data = dll_data, iter = 2000 )
+```
+
+```{r mlm2_sum}
+summary(mlm_fit2)
+```
+
+Of note, this allows for several different types of permutation tests, by default based on using the residuals from a reduced model (in this case there is only one). Also note that it also provides a measure of $R^2$, which is not identical to the one I provided (but similar in this instance).
+
+Note that it actually provides the same estimated coefficients, as these are typically used to compare Procrustes Distance (Euclidean Distance) as a measure of effect size
+
+```{r mlm2_coef}
+coef(mlm_fit2)
+```
+
+The 'advanced.procD.lm()` can do much of this automatically, but it is designed to compare sets of nested models.
+
+# Does the data conform to the assumptions of a multivariate linear model?
+
+As with any other general linear model you want to examine how well the model fit conforms to the assumptions of the GLM. This gets a bit trickier for multivariate data, although it can still be done. The most difficult issue is whether the residuals conform to multivariate normality. While there are a number of tests for this, in almost all cases with reasonable amounts of data, MVN seems to be rejected. Therefore, most researchers use non-parametric resampling (bootstrapping and permutation tests) to aid in the inferences. There are several approaches to this. See both the `adonis()` and the functions in `geomorph` for some examples. On our github page with the code for [this paper](https://github.com/DworkinLab/PitchersJEB2014_cricket_wings/blob/master/scripts/CGwing_analyses_final_2014.Rmd) we have some different approaches. Remember that it gets tricky to do permutation tests for complex models (where you can not just do a simple permutation of response data relative to predictors). Also keep in mind that you want to resample at the levels of observations (rows), not single variables!
+
+# More complicated models
+
+Let's add some complexity to the model. We have additional predictors, temp (rearing temperature) and line (different wild type strains.)
+
+```{r mlm_45}
+mlm_fit4 <- lm(as.matrix(dll_data[,9:12]) ~ temp + genotype, data = dll_data)
+mlm_fit5 <- lm(as.matrix(dll_data[,9:12]) ~ temp*genotype, data = dll_data)
+
+
+Anova(mlm_fit5)
+
+heplot(mlm_fit4, fill = c(TRUE, TRUE, TRUE))
+heplot(mlm_fit5, fill = c(TRUE, TRUE, TRUE))
+```
+
+
+It may be easier to see what is going on by combining the levels of the two factors into one factor with four levels
+
+```{r}
+
+mlm_fit5b <- lm(as.matrix(dll_data[,9:12]) ~ interaction(temp, genotype), data = dll_data)
+
+summary(Manova(mlm_fit5b))
+
+heplot(mlm_fit5b,
+       fill = c(TRUE, TRUE), variables = c(1:2))
+
+heplot(mlm_fit5b,
+       fill = c(TRUE, TRUE), variables = c(3:4))
+
+
+```
+
+```{r mlm_45_procD,results="hide"}
+mlm_fit4_dist <- procD.lm(dll_data[,9:12] ~ genotype*temp,
+                          data = dll_data, iter = 2000)
+```
+```{r mlm_45_procD_sum}
+summary(mlm_fit4_dist)
+```
+
+We can look at the lengths of the vectors to get a sense of relative effects of temp, genotype and their interaction.
+
+```{r PD_5}
+PD(coef(mlm_fit5)[2,])
+PD(coef(mlm_fit5)[3,])
+PD(coef(mlm_fit5)[4,])
+```
+
+How about variance accounted for? We have a slightly more advanced version for this. However, with interaction terms, this can be difficult to interpret (and we tend to only use it for main effects)
+
+```{r shapeRsq_45}
+shapeRsq(mlm_fit4)
+shapePRsq(mlm_fit4)
+```
+
+
+

@@ -1,0 +1,355 @@
+---
+title: "Multivariate modeling via mixed models"
+author: "Ian Dworkin and Ben Bolker"
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output: 
+  html_document: 
+    keep_md: yes
+    number_sections: yes
+    toc: yes
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(digits  = 3)
+```
+
+This tutorial follows from our introduction to multivariate linear models, extending it by using multivariate linear **mixed** models.
+
+Useful packages:
+
+```{r, pkgs, message=FALSE}
+library(MCMCglmm)
+library(lme4)
+library(brms)
+library(tidyr)
+library(dplyr)
+library(corrplot)
+library(broom.mixed)
+library(dotwhisker)
+library(ggplot2); theme_set(theme_bw())
+```
+
+Get data:
+
+```{r get_data}
+data_url <- "http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv"
+if (!file.exists("dll.csv")) {
+    download.file(data_url,dest="dll.csv")
+}
+dll_data <- read.csv("dll.csv")
+```
+
+```{r proc_data,cache=TRUE}
+## make temp a factor (25 vs 30 degrees)
+dll_data$temp <- factor(dll_data$temp)
+## scale relevant variables (fancier but less repetition than previously)
+morph_vars <- c("femur","tibia","tarsus","SCT")
+morph_vars_sc <- paste(morph_vars,"s",sep="_")
+dll_data2 <- dll_data
+## c() drops unwanted structure from the results of scale()
+for (i in 1:length(morph_vars)) {
+    dll_data2[[morph_vars_sc[i]]] <- c(scale(dll_data[[morph_vars[i]]]))
+}
+```
+
+## Mixed models
+
+The previous expression for the multivariate model was
+
+$$ 
+\mathbf{Y} = \mathbf{XB} + \mathbf{E}
+$$
+
+In contrast, the expression for the mixed model is
+
+$$ 
+y = \mathbf{X\beta} + \mathbf{Zb} + \epsilon
+$$
+
+where $\mathbf{b}$ is a set of Gaussian variables with a variance-covariance matrix $\mathbf{\Sigma}$ which we estimate.
+
+Suppose we have observations of $m$ individuals, with $p$ different observations
+(traits, or time points, or types of measurement, or ...) for each individual.
+The way we're going to make this work is to expand ("melt", or `gather()` if we're using `tidyr`) the data set to be $mp$ observations long, then treat each individual (which was previously a single row of the data set but now comprises $p$ rows) as a group (we'll call this `units`):
+
+## A trick to do multivariate mixed models using lme4
+
+lme4 does not (currently) have a natural syntax for multivariate responses, however, as I eluded to in class, there is an important relationship between multivariate response models and so called "repeated" measures (or longitudinal) models. As such we can use a few tricks to estimate the model in lme4. Below this, I will go through the same model using MCMCglmm, which is a library which has a more natural syntax for such multivariate responses, but is explictly Bayesian, so you need to provide prior distributions. 
+
+
+### melting code for lme4
+
+What we need to first do (for lme4) is to generate a single column that represents the numeric values for our response traits, and then a second variable that stores the trait type.
+
+<img src="figure/the-persistence-of-memory-1931.jpg" alt="melting" style="width: 100px;" />
+
+```{r melt}
+dll_melt <- (dll_data2
+    %>% select(-c(femur,tibia,tarsus,SCT))  ## drop unscaled vars
+    %>% mutate(units=factor(1:n()))
+    %>% gather(trait,value, -c(units,replicate,line,genotype,temp))
+    %>% drop_na()
+)
+```
+
+And we can take a look at how this has changed the structure of the data from a "wide" format to a long format
+```{r}
+head(dll_data) # original wide
+```
+
+
+To the long format
+```{r}
+head(dll_melt)
+```
+
+## lmer fit
+
+We can now go ahead and fit the model where we need to include trait as a predictor variable (where each trait is now a "repeated measure" from a particular subject/individual)
+
+```{r lmer1,cache=TRUE}
+t1 <- system.time(
+    lmer1 <- lmer(value ~ trait:(genotype*temp) - 1 +
+                      (trait-1|line) + (trait-1|units),
+                  data=dll_melt,
+                  control=lmerControl(optCtrl=list(ftol_abs=1e-8),
+                                      check.nobs.vs.nlev="ignore",
+                                      check.nobs.vs.nRE="ignore"))
+)
+```
+
+## lme4: fixed-effects formula
+
+- it doesn't make sense to consider effects that apply equally to all traits
+- so, let trait interact with all the other variables, but nothing else - use `-1`
+to drop intercept
+- specification is equivalent to
+     - `trait:(1+genotype+temp+genotype:temp)`
+	 - **or** `trait + trait:genotype + trait:temp + trait:genotype:temp`
+
+## lme4: random-effects formula
+
+- `(trait-1|line)` means "variance/covariances of traits among lines"
+- `-1` so we consider traits, not *differences* among traits
+- `(trait-1|units)` specifies "var/cov of traits among units (individuals)"
+- `lmer` always includes a residual variance term. This is redundant
+because we have only one data point per individual per trait:
+`lmerControl(...)` tells `lmer` not complain
+- As a result, our within-individual
+correlation estimates will be slightly overestimated
+(not so for GLMMs)
+
+## Notes on lme4 results
+
+- the fit is a little slow (`r round(t1["elapsed"])` seconds
+on my laptop) (GLMMs would be even slower)
+- `print(lmer1)`, `summary(lmer1)` useful but awkward
+(`r length(fixef(lmer1))` fixed effect coefficients,
+we'll look at graphical summaries instead
+- `fixef()` (fixed effects), `ranef()` (line/indiv deviations from pop mean), `coef()` (line/indiv-level estimates), `VarCorr` (random effects var/cov)
+
+## lme4: random-effects var/cov
+
+- underlying var-cov parameters are labeled $\theta$: `getME(fit,"theta")` extracts them
+
+```{r corrs}
+all(abs(getME(lmer1,"theta"))>1e-4) ## check for singularity (OK in this case)
+VarCorr(lmer1)
+```
+
+## lme4: correlation plot
+
+```{r corrplot1,width=10}
+par(mfrow=c(1,2))
+vv1 <- VarCorr(lmer1)
+## fix unit variance-covariance by adding residual variance:
+diag(vv1$units) <- diag(vv1$units)+sigma(lmer1)^2
+corrplot.mixed(cov2cor(vv1$line),upper="ellipse")
+corrplot.mixed(cov2cor(vv1$units),upper="ellipse")
+```
+
+Correlations of traits across lines are stronger than
+correlations within individuals. In both cases correlations are
+all positive (i.e. first axis of variation is *size* variation?)
+
+## lme4: coefficient plot
+```{r dwplot}
+cc1 <- tidy(lmer1,effect="fixed") %>%
+  tidyr::separate(term,into=c("trait","fixeff"),extra="merge",
+                  remove=FALSE)
+dwplot(cc1)+facet_wrap(~fixeff,scale="free",ncol=2)+
+  geom_vline(xintercept=0,lty=2)
+```
+
+These results tell approximately the same story (coefficients are
+consistent across traits within a fixed effect, e.g. effect of higher
+temperature is to reduce scores on all traits).
+
+## lme4: random effects
+
+**This is slow, you may not want to evaluate it on your computer**
+```{r dwplot2, cache=TRUE, eval = F}
+cc2 <- tidy(lmer1,
+            effect = "ran_pars",
+            conf.int = TRUE, conf.method = "profile")
+```
+
+# MCMCglmm
+
+Another option is the `MCMCglmm` package, which has a natural interface for general multivariate mixed models.  It takes a while to get used to the interface, but here is an example. Please check out [here](https://cran.r-project.org/web/packages/MCMCglmm/index.html) for more information about the package, and [here](https://cran.r-project.org/web/packages/MCMCglmm/vignettes/Overview.pdf) for an overview of how to use it.
+
+First I find it easier (given the interface of MCMCglmm) to create a formula with the response variables and predictors. This is only for the fixed effects part of the model.
+```{r mod_fm}
+fmla.MMLM1  <- cbind(femur_s, tibia_s, tarsus_s, SCT_s) ~
+    trait:(genotype*temp) - 1
+```
+
+Now we need to let `MCMCglmm` know which family (i.e. distribution) the response variables are. Since all are normal (Gaussian), we can specify it the following way.
+
+```{r fam}
+fam.test <- rep("gaussian", 4 )
+```
+
+Since `MCMCglmm` is fundamentally a Bayesian approach, it needs a prior. If you provide no prior by default, it tries a "flat" prior, although this rarely works. In this case I am providing a not-quite-flat prior, but just for the random effects of line and for the residual variances (could also provide them for the fixed effects). Choosing priors for variances and covariances can sometimes be tricky, and for the moment is too much to chew on in this class, so we will use the default prior distributions (inverse-Wishart is what it is called if you really care). If you want to get deep into this, come chat with me. I also have some simple tutorials where I draw out the effects of various common priors for variances and covariances.
+
+```{r prior} 
+prior.model.1 <- list( R = list(V=diag(4)/4, nu=0.004),  
+                       G = list(G1=list(V=diag(4)/4, nu=0.004)))
+```
+
+Let's take a quick look at the prior 
+
+
+```{r}
+prior.model.1
+```
+
+The `R` matrix prior is for the residuals. This is $\mathbf{R}_{4,4}$ as we have 4 traits in the VCV matrix. We have have non-zero variances for each trait as the mode for the prior, and 0 for covariances. However this is a weak prior, so even small amounts of data will largely overcome the pull of the prior. Another sensible approach we have used is to make the prior proportional to the overall observed VCV, as there is a large literature on the proportionality of covariance matrices for morphology. This may not be sensible for other types of multivariate response measures.
+
+```{r MCMCglmm_fit,cache=TRUE,results="hide"}
+##,depends.on=c("prior","mod_fm","get_data")}
+t2 <- system.time(
+    MMLM1.fit <- MCMCglmm(fmla.MMLM1,
+                          random=~ us(trait):line, 
+                          rcov=~ us(trait):units,
+                          prior=  prior.model.1,
+                          data= dll_data2, 
+                          family = fam.test, 
+                          nitt= 10000, burnin= 2000, thin=10)
+)
+```
+
+## MCMCglmm specification: fixed effects
+
+- `fmla.MMLM1` is the formula object we created above
+- it looks like the `lmer` formula
+- the `trait` term is a reserved word in `MCMCglmm`, letting it know we want to fit a multivariate mixed model
+- `MCMCglmm` automatically melts the data for us (and assigns the name `trait` the same way we did manually above)
+
+## MCMCglmm: random effects
+
+- `random=~us(trait):line` asks `MCMCglmm` to fit an *unstructured* covariance matrix for the line term (i.e the different wild type genotypes we are examining).- "Unstructured" means we are estimating the complete 4 x 4 matrix of covariances (= 4*5/2 = 10 elements total)
+- equivalent to `(trait-1|line)` in `lmer` model
+- `MCMCglmm` also automatically adds a `units`
+- `rcov=~us(trait):units` = `(trait-1|units)`
+- `MCMCglmm` offers a few other options for variance-covariance structures
+
+## MCMCglmm: other options
+
+The `nitt` is how many iterations for the MCMC we want to perform, and the `burnin` is how many should be ignored at the beginning of the random walk.
+
+## MCMCglmm: diagnostics
+
+The fit takes `r round(t2["elapsed"])` seconds.
+
+Normally we would spend a fair bit of time on diagnostics of the MCMC, but for now we will just quickly check the trace plots and autocorrelation.
+
+In the fitted object `$Sol` is for solution, which is the term used for fixed effects in MCMCglmm. `$VCV` is for the variance-covariance matrix.
+
+```{r diag_plots}
+library(lattice)
+xyplot(MMLM1.fit$Sol[,1:4])
+xyplot(MMLM1.fit$Sol[,13:16])
+acf(MMLM1.fit$Sol[,1:2])
+
+xyplot(MMLM1.fit$VCV[,1:4])
+acf(MMLM1.fit$VCV[,1:3])
+```
+
+Nothing terribly worrying.
+
+```{r MCMCglmm_sum}
+summary(MMLM1.fit)
+```
+
+Sometimes it is easier to look at the fixed and random effects separately.
+
+```{r summary_fixed}
+summary(MMLM1.fit$Sol)
+```
+
+And for the random effects.
+```{r summary_random}
+summary(MMLM1.fit$VCV)
+```
+
+This is not the most friendly output, and it takes a while to get used to. However, we can see that we still have evidence for something interesting going, and we could extract the vectors of effects as we did above.
+
+let's look at the VCV matrix for the random effects of line in a slightly clearer way (as a matrix)
+
+```{r VCV}
+##' extract variance-covariance matrices for MCMCglmm objects
+##' does not (yet) set cor, stddev, residual-var attributes
+##' may be fragile: depends on group vars not having dots in them?
+VarCorr.MCMCglmm <- function(object, ...) {
+    s <- summary(object$VCV)$statistics[,"Mean"]
+    grps <- gsub("^[^.]+\\.([[:alnum:]]+)$","\\1",names(s))
+    ss <- split(s,grps)
+    getVC <- function(x) {
+        nms <- gsub("^([^.]+)\\.[[:alnum:]]+$","\\1",names(x))
+        n <- length(nms)
+        L <- round(sqrt(n))
+        dimnms <- gsub("^([^:]+):.*$","\\1",nms[1:L])
+        return(matrix(x,dimnames=list(dimnms,dimnms),
+                      nrow=L))
+    }
+    r <- setNames(lapply(ss,getVC),unique(grps))
+    return(r)
+}
+vv <- VarCorr(MMLM1.fit)
+```
+
+```{r MCMCglmm_corrplot,width=10}
+par(mfrow=c(1,2))
+corrplot.mixed(cov2cor(vv$line),upper="ellipse")
+corrplot.mixed(cov2cor(vv$units),upper="ellipse")
+```
+
+- among-line effects are very similar to `lme4` estimates (variables are in a different order)
+- among-individual effects a
+
+This is only a taste of what to do, and after this we could start asking questions about this genetic variance co-variance matrix. 
+
+Compare fixed effects:
+
+```{r dwplot3}
+tt <- tidy(MMLM1.fit)
+tt2 <- tidy(lmer1)
+tt_comb <- bind_rows(lmer=tt,MCMCglmm=tt2,.id="model") %>%
+    filter(effect=="fixed")
+dwplot(tt_comb)+geom_vline(xintercept=0,lty=2)
+```
+
+## Pros and cons
+
+- MCMCglmm: Bayesian
+    - easier to get various kinds of confidence intervals
+	- flexible priors
+	- more flexible variance structures
+	- multiple response types within a unit (e.g. Gaussian + Poisson)
+- lme4: frequentist
+    - faster
+	- simpler interface (??)
+	- more convenient outputs
+- other options: `glmmTMB`, `brms` ...

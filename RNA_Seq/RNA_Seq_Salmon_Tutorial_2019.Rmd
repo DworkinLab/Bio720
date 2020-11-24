@@ -231,7 +231,7 @@ FBtr0070002	FBgn0031085
 FBtr0070003	FBgn0062565
 ```
 
-How do we generate this? In the R vignette for tximport `vignette('tximport')` it provides exaple code for this. You can potentially also get pretty close to a file like this for many model organisms. For *Drosophila* you can download a similar file from flybase that file link is here
+How do we generate this? In the R vignette for tximport `vignette('tximport')` it provides example code for this. You can potentially also get pretty close to a file like this for many model organisms. For *Drosophila* you can download a similar file from flybase that file link is here
 
 ftp://ftp.flybase.org/releases/FB2018_06/precomputed_files/genes/fbgn_fbtr_fbpp_fb_2018_06.tsv.gz
 
@@ -243,7 +243,7 @@ head fbgn_fbtr_fbpp_fb_2018_06.tsv
 tail fbgn_fbtr_fbpp_fb_2018_06.tsv
 ```
 
-As you will see it has a few rows at the top and bottom of the file that you will want to remove, and we also want to remove the third column (FlyBase_FBpp are the protein identifiers). How would you do these to generate the file in the right format? You can use sed (or awk), but an even easier approach is
+As you will see it has a few rows at the top and bottom of the file that you will want to remove, and we also want to remove the third column (FlyBase_FBpp are the protein identifiers). How would you do these to generate the file in the right format? One approach may be.
 
 ```{bash}
 tail -n +7 fbgn_fbtr_fbpp_fb_2018_06.tsv | head -n -3 | cut -f 1,2 > temp.tsv
@@ -257,7 +257,7 @@ With the `tail -n +7` I am streaming all but the first 7 lines of the file which
 
 So I use `paste` to make duplicate copy, and can extract the 2nd and 3rd column with cut
 
-Or just use awk, which is a nice powerful way to do text processing.
+Or just use awk, which is a nice powerful way to do text processing. I recommend this.
 
 ```{bash}
 awk '/^FBgn/ {print $2,"\t" $1}' fbgn_fbtr_fbpp_fb_2018_06.tsv > txp_to_gene_alt.tsv
