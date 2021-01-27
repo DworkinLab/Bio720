@@ -1,18 +1,30 @@
 # Bio720
 
 ## Course Summary
-This is the page for Bio720 (2018), a practical introduction to fundamental computational skills for biologists. This is taught through the Biology Department at McMaster University, but most course materials are freely available to anyone interested.
+This is my (ID) github repo for students for both Bio720 (introduction to computational skills for biologists) and BIO722 (practical introduction to bioinformatic and genomic computational skills). The reason I have these together is mostly history, but also utility. Those in BIO722 may need some reminders, so there are other useful links here.This is taught through the Biology Department at McMaster University, but most course materials are freely available to anyone interested.
+
+**Please note**, other instructors (Dr. Golding and Dr. Evans) may not put their material up here. So this may only be the parts of each class taught by ID.
+
+**please note** scripts for BIO722 are here, but most of the readme below is about BIO720.
+
 
 ## Instructors
 [Dr. Brian Golding](http://helix.biology.mcmaster.ca/)
 
-[Dr. Ian Dworkin](https://scholar.google.com/citations?user=Iium3AEAAAAJ&hl=)
+[Dr. Ben Evans](https://benevanslab.wordpress.com/)
+
+[Dr. Ian Dworkin](https://dworkinlab.github.io/)
 
 ## Class time and location
-Mondays 6-8PM, GS101
 
-## Background assumed for students
+BIO722, Wednesdays 1:45 - 3:45, MS TEAMS
+
+## Background assumed for students for Bio720
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out how to install basic software on a Mac (OS X) or a PC (Windows).
+
+## Background assumed for students for BIO722.
+
+That you have taken BIO720 or equivalent. Are comfortable at the UNIX shell, with at least one scripting language and able to learn a second. Know how to remotely access computers (ssh etc).
 
 # What students will need
 A laptop with internet access and the ability to install several programs (in particular, `R`, `Python` and a shell emulator if not using a Mac (OS X) or linux.

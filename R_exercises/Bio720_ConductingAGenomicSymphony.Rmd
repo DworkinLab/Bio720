@@ -3,6 +3,8 @@ title: "Bio720_MuckingWithDrosophilaPromoters"
 author: "Ian Dworkin"
 date: "12/3/2018"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 # A little introduction to Bioconductor using Drosophila
