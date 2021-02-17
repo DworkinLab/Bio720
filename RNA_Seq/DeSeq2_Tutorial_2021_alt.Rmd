@@ -155,6 +155,8 @@ Set the working directory for the raw count data (you need to know where you put
 
 The folder that contains all of the sub-folders with the quantifications should be renamed "quants"
 
+
+
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
@@ -162,6 +164,9 @@ setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salm
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 
+
+# or if you created a folder called salmon counts, call this instead.
+quant_files <- file.path("salmon_counts", list.files("salmon_counts"), "quant.sf")
 
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)

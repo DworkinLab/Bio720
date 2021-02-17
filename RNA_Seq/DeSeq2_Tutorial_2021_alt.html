@@ -505,6 +505,9 @@ setwd(&quot;/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019
 quant_files &lt;- file.path(&quot;quants&quot;, list.files(&quot;quants&quot;), &quot;quant.sf&quot;)
 
 
+# or if you created a folder called salmon counts, call this instead.
+quant_files &lt;- file.path(&quot;salmon_counts&quot;, list.files(&quot;salmon_counts&quot;), &quot;quant.sf&quot;)
+
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)
 
