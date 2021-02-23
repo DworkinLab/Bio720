@@ -87,10 +87,26 @@ Question 7: While I don't want you to run it, how would run fastqc on each .fast
 fastqc *.fastq -o YourOutputDirect/
 ```
 
-If you do this you may wish to specify the `-t n` for multi threads, with n being the number of processors.
+question 7.5: using the help options for by running `fastqc -h` figure out how you would run this above with multiple threads to speed things up?
+
+If you do this you may wish to specify the `-t n` for multi threads, with n being the number of processors. This will of course speed this up. But make sure you have access to multiple threads or cores, and use `top` to check what is currently available. If you are using a queuing system like qsub or slurm, this will be taken care of when you provide the information for your job submission.
+
 
 We will take a look at one of the reports `fastqc` generated in class. 
 
+### When looking at many qc files.
+
+Often you have many files you have to QC at the same time. At each stage (raw reads, post trimming, mapped reads, etc). That means a lot of individual QC files to look at. It is often useful to start with an overview to figure out which files (and underlying samples) need more attention because of potential issues. The [multiqc](https://multiqc.info/) program is a little script that helps to provide an aggregate look at your QC information. It can do this from over 100 different genomic software tools for QCing.
+
+While there is more information [here](https://multiqc.info/docs/#running-multiqc) on running *multiqc*, if you happen to have all of your QC output in a single folder (and want to aggregate all of them) all you need to do is navigate to that folder (i.e `cd`) and run (assuming you have multiqc in your path).
+
+
+```bash
+multiqc FolderWithQCFiles/
+```
+
+
+I leave this as a very useful exercise. The multiqc website has some short videos to help you with this, and interpreting the output.
 
 ## Trimming reads
 
@@ -131,7 +147,7 @@ java -jar /usr/local/trimmomatic/trimmomatic-0.36.jar PE -threads 12 \
 
 The two most important things I want to go over today are the choice of adapter file and the parameters for MAXINFO. We will discuss these in class. 
 
-Obviously we don't want to run the script each time so instead, I recommend making a for loop and running them all (consider submitting it as a shell script). It could look something like (PLEASE DON'T RUN THIS DURING THE TUTORIAL)
+Obviously we don't want to run the script each time so instead, I recommend making a for loop and running them all (consider submitting it as a shell script). It could look something like (PLEASE DON'T RUN THIS DURING THE TUTORIAL). Please see the next section for something I recommend doing (always) before running a for loop like this.
 
 
 ```bash
@@ -157,8 +173,34 @@ Don't forget to perform fastqc (or whatever qc) on the trimmed files to confirm 
 
 As mentioned in class, the trimmomatic adapter files are a bit minimal. I decided to use the adapter file from BBMap, which has many more adapters (including all of the index adapters in this data set). You should consider carefully which adapters you need to include. The fastqc report helps with this!
 
+### Getting your loop working
+
+In my experience, even with creating variables for directories and file names etc, little mistakes creep in and can be hard to find when you put together everything into a loop. As such I usually suggest a two pronged strategy whenever working with a new tool, or new set of samples.
+
+First (like we did above), run it "manually" for a single sample (or single pair of samples for paired end reads) to make sure it works.
+
+Then, before doing the for loop with the actual work, try something like this to return just the file names (with directories) and showing that the program you want to use will respond
+
+
+```bash
+for file in ${files[@]}
+do
+  name=${file}
+  base=`basename ${name} _R1_001.fastq`
+  echo basename: $base
+  echo rawdir: ${raw_dir}/${base}_R1_001.fastq
+  echo trimdir: ${trim_dir}/${base}_R1_PE.fastq
+  echo ""
+  java -jar /usr/local/trimmomatic/trimmomatic-0.36.jar -version
+  echo ""
+done
+```
+
+This will just spit out the names on screen for each sample that will be processed, with directories etc.. It also then just calls the program but only asks for the version of the program to be returned (it may be a slightly different flag for different programs). This often saves me a lot of time and energy.
+
 
 ## How counts were generated
+
 See Rob Patro's tutorial on using Salmon [here](https://combine-lab.github.io/salmon/).
 More info [here](https://buildmedia.readthedocs.org/media/pdf/salmon/stable/salmon.pdf)
 
@@ -166,15 +208,15 @@ More info [here](https://buildmedia.readthedocs.org/media/pdf/salmon/stable/salm
 ### The commands used for salmon for this data set
 In case you want to try this yourself at a later date. DO NOT RUN this now.
 
-First I downloaded the Drosophila transcriptome from flybase (in the drosophilaReference folder). 
+First I downloaded the Drosophila transcriptome from flybase (in the drosophilaReference folder). For your genome databases there may be specialized databases, or you may wish to use emsembl or UCSC versions of genomes or transcriptomes.
 
 salmon requires the generation of the index for the transcriptome (this only has to be done once per transcriptome). I used the commands
 
  **Don't re-run the index right now**
  
- Please note that this has undergone a major change. I am showing the older fast way, but please take a look at how to build the decoys as discussed in the tutorial above. You can also download some pre-computed indexes for this (and many other applications) from [refgenie](http://refgenomes.databio.org/index) which provides reference genome files for a number of commonly studied species.
+ Please note that this has undergone a major change, based on some findings and suggestions [in this study](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-020-02151-8). I am showing the older "easy" way, but please take a look at how to build the decoys as discussed in the tutorial above, or [this little (and straightforward) tutorial](https://combine-lab.github.io/alevin-tutorial/2019/selective-alignment/). You can also download some pre-computed indexes for this (and many other applications) from [refgenie](http://refgenomes.databio.org/index) which provides reference genome files for a number of commonly studied species.
  
-I have not used this new approach, but will try to work on it and see how it changes the results!
+I have just started to use this new approach, so I don't know much about its influence yet. Let me know if you want our script to build the index with decoys (the other way)
  
 
 ```bash
@@ -240,7 +282,7 @@ Which should copy the files to your local machine
 
 ## One other file we are going to need.
 
-Salmon is mapping to transcripts, which is great, but we want to get gene level counts. As we will see the R library `tximport` has some utilities to help with this. However one thing we need is a file (normally named `txp_to_gene.tsv`) which is a tab delimited file with two columns (no header). The first column is going to be the name of the transcript, and the second column will be gene identifier. So the first few lines may look like this:
+Salmon is mapping to transcripts, which is great, but we want to get gene level counts. As we will see the R library `tximport` has some utilities to help with this (which are relatively straightforward to do). However one thing we need is a file (normally named `txp_to_gene.tsv`) which is a tab delimited file with two columns (no header). The first column is going to be the name of the transcript, and the second column will be gene identifier. So the first few lines may look like this:
 
 
 
@@ -253,7 +295,7 @@ FBtr0070002	FBgn0031085
 FBtr0070003	FBgn0062565
 ```
 
-How do we generate this? In the R vignette for tximport `vignette('tximport')` it provides example code for this. You can potentially also get pretty close to a file like this for many model organisms. For *Drosophila* you can download a similar file from flybase that file link is here
+How do we generate this? In the R vignette for tximport `vignette('tximport')` it provides example code for this. You can potentially also get pretty close to a file like this for many model organisms. For *Drosophila* you can download a similar file from flybase that file link is here.
 
 ftp://ftp.flybase.org/releases/FB2018_06/precomputed_files/genes/fbgn_fbtr_fbpp_fb_2018_06.tsv.gz
 

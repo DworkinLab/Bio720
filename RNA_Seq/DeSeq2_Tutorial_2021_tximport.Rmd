@@ -16,9 +16,6 @@ knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
 ```
 
 
-## Note, this version uses the tximeta library to handle the import
-
-
 ## Background
 In this tutorial I will provide a basic overview of differential expression analysis for transcriptional profiling using RNA-Seq data. We will be using the [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) library in R. This approach utilizes a variant on the assumption of a negative binomially set of counts. This approach assumes that all you have going in are counts, that have not been normalized either for library size (or number of mapped reads), not for transcript length.
 
@@ -52,7 +49,25 @@ BiocManager::install("tximportData") # this is relatively big
 BiocManager::install("tximeta")
 BiocManager::install("GenomeInfoDb")
 BiocManager::install("org.Dm.eg.db")
+BiocManager::install("TxDb.Dmelanogaster.UCSC.dm6.ensGene") # Drosophila
+
 ```
+
+For your organisms it is worth checking what annotation packages are available. You can go to the [bioconductor annotation page](https://bioconductor.org/packages/3.12/data/annotation/). Alternatively you can
+
+
+```{r}
+
+avail <- BiocManager::available() # available packages
+
+avail[grep("Dmelanogaster", avail)] # which ones have Drosophila melanogaster.
+```
+
+You will see that there are two transcriptome available for *Drosophila melanogaster*. We want (and actually already installed) the `TxDb.Dmelanogaster.UCSC.dm6.ensGene` 
+
+If you need to make your own transcriptome database to use, you probably want functions like `makeTxDb`, `makeTxDbFromUCSC` or other similar functions in the GenomicFeatures library. I recommend checking out the [GenomicFeatures bioconductor library](https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html) (it has a vignette that discusses how to do this.)
+
+
 
 
 ## Data provenance
@@ -137,13 +152,15 @@ Which should copy the files to your local machine
 
 ## Get `R` loaded, and let's get started.
 
+### using tximport
+
+We are going to use tximport to help import our data along with a simple version of the file containing transcript and gene level information. We will use the tximport function to do so. There is a nice [tutorial here](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html) that I have modified things from.
+
 First we load in libraries in `R`. In addition to `DESeq2`, there are a few other libraries we will need.
 
 ```{r}
 library(DESeq2)
 library(tximport)
-library(tximeta)
-library(tximportData)
 library(readr)
 library("RColorBrewer")
 library(gplots)
@@ -158,8 +175,6 @@ Set the working directory for the raw count data (you need to know where you put
 
 The folder that contains all of the sub-folders with the quantifications should be renamed "quants"
 
-
-
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
@@ -167,30 +182,9 @@ setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salm
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 
-
-# or if you created a folder called salmon counts, call this instead.
-quant_files <- file.path("salmon_counts", list.files("salmon_counts"), "quant.sf")
 
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)
-
-# Let's take a look at this variable we have created
-quant_files
-```
-
-
-Depending on the implementation of R you are using (R on mac, R on windows, R studio), there may be some slight differences, so grab an instructor.
-
-Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple.  Just like Unix, R has a current working directory. You can set the working directory using the `setwd()` function. Once you have unzipped the file Rob has provided, you need to navigate to that directory. You will want to be inside the quantification folder. For me this will look like this.
-
-The folder that contains all of the sub-folders with the quantifications should be renamed "quants"
-
-```{r}
-#setwd("../data/salmon_counts")
-# This will differ for you!!!
-setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
-# Setting it up for the import (this is not the import itself)
-quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 
 # Let's take a look at this variable we have created
 quant_files
@@ -231,49 +225,72 @@ samples <- c("samw_17C_gen_fed_R1",
 names(quant_files) <- samples
 ```
 
-We also need to load in the table of gene and transcript names (with correspondence).  We can first take a look at this file (`txp_to_gene.tsv`) in your terminal. How do you do this?
 
-To import it into `R` we are going to use the most basic and general import tool in base `R`. `read.table()`. There are many options (and I often use read.csv). The data.table library has many useful approaches to this problem (FYI.)
+
+## using tximport
+
+Bioconductor is making it ostensibly easier to get all of your information from certain places, and so has introduced some packages like tximport and tximeta. It can import transcript level count data from a variety of packages (Salmon, Alevin, kallisto amongst them.)
 
 
 ```{r}
-tx2gene <- read.table("txp_to_gene.tsv", col.names=c("TXNAME", "GENEID"))
+library(TxDb.Dmelanogaster.UCSC.dm6.ensGene)
+
+txdb <- TxDb.Dmelanogaster.UCSC.dm6.ensGene # easier to write
+
+txdb # Some basic information about the transcriptome
+
+transcripts(txdb) # a list of all of the transcripts along with genome ranges.
+
+transcriptsBy(txdb, "gene") # grouped by gene
+```
+
+Note if you are trying to extract certain genomic features, the GenomicFeatures package will be your friend!
+
+
+Now we can extract just the transcript and gene identifiers and create the file we need
+```{r}
+k <- keys(txdb, keytype = "TXNAME")
+
+tx2gene <- select(x = txdb, keys = k, "GENEID", "TXNAME")
 
 head(tx2gene)
-dim(tx2gene)
-```
-Drosophila genomics and datasets have their own unique gene and transcript identifiers (as well as more universal ones). In this case the column TXNAME are the identifiers for the transcripts (FBtr) and the gene identifier is in the GENEID column (FBgn). The names for those columns are from when we generated above for the counts using salmon. More information about Drosophila genes, transcripts, etc can be found at [flybase](http://flybase.org/). 
-
-It is probably (before we start) worth asking about how many genes and how many transcripts we have in our list. How might you do this in `R`?
-
-```{R genesVStranscript}
-length(table(tx2gene$TXNAME))
-length(table(tx2gene$GENEID))
 ```
 
 
+Now we can go ahead and read in the input — this will automatically sum results to the gene level.  You can check out the tximport documentation for some other, potentially useful options.
 
 ```{r}
-txi <- tximport(quant_files,
-  type = "salmon",
-  tx2gene = tx2gene)
+txi <- tximport(quant_files, 
+                type = "salmon", tx2gene = tx2gene)
+```
 
-# Let's also take a quick look at txi
 
-summary(txi) # why 274560?
-str(txi)
-head(txi$counts) # note these are not integers!
-dim(txi$counts)
+This creates a pretty simple object with just the samples as columns and gene counts as rows for each gene.
 
-# We can look at patterns of correlations among samples
+```{r}
+summary(txi)
+
+head(txi$counts)
+```
+
+The counts are just that. the length represents sample specific average transcripts lengths to use as offsets in the models below.
+
+
+
+
+We can even start to look at the data in some basic ways. For instance, we can look at correlations among the full set of genes (remember our discussion of what this does and DOES NOT mean)
+```{r}
 cor(txi$counts[,1:3])
 
-
-pairs(log(txi$counts[,1:6]), 
+pairs(log2(txi$counts[,1:6]), 
       pch = 20, lower.panel = NULL, col = "#00000019")
 ```
 
-## Setting up our experimental design.
+
+## Getting ready for DeSeq2
+
+
+### Setting up our experimental design.
 
 DESeq2 needs the information about your experiment set up, so it knows the various predictors in the model (in this case genotype and background). The easiest way to do this is by setting it up as a data frame in R (which is a specialized version of a list). I will (time permitting) show you a more general way of doing this with another example, but for now we are explictly writing this out.
 
@@ -306,11 +323,11 @@ lane <- c(2,4,5,5,2,3,2,4,4,3,2,4,2,3,2,4,3,3,2,4)
 lane <- factor(lane) # we will want to treat this as a factor
 length(lane)
 
-rna.design <- data.frame(sample = samples,
-  file = quant_files,
-  tissue = tissue,
-  food = food,
-  temperature = temperature,
+rna.design <- data.frame(sample=samples,
+  file=quant_files,
+  tissue=tissue,
+  food=food,
+  temperature=temperature,
   lane = lane)
 
 rna.design
@@ -401,7 +418,7 @@ plotPCA(for_pca,
         ntop = 2000) 
 ```
 
-The `plotPCA()` function is actually just a wrapper for one of the built in functions for performing a principal components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the `plotPCA` function only plots the first couple of Principal components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.
+The `plotPCA()` function is actually just a wrapper for one of the built in functions for performing a principle components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the `plotPCA` function only plots the first couple of Principle components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.
 
 If you want to see what this wrapper is doing we can ask about this particular function
 
@@ -472,6 +489,7 @@ heatmap.2(mat, Rowv=as.dendrogram(hc),
  
 
 
+
 ## Proceeding with the real analysis we care about!
 Given the results from above, I am removing lane entirely.
 
@@ -496,7 +514,7 @@ Quick PCA with blind = F
 for_pca <- rlog(test_tissue_effects2, 
                 blind = FALSE)
 
-plotPCA(for_pca, ntop = 1000,
+plotPCA(for_pca, ntop = 500,
         intgroup=c("tissue", "food"))
 
 ```
@@ -661,7 +679,8 @@ plotDispEsts(test_FxT_effects2)
 plotMA(test_FxT_effects2, ylim =c(-4, 4))
 
 FxT_results <- results(test_FxT_effects2, 
-                       alpha = 0.05, pAdjustMethod="BH")
+                       alpha = 0.05, pAdjustMethod="BH"
+                       contrast = )
 summary(FxT_results)
 
 # reorder
@@ -683,3 +702,24 @@ hist(FxT_results$pvalue)
 ```
 
 False Discovery Methods (FDR) exploit this.
+
+
+
+## some cleanup to disconnect from remote db
+
+```{r}
+dbDisconnect() 
+```
+
+
+## As always it is good to know what libraries you loaded and version of R you used in the session 
+
+For your papers
+
+
+```{r}
+sessionInfo()
+
+# or try session_info() on older versions of R
+```
+
