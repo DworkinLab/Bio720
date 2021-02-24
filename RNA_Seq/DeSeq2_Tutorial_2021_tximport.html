@@ -380,20 +380,24 @@ summary {
 
 <div id="TOC">
 <ul>
-<li><a href="#note-this-version-uses-the-tximeta-library-to-handle-the-import"><span class="toc-section-number">0.1</span> Note, this version uses the tximeta library to handle the import</a></li>
-<li><a href="#background"><span class="toc-section-number">0.2</span> Background</a></li>
-<li><a href="#installing-libraries-in-r"><span class="toc-section-number">0.3</span> Installing libraries in R</a></li>
-<li><a href="#install-deseq2-edger-and-limma"><span class="toc-section-number">0.4</span> Install DeSeq2, edgeR and limma</a></li>
-<li><a href="#data-provenance"><span class="toc-section-number">0.5</span> Data provenance</a></li>
-<li><a href="#how-counts-were-generated"><span class="toc-section-number">0.6</span> How counts were generated</a><ul>
-<li><a href="#the-commands-used-for-salmon-for-this-data-set"><span class="toc-section-number">0.6.1</span> The commands used for salmon for this data set</a></li>
-<li><a href="#getting-the-full-set-of-counts-we-are-going-to-use."><span class="toc-section-number">0.6.2</span> Getting the full set of counts we are going to use.</a></li>
+<li><a href="#background"><span class="toc-section-number">0.1</span> Background</a></li>
+<li><a href="#installing-libraries-in-r"><span class="toc-section-number">0.2</span> Installing libraries in R</a></li>
+<li><a href="#install-deseq2-edger-and-limma"><span class="toc-section-number">0.3</span> Install DeSeq2, edgeR and limma</a></li>
+<li><a href="#data-provenance"><span class="toc-section-number">0.4</span> Data provenance</a></li>
+<li><a href="#how-counts-were-generated"><span class="toc-section-number">0.5</span> How counts were generated</a><ul>
+<li><a href="#the-commands-used-for-salmon-for-this-data-set"><span class="toc-section-number">0.5.1</span> The commands used for salmon for this data set</a></li>
+<li><a href="#getting-the-full-set-of-counts-we-are-going-to-use."><span class="toc-section-number">0.5.2</span> Getting the full set of counts we are going to use.</a></li>
 </ul></li>
-<li><a href="#get-r-loaded-and-lets-get-started."><span class="toc-section-number">0.7</span> Get <code>R</code> loaded, and let’s get started.</a></li>
-<li><a href="#loading-the-count-data-into-r"><span class="toc-section-number">0.8</span> Loading the count data into R</a><ul>
-<li><a href="#getting-the-meta-data-set"><span class="toc-section-number">0.8.1</span> Getting the meta-data set</a></li>
+<li><a href="#get-r-loaded-and-lets-get-started."><span class="toc-section-number">0.6</span> Get <code>R</code> loaded, and let’s get started.</a><ul>
+<li><a href="#using-tximport"><span class="toc-section-number">0.6.1</span> using tximport</a></li>
 </ul></li>
-<li><a href="#setting-up-our-experimental-design."><span class="toc-section-number">0.9</span> Setting up our experimental design.</a></li>
+<li><a href="#loading-the-count-data-into-r"><span class="toc-section-number">0.7</span> Loading the count data into R</a><ul>
+<li><a href="#getting-the-meta-data-set"><span class="toc-section-number">0.7.1</span> Getting the meta-data set</a></li>
+</ul></li>
+<li><a href="#using-tximport-1"><span class="toc-section-number">0.8</span> using tximport</a></li>
+<li><a href="#getting-ready-for-deseq2"><span class="toc-section-number">0.9</span> Getting ready for DeSeq2</a><ul>
+<li><a href="#setting-up-our-experimental-design."><span class="toc-section-number">0.9.1</span> Setting up our experimental design.</a></li>
+</ul></li>
 <li><a href="#data-is-in-now-what"><span class="toc-section-number">0.10</span> Data is in, now what?</a></li>
 <li><a href="#preliminary-quality-control-analysis"><span class="toc-section-number">0.11</span> Preliminary Quality Control analysis</a><ul>
 <li><a href="#principal-components-analysis-and-hierarchical-clustering-are-useful-tools-to-visualize-patterns-and-to-identify-potential-confounds"><span class="toc-section-number">0.11.1</span> Principal Components analysis and hierarchical clustering are useful tools to visualize patterns (and to identify potential confounds)</a></li>
@@ -405,25 +409,24 @@ summary {
 <li><a href="#more-complex-models"><span class="toc-section-number">0.14</span> More complex models</a><ul>
 <li><a href="#interaction-terms-in-models."><span class="toc-section-number">0.14.1</span> Interaction terms in models.</a></li>
 </ul></li>
+<li><a href="#some-cleanup-to-disconnect-from-remote-db"><span class="toc-section-number">0.15</span> some cleanup to disconnect from remote db</a></li>
+<li><a href="#as-always-it-is-good-to-know-what-libraries-you-loaded-and-version-of-r-you-used-in-the-session"><span class="toc-section-number">0.16</span> As always it is good to know what libraries you loaded and version of R you used in the session</a></li>
 </ul>
 </div>
 
-<div id="note-this-version-uses-the-tximeta-library-to-handle-the-import" class="section level2">
-<h2><span class="header-section-number">0.1</span> Note, this version uses the tximeta library to handle the import</h2>
-</div>
 <div id="background" class="section level2">
-<h2><span class="header-section-number">0.2</span> Background</h2>
+<h2><span class="header-section-number">0.1</span> Background</h2>
 <p>In this tutorial I will provide a basic overview of differential expression analysis for transcriptional profiling using RNA-Seq data. We will be using the <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> library in R. This approach utilizes a variant on the assumption of a negative binomially set of counts. This approach assumes that all you have going in are counts, that have not been normalized either for library size (or number of mapped reads), not for transcript length.</p>
 <p>Instead of running these analyses on info, we’ll run this locally on our own computers. Before you begin, you will need to download all of the count files we generated using Salmon. Rob Patro and the author of DESeq2 (Mike Love) have developed some nice import tools to get everything into <code>R</code> relatively efficiently. However, you will need to use a very recent version of <code>R</code> to use these functions.</p>
 </div>
 <div id="installing-libraries-in-r" class="section level2">
-<h2><span class="header-section-number">0.3</span> Installing libraries in R</h2>
+<h2><span class="header-section-number">0.2</span> Installing libraries in R</h2>
 <p>It is possible or even likely that you will get an error for some of these, as you have not yet installed the appropriate library. Some are from CRAN (where most R libraries are available), while others are part of bioconductor.</p>
 <p>To install for base R (like <code>gplots</code>) you can use the: You will need to remove the <code>#</code> first which is the comment character in R</p>
 <pre class="r"><code>#install.packages(&quot;gplots&quot;)</code></pre>
 </div>
 <div id="install-deseq2-edger-and-limma" class="section level2">
-<h2><span class="header-section-number">0.4</span> Install DeSeq2, edgeR and limma</h2>
+<h2><span class="header-section-number">0.3</span> Install DeSeq2, edgeR and limma</h2>
 <p>Please note that bioconductor (all of the genomics libraries in R) has its own way of installing things using the <code>BioCManager</code> library <code>install()</code> function.</p>
 <pre class="r"><code>if (!requireNamespace(&quot;BiocManager&quot;, quietly = TRUE))
     install.packages(&quot;BiocManager&quot;)
@@ -435,10 +438,17 @@ BiocManager::install(&quot;tximport&quot;)
 BiocManager::install(&quot;tximportData&quot;) # this is relatively big
 BiocManager::install(&quot;tximeta&quot;)
 BiocManager::install(&quot;GenomeInfoDb&quot;)
-BiocManager::install(&quot;org.Dm.eg.db&quot;)</code></pre>
+BiocManager::install(&quot;org.Dm.eg.db&quot;)
+BiocManager::install(&quot;TxDb.Dmelanogaster.UCSC.dm6.ensGene&quot;) # Drosophila</code></pre>
+<p>For your organisms it is worth checking what annotation packages are available. You can go to the <a href="https://bioconductor.org/packages/3.12/data/annotation/">bioconductor annotation page</a>. Alternatively you can use a command like this one (you just need to know what names your organism will have in the database)</p>
+<pre class="r"><code>avail &lt;- BiocManager::available() # available packages
+
+avail[grep(&quot;Dmelanogaster&quot;, avail)] # which ones have Drosophila melanogaster.</code></pre>
+<p>You will see that there are two transcriptome available for <em>Drosophila melanogaster</em>. We want (and actually already installed) the <code>TxDb.Dmelanogaster.UCSC.dm6.ensGene</code></p>
+<p>If you need to make your own transcriptome database to use, you probably want functions like <code>makeTxDb</code>, <code>makeTxDbFromUCSC</code> or other similar functions in the GenomicFeatures library. I recommend checking out the <a href="https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html">GenomicFeatures bioconductor library</a> (it has a vignette that discusses how to do this.)</p>
 </div>
 <div id="data-provenance" class="section level2">
-<h2><span class="header-section-number">0.5</span> Data provenance</h2>
+<h2><span class="header-section-number">0.4</span> Data provenance</h2>
 <p>The RNA-seq data we are using was generated from Drosophila melanogaster, where the developing wing and genital tissues (imaginal discs) were dissected out of larvae. We grew these flies at multiple temperatures (17C and 24C), where they tend to be bigger at lower temperatures. We also had “fed” and “starved” treatments (with starvation during development generally making organisms smaller). Importantly the wing tends to grow isometrically and is plastic with respect to nutrition and temperature. The genital discs much less so.</p>
 <p>For each treatment combination, 3 independent biological samples (each sample consisting of ~30 imaginal discs) were produced. However several sequencing libraries failed, so the design is no longer balanced.</p>
 <p>So file names like</p>
@@ -448,10 +458,10 @@ BiocManager::install(&quot;org.Dm.eg.db&quot;)</code></pre>
 <p>In total, 20 samples were sequenced (100bp paired end using Illumina Tru-Seq chemistry)</p>
 </div>
 <div id="how-counts-were-generated" class="section level2">
-<h2><span class="header-section-number">0.6</span> How counts were generated</h2>
+<h2><span class="header-section-number">0.5</span> How counts were generated</h2>
 <p>See Rob Patro’s tutorial on using Salmon <a href="https://combine-lab.github.io/salmon/">here</a>.</p>
 <div id="the-commands-used-for-salmon-for-this-data-set" class="section level3">
-<h3><span class="header-section-number">0.6.1</span> The commands used for salmon for this data set</h3>
+<h3><span class="header-section-number">0.5.1</span> The commands used for salmon for this data set</h3>
 <p>In case you want to try this yourself at a later date. DO NOT RUN This now.</p>
 <p>First I downloaded the Drosophila transcriptome (in the drosophilaReference folder).</p>
 <p>salmon requires the generation of the index for the transcriptome (this only has to be done once per transcriptome). I used the commands</p>
@@ -476,7 +486,7 @@ salmon quant -i ${index_dir} -l A \
 <p>Question 8: Trying running salmon on one sample (set of reads pairs) that differs from the ones in this example. As always, please output it in your own home directory.</p>
 </div>
 <div id="getting-the-full-set-of-counts-we-are-going-to-use." class="section level3">
-<h3><span class="header-section-number">0.6.2</span> Getting the full set of counts we are going to use.</h3>
+<h3><span class="header-section-number">0.5.2</span> Getting the full set of counts we are going to use.</h3>
 <p>Counts from Salmon are found on info <code>2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/salmon_counts</code></p>
 <p>I suggest using scp (with <code>-r</code>) to copy these to your local computer. Something like. There may be a better way, but I first generally copy what I am going to scp over to my regular folder</p>
 <p>So on info (need to be logged into info11<em>, with </em> being the one you work on)</p>
@@ -490,12 +500,13 @@ scp -r yourinfo@info.mcmaster.ca:~salmon_counts .</code></pre>
 </div>
 </div>
 <div id="get-r-loaded-and-lets-get-started." class="section level2">
-<h2><span class="header-section-number">0.7</span> Get <code>R</code> loaded, and let’s get started.</h2>
+<h2><span class="header-section-number">0.6</span> Get <code>R</code> loaded, and let’s get started.</h2>
+<div id="using-tximport" class="section level3">
+<h3><span class="header-section-number">0.6.1</span> using tximport</h3>
+<p>We are going to use tximport to help import our data along with a simple version of the file containing transcript and gene level information. We will use the tximport function to do so. There is a nice <a href="https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html">tutorial here</a> that I have modified things from.</p>
 <p>First we load in libraries in <code>R</code>. In addition to <code>DESeq2</code>, there are a few other libraries we will need.</p>
 <pre class="r"><code>library(DESeq2)
 library(tximport)
-library(tximeta)
-library(tximportData)
 library(readr)
 library(&quot;RColorBrewer&quot;)
 library(gplots)</code></pre>
@@ -509,31 +520,18 @@ setwd(&quot;/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019
 quant_files &lt;- file.path(&quot;quants&quot;, list.files(&quot;quants&quot;), &quot;quant.sf&quot;)
 
 
-# or if you created a folder called salmon counts, call this instead.
-quant_files &lt;- file.path(&quot;salmon_counts&quot;, list.files(&quot;salmon_counts&quot;), &quot;quant.sf&quot;)
-
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)
 
 # Let&#39;s take a look at this variable we have created
 quant_files</code></pre>
-<p>Depending on the implementation of R you are using (R on mac, R on windows, R studio), there may be some slight differences, so grab an instructor.</p>
-<p>Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple. Just like Unix, R has a current working directory. You can set the working directory using the <code>setwd()</code> function. Once you have unzipped the file Rob has provided, you need to navigate to that directory. You will want to be inside the quantification folder. For me this will look like this.</p>
-<p>The folder that contains all of the sub-folders with the quantifications should be renamed “quants”</p>
-<pre class="r"><code>#setwd(&quot;../data/salmon_counts&quot;)
-# This will differ for you!!!
-setwd(&quot;/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/&quot;)
-# Setting it up for the import (this is not the import itself)
-quant_files &lt;- file.path(&quot;quants&quot;, list.files(&quot;quants&quot;), &quot;quant.sf&quot;)
-
-# Let&#39;s take a look at this variable we have created
-quant_files</code></pre>
+</div>
 </div>
 <div id="loading-the-count-data-into-r" class="section level2">
-<h2><span class="header-section-number">0.8</span> Loading the count data into R</h2>
+<h2><span class="header-section-number">0.7</span> Loading the count data into R</h2>
 <p>DESeq2 and other libraries often have helper functions for getting your count data in. In particular if you are using objects created from other tools that the same authors generated. However, if you are going to make your own pipeline, it is important to know how to write some simple R code to be able to get your data in, and to parse it so that it is in the format you need. I will (if we have time) go through a more typical example where there is no helper functions (so you write it yourself). However, we will use the ones available from <code>tximport</code>.</p>
 <div id="getting-the-meta-data-set" class="section level3">
-<h3><span class="header-section-number">0.8.1</span> Getting the meta-data set</h3>
+<h3><span class="header-section-number">0.7.1</span> Getting the meta-data set</h3>
 <p>Normally I extract these direct from the file names (which I could here given how I have the names written). However, more generally (but more laborious) you can do it directly in <code>R</code> like I have below, or you could make a second data frame containing the meta data.</p>
 <pre class="r"><code># Names of samples.
 samples &lt;- c(&quot;samw_17C_gen_fed_R1&quot;, 
@@ -558,37 +556,45 @@ samples &lt;- c(&quot;samw_17C_gen_fed_R1&quot;,
              &quot;samw_24C_wings_starved_R3&quot;)
 
 names(quant_files) &lt;- samples</code></pre>
-<p>We also need to load in the table of gene and transcript names (with correspondence). We can first take a look at this file (<code>txp_to_gene.tsv</code>) in your terminal. How do you do this?</p>
-<p>To import it into <code>R</code> we are going to use the most basic and general import tool in base <code>R</code>. <code>read.table()</code>. There are many options (and I often use read.csv). The data.table library has many useful approaches to this problem (FYI.)</p>
-<pre class="r"><code>tx2gene &lt;- read.table(&quot;txp_to_gene.tsv&quot;, col.names=c(&quot;TXNAME&quot;, &quot;GENEID&quot;))
+</div>
+</div>
+<div id="using-tximport-1" class="section level2">
+<h2><span class="header-section-number">0.8</span> using tximport</h2>
+<p>Bioconductor is making it ostensibly easier to get all of your information from certain places, and so has introduced some packages like tximport and tximeta. It can import transcript level count data from a variety of packages (Salmon, Alevin, kallisto amongst them.)</p>
+<pre class="r"><code>library(TxDb.Dmelanogaster.UCSC.dm6.ensGene)
 
-head(tx2gene)
-dim(tx2gene)</code></pre>
-<p>Drosophila genomics and datasets have their own unique gene and transcript identifiers (as well as more universal ones). In this case the column TXNAME are the identifiers for the transcripts (FBtr) and the gene identifier is in the GENEID column (FBgn). The names for those columns are from when we generated above for the counts using salmon. More information about Drosophila genes, transcripts, etc can be found at <a href="http://flybase.org/">flybase</a>.</p>
-<p>It is probably (before we start) worth asking about how many genes and how many transcripts we have in our list. How might you do this in <code>R</code>?</p>
-<pre class="r"><code>length(table(tx2gene$TXNAME))
-length(table(tx2gene$GENEID))</code></pre>
-<pre class="r"><code>txi &lt;- tximport(quant_files,
-  type = &quot;salmon&quot;,
-  tx2gene = tx2gene)
+txdb &lt;- TxDb.Dmelanogaster.UCSC.dm6.ensGene # easier to write
 
-# Let&#39;s also take a quick look at txi
+txdb # Some basic information about the transcriptome
 
-summary(txi) # why 274560?
-str(txi)
-head(txi$counts) # note these are not integers!
-dim(txi$counts)
+transcripts(txdb) # a list of all of the transcripts along with genome ranges.
 
-# We can look at patterns of correlations among samples
-cor(txi$counts[,1:3])
+transcriptsBy(txdb, &quot;gene&quot;) # grouped by gene</code></pre>
+<p>Note if you are trying to extract certain genomic features, the GenomicFeatures package will be your friend!</p>
+<p>Now we can extract just the transcript and gene identifiers and create the file we need</p>
+<pre class="r"><code>k &lt;- keys(txdb, keytype = &quot;TXNAME&quot;)
 
+tx2gene &lt;- select(x = txdb, keys = k, &quot;GENEID&quot;, &quot;TXNAME&quot;)
 
-pairs(log(txi$counts[,1:6]), 
+head(tx2gene)</code></pre>
+<p>Now we can go ahead and read in the input — this will automatically sum results to the gene level. You can check out the tximport documentation for some other, potentially useful options.</p>
+<pre class="r"><code>txi &lt;- tximport(quant_files, 
+                type = &quot;salmon&quot;, tx2gene = tx2gene)</code></pre>
+<p>This creates a pretty simple object with just the samples as columns and gene counts as rows for each gene.</p>
+<pre class="r"><code>summary(txi)
+
+head(txi$counts)</code></pre>
+<p>The counts are just that. the length represents sample specific average transcripts lengths to use as offsets in the models below.</p>
+<p>We can even start to look at the data in some basic ways. For instance, we can look at correlations among the full set of genes (remember our discussion of what this does and DOES NOT mean)</p>
+<pre class="r"><code>cor(txi$counts[,1:3])
+
+pairs(log2(txi$counts[,1:6]), 
       pch = 20, lower.panel = NULL, col = &quot;#00000019&quot;)</code></pre>
 </div>
-</div>
-<div id="setting-up-our-experimental-design." class="section level2">
-<h2><span class="header-section-number">0.9</span> Setting up our experimental design.</h2>
+<div id="getting-ready-for-deseq2" class="section level2">
+<h2><span class="header-section-number">0.9</span> Getting ready for DeSeq2</h2>
+<div id="setting-up-our-experimental-design." class="section level3">
+<h3><span class="header-section-number">0.9.1</span> Setting up our experimental design.</h3>
 <p>DESeq2 needs the information about your experiment set up, so it knows the various predictors in the model (in this case genotype and background). The easiest way to do this is by setting it up as a data frame in R (which is a specialized version of a list). I will (time permitting) show you a more general way of doing this with another example, but for now we are explictly writing this out.</p>
 <pre class="r"><code>tissue &lt;- c(rep(&quot;genital&quot;, 5),
             rep(&quot;wing&quot;, 6),
@@ -617,11 +623,11 @@ lane &lt;- c(2,4,5,5,2,3,2,4,4,3,2,4,2,3,2,4,3,3,2,4)
 lane &lt;- factor(lane) # we will want to treat this as a factor
 length(lane)
 
-rna.design &lt;- data.frame(sample = samples,
-  file = quant_files,
-  tissue = tissue,
-  food = food,
-  temperature = temperature,
+rna.design &lt;- data.frame(sample=samples,
+  file=quant_files,
+  tissue=tissue,
+  food=food,
+  temperature=temperature,
   lane = lane)
 
 rna.design
@@ -632,6 +638,7 @@ load.model &lt;- formula(~ tissue)</code></pre>
 <pre class="r"><code>all.data &lt;- DESeqDataSetFromTximport(txi, 
                                      rna.design,
                                      design=load.model)</code></pre>
+</div>
 </div>
 <div id="data-is-in-now-what" class="section level2">
 <h2><span class="header-section-number">0.10</span> Data is in, now what?</h2>
@@ -682,7 +689,7 @@ dim(for_pca)</code></pre>
 <pre class="r"><code>plotPCA(for_pca, 
         intgroup=c(&quot;lane&quot;),
         ntop = 2000) </code></pre>
-<p>The <code>plotPCA()</code> function is actually just a wrapper for one of the built in functions for performing a principal components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the <code>plotPCA</code> function only plots the first couple of Principal components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.</p>
+<p>The <code>plotPCA()</code> function is actually just a wrapper for one of the built in functions for performing a principle components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the <code>plotPCA</code> function only plots the first couple of Principle components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.</p>
 <p>If you want to see what this wrapper is doing we can ask about this particular function</p>
 <pre class="r"><code>getMethod(&quot;plotPCA&quot;,&quot;DESeqTransform&quot;)
 
@@ -743,7 +750,7 @@ resultsNames(test_tissue_effects2)</code></pre>
 <pre class="r"><code>for_pca &lt;- rlog(test_tissue_effects2, 
                 blind = FALSE)
 
-plotPCA(for_pca, ntop = 1000,
+plotPCA(for_pca, ntop = 500,
         intgroup=c(&quot;tissue&quot;, &quot;food&quot;))</code></pre>
 <p>Now we can look at some of the results. First we recheck the dispersion estimates estimated in our model</p>
 <pre class="r"><code>plotDispEsts(test_tissue_effects2,
@@ -873,7 +880,8 @@ plotDispEsts(test_FxT_effects2)
 plotMA(test_FxT_effects2, ylim =c(-4, 4))
 
 FxT_results &lt;- results(test_FxT_effects2, 
-                       alpha = 0.05, pAdjustMethod=&quot;BH&quot;)
+                       alpha = 0.05, pAdjustMethod=&quot;BH&quot;
+                       contrast = )
 summary(FxT_results)
 
 # reorder
@@ -886,6 +894,17 @@ hist(p_fake)</code></pre>
 <pre class="r"><code>hist(FxT_results$pvalue)</code></pre>
 <p>False Discovery Methods (FDR) exploit this.</p>
 </div>
+</div>
+<div id="some-cleanup-to-disconnect-from-remote-db" class="section level2">
+<h2><span class="header-section-number">0.15</span> some cleanup to disconnect from remote db</h2>
+<pre class="r"><code>dbDisconnect() </code></pre>
+</div>
+<div id="as-always-it-is-good-to-know-what-libraries-you-loaded-and-version-of-r-you-used-in-the-session" class="section level2">
+<h2><span class="header-section-number">0.16</span> As always it is good to know what libraries you loaded and version of R you used in the session</h2>
+<p>For your papers</p>
+<pre class="r"><code>sessionInfo()
+
+# or try session_info() on older versions of R</code></pre>
 </div>
 
 

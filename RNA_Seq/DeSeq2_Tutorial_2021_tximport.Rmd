@@ -3,11 +3,13 @@ title: "Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)
 author: "Ian Dworkin"
 date: "Wed February 17th 2021"
 output:
-  html_document: 
+  html_document:
     keep_md: yes
     number_sections: yes
     toc: yes
-editor_options: 
+  pdf_document:
+    toc: yes
+editor_options:
   chunk_output_type: console
 ---
  
@@ -53,7 +55,7 @@ BiocManager::install("TxDb.Dmelanogaster.UCSC.dm6.ensGene") # Drosophila
 
 ```
 
-For your organisms it is worth checking what annotation packages are available. You can go to the [bioconductor annotation page](https://bioconductor.org/packages/3.12/data/annotation/). Alternatively you can
+For your organisms it is worth checking what annotation packages are available. You can go to the [bioconductor annotation page](https://bioconductor.org/packages/3.12/data/annotation/). Alternatively you can use a command like this one (you just need to know what names your organism will have in the database)
 
 
 ```{r}

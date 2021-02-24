@@ -1,0 +1,1103 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)},
+  pdfauthor={Ian Dworkin},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)}
+\author{Ian Dworkin}
+\date{Wed February 17th 2021}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\hypertarget{background}{%
+\subsection{Background}\label{background}}
+
+In this tutorial I will provide a basic overview of differential
+expression analysis for transcriptional profiling using RNA-Seq data. We
+will be using the
+\href{https://bioconductor.org/packages/release/bioc/html/DESeq2.html}{DESeq2}
+library in R. This approach utilizes a variant on the assumption of a
+negative binomially set of counts. This approach assumes that all you
+have going in are counts, that have not been normalized either for
+library size (or number of mapped reads), not for transcript length.
+
+Instead of running these analyses on info, we'll run this locally on our
+own computers. Before you begin, you will need to download all of the
+count files we generated using Salmon. Rob Patro and the author of
+DESeq2 (Mike Love) have developed some nice import tools to get
+everything into \texttt{R} relatively efficiently. However, you will
+need to use a very recent version of \texttt{R} to use these functions.
+
+\hypertarget{installing-libraries-in-r}{%
+\subsection{Installing libraries in R}\label{installing-libraries-in-r}}
+
+It is possible or even likely that you will get an error for some of
+these, as you have not yet installed the appropriate library. Some are
+from CRAN (where most R libraries are available), while others are part
+of bioconductor.
+
+To install for base R (like \texttt{gplots}) you can use the: You will
+need to remove the \texttt{\#} first which is the comment character in R
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#install.packages("gplots")}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{install-deseq2-edger-and-limma}{%
+\subsection{Install DeSeq2, edgeR and
+limma}\label{install-deseq2-edger-and-limma}}
+
+Please note that bioconductor (all of the genomics libraries in R) has
+its own way of installing things using the \texttt{BioCManager} library
+\texttt{install()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{requireNamespace}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{, }\DataTypeTok{quietly =} \OtherTok{TRUE}\NormalTok{))}
+    \KeywordTok{install.packages}\NormalTok{(}\StringTok{"BiocManager"}\NormalTok{)}
+
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"DESeq2"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"edgeR"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"limma"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"tximport"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"tximportData"}\NormalTok{) }\CommentTok{# this is relatively big}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"tximeta"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"GenomeInfoDb"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"org.Dm.eg.db"}\NormalTok{)}
+\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{install}\NormalTok{(}\StringTok{"TxDb.Dmelanogaster.UCSC.dm6.ensGene"}\NormalTok{) }\CommentTok{# Drosophila}
+\end{Highlighting}
+\end{Shaded}
+
+For your organisms it is worth checking what annotation packages are
+available. You can go to the
+\href{https://bioconductor.org/packages/3.12/data/annotation/}{bioconductor
+annotation page}. Alternatively you can use a command like this one (you
+just need to know what names your organism will have in the database)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{avail <-}\StringTok{ }\NormalTok{BiocManager}\OperatorTok{::}\KeywordTok{available}\NormalTok{() }\CommentTok{# available packages}
+
+\NormalTok{avail[}\KeywordTok{grep}\NormalTok{(}\StringTok{"Dmelanogaster"}\NormalTok{, avail)] }\CommentTok{# which ones have Drosophila melanogaster.}
+\end{Highlighting}
+\end{Shaded}
+
+You will see that there are two transcriptome available for
+\emph{Drosophila melanogaster}. We want (and actually already installed)
+the \texttt{TxDb.Dmelanogaster.UCSC.dm6.ensGene}
+
+If you need to make your own transcriptome database to use, you probably
+want functions like \texttt{makeTxDb}, \texttt{makeTxDbFromUCSC} or
+other similar functions in the GenomicFeatures library. I recommend
+checking out the
+\href{https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html}{GenomicFeatures
+bioconductor library} (it has a vignette that discusses how to do this.)
+
+\hypertarget{data-provenance}{%
+\subsection{Data provenance}\label{data-provenance}}
+
+The RNA-seq data we are using was generated from Drosophila
+melanogaster, where the developing wing and genital tissues (imaginal
+discs) were dissected out of larvae. We grew these flies at multiple
+temperatures (17C and 24C), where they tend to be bigger at lower
+temperatures. We also had ``fed'' and ``starved'' treatments (with
+starvation during development generally making organisms smaller).
+Importantly the wing tends to grow isometrically and is plastic with
+respect to nutrition and temperature. The genital discs much less so.
+
+For each treatment combination, 3 independent biological samples (each
+sample consisting of \textasciitilde30 imaginal discs) were produced.
+However several sequencing libraries failed, so the design is no longer
+balanced.
+
+So file names like
+
+\texttt{samw\_17C\_gen\_fed\_R1\_TAGCTT\_L002}
+
+Means that the genotype was Samarkand \emph{white} (all of these samples
+are genetically identical), reared at 17 degrees C with high food, this
+would be replicate 1. L002 means this sample was run on lane 2 of the
+flow cell.
+
+\texttt{samw\_24C\_wings\_fed\_R2\_AGTCAA\_L004} means the animals were
+reared at 24C, these were wings, also fed from lane 4. The 6 letter
+sequence is the barcode used for the sample during multiplexed
+sequencing.
+
+In total, 20 samples were sequenced (100bp paired end using Illumina
+Tru-Seq chemistry)
+
+\hypertarget{how-counts-were-generated}{%
+\subsection{How counts were generated}\label{how-counts-were-generated}}
+
+See Rob Patro's tutorial on using Salmon
+\href{https://combine-lab.github.io/salmon/}{here}.
+
+\hypertarget{the-commands-used-for-salmon-for-this-data-set}{%
+\subsubsection{The commands used for salmon for this data
+set}\label{the-commands-used-for-salmon-for-this-data-set}}
+
+In case you want to try this yourself at a later date. DO NOT RUN This
+now.
+
+First I downloaded the Drosophila transcriptome (in the
+drosophilaReference folder).
+
+salmon requires the generation of the index for the transcriptome (this
+only has to be done once per transcriptome). I used the commands
+
+\textbf{Don't re-run the index right now}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ExtensionTok{salmon}\NormalTok{ index -t dmel-all-transcript-r6.25.fasta -i ./salmon_index/dmel-all-transcript_r6.25_index}
+\end{Highlighting}
+\end{Shaded}
+
+Once the index was generated I could then generate counts, using the
+trimmed paired end files. Here is an example of doing it for a set of
+paired end reads.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\VariableTok{index_dir=}\NormalTok{/2/scratch/Bio722_2019/ID/drosophilaReference/salmon_index/dmel-all-transcript_r6.25_index}
+
+\VariableTok{sample_dir=}\NormalTok{/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads}
+
+\VariableTok{sample_name=}\NormalTok{samw_wings_starved_R3_GCCAAT_L004}
+
+\VariableTok{out_dir=}\NormalTok{/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/salmon_counts}
+
+\ExtensionTok{salmon}\NormalTok{ quant -i }\VariableTok{$\{index_dir\}}\NormalTok{ -l A \textbackslash{}}
+\NormalTok{  -1 }\VariableTok{$\{sample_dir\}}\NormalTok{/}\VariableTok{$\{sample_name\}}\NormalTok{_R1_PE.fastq \textbackslash{}}
+\NormalTok{  -2 }\VariableTok{$\{sample_dir\}}\NormalTok{/}\VariableTok{$\{sample_name\}}\NormalTok{_R2_PE.fastq \textbackslash{}}
+\NormalTok{  -p 8 --validateMappings --rangeFactorizationBins 4 \textbackslash{}}
+\NormalTok{  --seqBias --gcBias \textbackslash{}}
+\NormalTok{  -o }\VariableTok{$\{out_dir\}}\NormalTok{/}\VariableTok{$\{sample_name\}}\NormalTok{_quant}
+\end{Highlighting}
+\end{Shaded}
+
+I have a number of optional flags that I have set. These improve the
+mapping and quantification for both gcBias and other sequencing biases.
+These slow down the quantification a bit, but it is still typically less
+than 10 minutes for these samples (\textasciitilde30 million read pairs
+per sample)
+
+Question 8: Trying running salmon on one sample (set of reads pairs)
+that differs from the ones in this example. As always, please output it
+in your own home directory.
+
+\hypertarget{getting-the-full-set-of-counts-we-are-going-to-use.}{%
+\subsubsection{Getting the full set of counts we are going to
+use.}\label{getting-the-full-set-of-counts-we-are-going-to-use.}}
+
+Counts from Salmon are found on info
+\texttt{2/scratch/Bio722\_2019/ID/drosophilaDiscsGrowthSubset/salmon\_counts}
+
+I suggest using scp (with \texttt{-r}) to copy these to your local
+computer. Something like. There may be a better way, but I first
+generally copy what I am going to scp over to my regular folder
+
+So on info (need to be logged into info11\emph{, with } being the one
+you work on)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ /2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/}
+
+\FunctionTok{cp}\NormalTok{ -r salmon_counts ~}
+\end{Highlighting}
+\end{Shaded}
+
+Then on your laptop/local machine
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\BuiltInTok{cd}\NormalTok{ YourWorkingDirHere}
+\FunctionTok{scp}\NormalTok{ -r yourinfo@info.mcmaster.ca:~salmon_counts .}
+\end{Highlighting}
+\end{Shaded}
+
+Which should copy the files to your local machine
+
+\hypertarget{get-r-loaded-and-lets-get-started.}{%
+\subsection{\texorpdfstring{Get \texttt{R} loaded, and let's get
+started.}{Get R loaded, and let's get started.}}\label{get-r-loaded-and-lets-get-started.}}
+
+\hypertarget{using-tximport}{%
+\subsubsection{using tximport}\label{using-tximport}}
+
+We are going to use tximport to help import our data along with a simple
+version of the file containing transcript and gene level information. We
+will use the tximport function to do so. There is a nice
+\href{https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html}{tutorial
+here} that I have modified things from.
+
+First we load in libraries in \texttt{R}. In addition to
+\texttt{DESeq2}, there are a few other libraries we will need.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(DESeq2)}
+\KeywordTok{library}\NormalTok{(tximport)}
+\KeywordTok{library}\NormalTok{(readr)}
+\KeywordTok{library}\NormalTok{(}\StringTok{"RColorBrewer"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(gplots)}
+\end{Highlighting}
+\end{Shaded}
+
+Depending on the implementation of R you are using (R on mac, R on
+windows, R studio), there may be some slight differences, so grab an
+instructor.
+
+Set the working directory for the raw count data (you need to know where
+you put it). I will go over how I organize my projects to keep this
+simple. Just like Unix, R has a current working directory. You can set
+the working directory using the \texttt{setwd()} function. Once you have
+unzipped the file Rob has provided, you need to navigate to that
+directory. You will want to be inside the quantification folder. For me
+this will look like this.
+
+The folder that contains all of the sub-folders with the quantifications
+should be renamed ``quants''
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#setwd("../data/salmon_counts")}
+\CommentTok{# This will differ for you!!!}
+\KeywordTok{setwd}\NormalTok{(}\StringTok{"/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/"}\NormalTok{)}
+\CommentTok{# Setting it up for the import (this is not the import itself)}
+\NormalTok{quant_files <-}\StringTok{ }\KeywordTok{file.path}\NormalTok{(}\StringTok{"quants"}\NormalTok{, }\KeywordTok{list.files}\NormalTok{(}\StringTok{"quants"}\NormalTok{), }\StringTok{"quant.sf"}\NormalTok{)}
+
+
+\CommentTok{# check that the files actually exist. Should return TRUE for each file}
+\KeywordTok{file.exists}\NormalTok{(quant_files)}
+
+\CommentTok{# Let's take a look at this variable we have created}
+\NormalTok{quant_files}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{loading-the-count-data-into-r}{%
+\subsection{Loading the count data into
+R}\label{loading-the-count-data-into-r}}
+
+DESeq2 and other libraries often have helper functions for getting your
+count data in. In particular if you are using objects created from other
+tools that the same authors generated. However, if you are going to make
+your own pipeline, it is important to know how to write some simple R
+code to be able to get your data in, and to parse it so that it is in
+the format you need. I will (if we have time) go through a more typical
+example where there is no helper functions (so you write it yourself).
+However, we will use the ones available from \texttt{tximport}.
+
+\hypertarget{getting-the-meta-data-set}{%
+\subsubsection{Getting the meta-data
+set}\label{getting-the-meta-data-set}}
+
+Normally I extract these direct from the file names (which I could here
+given how I have the names written). However, more generally (but more
+laborious) you can do it directly in \texttt{R} like I have below, or
+you could make a second data frame containing the meta data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Names of samples.}
+\NormalTok{samples <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"samw_17C_gen_fed_R1"}\NormalTok{, }
+             \StringTok{"samw_17C_gen_fed_R2"}\NormalTok{, }
+             \StringTok{"samw_17C_gen_fed_R3"}\NormalTok{,}
+             \StringTok{"samw_17C_gen_starved_R1"}\NormalTok{, }
+             \StringTok{"samw_17C_gen_starved_R2"}\NormalTok{, }
+             \StringTok{"samw_17C_wings_fed_R1"}\NormalTok{, }
+             \StringTok{"samw_17C_wings_fed_R2"}\NormalTok{,}
+             \StringTok{"samw_17C_wings_fed_R3"}\NormalTok{, }
+             \StringTok{"samw_17C_wings_starved_R1"}\NormalTok{,}
+             \StringTok{"samw_17C_wings_starved_R2"}\NormalTok{,}
+             \StringTok{"samw_17C_wings_starved_R3"}\NormalTok{, }
+             \StringTok{"samw_24C_gen_fed_R1"}\NormalTok{,}
+             \StringTok{"samw_24C_gen_fed_R3"}\NormalTok{,}
+             \StringTok{"samw_24C_gen_starved_R3"}\NormalTok{,}
+             \StringTok{"samw_24C_wings_fed_R1"}\NormalTok{,}
+             \StringTok{"samw_24C_wings_fed_R2"}\NormalTok{,}
+             \StringTok{"samw_24C_wings_fed_R3"}\NormalTok{,}
+             \StringTok{"samw_24C_wings_starved_R1"}\NormalTok{,}
+             \StringTok{"samw_24C_wings_starved_R2"}\NormalTok{,}
+             \StringTok{"samw_24C_wings_starved_R3"}\NormalTok{)}
+
+\KeywordTok{names}\NormalTok{(quant_files) <-}\StringTok{ }\NormalTok{samples}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{using-tximport-1}{%
+\subsection{using tximport}\label{using-tximport-1}}
+
+Bioconductor is making it ostensibly easier to get all of your
+information from certain places, and so has introduced some packages
+like tximport and tximeta. It can import transcript level count data
+from a variety of packages (Salmon, Alevin, kallisto amongst them.)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(TxDb.Dmelanogaster.UCSC.dm6.ensGene)}
+
+\NormalTok{txdb <-}\StringTok{ }\NormalTok{TxDb.Dmelanogaster.UCSC.dm6.ensGene }\CommentTok{# easier to write}
+
+\NormalTok{txdb }\CommentTok{# Some basic information about the transcriptome}
+
+\KeywordTok{transcripts}\NormalTok{(txdb) }\CommentTok{# a list of all of the transcripts along with genome ranges.}
+
+\KeywordTok{transcriptsBy}\NormalTok{(txdb, }\StringTok{"gene"}\NormalTok{) }\CommentTok{# grouped by gene}
+\end{Highlighting}
+\end{Shaded}
+
+Note if you are trying to extract certain genomic features, the
+GenomicFeatures package will be your friend!
+
+Now we can extract just the transcript and gene identifiers and create
+the file we need
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k <-}\StringTok{ }\KeywordTok{keys}\NormalTok{(txdb, }\DataTypeTok{keytype =} \StringTok{"TXNAME"}\NormalTok{)}
+
+\NormalTok{tx2gene <-}\StringTok{ }\KeywordTok{select}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ txdb, }\DataTypeTok{keys =}\NormalTok{ k, }\StringTok{"GENEID"}\NormalTok{, }\StringTok{"TXNAME"}\NormalTok{)}
+
+\KeywordTok{head}\NormalTok{(tx2gene)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can go ahead and read in the input --- this will automatically
+sum results to the gene level. You can check out the tximport
+documentation for some other, potentially useful options.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{txi <-}\StringTok{ }\KeywordTok{tximport}\NormalTok{(quant_files, }
+                \DataTypeTok{type =} \StringTok{"salmon"}\NormalTok{, }\DataTypeTok{tx2gene =}\NormalTok{ tx2gene)}
+\end{Highlighting}
+\end{Shaded}
+
+This creates a pretty simple object with just the samples as columns and
+gene counts as rows for each gene.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(txi)}
+
+\KeywordTok{head}\NormalTok{(txi}\OperatorTok{$}\NormalTok{counts)}
+\end{Highlighting}
+\end{Shaded}
+
+The counts are just that. the length represents sample specific average
+transcripts lengths to use as offsets in the models below.
+
+We can even start to look at the data in some basic ways. For instance,
+we can look at correlations among the full set of genes (remember our
+discussion of what this does and DOES NOT mean)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{cor}\NormalTok{(txi}\OperatorTok{$}\NormalTok{counts[,}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{])}
+
+\KeywordTok{pairs}\NormalTok{(}\KeywordTok{log2}\NormalTok{(txi}\OperatorTok{$}\NormalTok{counts[,}\DecValTok{1}\OperatorTok{:}\DecValTok{6}\NormalTok{]), }
+      \DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{lower.panel =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{col =} \StringTok{"#00000019"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{getting-ready-for-deseq2}{%
+\subsection{Getting ready for DeSeq2}\label{getting-ready-for-deseq2}}
+
+\hypertarget{setting-up-our-experimental-design.}{%
+\subsubsection{Setting up our experimental
+design.}\label{setting-up-our-experimental-design.}}
+
+DESeq2 needs the information about your experiment set up, so it knows
+the various predictors in the model (in this case genotype and
+background). The easiest way to do this is by setting it up as a data
+frame in R (which is a specialized version of a list). I will (time
+permitting) show you a more general way of doing this with another
+example, but for now we are explictly writing this out.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tissue <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\StringTok{"genital"}\NormalTok{, }\DecValTok{5}\NormalTok{),}
+            \KeywordTok{rep}\NormalTok{(}\StringTok{"wing"}\NormalTok{, }\DecValTok{6}\NormalTok{),}
+            \KeywordTok{rep}\NormalTok{(}\StringTok{"genital"}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+            \KeywordTok{rep}\NormalTok{(}\StringTok{"wing"}\NormalTok{, }\DecValTok{6}\NormalTok{))}
+
+\NormalTok{tissue <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(tissue)}
+\KeywordTok{length}\NormalTok{(tissue)}
+
+\NormalTok{temperature <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\DecValTok{17}\NormalTok{, }\DecValTok{11}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{24}\NormalTok{,}\DecValTok{9}\NormalTok{))}
+\NormalTok{temperature <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(temperature)}
+\KeywordTok{length}\NormalTok{(temperature)}
+
+\NormalTok{food <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\StringTok{"fed"}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"starved"}\NormalTok{, }\DecValTok{2}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"fed"}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"starved"}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"fed"}\NormalTok{, }\DecValTok{2}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"starved"}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"fed"}\NormalTok{, }\DecValTok{3}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\StringTok{"starved"}\NormalTok{, }\DecValTok{3}\NormalTok{))}
+\NormalTok{food <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(food)}
+\KeywordTok{length}\NormalTok{(food)}
+
+\NormalTok{lane <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{)}
+\NormalTok{lane <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(lane) }\CommentTok{# we will want to treat this as a factor}
+\KeywordTok{length}\NormalTok{(lane)}
+
+\NormalTok{rna.design <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{sample=}\NormalTok{samples,}
+  \DataTypeTok{file=}\NormalTok{quant_files,}
+  \DataTypeTok{tissue=}\NormalTok{tissue,}
+  \DataTypeTok{food=}\NormalTok{food,}
+  \DataTypeTok{temperature=}\NormalTok{temperature,}
+  \DataTypeTok{lane =}\NormalTok{ lane)}
+
+\NormalTok{rna.design}
+
+\CommentTok{# and we can start with a simple model (back to this later)}
+\NormalTok{load.model <-}\StringTok{ }\KeywordTok{formula}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{tissue)}
+\end{Highlighting}
+\end{Shaded}
+
+Below is the crucial function, \texttt{DESeqDataSetFromTximport()}, that
+gives you a DESeq2 count matrix from the txt object. interestingly, this
+is the step that converts the estimated counts to integers (again we can
+take a look at the quant\_files).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{all.data <-}\StringTok{ }\KeywordTok{DESeqDataSetFromTximport}\NormalTok{(txi, }
+\NormalTok{                                     rna.design,}
+                                     \DataTypeTok{design=}\NormalTok{load.model)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{data-is-in-now-what}{%
+\subsection{Data is in, now what?}\label{data-is-in-now-what}}
+
+This is normally a good opportunity to do some simple visulizations to
+look at the distributions of the estimates and the correlations among
+samples (what should we be looking for).
+
+\hypertarget{preliminary-quality-control-analysis}{%
+\subsection{Preliminary Quality Control
+analysis}\label{preliminary-quality-control-analysis}}
+
+Before we begin any real analysis. It pays to take some looks at the
+data. I am not going to go through a full exploratory data analysis
+session here. But some obvious plots
+
+It is well known that there can be substantial lane to lane variation.
+For this experiment, it was designed so that a number of samples were
+run in each lane (barcoded), in a randomized design. This enables us to
+control for lane effects if necessary. As it turns out I picked a
+somewhat useless sub-sample of the full data set, so we can not look at
+the lane effects (as we don't have enough samples in each lane for this
+subset of data we provide). But normally do something like this (and
+include a lane effect at a covariate)
+
+First we create a DESeq data object using our counts, experimental
+design and a simple statistical model (more on this later)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{load.model <-}\StringTok{ }\KeywordTok{formula}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{lane)}
+
+\NormalTok{test_lane_effects <-}\StringTok{ }\KeywordTok{DESeqDataSetFromTximport}\NormalTok{(txi,}
+\NormalTok{  rna.design, }\DataTypeTok{design=}\NormalTok{load.model)}
+
+\NormalTok{test_lane_effects2 <-}\StringTok{ }\KeywordTok{DESeq}\NormalTok{(test_lane_effects)}
+\CommentTok{# We now fit the simple model}
+\end{Highlighting}
+\end{Shaded}
+
+This generates a fairly complex object
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(test_lane_effects2)}
+\end{Highlighting}
+\end{Shaded}
+
+For the moment we can ask whether any genes show evidence of different
+expression based solely on lane to lane variation. We use the results()
+to summarize some of the results.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test_lane_effects2_results <-}\StringTok{ }\KeywordTok{results}\NormalTok{(test_lane_effects2, }
+                                      \DataTypeTok{alpha =} \FloatTok{0.05}\NormalTok{)}
+\CommentTok{# alpha = 0.05 is the  "cut-off" for significance (not really - I will discuss).}
+
+\KeywordTok{summary}\NormalTok{(test_lane_effects2_results)}
+\CommentTok{# 2 genes which may show  evidence of lane effects, but this is a bit incomplete for the full data set.}
+
+\KeywordTok{head}\NormalTok{(test_lane_effects2_results)}
+
+\CommentTok{# let's re-order the data to look at genes.}
+\NormalTok{test_lane_effects2_results <-}\StringTok{ }\NormalTok{test_lane_effects2_results[}\KeywordTok{order}\NormalTok{(test_lane_effects2_results}\OperatorTok{$}\NormalTok{padj),]}
+
+\KeywordTok{head}\NormalTok{(test_lane_effects2_results)}
+\end{Highlighting}
+\end{Shaded}
+
+We can also plot the mean-dispersion relationship for this data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDispEsts}\NormalTok{(test_lane_effects2, }
+             \DataTypeTok{legend =}\NormalTok{F)}
+
+\KeywordTok{plotDispEsts}\NormalTok{(test_lane_effects2, }
+             \DataTypeTok{CV =}\NormalTok{ T, }\DataTypeTok{legend =}\NormalTok{F)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's talk about what this means.
+
+\hypertarget{principal-components-analysis-and-hierarchical-clustering-are-useful-tools-to-visualize-patterns-and-to-identify-potential-confounds}{%
+\subsubsection{Principal Components analysis and hierarchical clustering
+are useful tools to visualize patterns (and to identify potential
+confounds)}\label{principal-components-analysis-and-hierarchical-clustering-are-useful-tools-to-visualize-patterns-and-to-identify-potential-confounds}}
+
+We can also use some multivariate approaches to look at variation. For
+PCA (checking it with a ``blind'' dispersion estimate to look for any
+funky effects. Not for biological inference).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{for_pca <-}\StringTok{ }\KeywordTok{rlog}\NormalTok{(test_lane_effects2, }
+                \DataTypeTok{blind =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{dim}\NormalTok{(for_pca)}
+\end{Highlighting}
+\end{Shaded}
+
+\texttt{rlog} is one approach to adjusting for both library size and
+dispersion among samples. \texttt{blind=TRUE}, has it ignore information
+from the model (in this case lane). So we want to see
+\texttt{blind=TRUE} when we are doing QC, but if we are using the PCA
+for downstream analysis, we might want to consider using TRUE.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotPCA}\NormalTok{(for_pca, }
+        \DataTypeTok{intgroup=}\KeywordTok{c}\NormalTok{(}\StringTok{"lane"}\NormalTok{),}
+        \DataTypeTok{ntop =} \DecValTok{2000}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{plotPCA()} function is actually just a wrapper for one of
+the built in functions for performing a principle components analysis.
+The goal of this (without getting into the details for the moment) is to
+find statistically independent (orthogonal) axes of overall variation.
+PC1 accounts for the greatest amount of overall variation among samples,
+PC2 is statistically independent of PC1 and accounts for the second
+largest amount of variation. By default the \texttt{plotPCA} function
+only plots the first couple of Principle components. In this case it
+explains just under 80\% of all of the variation among the samples.
+However, I highly recommend looking at the plots for higher PCs as well,
+as sometimes there is something going on, even if it only accounts for a
+few \% of variation.
+
+If you want to see what this wrapper is doing we can ask about this
+particular function
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{getMethod}\NormalTok{(}\StringTok{"plotPCA"}\NormalTok{,}\StringTok{"DESeqTransform"}\NormalTok{)}
+
+\CommentTok{# or }
+\NormalTok{DESeq2}\OperatorTok{:::}\NormalTok{plotPCA.DESeqTransform}
+\end{Highlighting}
+\end{Shaded}
+
+It is very easy to modify this function if you need to.
+
+By default this only examine the top 500 genes. Let's look at 2000 or
+more to get a sense of the stability of the pattern.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotPCA}\NormalTok{(for_pca, }
+        \DataTypeTok{ntop =} \DecValTok{1000}\NormalTok{, }
+        \DataTypeTok{intgroup=}\KeywordTok{c}\NormalTok{(}\StringTok{"lane"}\NormalTok{)) }
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{back-to-the-analysis}{%
+\subsubsection{Back to the analysis}\label{back-to-the-analysis}}
+
+While there is some lane effects based on our initial statistical check,
+and visual inspection of PC1 VS. PC2. However, there clearly is a
+pattern here, and it has nothing to do with lane.
+
+We can quickly take a look to see if this pattern shows anything
+interesting for our biological interest. However, this is putting the
+cart before the horse, so be warned. Also keep in mind the regularized
+log transformation of the data being used is not accounting for
+condition effects (we can do this below)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotPCA}\NormalTok{(for_pca, }\DataTypeTok{ntop =} \DecValTok{2000}\NormalTok{,}
+        \DataTypeTok{intgroup=}\KeywordTok{c}\NormalTok{(}\StringTok{"tissue"}\NormalTok{, }\StringTok{"food"}\NormalTok{, }\StringTok{"temperature"}\NormalTok{))}
+
+\KeywordTok{plotPCA}\NormalTok{(for_pca, }\DataTypeTok{ntop =} \DecValTok{2000}\NormalTok{,}
+        \DataTypeTok{intgroup=}\KeywordTok{c}\NormalTok{(}\StringTok{"tissue"}\NormalTok{))}
+
+\KeywordTok{plotPCA}\NormalTok{(for_pca, }\DataTypeTok{ntop =} \DecValTok{500}\NormalTok{,}
+        \DataTypeTok{intgroup=}\KeywordTok{c}\NormalTok{(}\StringTok{"temperature"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Not entirely clear patterns of clustering here. Play with this changing
+the number of genes used. I would say there are some concerning aspects
+to this (potentially reversed samples). How might we check?
+
+Also keep in mind that it is by default only showing the first two
+principal components of many, so it may not be giving a very clear
+picture!
+
+\hypertarget{we-can-also-use-some-hierarchical-clustering-to-further-check-for-lane-effects-or-for-clustering-based}{%
+\subsubsection{We can also use some hierarchical clustering to further
+check for lane effects or for clustering
+based}\label{we-can-also-use-some-hierarchical-clustering-to-further-check-for-lane-effects-or-for-clustering-based}}
+
+For distance matrix for clustering QC
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rlogMat <-}\StringTok{ }\KeywordTok{assay}\NormalTok{(for_pca) }\CommentTok{# just making a matrix of the counts that have been corrected for over-dispersion in a "blind" fashion}
+\NormalTok{distsRL <-}\StringTok{ }\KeywordTok{dist}\NormalTok{(}\KeywordTok{t}\NormalTok{(rlogMat)) }\CommentTok{# Computes a distance matrix (Euclidian Distance)}
+\NormalTok{mat <-}\StringTok{ }\KeywordTok{as.matrix}\NormalTok{(distsRL)  }\CommentTok{# Make sure it is a matrix}
+\end{Highlighting}
+\end{Shaded}
+
+We need to rename our new matrix of distances based on the samples.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rownames}\NormalTok{(mat) <-}\StringTok{ }\KeywordTok{colnames}\NormalTok{(mat) <-}\StringTok{   }\KeywordTok{with}\NormalTok{(}\KeywordTok{colData}\NormalTok{(test_lane_effects2), }
+                                         \KeywordTok{paste}\NormalTok{(tissue, food, temperature,}
+                                               \DataTypeTok{sep=}\StringTok{" : "}\NormalTok{))}
+
+\NormalTok{hc <-}\StringTok{ }\KeywordTok{hclust}\NormalTok{(distsRL)  }\CommentTok{# performs hierarchical clustering}
+\NormalTok{hmcol <-}\StringTok{ }\KeywordTok{colorRampPalette}\NormalTok{(}\KeywordTok{brewer.pal}\NormalTok{(}\DecValTok{9}\NormalTok{, }\StringTok{"GnBu"}\NormalTok{))(}\DecValTok{100}\NormalTok{)  }\CommentTok{# picking our colours}
+\end{Highlighting}
+\end{Shaded}
+
+Now we generate the plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{heatmap.2}\NormalTok{(mat, }\DataTypeTok{Rowv=}\KeywordTok{as.dendrogram}\NormalTok{(hc),}
+          \DataTypeTok{symm =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{trace=}\StringTok{"none"}\NormalTok{,}
+          \DataTypeTok{col =} \KeywordTok{rev}\NormalTok{(hmcol), }\DataTypeTok{margin=}\KeywordTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{,}\DecValTok{10}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{proceeding-with-the-real-analysis-we-care-about}{%
+\subsection{Proceeding with the real analysis we care
+about!}\label{proceeding-with-the-real-analysis-we-care-about}}
+
+Given the results from above, I am removing lane entirely.
+
+Let's fit and run a simple model comparing the two tissue types
+(ignoring for the fact that we think that two samples are reversed in
+each tissue.)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{load.model <-}\StringTok{ }\KeywordTok{formula}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{lane }\OperatorTok{+}\StringTok{ }\NormalTok{tissue)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{test_tissue_effects <-}\StringTok{ }\KeywordTok{DESeqDataSetFromTximport}\NormalTok{(txi,}
+\NormalTok{  rna.design, }
+  \DataTypeTok{design =}\NormalTok{ load.model)}
+
+\NormalTok{test_tissue_effects2 <-}\StringTok{ }\KeywordTok{DESeq}\NormalTok{(test_tissue_effects)}
+\KeywordTok{resultsNames}\NormalTok{(test_tissue_effects2)}
+\end{Highlighting}
+\end{Shaded}
+
+Quick PCA with blind = F
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{for_pca <-}\StringTok{ }\KeywordTok{rlog}\NormalTok{(test_tissue_effects2, }
+                \DataTypeTok{blind =} \OtherTok{FALSE}\NormalTok{)}
+
+\KeywordTok{plotPCA}\NormalTok{(for_pca, }\DataTypeTok{ntop =} \DecValTok{500}\NormalTok{,}
+        \DataTypeTok{intgroup=}\KeywordTok{c}\NormalTok{(}\StringTok{"tissue"}\NormalTok{, }\StringTok{"food"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can look at some of the results. First we recheck the dispersion
+estimates estimated in our model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotDispEsts}\NormalTok{(test_tissue_effects2,}
+             \DataTypeTok{legend =}\NormalTok{ F)}
+\end{Highlighting}
+\end{Shaded}
+
+Not much different. A few outliers though, and it may be worth later
+going in and checking these.
+
+Let's get going with things we are interested in, like looking for
+differentially expressed genes across genotypes. We can start by doing a
+visualization using a so-called MA plot (look it up on wikipedia, then
+we will talk)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plotMA}\NormalTok{(test_tissue_effects2, }
+       \DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+A few things to note. The points coloured in red are the genes that show
+evidence of differential expression. The triangles are ones whose log2
+fold change is greater than or less than 1 ( i.e.~2 fold difference).
+Please keep in mind that many genes that have small fold changes can
+still still be differentially expressed. Don't get overly hung up on
+either just fold changes alone or a threshold for significance. Look
+carefully at results to understand them. This takes lots of time!!!
+
+Let's actually look at our results. DESeq2 has some functions to make
+this a bit easier, as the object we generated above (of class
+\texttt{DESeqDataSet}) is quite complex.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tissue_results <-}\StringTok{ }\KeywordTok{results}\NormalTok{(test_tissue_effects2,}
+                            \DataTypeTok{contrast =} \KeywordTok{c}\NormalTok{(}\StringTok{"tissue"}\NormalTok{, }\StringTok{"genital"}\NormalTok{, }\StringTok{"wing"}\NormalTok{),}
+                            \DataTypeTok{alpha =} \FloatTok{0.1}\NormalTok{)}
+
+\KeywordTok{mcols}\NormalTok{(tissue_results)}\OperatorTok{$}\NormalTok{description}
+
+\NormalTok{tissue_results2 <-}\StringTok{ }\KeywordTok{results}\NormalTok{(test_tissue_effects2,}
+                            \DataTypeTok{alpha =} \FloatTok{0.1}\NormalTok{)}
+
+\KeywordTok{mcols}\NormalTok{(tissue_results2)}\OperatorTok{$}\NormalTok{description}
+
+\KeywordTok{plotMA}\NormalTok{(tissue_results, }\DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{))}
+
+\KeywordTok{summary}\NormalTok{(tissue_results)}
+
+\KeywordTok{print}\NormalTok{(tissue_results)}
+
+\KeywordTok{head}\NormalTok{(tissue_results)}
+\end{Highlighting}
+\end{Shaded}
+
+A few things to note. By default alpha is set at 0.1 This is a pretty
+liberal ``threshold'' for assessing ``significance''. While it is a much
+larger conversation, I do not recommend getting hung up too much on
+statistical significance (since you have estimates of effects and
+estimates of uncertainty). In particular if you have specific questions
+about specific sets of genes, and if these were planned comparisons
+(i.e.~before you started to analyze your data) you should focus on
+those.
+
+You will see that DESeq2 also will throw out genes that it deems
+outliers or have very low counts. It does this so that when it is
+correcting for multiple comparisons it does not need to include genes
+that should not be analyzed (as the counts are too few.)
+
+Let's take a look at the results.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# reorder}
+\NormalTok{tissue_results <-}\StringTok{ }\NormalTok{tissue_results[}\KeywordTok{order}\NormalTok{(tissue_results}\OperatorTok{$}\NormalTok{padj),]}
+
+
+\KeywordTok{rownames}\NormalTok{(tissue_results[}\DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{,])}
+\NormalTok{tissue_results[}\DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{,]}
+
+\KeywordTok{plotCounts}\NormalTok{(test_tissue_effects2, }
+           \DataTypeTok{gene =} \KeywordTok{which.min}\NormalTok{(tissue_results}\OperatorTok{$}\NormalTok{padj),}
+           \DataTypeTok{intgroup=}\StringTok{"tissue"}\NormalTok{)}
+
+\KeywordTok{plotCounts}\NormalTok{(test_tissue_effects2, }
+           \DataTypeTok{gene =} \StringTok{"FBgn0000015"}\NormalTok{,}
+           \DataTypeTok{intgroup=}\StringTok{"tissue"}\NormalTok{,}
+           \DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+
+\KeywordTok{plotCounts}\NormalTok{(test_tissue_effects2, }
+           \DataTypeTok{gene =} \StringTok{"FBgn0003975"}\NormalTok{,}
+           \DataTypeTok{intgroup=}\StringTok{"tissue"}\NormalTok{,}
+           \DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{shrinking-the-estimates}{%
+\subsection{Shrinking the estimates}\label{shrinking-the-estimates}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tissue_results_shrunk <-}\StringTok{ }\KeywordTok{lfcShrink}\NormalTok{(test_tissue_effects2, }
+                                   \DataTypeTok{coef =} \DecValTok{2}\NormalTok{,}
+                                   \DataTypeTok{type =} \StringTok{"normal"}\NormalTok{,}
+                                   \DataTypeTok{lfcThreshold =} \DecValTok{0}\NormalTok{)}
+
+\KeywordTok{plotMA}\NormalTok{(tissue_results_shrunk, }\DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+
+\KeywordTok{summary}\NormalTok{(tissue_results_shrunk)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{more-complex-models}{%
+\subsection{More complex models}\label{more-complex-models}}
+
+While everything is stored, by default DESeq2 is printing its evaluation
+of the final term in the model. We can look at these in the model we
+actually want to fit (unlike the naively simple model above)
+
+Let's start by examining the effects of genotype (like we did above),
+but by first taking into account difference in different wild type
+genetic background and any residual lane effects
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{load.model <-}\StringTok{ }\KeywordTok{formula}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{lane }\OperatorTok{+}\StringTok{ }\NormalTok{tissue }\OperatorTok{+}\StringTok{ }\NormalTok{food }\OperatorTok{+}\StringTok{ }\NormalTok{tissue}\OperatorTok{:}\NormalTok{food) }\CommentTok{# Let me go over the matrix rank issue here}
+
+\NormalTok{test_temp_tissue <-}\StringTok{ }\KeywordTok{DESeqDataSetFromTximport}\NormalTok{(txi,}
+\NormalTok{  rna.design, }\DataTypeTok{design=}\NormalTok{load.model)}
+
+\NormalTok{test_temp_tissue}\OperatorTok{$}\NormalTok{group <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(test_temp_tissue}\OperatorTok{$}\NormalTok{tissue,test_temp_tissue}\OperatorTok{$}\NormalTok{temperature))}
+
+\KeywordTok{design}\NormalTok{(test_temp_tissue) <-}\StringTok{ }\ErrorTok{~}\StringTok{ }\NormalTok{lane }\OperatorTok{+}\StringTok{ }\NormalTok{group}
+
+\NormalTok{test_FT_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{DESeq}\NormalTok{(test_temp_tissue)}
+\KeywordTok{resultsNames}\NormalTok{(test_FT_}\DecValTok{2}\NormalTok{)}
+
+\KeywordTok{plotDispEsts}\NormalTok{(test_FT_}\DecValTok{2}\NormalTok{, }\DataTypeTok{legend =}\NormalTok{ F)}
+
+\NormalTok{temp_results_wing <-}\StringTok{ }\KeywordTok{results}\NormalTok{(test_FT_}\DecValTok{2}\NormalTok{, }
+                     \DataTypeTok{contrast =} \KeywordTok{c}\NormalTok{(}\StringTok{"group"}\NormalTok{, }\StringTok{"wing17"}\NormalTok{, }\StringTok{"wing24"}\NormalTok{),}
+                     \DataTypeTok{alpha =} \FloatTok{0.1}\NormalTok{, }\DataTypeTok{pAdjustMethod=}\StringTok{"BH"}\NormalTok{)}
+
+\KeywordTok{mcols}\NormalTok{(food_results_wing)}\OperatorTok{$}\NormalTok{description}
+
+\KeywordTok{summary}\NormalTok{(food_results_wing)}
+
+\KeywordTok{plotMA}\NormalTok{(food_results, }
+       \DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{5}\NormalTok{, }\DecValTok{5}\NormalTok{))}
+
+
+\NormalTok{temp_wing_results_shrunk <-}\StringTok{ }\KeywordTok{lfcShrink}\NormalTok{(test_FT_}\DecValTok{2}\NormalTok{, }
+                                   \DataTypeTok{coef =} \DecValTok{2}\NormalTok{,}
+                                   \DataTypeTok{type =} \StringTok{"normal"}\NormalTok{,}
+                                   \DataTypeTok{lfcThreshold =} \DecValTok{0}\NormalTok{)}
+
+\KeywordTok{plotMA}\NormalTok{(temp_wing_results_shrunk, }\DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+
+\KeywordTok{summary}\NormalTok{(temp_wing_results_shrunk)}
+\KeywordTok{head}\NormalTok{(temp_wing_results_shrunk)}
+
+\CommentTok{# reorder}
+\NormalTok{temp_wing_results_shrunk <-}\StringTok{ }\NormalTok{temp_wing_results_shrunk[}\KeywordTok{order}\NormalTok{(temp_wing_results_shrunk}\OperatorTok{$}\NormalTok{padj),]}
+\KeywordTok{rownames}\NormalTok{(temp_wing_results_shrunk[}\DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{,])}
+
+
+\KeywordTok{plotCounts}\NormalTok{(test_FT_}\DecValTok{2}\NormalTok{, }
+           \DataTypeTok{gene =} \StringTok{"FBgn0032282"}\NormalTok{,}
+           \DataTypeTok{intgroup=}\StringTok{"group"}\NormalTok{,}
+           \DataTypeTok{pch =} \DecValTok{20}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+
+\KeywordTok{resultsNames}\NormalTok{(test_FT_}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{interaction-terms-in-models.}{%
+\subsubsection{Interaction terms in
+models.}\label{interaction-terms-in-models.}}
+
+In our case we are as much interested in genes that show an interaction
+between genotype and background as those that show just an effect of
+genotype. However for the subset of all of the samples we are looking
+at, we are going to run into estimation issues.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{load.model <-}\StringTok{ }\KeywordTok{formula}\NormalTok{(}\OperatorTok{~}\StringTok{ }\NormalTok{lane }\OperatorTok{+}\StringTok{ }\NormalTok{tissue }\OperatorTok{+}\StringTok{ }\NormalTok{food }\OperatorTok{+}\StringTok{ }\NormalTok{tissue}\OperatorTok{:}\NormalTok{food) }\CommentTok{# Let me go over the matrix rank issue here}
+
+\NormalTok{test_FxT_effects <-}\StringTok{ }\KeywordTok{DESeqDataSetFromTximport}\NormalTok{(txi,}
+\NormalTok{  rna.design, }\DataTypeTok{design=}\NormalTok{load.model)}
+
+\NormalTok{test_FxT_effects2 <-}\StringTok{ }\KeywordTok{DESeq}\NormalTok{(test_FxT_effects)}
+
+\KeywordTok{plotDispEsts}\NormalTok{(test_FxT_effects2)}
+
+\KeywordTok{plotMA}\NormalTok{(test_FxT_effects2, }\DataTypeTok{ylim =}\KeywordTok{c}\NormalTok{(}\OperatorTok{-}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{))}
+
+\NormalTok{FxT_results <-}\StringTok{ }\KeywordTok{results}\NormalTok{(test_FxT_effects2, }
+                       \DataTypeTok{alpha =} \FloatTok{0.05}\NormalTok{, }\DataTypeTok{pAdjustMethod=}\StringTok{"BH"}
+                       \DataTypeTok{contrast =}\NormalTok{ )}
+\KeywordTok{summary}\NormalTok{(FxT_results)}
+
+\CommentTok{# reorder}
+\NormalTok{FxT_results <-}\StringTok{ }\NormalTok{FxT_results[}\KeywordTok{order}\NormalTok{(FxT_results}\OperatorTok{$}\NormalTok{padj),]}
+\NormalTok{FxT_results[}\DecValTok{1}\OperatorTok{:}\DecValTok{14}\NormalTok{,]}
+\end{Highlighting}
+\end{Shaded}
+
+Relatively few ``significant'' genes. Just to keep in mind. We expect a
+priori, with no true ``significant'' hits an approximately uniform
+distribution that looks like (for 13140 genes)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p_fake <-}\StringTok{ }\KeywordTok{rbeta}\NormalTok{(}\DecValTok{13140}\NormalTok{, }\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{) }\CommentTok{# you could also use runif(12627,1,1)}
+\KeywordTok{hist}\NormalTok{(p_fake)}
+\end{Highlighting}
+\end{Shaded}
+
+But we actually observe
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{hist}\NormalTok{(FxT_results}\OperatorTok{$}\NormalTok{pvalue)}
+\end{Highlighting}
+\end{Shaded}
+
+False Discovery Methods (FDR) exploit this.
+
+\hypertarget{some-cleanup-to-disconnect-from-remote-db}{%
+\subsection{some cleanup to disconnect from remote
+db}\label{some-cleanup-to-disconnect-from-remote-db}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dbDisconnect}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{as-always-it-is-good-to-know-what-libraries-you-loaded-and-version-of-r-you-used-in-the-session}{%
+\subsection{As always it is good to know what libraries you loaded and
+version of R you used in the
+session}\label{as-always-it-is-good-to-know-what-libraries-you-loaded-and-version-of-r-you-used-in-the-session}}
+
+For your papers
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sessionInfo}\NormalTok{()}
+
+\CommentTok{# or try session_info() on older versions of R}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}
