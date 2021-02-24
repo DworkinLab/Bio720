@@ -142,8 +142,8 @@ First we load in libraries in `R`. In addition to `DESeq2`, there are a few othe
 ```{r}
 library(DESeq2)
 library(tximport)
-library(tximeta)
-library(tximportData)
+#library(tximeta)
+#library(tximportData)
 library(readr)
 library("RColorBrewer")
 library(gplots)
