@@ -432,10 +432,10 @@ BiocManager::install(&quot;DESeq2&quot;)
 BiocManager::install(&quot;edgeR&quot;)
 BiocManager::install(&quot;limma&quot;)
 BiocManager::install(&quot;tximport&quot;)
-BiocManager::install(&quot;tximportData&quot;) # this is relatively big
-BiocManager::install(&quot;tximeta&quot;)
-BiocManager::install(&quot;GenomeInfoDb&quot;)
-BiocManager::install(&quot;org.Dm.eg.db&quot;)</code></pre>
+#BiocManager::install(&quot;tximportData&quot;) # this is relatively big
+#BiocManager::install(&quot;tximeta&quot;)
+#BiocManager::install(&quot;GenomeInfoDb&quot;)
+#BiocManager::install(&quot;org.Dm.eg.db&quot;)</code></pre>
 </div>
 <div id="data-provenance" class="section level2">
 <h2><span class="header-section-number">0.5</span> Data provenance</h2>
@@ -514,17 +514,6 @@ quant_files &lt;- file.path(&quot;salmon_counts&quot;, list.files(&quot;salmon_c
 
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)
-
-# Let&#39;s take a look at this variable we have created
-quant_files</code></pre>
-<p>Depending on the implementation of R you are using (R on mac, R on windows, R studio), there may be some slight differences, so grab an instructor.</p>
-<p>Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple. Just like Unix, R has a current working directory. You can set the working directory using the <code>setwd()</code> function. Once you have unzipped the file Rob has provided, you need to navigate to that directory. You will want to be inside the quantification folder. For me this will look like this.</p>
-<p>The folder that contains all of the sub-folders with the quantifications should be renamed “quants”</p>
-<pre class="r"><code>#setwd(&quot;../data/salmon_counts&quot;)
-# This will differ for you!!!
-setwd(&quot;/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/&quot;)
-# Setting it up for the import (this is not the import itself)
-quant_files &lt;- file.path(&quot;quants&quot;, list.files(&quot;quants&quot;), &quot;quant.sf&quot;)
 
 # Let&#39;s take a look at this variable we have created
 quant_files</code></pre>

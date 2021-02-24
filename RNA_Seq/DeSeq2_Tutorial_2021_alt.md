@@ -48,10 +48,10 @@ BiocManager::install("DESeq2")
 BiocManager::install("edgeR")
 BiocManager::install("limma")
 BiocManager::install("tximport")
-BiocManager::install("tximportData") # this is relatively big
-BiocManager::install("tximeta")
-BiocManager::install("GenomeInfoDb")
-BiocManager::install("org.Dm.eg.db")
+#BiocManager::install("tximportData") # this is relatively big
+#BiocManager::install("tximeta")
+#BiocManager::install("GenomeInfoDb")
+#BiocManager::install("org.Dm.eg.db")
 ```
 
 
@@ -185,23 +185,9 @@ quant_files
 ```
 
 
-Depending on the implementation of R you are using (R on mac, R on windows, R studio), there may be some slight differences, so grab an instructor.
-
-Set the working directory for the raw count data (you need to know where you put it). I will go over how I organize my projects to keep this simple.  Just like Unix, R has a current working directory. You can set the working directory using the `setwd()` function. Once you have unzipped the file Rob has provided, you need to navigate to that directory. You will want to be inside the quantification folder. For me this will look like this.
-
-The folder that contains all of the sub-folders with the quantifications should be renamed "quants"
 
 
-```r
-#setwd("../data/salmon_counts")
-# This will differ for you!!!
-setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
-# Setting it up for the import (this is not the import itself)
-quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 
-# Let's take a look at this variable we have created
-quant_files
-```
 
 ## Loading the count data into R
 
@@ -251,6 +237,7 @@ tx2gene <- read.table("txp_to_gene.tsv", col.names=c("TXNAME", "GENEID"))
 head(tx2gene)
 dim(tx2gene)
 ```
+
 Drosophila genomics and datasets have their own unique gene and transcript identifiers (as well as more universal ones). In this case the column TXNAME are the identifiers for the transcripts (FBtr) and the gene identifier is in the GENEID column (FBgn). The names for those columns are from when we generated above for the counts using salmon. More information about Drosophila genes, transcripts, etc can be found at [flybase](http://flybase.org/). 
 
 It is probably (before we start) worth asking about how many genes and how many transcripts we have in our list. How might you do this in `R`?
