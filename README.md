@@ -17,7 +17,7 @@ This is my (ID) github repo for students for both Bio720 (introduction to comput
 
 ## Class time and location
 
-BIO720, Thursdaya 8:30-10:30, JHE 329
+BIO720, Thursday 8:30-10:30, JHE 329
 
 ## Background assumed for students for Bio720
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out how to install basic software on a Mac (OS X) or a PC (Windows).

@@ -1,0 +1,103 @@
+---
+title: "WelcomeToBio720"
+author: ""
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output:
+  slidy_presentation: 
+    keep_md: yes
+    highlight: tango
+    fig_retina: 1
+  ioslides_presentation: default
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Welcome to BIO720
+
+## Introductions
+- Dr. Ben Evans  
+- Dr. Brian Golding  
+- Dr. Ian Dworkin
+
+- All y'all
+
+## Learning Objectives for the course
+- develop fundamental computational skills necessary for modern biological research 
+
+- Open the door for you to develop your computational skills for your needs (genomics, bioinformatics, simulations, image analysis..)  
+
+- Organizing your research around principles of reproducibility
+
+## What this course is not
+- Genomic analysis course. Covered in BIO722.
+
+- Bioinformatics class.
+
+- A computer science course.
+
+- A statistics course. BIO708.
+
+## Course organization and assignments
+
+BG, BE...
+
+## Topics
+- Reproducible Research, literate programming and science (ID)
+
+- Introduction to the UNIX command line (BG)
+
+- Introduction to R programming (BE)
+
+- Putting it all together (a few examples in bioinformatics, genomics and maybe image analysis?)
+
+## Break
+
+## What is reproducible research
+
+## Literate programming
+
+Literate programming just means combining the computer code with an explanation of what and how you are doing something in a natural language. 
+
+[The wikipedia page is pretty good for this](https://en.wikipedia.org/wiki/Literate_programming)
+
+## R markdown
+
+- Many ways of achieving this
+
+- At least while working in R we will use R markdown via Rstudio.
+
+- Combines code snippets (R, python, c++, bash) with a very simple markup language (called markdown) that is human readable, and can be rendered.
+
+## R markdown
+
+Let's do a few examples.
+
+
+## version control
+What's wrong with this?
+![alt text](http://www.phdcomics.com/comics/archive/phd052810s.gif "PhD Comics 1323, Copyright Jorge Cham")
+
+## Version control
+- version control enables you to organize and keep track of changes to all kinds of documents, including data and code!!
+
+- We will use git in this class (next week)
+
+## Organizing project structure
+```bash
+/ProjectName
+  ./data
+  ./scripts
+  ./outputs
+  ./misc
+  ./manuscript
+  README
+```
+
+## link to github page for the class on this
+[go here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md)
+
+
