@@ -1,0 +1,198 @@
+---
+title: "LiveDemoClass_Nov15_2021"
+author: "Ian Dworkin"
+date: "15/11/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(digits = 2)
+```
+
+## R Markdown
+
+```{r}
+my_vector <- c(3, 5, 9, 11)
+
+mean(my_vector)
+```
+
+
+
+## What is the general form of a function?
+
+```{r, eval = FALSE}
+
+aFunction <- function(input1, input2, argument, ...) {
+  bodyOfFunction
+  return(values from body of function)
+}
+```
+
+
+## let's do a real example, the standard error of the mean
+
+
+```{r}
+a <- c(1,2,3,5,6,3,2,5,2)
+sd_a <- sd(a)
+sample_a <- length(a)
+
+sd_a/sqrt(sample_a)
+
+sd(a)/sqrt(length(a))
+```
+
+
+But now I have new data!
+```{r}
+b <- rnorm(100, mean = 10, sd = 1)
+
+
+sd_b <- sd(b)
+sample_b <- length(b)
+
+sd_b/sqrt(sample_b)
+```
+
+## So let's write a function to compute the standard error of the mean
+
+
+```{r}
+StdErr <- function(vector_vals) {
+  sd(vector_vals)/sqrt(length(vector_vals))
+}
+
+```
+
+
+```{r}
+StdErr(a)
+StdErr(b)
+```
+
+
+We want to look at the code of the function we wrote
+
+
+```{r}
+StdErr
+```
+
+
+```{r}
+edit(StdErr)
+```
+
+
+## How about for built in functions
+
+```{r}
+mean
+```
+
+
+
+
+```{r}
+StdErr_V2 <- function(vector_vals) {
+ se <- sd(vector_vals)/sqrt(length(vector_vals))
+}
+```
+
+
+```{r}
+StdErr_V2(a)
+```
+
+HEY THIS DIDN"T WORK
+
+
+```{r}
+StdErr_V3 <- function(vector_vals) {
+ se <- sd(vector_vals)/sqrt(length(vector_vals))
+ return(se)
+}
+```
+
+```{r}
+StdErr_V3(a)
+```
+
+
+
+```{r}
+StdErr_V4 <- function(vector_vals) {
+ se <- sd(vector_vals)/sqrt(length(vector_vals))
+ return(c(StandardError = se))
+}
+```
+
+
+```{r}
+StdErr_V4(a)
+```
+
+
+
+```{r}
+StdErr_V5 <- function(vector_vals) {
+ se <- sd(vector_vals)/sqrt(length(vector_vals))
+ std_dev <- sd(vector_vals)
+ return(c(StandardError = se, 
+          StandardDeviation = std_dev))}
+```
+
+```{r}
+StdErr_V5(a)
+```
+
+
+
+
+```{r}
+StdErr_V6 <- function(vector_vals) {
+ se <- sd(vector_vals)/sqrt(length(vector_vals))
+ std_dev <- sd(vector_vals)
+ return(c(StandardError = se, 
+          StandardDeviation = std_dev,
+          Mean = mean(vector_vals)))}
+```
+
+
+```{r}
+dat_summary <- StdErr_V6(a)
+class(dat_summary)
+
+typeof(dat_summary)
+```
+
+
+
+```{r}
+StdErr_V7 <- function(vector_vals) {
+ se <- sd(vector_vals)/sqrt(length(vector_vals))
+ std_dev <- sd(vector_vals)
+ return(list(StandardError = se, 
+          StandardDeviation = std_dev,
+          Mean = mean(vector_vals)))}
+```
+
+
+```{r}
+StdErr_V7(vector_vals = a)
+```
+
+
+```{r}
+comment(StdErr_V7) <- c(" This is the best function ever")
+```
+
+
+
+## The coefficient of variation?
+
+

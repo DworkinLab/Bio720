@@ -11,6 +11,9 @@ output:
 # Answers to *R* asssignment 3
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+
+
 ```
 
 ## Question 2

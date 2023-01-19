@@ -1,19 +1,21 @@
 ---
 title: "Bio720 R In Class Exercise 2"
 author: "Ian Dworkin"
-date: "October 29, 2018"
+date: "November 22nd, 2021"
 output: 
   html_document: 
     keep_md: yes
     number_sections: yes
     toc: yes
+editor_options: 
+  chunk_output_type: console
 ---
 # Introduction
 
 In class assignment. Please work in groups of 2-3. When you are finished with your assignment, please (as both a .Rmd and a .md file) add this to your class github repo (or make a new one if you really want). 
 
 ## for loops and the apply family of functions
-During the past two week for, you learned a bit about how to use `for` loops and `apply` family of functions. Now we are going to do some in class practice and extend your understanding of how they work. In case you want some alternative tutorials [here](https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r#gs.FgFVHlY) is one that goes into more detail.
+During the past two week for, you learned a bit about how to use `for` loops and today the `apply` family of functions. Now we are going to do some in class practice and extend your understanding of how they work. In case you want some alternative tutorials [here](https://www.datacamp.com/community/tutorials/tutorial-on-loops-in-r#gs.FgFVHlY) is one that goes into more detail.
 
 1. What happens to `x` for each of these functions after you run them? Please explain what is happening in each case. i.e. Why do these behave differently?
 

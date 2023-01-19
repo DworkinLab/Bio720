@@ -1,0 +1,321 @@
+---
+title: "BIO720_morning_activity_strings"
+author: "Ian Dworkin"
+date: "11/29/2021"
+output: 
+  html_document: 
+    keep_md: yes
+    toc: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error =T)
+```
+
+# A lovely evening with strings
+
+Tonight we are going to work a bit with the string manipulation functions in R. R actually has many string manipulation functions, but they do not have a particularly standardized naming convention, nor do they have a common way of calling arguments (i.e. string first VS object you want to search etc...). So for some people this can be frustrating (it is actually not that bad). Some of tonights tutorial is based on an example from [here](https://francoismichonneau.net/2017/04/tidytext-origins-of-species/)
+
+Given that there are probably two very important R libraries to know about for string manipulation, *stringi* and *stringr*. There have been important co-developments of both these packages, but the two main things to know are that *stringr* just provides wrappers for functions in *stringi* (to make common uses a bit easier), and *stringr* has relatively limited functionality. They both also are consistent with *tidyverse* usage, as is one more library worth knowing about *tidytext*. There are a few others, like *rebus* which as a library uses tidyverse piping to make regular expressions easier to understand. However, I don't recommend this as much, as it is important to get used to writing regular expressions which are common among many programming languages.
+
+All functions in *stringi* begin with `stri_..`, where ".." is the name of the function. For *stringr* all functions begin with `str_`.
+
+## Install and load libraries you will need
+
+You will want to install *stringi*, *stringr* and *tidytext*
+
+```{r}
+#install.packages("tidytext")
+```
+
+```{r}
+library(stringr)
+library(stringi)
+library(tidytext)
+```
+
+
+## printing strings to the standard output (the console)
+
+It turns out there are some subtlies that you want to know about with respect to printing things to the console. First thing to keep in mind is that "\" is the escape character so if you want to print the quote " This is "me"" to the console how would you do it (i.e. double quotes for everything). Compare your results using `print` vs `writeLines`
+
+```{r}
+print("this is \"me\"")
+writeLines("this is \"me\"")
+```
+
+also worth noting some of the differences in behaviours for vectors of strings.
+
+```{r}
+fly_seq <- c(A = "ACTGGCCA", B = "ACTGGCCT", C = "ACTGTCCA" )
+
+print(fly_seq)
+
+
+writeLines(fly_seq, sep = " ")
+writeLines(fly_seq, sep ="\n")
+cat(fly_seq, sep ="\n")
+cat(fly_seq)
+```
+
+How might you get `writeLines` to print each string on a newline?
+
+
+## Joining strings together
+
+We already saw this a bit last week with `paste()` and `paste0`. Default argument for seperator between strings is a single space, but can be altered with `sep = ""`. The collapse argument is particularly useful for collapsing everything to a single string.
+
+
+Make a single string that looks like "x1 + x2 + x3 + x4 + x5" using `paste` or for stringi it is `stri_join()` and `str_c` in *stringr*
+
+```{r}
+paste("x", 1:5, sep="", collapse = " + ")
+```
+
+# How long is your string?
+
+```{r, echo = F}
+
+seq_gen <- function() {
+   x <- sample(c("A", "C", "T", "G"), 
+           size = rbinom(100, 100, 0.8),
+           replace =T)
+   paste0(x, collapse="")    
+}
+seqs <- replicate(20, seq_gen())
+```
+
+I have created an object of DNA sequences called "seqs" how long is each sequence? How many sequences are there? `nchar()` in base, and `str_length()`
+
+```{r}
+length(seqs)
+nchar(seqs)
+str_length(seqs)
+stri_length(seqs)
+```
+
+
+## **regular expressions in R**
+
+In general in R remember that since a backslash, '\'' has a special meaning when in a string, if you need to include it as part of a regular expression you need to escape it so to use it as part of a regular expression use "\\" so instead of "\d" for a digit you would use two consecutive backslashes followed by a d, i.e. "\\d". Same for other special characters that are part of regular expressions. i.e. "\\." or "\\^" or "\\$".  
+
+
+## Turning file names into variables (splitting strings)
+
+In our lab we use this a lot with our naming conventions for images that have names like ID_Experiment_Sex_Treatment_Vial_Individual.tiff. We use str_split or strsplit, to change these names to list which we can then use to generate the various factor levels for each variable.
+
+`str_split()` in stringr, `strsplit()` in base R are useful. What pattern do you want to split the string on. Output is a list with vectors with new elements being strings split on the pattern for each element of the original input vector.
+
+```{r}
+file_labels <- c("ID_GeneKnockdown2018_ds-RNAi_M_1_1", 
+                 "ID_GeneKnockdown2018_ds-RNAi_F_1_1",
+                 "ID_GeneKnockdown2018_control_M_1_1",
+                 "ID_GeneKnockdown2018_control_F_1_1")
+
+str_split(file_labels, pattern = "_")
+```
+
+If you know that each string going in will be split into the same number of elements (like the above example) you can set `simplify = TRUE` for `str_split()`, which is really useful for our purposes. This returns a matrix
+
+```{r}
+str_split(file_labels, pattern = "_", simplify = T)
+
+# or better yet
+covariates_mat <- str_split(file_labels, pattern = "_", simplify = T)
+
+colnames(covariates_mat) <- c("lab_peep", "experiment", "treatment", "sex", "vial", "individual")
+```
+
+often you will need `pattern = fixed("YourPattern")` for this, just in case.
+
+
+## Words in the origin of species
+
+Let's take a look at a famous book
+
+We will install the *gutenbergr* library from github, so we can grab the text of the book. If you don't have the *devtools* library already, you may need to install this first. Also if you plan to use tidyverse libraries, remember to load them!
+
+```{r}
+devtools::install_github("ropenscilabs/gutenbergr")
+```
+
+Load the *gutenberr* library
+
+```{r}
+library(gutenbergr)
+library(tidyverse)
+```
+
+We will use either `grepl()` or `str_detect` to try to find books with the term "on the origin of species". I suggest ignoring case It does return a tibble so you may want to tidyverse from here on in.
+
+```{r}
+books <- gutenberg_works(grepl(title, 
+                               pattern = "On the origin of species",
+                         ignore.case = TRUE))
+
+# OR!!!
+books <- gutenberg_works(str_detect(title, 
+                                    regex("on the origin of species",
+                                          ignore_case = TRUE)))
+```
+
+Let's take a look
+
+```{r}
+books
+
+books[["title"]]
+
+books %>% select(title)
+
+books$title[1]
+```
+
+
+The first one should be the 1st edition, let's download that. The first number is the gutenberg id that we need to use
+
+```{r}
+species <- gutenberg_download(1228)
+str(species)
+head(species$text)
+
+species_text <- species$text
+```
+
+
+## Cleaning it up a bit
+We want to clean things up so we can do some word searches in the text. Removing, preface, TOC, index etc...
+
+How many lines are empty, check using the `stri_isempty`. What proportion of lines is this?
+
+```{r}
+empty <- sum(stri_isempty(species_text))/length(species_text)
+empty
+```
+
+## removing the introduction
+
+How often does the word introduction appear? Use `grep` or `str_subset`
+```{r}
+length(grep("INTRODUCTION\\.",species_text, ignore.case = F)) # provides the positions in the text
+
+
+sum(str_detect(species_text, "INTRODUCTION\\.")) #boolean for each word
+length(str_subset(species_text, "INTRODUCTION\\.")) # equivalent to the grep statement
+```
+
+How would you check?
+
+```{r}s
+species_text[c(49, 68, 281)]  # each word position in the text with INTRODUCTION.
+```
+
+## Try this again for identifying the INDEX
+
+Let's use slice in dplyr to remove introduction and INDEX as follows (or really just keeping everything in between)
+
+
+```{r}
+species_slice <- species %>%
+  slice(grep("^INTRODUCTION\\.", text)[2]:(grep("^INDEX\\.", text)) - 1)
+```
+
+## Identifying chapters
+
+Each chapter begins like this "CHAPTER I. VARIATION UNDER DOMESTICATION". Can you identify a regular expression that matches this?
+
+```{r}
+grep("^CHAPTER", species_slice$text, value=TRUE)
+```
+
+
+## removing blank lines etc...
+
+Use nzchar (which returns FALSE if the string is empty) to find empty lines
+
+```{r}
+length(species_slice$text)
+sum(nzchar(species_slice$text))
+```
+
+We can filter on those lines. Fill in the missing parts.
+
+```{r}
+___ <- ___ %>%
+  ___(grep("^INTRODUCTION\\.", text):(grep("^INDEX\\.", text))-1) %>%
+  ___(nzchar(text)) %>%
+  mutate(linenumber = row_number(),
+         chapter = cumsum(grepl("^[0-9]+\\.", text)))
+```
+
+
+```{r}
+species_filtered <- species %>%
+  slice(grep("^INTRODUCTION\\.", text):(grep("^INDEX\\.", text))-1) %>%
+  filter(nzchar(text)) %>%
+  mutate(linenumber = row_number(),
+         chapter = cumsum(grepl("^[0-9]+\\.", text)))
+```
+
+## make everything upper case just in case
+
+```{r}
+species_filtered$text <- toupper(species_filtered$text)
+
+head(species_filtered$text)
+```
+
+## tidytext
+We could continue to make all of the changes by ourselves, but let's use tidytext to help us
+
+```{r}
+species_tidy <- species_filtered %>%
+    unnest_tokens(word, text)
+```
+
+Now we remove "stop words"
+
+```{r}
+species_tidy <- species_tidy %>%
+  anti_join(stop_words)
+```
+
+## Find the most common words in the book? You can use the count function in dplyr, and examine the top 10
+
+```{r}
+word_counts_10 <- species_tidy %>% 
+    count(word, sort = TRUE) %>%
+    top_n(10) %>%
+    mutate(word = reorder(word, n)) 
+```
+
+## How about a word cloud of the top 50 words
+
+```{r}
+library(wordcloud)
+```
+
+```{r}
+species_tidy %>% 
+    count(word, sort = TRUE) %>%
+    top_n(25) %>%
+    mutate(word = reorder(word, n)) %>%
+    with(wordcloud(word, n, random.order = F, max.words  = 25, colors = rainbow(8)))
+```
+
+or
+
+```{r}
+word_counts_25 <- species_tidy %>% 
+    count(word, sort = TRUE) %>%
+    top_n(25) %>%
+    mutate(word = reorder(word, n)) 
+
+word_counts_25 <- data.frame(word_counts_25)
+
+with(word_counts_25,
+     wordcloud(word, n, random.order = F, max.words = 25, col = rainbow(n = 5)))
+```
+

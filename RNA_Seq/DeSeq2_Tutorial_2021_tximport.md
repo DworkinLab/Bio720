@@ -34,6 +34,7 @@ You will need to remove the `#` first which is the comment character in R
 #install.packages("gplots")
 ```
 
+
 ## Install DeSeq2, edgeR and limma
 
 Please note that bioconductor (all of the genomics libraries in R) has its own way of installing things using the `BioCManager` library `install()` function.
@@ -293,9 +294,13 @@ The counts are just that. the length represents sample specific average transcri
 We can even start to look at the data in some basic ways. For instance, we can look at correlations among the full set of genes (remember our discussion of what this does and DOES NOT mean)
 
 ```r
-cor(txi$counts[,1:3])
+cor_vals <- cor(txi$counts[,1:20]) 
+hist(cor_vals)
 
 pairs(log2(txi$counts[,1:6]), 
+      pch = 20, lower.panel = NULL, col = "#00000019")
+
+pairs(log2(txi$counts[,1:2]), 
       pch = 20, lower.panel = NULL, col = "#00000019")
 ```
 
@@ -333,6 +338,7 @@ food <- as.factor(food)
 length(food)
 
 lane <- c(2,4,5,5,2,3,2,4,4,3,2,4,2,3,2,4,3,3,2,4)
+
 lane <- factor(lane) # we will want to treat this as a factor
 length(lane)
 

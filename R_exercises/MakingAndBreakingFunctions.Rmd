@@ -32,7 +32,7 @@ CoefVar_v1 <- function(x) {
 ```
 
 
-Computing a ration
+Computing a ratio
 ```{r}
 ratio_function <- function(x, y) {
     x/y
@@ -50,6 +50,7 @@ x
 ratio1 <- ratio_function(rnorm(100, 10, 3), rnorm(100, 10, 3))
 ratio1
 ```
+
 ## Time to break it. 
 In groups of 4, each of you will (one at a time) give your version of the function to one other person in the group, who will write some code to "break" the function in some way. Don't tell your neighbours what the variables are, just let them try and use it and break it...
 

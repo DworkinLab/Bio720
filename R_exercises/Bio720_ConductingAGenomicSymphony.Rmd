@@ -1,13 +1,13 @@
 ---
 title: "Bio720_MuckingWithDrosophilaPromoters"
 author: "Ian Dworkin"
-date: "12/3/2018"
+date: "12/06/2021"
 output: html_document
 editor_options: 
   chunk_output_type: console
 ---
 
-# A little introduction to Bioconductor using Drosophila
+# A little introduction to Bioconductor using *Drosophila*
 
 
 ## A visit to Bioconductor
@@ -15,7 +15,7 @@ You have to give the developers of Bioconductor a little love. They have really 
 
 ## A little introduction with Drosophila
 
-With 1649 packages it is not like I can show you everything. However your book, and the datacamp tutorial has given you a tiny bit of an intro into things.
+With 2083 (as of December 6th, 2021) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
 
 We will just use a few packages today
 
@@ -26,20 +26,22 @@ library(Biostrings)
 library(GenomicRanges)
 library(GenomicFeatures)
 library('BSgenome')
+
+library(seqLogo)
 ```
 
 
 ## old vs new
 
-In terms of installing BioConductor genomes and libraries they have recently deprecated some functions
+In terms of installing BioConductor genomes and libraries they have deprecated some functions about 3 years ago. I only mention in because you may see some old code using the `biocLite` function which is now **deprecated**.
 
-deprecated
+** deprecated, so don't use.. BUT YOU WILL SEE THIS IN THE DATACAMP MODULE**
 ```{r}
 #source("https://bioconductor.org/biocLite.R") # deprecated
 #biocLite('BSgenome') # deprecated
 ```
 
-New!
+**New!**
 
 ```{r}
 BiocManager::install("BSgenome") 
@@ -55,48 +57,181 @@ First let us take a look at available genomes
 available.genomes()
 ```
 
-This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the Drosophila melanogaster genome assembly
+This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the *Drosophila melanogaster* genome assembly
 
 ```{r}
-#biocLite("BSgenome.Dmelanogaster.UCSC.dm6")
+#biocLite("BSgenome.Dmelanogaster.UCSC.dm6") # Should not need this now!
 BiocManager::install("BSgenome.Dmelanogaster.UCSC.dm6")
 
+
+
 library(BSgenome.Dmelanogaster.UCSC.dm6)
-dm <- BSgenome.Dmelanogaster.UCSC.dm6
+Dm6 <- BSgenome.Dmelanogaster.UCSC.dm6
+
+
+BSgenome.Dmelanogaster.UCSC.dm6
+
+class(BSgenome.Dmelanogaster.UCSC.dm6)
+typeof(BSgenome.Dmelanogaster.UCSC.dm6) # an S4 object
+
+str(BSgenome.Dmelanogaster.UCSC.dm6)  # not so useful from a bioinformatics analysis perspective
+ 
 ```
 
 
-## Some basic statistics about the genome
+
+**Question:** Pick another genome and download it and give it initials (like Hs for Homo sapiens)
+
+
+### Note about Non-model species genomes
+
+There is a pretty reasonable chance that the exact genome you want to work with is not available. There are PLENTY of resources in bioconductor to help you out. In particular check out the [how to guide for the annotation hub](https://bioconductor.org/packages/release/bioc/vignettes/AnnotationHub/inst/doc/AnnotationHub-HOWTO.html) and also see here for a [useful vignette](https://www.bioconductor.org/packages/release/workflows/vignettes/annotation/inst/doc/Annotation_Resources.html).
+
+## Some basic statistics about the Drosophila genome
+
+Let's start by just getting some basic information about the genome we are looking at.
+
 ```{r}
-length(dm)
-names(dm)
-show(dm)
-organism(dm)
-seqinfo(dm)
-isS4(dm)
-seqlengths(BSgenome.Dmelanogaster.UCSC.dm6)
-alphabetFrequency(dm$chr2R, 
+length(Dm6)  # this is how many "chromosomes" (usually contigs) in this genome
+
+names(Dm6)
+
+length(names(Dm6)) # same as length of the genome BSgenome object
+
+```
+
+**Question** How is it that the length function works on such a "strange" object like Dm6?
+
+```{r}
+methods("length")  # length is a "generic function". Depending on what the class of the object it is being used on, it may behave differently than you expect
+
+showMethods("names") # same idea for S4 objects. Slots are accessed via "@" not "$"
+```
+
+
+For Bioconductor you can get a useful list of the S4 generic functions by looking at 
+
+```{r}
+?BiocGenerics
+```
+
+
+Obviously a lot more information available for our genome
+
+```{r}
+show(Dm6)
+organism(Dm6)
+
+isS4(Dm6)
+```
+
+
+```{r}
+seqlengths(Dm6) # length of each contig.
+```
+
+**Question:** How would you sort this so that the the largest contigs (representing near complete chromosomal assemblies) are first?
+
+
+```{r}
+head(sort(seqlengths(Dm6), decreasing  = TRUE))
+```
+
+
+
+Thankfully there is an easier way of looking at this!
+
+```{r}
+seqinfo(Dm6)
+```
+
+
+**Question:** How long is the assembled genome in base pairs (bp)? How about in mega base pairs (Mb)?
+
+```{r}
+sum(seqlengths(Dm6)[1:8])
+
+sum(seqlengths(Dm6)[1:8])/1e6  # Mbp
+```
+
+
+## frequency of bases in the genome.
+
+Often we may need to start with something simple like looking at the nucleotide composition of the genome. 
+
+
+Let's take a look at just one arm of one chromosome.
+
+
+```{r}
+alphabetFrequency(Dm6$chr2R)
+```
+
+
+**Question:** How would you represent this as probabilities instead. Use the help file for alphabetFrequency.
+
+**Question:** Why is there more than just ACGT?
+
+
+
+## Single chromosome arm
+
+Let's take a look at just one arm of one chromosome.
+
+
+```{r}
+alphabetFrequency(Dm6$chr2R, 
                   baseOnly = T, as.prob = T)
 ```
 
 
+We can also use the `getSeq` function to extract a set of sequences, like a chromosome
+
 ```{r}
-seqinfo(dm)
-sum(seqlengths(dm))/1e6
+
+dm_chrX <- getSeq(Dm6, names = "chrX")
+dm_chrX
+
+show(dm_chrX)
+
+print(dm_chrX)
 
 
-dm_chrX <- getSeq(dm, "chrX")
+class(dm_chrX) # This is now a DNAString type object, not a BSgenome object
+typeof(dm_chrX)
+
+
+length(dm_chrX)/1e6  # hey, why does this work!?   ;)
+
 nchar(dm_chrX)/1e6
 ```
 
 ## Frequencies of nucleotides on the X chromosome
 ```{r}
 alphabetFrequency(dm_chrX, baseOnly = T, as.prob = T)
+```
+
+
+
+**Question:** How would you extract positions 1000000 to 2000000 examining the negative strand of chromosome 3L? Use the help function for ?getSeq to help you. Then take a look at the nucleotide frequencies.
+
+```{r}
+dm_chr3L <- getSeq(Dm6, names = "chr3L", 
+                  start = 1000000, 
+                  end = 2000000,
+                  strand = "-")
+
+
+alphabetFrequency(dm_chr3L, baseOnly = T, as.prob = T)
 
 ```
 
 
-## Find some simple patterns
+
+## Finding some simple patterns in our chromosome
+
+Often we are looking through genomes for certain patterns (usually best set up as a kinf of regular expression, but with the ambiguous nucleotide characters)
+
 ```{r}
 seqs <- c("CCCGGG", "CCCCTTTT", "AAATTT", "TAGCT")
 n = sapply(seqs, function(x) countPattern(x, dm_chrX ))
@@ -104,9 +239,22 @@ n
 which.max(n)
 ```
 
+
+**Question:** Find the same patterns as above, but where the 4th nucleotide in the string can be any nucleotide. Note you will want to check the help file for one of the arguments.
+
+
+```{r}
+seqs2 <- c("CCCNGG", "CCCNTTTT", "AAANTT", "TAGNT")
+n = sapply(seqs2, function(x) countPattern(x, dm_chrX, fixed = FALSE ))
+n
+which.max(n)
+
+```
+
+
 ## patterns
 
-In BioStrings, there are a few functions
+In BioStrings, there are a few functions that can really help! Also see the help files.
 
   - `matchPattern(pattern, subject, max.mismatch = 1)` one string to one string
   - `vmatchPattern(pattern, subject)`
@@ -120,29 +268,66 @@ In BioStrings, there are a few functions
 
 ## a position weight matrix for a Drosophila transcription factor HNF4alpha
 
-THis is a TF that is already in bioconductor (although you may have to install)
+THis is a collection of known transcription factor (TF) binding sites in the Drosophila genome for the HNF transcriptiona factor that is already in bioconductor (although you may have to install)
+
+
 ```{r}
 data(HNF4alpha)
+
 HNF4alpha
+
 class(HNF4alpha)
 ```
 
 
-We can generate a position frequency matrix and position weight matrix of these binding sites.
+We can generate a position frequency matrix and position weight matrix of these TF binding sites.
+
 ```{r}
 pfm <- consensusMatrix(HNF4alpha)
+
+pfm
+```
+
+
+Not the most useful way of looking at it. So let's clean this up a bit. 
+
+```{r}
+
 round(pfm[1:4,]/colSums(pfm[1:4,]), 2)
 class(pfm)
+
+```
+
+
+We can now use this and create a position weight matrix (PWM) object
+
+```{r}
+
 
 pwm <- PWM(pfm)
 
 # or directly
+
+```
+
+
+
+While this is useful to see, we can do this more directly (protect those kittens)
+
+
+```{r}
+
 pwm <- PWM(HNF4alpha, type = "prob")
+
+
 round(pwm[1:4,]/colSums(pwm[1:4,]), 2)
 maxWeights(pwm)
 
 conMat <- consensusMatrix(HNF4alpha, as.prob = T)[1:4,]
+
+
 seqLogo(conMat)
+
 seqLogo(pwm[1:4,]/colSums(pwm[1:4,]))
 ```
 
@@ -150,7 +335,11 @@ seqLogo(pwm[1:4,]/colSums(pwm[1:4,]))
 
 ```{r}
 TF_hits <- matchPWM(pwm, dm_chrX, with.score = TRUE)
+
+head(TF_hits)
+
 length(TF_hits)
+
 head(mcols(TF_hits)$score)
 
 hist(mcols(TF_hits)$score)
@@ -165,19 +354,36 @@ hist(mcols(TF_hits_rc)$score)
 ```
 
 ## Extracting upstream sequences from Drosphila melanogaster
+Oftem the Transcription factor binding sites (TFBS) are upstream of the coding sequence of genes (although in Drosophila, many are intronic as well). Let's download the transcripts (and their genomic co-ordinates/positions) and use this to extract the upstream sequences.
 
 Makes a TxDb object (transcript annotations. Again, lots of options depending on how you want to refer to genes. Then extract the upstream sequences from the genes.
+
+
 ```{r}
 dm_txdb <- makeTxDbFromUCSC("dm6", tablename="refGene") 
 
-up10000seqs <- extractUpstreamSeqs(dm, dm_txdb, width=10000)
+dm_txdb 
+
+
+class(dm_txdb) # as always, know what kind of object you are working with!
+columns(dm_txdb)
+keytypes(dm_txdb )  # GenomicFeatures uses a "key pairs" approach
+
+head(transcripts(dm_txdb))  # let's look at the transcripts we have
+
+up10000seqs <- extractUpstreamSeqs(Dm6, dm_txdb, width=10000)
+
+head(up10000seqs)
+
+class(up10000seqs) # as we would hope, a DNAStringSet
 ```
 
 How about this pattern?
 
 ```{r}
-upstream_hits <- vcountPattern("NGNNCAAAGNNCA", up10000seqs)
-length(upstream_hits)
-```
+upstream_hits <- vcountPattern("NGNNCAAAGNNCA", up10000seqs, fixed = FALSE)
 
+length(upstream_hits)
+
+```
 
