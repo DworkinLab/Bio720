@@ -17,7 +17,7 @@ This is my (ID) github repo for students for both Bio720 (introduction to comput
 
 ## Class time and location
 
-BIO722, Wednesdays 1:45 - 3:45, MS TEAMS
+BIO720, Thursdaya 8:30-10:30, JHE 329
 
 ## Background assumed for students for Bio720
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out how to install basic software on a Mac (OS X) or a PC (Windows).
@@ -35,11 +35,11 @@ The primary goal of this course it to provide graduate students an opportunity t
 ## **What this course is not**
 Because of limitations of time (one two hour lecture a week for 13-14 weeks), we are purposefully making this a course about fundamental skills. As such, this course will not cover in any detail:
 
-    - Genomic analysis pipelines (RNAseq, variant calling and populations genomics). These are covered in the winter-spring in Bio722.
+    - Genomic analysis pipelines (RNAseq, variant calling and populations genomics). These are covered in BIO722.
 
     - Theory of computer science (nor theory on programming, algorithms, data structures etc).
 
-    - Despite using `R` for much of this course, it is most definitely not a statistics course. Bio708 (taught by Dr. Ben Bolker and Dr. Jonathan Dushoff) is such a course (also using R as the primary programming environmental for statistical modeling.)
+    - Despite using `R` for much of this course, it is most definitely not a statistics course. Bio708 (taught by Dr. Ben Bolker and Dr. Jonathan Dushoff and sometimes Dr.Dworkin) is such a course (also using R as the primary programming environmental for statistical modeling.)
 
     - A bioinformatics class (i.e. we will not teach any conceptual or theoretical background in bioinformatics. All examples will be real examples, but mostly to illustrate the computational skills necessary to run an analysis, not the why).
 
