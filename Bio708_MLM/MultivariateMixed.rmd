@@ -7,6 +7,8 @@ output:
     keep_md: yes
     number_sections: yes
     toc: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -33,7 +35,7 @@ library(ggplot2); theme_set(theme_bw())
 Get data:
 
 ```{r get_data}
-data_url <- "http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv"
+data_url <- "https://raw.githubusercontent.com/DworkinLab/DworkinLab.github.io/master/dataSets/Dworkin2005_ED/dll.csv"
 if (!file.exists("dll.csv")) {
     download.file(data_url,dest="dll.csv")
 }
@@ -43,6 +45,9 @@ dll_data <- read.csv("dll.csv")
 ```{r proc_data,cache=TRUE}
 ## make temp a factor (25 vs 30 degrees)
 dll_data$temp <- factor(dll_data$temp)
+dll_data$line<- factor(dll_data$line)
+dll_data$genotype <- factor(dll_data$genotype)
+
 ## scale relevant variables (fancier but less repetition than previously)
 morph_vars <- c("femur","tibia","tarsus","SCT")
 morph_vars_sc <- paste(morph_vars,"s",sep="_")

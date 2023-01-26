@@ -18,7 +18,8 @@ sample_info <- read.csv("./plot_sample_info.csv")
 # remove the outlier to match the counts data
 sample_info <- sample_info[-5,]
 
-salmon_counts <- read.csv("./salmon_counts_raw_all.csv", row.names = 1)
+salmon_counts <- read.csv("./salmon_counts_raw_all.csv", 
+                          row.names = 1)
 
 salmon_counts <- round(salmon_counts)
 
@@ -36,7 +37,7 @@ dds <- DESeqDataSetFromMatrix(countData = salmon_counts,
 dds <- filter_genes(dds, min_count = 5)
 
 # variance stabilizing
-vsd <- vst(salmon_counts_mat)
+vsd <- vst(dds)
 # check if it worked! Think so
 mean_sd_plot(vsd)
 
