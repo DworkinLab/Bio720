@@ -50,6 +50,15 @@ What easy steps can make science more reproducible & helpful for future scientis
 - In the process of organizing your data and analysis pipelines to share, you will make yourself a better scientist.
 - Future you (6 months after you finish data collecting), will thank you too!
 
+
+## New Tri-council (NSERC, CIHR and SSHRC) guidelines are in place
+"“Grant recipients are required to deposit into a recognized digital repository all digital research data, metadata and code that directly support the research… 
+The repository will ensure safe storage, preservation, and curation of the data. The agencies encourage researchers to provide access to the data ... 
+Whenever possible, these data, metadata and code should be linked to the publication with a persistent"
+[See links here](https://www.ic.gc.ca/eic/site/063.nsf/eng/h_97610.html
+)
+
+
 ## So how do you make this easy on yourself?
 
 - At the onset of your research, organize your workflow with the goal of making it as easy as possible to share.
