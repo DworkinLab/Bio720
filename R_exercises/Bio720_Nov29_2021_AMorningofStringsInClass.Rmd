@@ -1,7 +1,7 @@
 ---
-title: "BIO720_morning_activity_strings"
+title: "BIO720_strings"
 author: "Ian Dworkin"
-date: "11/29/2021"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -11,14 +11,16 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, error =T)
 ```
 
-# A lovely evening with strings
+# A lovely morning with strings
 
-Tonight we are going to work a bit with the string manipulation functions in R. R actually has many string manipulation functions, but they do not have a particularly standardized naming convention, nor do they have a common way of calling arguments (i.e. string first VS object you want to search etc...). So for some people this can be frustrating (it is actually not that bad). Some of tonights tutorial is based on an example from [here](https://francoismichonneau.net/2017/04/tidytext-origins-of-species/)
+Today we are going to work with string manipulation functions in R. R actually has many string manipulation functions, but they do not have a particularly standardized naming convention, nor do they have a common way of calling arguments (i.e. string first VS object you want to search etc...). This can be frustrating.
 
-Given that there are probably two very important R libraries to know about for string manipulation, *stringi* and *stringr*. There have been important co-developments of both these packages, but the two main things to know are that *stringr* just provides wrappers for functions in *stringi* (to make common uses a bit easier), and *stringr* has relatively limited functionality. They both also are consistent with *tidyverse* usage, as is one more library worth knowing about *tidytext*. There are a few others, like *rebus* which as a library uses tidyverse piping to make regular expressions easier to understand. However, I don't recommend this as much, as it is important to get used to writing regular expressions which are common among many programming languages.
+Given these frustrations that there are probably two very important R libraries to know about for string manipulation, *stringi* and *stringr*. There have been important co-developments of both these packages, but the two main things to know are that 1 - *stringr* just provides wrappers for functions in *stringi* (to make common uses a bit easier), and, 2 - *stringr* has somewhat limited functionality. They both are consistent with *tidyverse* usage, as is one more library worth knowing about *tidytext*. There are a few others, like *rebus* which as a library uses tidyverse piping to make regular expressions easier to understand. However, I don't recommend this as much, as it is important to get used to writing regular expressions which are common among many programming languages.
 
 All functions in *stringi* begin with `stri_..`, where ".." is the name of the function. For *stringr* all functions begin with `str_`.
 
+ Some of tonight's tutorial is based on an example from [here](https://francoismichonneau.net/2017/04/tidytext-origins-of-species/)
+ 
 ## Install and load libraries you will need
 
 You will want to install *stringi*, *stringr* and *tidytext*
@@ -190,7 +192,7 @@ sum(nzchar(species_slice$text))
 
 We can filter on those lines. Fill in the missing parts.
 
-```{r}
+```{r, echo=TRUE, eval=FALSE}
 ___ <- ___ %>%
   ___(grep("^INTRODUCTION\\.", text):(grep("^INDEX\\.", text))-1) %>%
   ___(nzchar(text)) %>%
