@@ -1,7 +1,7 @@
 ---
-title: "BIO720_2021_FunctionsAssignment"
+title: "BIO720_FunctionsAssignment"
 author: "ID"
-date: "16/11/2021"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
   html_document:
     toc: yes
@@ -16,15 +16,18 @@ editor_options:
 
 
 
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(digits = 3)
+```
 
 # Functions assignment
 
 
 
-**Due Date**: Tuesday November 23rd, 2021 (5PM)
+**Due Date**: Wednesday, April 5th. 5PM.
 
-This assignment is based on the class material from November 15th, 2021 (ID)
+This assignment is based on the class material from March 30th, 2023 (ID)
 
 ## DataCamp
 
@@ -44,8 +47,7 @@ This assignment is based on the class material from November 15th, 2021 (ID)
 
 
 
-
-```r
+```{r}
 read_1 <- "CGCGCAGTAGGGCACATGCCAGGTGTCCGCCACTTGGTGGGCACACAGCCGATGACGAACGGGCTCCTTGACTATAATCTGACCCGTTTGCGTTTGGGTGACCAGGGAGAACTGGTGCTCCTGC"
 ```
 

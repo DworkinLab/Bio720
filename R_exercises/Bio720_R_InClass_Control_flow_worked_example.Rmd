@@ -1,13 +1,19 @@
 ---
-title: "In class assignment week 2, part 2. A worked example using control flow (for loops, if statements, etc)"
+title: "In class activity. A worked example using control flow (for loops, if statements, etc)"
 author: "Ian Dworkin"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output: 
-  html_document:
-    keep_md: yes
+  html_document: 
+    toc: yes
     number_sections: yes
+    keep_md: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
+
 # Introduction
+
 Let's do a little exercise integrating some of the things we have learned. Here are some Illumina HiSeq reads for one of our recent projects:
 
 ```{r}

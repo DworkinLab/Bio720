@@ -1,11 +1,12 @@
 ---
-title: "In class assignment week 2, part 2. A worked example using control flow (for loops, if statements, etc)"
+title: "Answers for class activity. A worked example using control flow (for loops, if statements, etc)"
 author: "Ian Dworkin"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output: 
-  html_document:
-    keep_md: yes
-    number_sections: yes
+  html_document: 
     toc: yes
+    number_sections: yes
+    keep_md: yes
 editor_options: 
   chunk_output_type: console
 ---
@@ -79,19 +80,35 @@ Question 5. How about if we wanted the number of occurrences of each base? Or th
 For a list you could do this:
 
 ```{r}
-site_freq <- table(read_1_split)/lengths(read_1_split)
-print(site_freq, digits = 2)
+site_freq_list <- table(read_1_split)/lengths(read_1_split)
+
+# or
+
+site_freq_list_V2 <- table(read_1_split)/sum(table(read_1_split))
+
+print(site_freq_list, digits = 2)
+
+print(site_freq_list_V2, digits = 2)
 ```
 Note the use of `lengths()` not `length()` for the list above!!!!
 
 For a vector of characters you can use this:
 
 ```{r}
-site_freq_alt <- table(read_1_char)/length(read_1_char)
-print(site_freq_alt, digits = 2)
+site_freq_string <- table(read_1_char)/length(read_1_char)
+
+site_freq_string_V2 <- table(read_1_char)/sum(table(read_1_char))
+
+print(site_freq_string, digits = 2)
+print(site_freq_string_V2, digits = 2)
 ```
 
 Since this is a vector of characters we can use `length()`
+
+Note that the "V2" version works for the data stored as either a vector or a list. As such, if I was to write a custom function to do this, I would use that to reduce headaches with different data structures. But for the exercises below I pretend not to know this, so you can practice your programming
+
+
+
 
 Question 6. How would you make this into a nice looking function that can work on either  a list or vectors of characters? (Still just for a single read)
 
@@ -106,6 +123,14 @@ BaseFrequencies <- function(x) {
     	tab <- table(x)/length(x)
     }	
    return(tab)
+}
+```
+
+Or alternatively
+```{r}
+BaseFrequencies_V2 <- function(x) {
+    tab <- table(x)/sum(table(x))
+    return(tab)
 }
 ```
 

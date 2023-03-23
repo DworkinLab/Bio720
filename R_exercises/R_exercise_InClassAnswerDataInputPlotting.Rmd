@@ -1,9 +1,16 @@
 ---
-title: "Bio720_InClassActivitySept28_2015"
+title: "Answers, Simple data input and plotting in class activity"
 author: "Ian Dworkin"
-date: "October 2, 2015"
-output: html_document
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output: 
+  html_document: 
+    toc: yes
+    number_sections: yes
+    keep_md: yes
+editor_options: 
+  chunk_output_type: console
 ---
+
 
 In class this week our [in class activity][./R_exercise_InClass.md] worked to import some RNAseq count data sets, examine them and then do some simple plotting. Below I summarize how we went about doing each step. **Please keep in mind** this is a fairly inefficient way to do it, but they are good for practicing `R` fundamentals. I will go over in class (in a few weeks) a much better approach to do these types of operations.
 

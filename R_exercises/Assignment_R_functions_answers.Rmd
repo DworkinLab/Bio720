@@ -1,7 +1,7 @@
 ---
-title: "BIO720_2021_FunctionsAssignment_Answers"
+title: "BIO720_FunctionsAssignment_Answers"
 author: "ID"
-date: "16/11/2021"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
   html_document:
     toc: yes
