@@ -176,6 +176,8 @@ So what should we do? We can use the `unique()` to remove these duplicated rows 
 dll_data_unique <- unique(dll_data2)
 
 dim(dll_data_unique)
+
+any(duplicated(dll_data_unique))
 dim(dll_data2)
 dim(dll_data)
 ```
@@ -327,6 +329,17 @@ line_names2_mat <- matrix(unlist(line_names2),
 head(line_names2_mat)
 ```
 
+
+However, in practice I usually use the equivalent function in `stringr` to do this, as it generates the matrix in a single step.
+```{r}
+
+temp_string <- stringr::str_split(line_str, 
+                                  pattern = "-",
+                                  simplify = TRUE)
+
+head(temp_string)
+```
+
 And the second column contains what we want (line names) so we could make a new variable.
 
 ```{r}
@@ -465,7 +478,7 @@ head(dll_data)
 We often end up in a situation where we collect more data on the same set of samples (or in the same locales) that we need to include in our analyses. Again, we do not want to go back and edit the spreadsheets, but instead merge the data frames during the analysis. For instance, let's say we had this new data that related the elevation that each of the 27 lines were originally collected at, and we thought this may explain some important component of the variation in the traits (in this case size). So our collaborator collected this data:
 
 ```{r}
-line_names <- dll_data$line
+line_names <- as.factor(dll_data$line)
 levels(line_names)
 elevations <- c(100, 300, 270, 250, 500, 900, 500, 1100, 500,
                 3000,500, 570, 150, 800, 600, 500, 1900, 100,

@@ -55,7 +55,7 @@ We will use a number of different data sets to illustrate each of the points, bu
 
 ```{r, eval = TRUE}
 dll_data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
-                       h = T, stringsAsFactors = TRUE)
+                       h = TRUE, stringsAsFactors = TRUE)
 ```
 
 
@@ -74,7 +74,9 @@ Sometimes your data set has missing data, i.e. for some reason you could not mea
 First let's check if there is any missing data. Use `is.na` to see if there is any? How many observations have missing data?
 
 ```{r}
-
+is.na(dll_data)
+sum(is.na(dll_data))
+anyNA(dll_data)
 ```
 
 More generally we can use `anyNA()`. Try it on this data:
@@ -112,7 +114,7 @@ The `duplicated()` allows you to see which, if any rows are perfect duplicates o
 We can first ask if any rows are duplicates.  Use `duplicated` to check.
 
 ```{r}
-
+sum(duplicated(dll_data))
 ```
 
 How might we find how many duplicated?
@@ -125,7 +127,12 @@ Or if you want it as a Boolean (hint use `any`)
 
 ```{r}
 anyDuplicated(dll_data)
+
+dll_data[891,]
+
+dll_data[anyDuplicated(dll_data),]
 ```
+
 So for this example there was one duplicate rows.
 
 How can we use anyDuplicated to pull out the duplicated rows?
@@ -140,6 +147,12 @@ str(dll_data2)
 ```
 
 Now you don't know which rows, they are.  Please show how you would find whether there are any duplicated rows, and which ones they are using `duplicated()`
+
+```{r}
+sum(duplicated(dll_data2))
+
+dll_data2[duplicated(dll_data2), ]
+```
 
 
 
