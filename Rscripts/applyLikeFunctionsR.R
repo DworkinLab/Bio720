@@ -91,7 +91,7 @@ LinesSctMeans
 
 #There is a much easier way to do this using a useful function called tapply, which applies a function along factor levels::
 
-with(dll_data, tapply( X= SCT, INDEX = line, FUN = mean))
+with(dll_data, tapply( X = SCT, INDEX = line, FUN = mean))
 
 
 

@@ -1,7 +1,7 @@
 ---
 title: "Bio720_DataMunging in base R"
 author: "Ian Dworkin"
-date: "`r format(Sys.time(),'%d %b %Y')`"
+date: "06 Apr 2023"
 output: 
   html_document: 
     keep_md: yes
@@ -11,10 +11,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
-options(digits  = 3)
-```
+
 # Data parsing and munging in Base R
 
 ## Brief introduction
@@ -43,7 +40,8 @@ We have already spent considerable time in previous tutorials making data frames
 ## install packages.
 You may wish to install certain `R` libraries that get used a lot. While R-studio has a number of easy ways to install libraries I still prefer having it in the script. You only need to install the libraries once, although it is worth updating them regularly, and I re-install them everytime I update `R`.
 
-```{r, eval = FALSE}
+
+```r
 # remove hash to install.
 #install.packages("data.table")
 ```
@@ -53,7 +51,8 @@ You may wish to install certain `R` libraries that get used a lot. While R-studi
 We will use a number of different data sets to illustrate each of the points, but for the main one, we will use an old *Drosophila melanogaster* data set measuring several traits (lengths) and the number of sex comb teeth (a structure used to clasp females during copulation) for different wild type strains (line) reared at different developmental temperatures, with and without a mutation that effects proximal-distal axis development in limbs (genotype). Note that we are downloading the data from a data repository (Dryad). If you really care, it is from [this](https://www.ncbi.nlm.nih.gov/pubmed/15733306) paper.
 
 
-```{r, eval = TRUE}
+
+```r
 dll_data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
                        h = T, stringsAsFactors = TRUE)
 ```
@@ -61,7 +60,8 @@ dll_data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
 
 Before we go on, how should we look at the data to make sure it imported correctly, and the structure (and other information) about the object we have just created?
  
-```{r}
+
+```r
 # How do you want to check your data?
 ```
 - Since we are using base *R*, this is a regular data.frame.
@@ -73,20 +73,20 @@ Sometimes your data set has missing data, i.e. for some reason you could not mea
 
 First let's check if there is any missing data. Use `is.na` to see if there is any? How many observations have missing data?
 
-```{r}
 
-```
 
 More generally we can use `anyNA()`. Try it on this data:
 
 
 ### Why missing data can cause headaches
-```{r}
+
+```r
 mean(dll_data$femur)
 ```
 - Since there is some missing data, the `mean()` function defaults to NA, to warn you. This is a useful behaviour.
 
-```{r}
+
+```r
 mean(dll_data$femur, na.rm = TRUE)
 ```
 
@@ -100,7 +100,8 @@ There are numerous options about how `R` should handle operations if an `NA` is 
 
 For the moment, we are going to accept the approach above, and use it. However, I don't generally recommend this. Instead, you can first subset the variables you are going to use, and then decide how to deal with the missing data. Or you can allow them into your analysis, but make sure to set the right flags in functions that enable them to deal with missing data.
 
-```{r}
+
+```r
 dll_data <- na.omit(dll_data)
 mean(dll_data$femur)
 ```
@@ -111,9 +112,7 @@ The `duplicated()` allows you to see which, if any rows are perfect duplicates o
 
 We can first ask if any rows are duplicates.  Use `duplicated` to check.
 
-```{r}
 
-```
 
 How might we find how many duplicated?
 
@@ -123,7 +122,8 @@ Or if you want it as a Boolean (hint use `any`)
 
 `R` has a convenience function for the above:
 
-```{r}
+
+```r
 anyDuplicated(dll_data)
 ```
 So for this example there was one duplicate rows.
@@ -132,11 +132,24 @@ How can we use anyDuplicated to pull out the duplicated rows?
 
 However let's say an accident happened in generating the data set and a few rows were duplicated. I am going to use the `sample()` function to extract 5 random rows.
 
-```{r, eval = TRUE}
+
+```r
 new_rows <- dll_data[sample(nrow(dll_data), size = 5, replace = T ),]
 
 dll_data2 <- rbind(dll_data, new_rows)
 str(dll_data2)
+```
+
+```
+## 'data.frame':	1978 obs. of  8 variables:
+##  $ replicate: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ line     : Factor w/ 27 levels "line-1","line-11",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ genotype : Factor w/ 2 levels "Dll","wt": 1 1 1 1 1 1 1 1 1 1 ...
+##  $ temp     : int  25 25 25 25 25 25 25 25 25 25 ...
+##  $ femur    : num  0.59 0.55 0.588 0.588 0.596 ...
+##  $ tibia    : num  0.499 0.501 0.488 0.515 0.502 ...
+##  $ tarsus   : num  0.219 0.214 0.211 0.211 0.207 ...
+##  $ SCT      : int  9 13 11 NA 12 14 11 12 10 12 ...
 ```
 
 Now you don't know which rows, they are.  Please show how you would find whether there are any duplicated rows, and which ones they are using `duplicated()`
@@ -145,7 +158,8 @@ Now you don't know which rows, they are.  Please show how you would find whether
 
 So what should we do? We can use the `unique()` to remove these duplicated rows if we know for certain that they do not belong in the data set (i.e. they are duplicated in error). 
 
-```{r}
+
+```r
 dll_data_unique <- unique(dll_data2)
 
 dim(dll_data_unique)
@@ -155,7 +169,8 @@ dim(dll_data)
 
 Let's just do a bit of clean-up.
 
-```{r}
+
+```r
 rm(dll_data_complete, dll_data_unique, dll_data2)
 ```
 
@@ -165,14 +180,16 @@ In some sense this is a review of what we learned during the first week, but the
 
 Let's look at the data again:
 
-```{r}
+
+```r
 str(dll_data)
 ```
 
 As we can see there are two genotypes. Let's say we wanted to make a data frame (`dll_data_wt`) that was a subset with only the wild type (`wt`) data? How would you do this with the index?
 
 ### using the index
-```{r}
+
+```r
 dll_data_wt <- ?
 ```
 
@@ -183,7 +200,8 @@ Has this created the appropriate subset of data? How would you check?
 
 So that seems to match. We should only have one level now in `genotype`. Let's check.
 
-```{r}
+
+```r
 levels(dll_data_wt$genotype)
 ```
 
@@ -191,7 +209,8 @@ So what is going on?
 
 We know we only have the correct number of observations associated, but it still has the level `Dll` in the factor genotype, why? Because of the way it has been stored, each of these levels is still associated as part of `genotype`. Thankfully it is very easy to fix. Use the `droplevels()` to drop unused levels. 
 
-```{r}
+
+```r
 dll_data_wt <- 
 levels(dll_data_wt$genotype)
 ```
@@ -201,7 +220,8 @@ levels(dll_data_wt$genotype)
 Of course the easiest alternative is to use the `subset` function we introduced a few weeks back. Please use this to make a data frame (`dll_data_Dll`) for the *Dll* factor level of genotype and check what has happened to the *wt* factor level. Try that here.
 
 
-```{r, eval = FALSE}
+
+```r
 dll_data_Dll <- ?
 dim(dll_data_Dll)
 with(dll_data, table(genotype))
@@ -211,7 +231,8 @@ dll_data_Dll <- droplevels(dll_data_Dll)
 
 `subset()` like using the index allows you to select specific columns as well. Create a new version of dll_data_Dll where the only columns that remain are line, genotype, temp and SCT.
 
-```{r}
+
+```r
 dll_data_Dll <- ?
 
 dim(dll_data_Dll)
@@ -223,7 +244,8 @@ dim(dll_data_Dll)
 
 The `%in%` is a matching operator (also see `match()`) that returns a boolean (TRUE or FALSE). This can be really useful to find things. Go ahead and find all instances where a couple of the lines `c("line-Sam", "line-1")` are in the data set `dll_data$line`. I recommend first creating a dummy logical variable that can be used to filter via the index`[]`.
 
-```{r}
+
+```r
 matched_set <- ?
 
 dll_data_new_subset <- ?
@@ -234,14 +256,16 @@ dim(dll_data_new_subset)
 ### Clean up before moving on.
 let's remove the data frames we are not using.
 
-```{r}
+
+```r
 rm(dll_data_Dll, dll_data_wt, dll_data_new_subset, matched_set)
 ```
 
 ## Cleaning variable names
 Let's take a closer look at the names of the different fly strains used.
 
-```{r}
+
+```r
 levels(dll_data$line)
 ```
 
@@ -254,7 +278,8 @@ First thing to keep in mind though is that `dll_data$line` is currently stored a
 ### `substr()`
 Let's try to do some simple string manipulation. There are a few functions that could be useful here. Let's start with `substr()` (substring). This will extract or replace substrings within a character vector. So what do we need to do first to this variable (stored as a factor)
 
-```{r}
+
+```r
 line_str <- ?
 str(line_str)
 head(line_str)
@@ -262,7 +287,8 @@ head(line_str)
 
 Now we can use `substr()`. It is by position. Look up `?substr`, in the function you will want to use `stop = 1000000L`
 
-```{r}
+
+```r
 line_names <- ?
 
 head(line_names)
@@ -275,14 +301,15 @@ In this case, since the strings we want to keep start at different positions in 
 ### `strsplit()`
 An alternative way to do this is to use the fact that we (purposefully) used a delimiter character to seperate parts of the name. In this case we used the "-" to seperate the word "line" from the actual line name we car about. As such we can use a second function that can be very valuable, `strsplit()`. Use `strsplit` to create a new object splitting on the "-"
 
-```{r}
+
+```r
 line_names2 <- ?
 head(line_names2)
-
 ```
 Here it has created a list, where each list contains the 2 elements ("line" and the name of the line which we want). We are going to convert this list to a matrix so we can extract what we need.
 
-```{r}
+
+```r
 line_names2_mat <- ?
 
 head(line_names2_mat)
@@ -290,7 +317,8 @@ head(line_names2_mat)
 
 And the second column contains what we want (line names) so we could make a new variable.
 
-```{r}
+
+```r
 dll_data$line_names <- ?
 str(dll_data$line_names)
 ```
@@ -307,7 +335,8 @@ Many times however, there is no consistent delimiter like "-", nor can we assume
 
 `sub()` and `gsub()` are functions that perform replacements for the first match or globally (g) for all matches respectively. If we go back to the names of the original lines, we will see they all have `line-` in common, so perhaps we can search and replace based on that pattern. This is quite easy as well. use `gsub` to extract just the line name without the first part of the string, "line-"
 
-```{r}
+
+```r
 str(line_str)
 line_names3 <- ?
 
@@ -320,7 +349,8 @@ tail(line_names3)
 
 You may have noticed that for the line names which are short words, some are lower case and some are upper case. It could be that this inconsistentcy make cause an issue down the road. So let's say we wanted to take `line_names3` and make all of the words lower case. How would we do that? `R` has some nice functions to help, namely `tolower()` (and `toupper()`) and the more general `chartr()` for character translation.
 
-```{r}
+
+```r
 line_names3 <- tolower(line_names3)
 
 head(line_names3)
@@ -329,12 +359,14 @@ tail(line_names3, n = 25)
 
 Say we wanted to call the "sam" line by its proper name "Samarkand". How could we do this? with `sub`?
 
-```{r}
+
+```r
 line_names3 <- ?
 ```
 
 #### Clean up before moving on.
-```{r}
+
+```r
 rm(line_names2, line_names3, line_names, line_names2_mat, line_str, new_rows)
 ```
 
@@ -342,7 +374,8 @@ rm(line_names2, line_names3, line_names, line_names2_mat, line_str, new_rows)
 
 For this experiment, all flies were reared during their development at two temperatures, 25C and 30C. Currently this is kept as an integer. 
 
-```{r}
+
+```r
 str(dll_data$temp)
 ```
 
@@ -350,7 +383,8 @@ However we might want to treat this as a factor. Also your PI has decided they w
 
 Use the `factor()` function to generate a new variable `temp_as_factor` with factor labels "LowTemp", "HighTemp".
 
-```{r}
+
+```r
 temp_as_factor <- ?
 
 str(temp_as_factor)
@@ -362,7 +396,8 @@ tail(temp_as_factor)
 
 An alternative approach would be to use the `ifelse()` function. Create a new variable (that achieves the same thing) using `ifelse()`
 
-```{r}
+
+```r
 temp_as_factor2 <- ?
 temp_as_factor2 <- factor(temp_as_factor2)
 str(temp_as_factor2)
@@ -374,21 +409,24 @@ One issue with this is nested `if` statements, like `for` loops can get messy. P
 
 Sometimes you just want to sort your data frame. While this is rarely necessary for statistical analyses or plotting of the data, it is important to look at the raw data as a double (triple!!!) check that there are no typos, or issues you were not aware of. I would say in genomic analysis this is most important when you are looking at the summary of statistical analyses and you want to sort your output by genes with greatest effects or something else. While there is a `sort()` function in `R` this is not generally the way you want to approach it.
 
-```{r}
+
+```r
 head(sort(dll_data$SCT))
 
 tail(sort(dll_data$SCT))
 ```
 This just sorts the vector, which does not help us much. Instead we are going to use the `order()` function which provides information on the index for each observation. So 
 
-```{r}
+
+```r
 head(order(dll_data$SCT))
 
 tail(order(dll_data$SCT))
 ```
 Provides the row numbers. We can use this to sort via the *index*. Use the `order()` to sort the dll_data frame into a new object (dll_data_sorted) based on dll_data$SCT.
 
-```{r}
+
+```r
 dll_data_sorted <- ?
 
 head(dll_data_sorted)
@@ -400,7 +438,8 @@ How would you sort on tibia?
 
 So this by default sorts from lowest to highest. Use the help function for `order` and sort the data from highest to lowest.
 
-```{r}
+
+```r
 dll_data_sorted <- ?
 head(dll_data_sorted)
 ```
@@ -409,7 +448,8 @@ head(dll_data_sorted)
 
 This is a natural extension of what we have already done. Sort first on *SCT*, then on *temp*
 
-```{r}
+
+```r
 dll_data_sorted <- ?
 head(dll_data_sorted)
 head(dll_data)
@@ -419,7 +459,8 @@ head(dll_data)
 
 We often end up in a situation where we collect more data on the same set of samples (or in the same locales) that we need to include in our analyses. Again, we do not want to go back and edit the spreadsheets, but instead merge the data frames during the analysis. For instance, let's say we had this new data that related the elevation that each of the 27 lines were originally collected at, and we thought this may explain some important component of the variation in the traits (in this case size). So our collaborator collected this data:
 
-```{r}
+
+```r
 line_names <- dll_data$line
 levels(line_names)
 elevations <- c(100, 300, 270, 250, 500, 900, 500, 1100, 500,
@@ -441,21 +482,24 @@ The `merge()` function is designed for exactly this. It works on matching variab
 
 In our case
 
-```{r}
+
+```r
 names(dll_data)
 names(elevation_data)
 ```
 
 The easiest thing to do would be to rename the variable in `elevation_data` so that it matches that in `dll_data`
 
-```{r}
+
+```r
 names(elevation_data)[1] <- "line"
 str(elevation_data)
 ```
 
 Now we can merge the data
 
-```{r}
+
+```r
 merged_data <- merge(x = elevation_data, 
                      y = dll_data,
                      sort = FALSE)
@@ -463,7 +507,8 @@ merged_data <- merge(x = elevation_data,
 
 How can we check if it merged correctly?
 
-```{r}
+
+```r
 head(merged_data)
 tail(merged_data)
 ```
@@ -476,7 +521,8 @@ We can also use the index to do something similar.
 
 Say we measured gene expression of a particular transcript for both genotypes *Dll* and *wt*. We wanted to include that. It would be very easy to use an ifelse, but we can also use the index
 
-```{r}
+
+```r
 geneXpression <- c(Dll=1121, wt = 2051)
 merged_data$geneExp <- geneXpression[dll_data$genotype]
 
@@ -486,7 +532,8 @@ head(dll_data)
 Make a new variable based on genotype for `geneY = c(200, 500)`.
 
 #### Clean up for next part.
-```{r}
+
+```r
 rm(elevation_data, elevations, MeanDayTimeTemp, temp_as_factor, dll_data_sorted, geneXpression, temp_as_factor2, line_names, stuff, merged_data)
 ```
 
@@ -498,14 +545,16 @@ This is such a common operation that `R` has a function `reshape()` to do this. 
 
 ### `reshape()` function in `R`
 Let's take a quick look at our data again:
-```{r}
+
+```r
 head(dll_data)
 ```
 
 It is clear that we have three variables (femur, tibia and tarsus) which are all measures of size (3 segments of the leg). While we currently have these in the *wide* format, for some analysis (such as in mixed models) we may wish to put them in a *long* format. 
 
 First let me show you the code (and that it worked), and then we will go through the various arguments to make sense of what we have done.
-```{r}
+
+```r
 long_data <- reshape(dll_data,
                      varying = list(names(dll_data)[5:7]),
                      direction = "long",
@@ -517,7 +566,8 @@ long_data <- reshape(dll_data,
 
 Let's check that this worked. How might we do this? What do we expect in terms of number of rows in `long_data`?
 
-```{r}
+
+```r
 # It should have 3 times the number of rows as our original data
 (3*nrow(dll_data)) == nrow(long_data)
 
@@ -531,11 +581,13 @@ tail(long_data, n = 10)
 ### some other approaches to using `reshape()`
 
 Sometimes we actually have unique subject identifiers already in the data frame, and we don't need to just use row numbers. These unique identifiers can be a combination of several variables if it generates a unique combination for each row (for data currently in wide format). See the section below on combining names. In turns out that even if we combined line, genotype, temp we would not have unique names, so that strategy does not work here. So we can make a fake identifer
-```{r}
+
+```r
 dll_data$subject <- as.character(1:nrow(dll_data))
 ```
 
-```{r}
+
+```r
 long_data2 <- reshape(dll_data,
                      varying = list(names(dll_data)[5:7]),
                      direction = "long",
@@ -549,7 +601,8 @@ long_data2 <- reshape(dll_data,
 
 Which we can check again
 
-```{r}
+
+```r
 3*nrow(dll_data) == nrow(long_data2)
 
 head(long_data2)
@@ -560,13 +613,15 @@ In this case, this is really similar to the approach above as we used the same f
 ## Combining variables together.
 Sometimes you need to combine several variables together. For instance, we may need to look at combinations of both *genotype* and *temp*
 
-```{r}
+
+```r
 str(dll_data)
 ```
 
 What if we wanted to combine these two variables together into a meta-variable? There are a few good options. One is to use paste of course
 
-```{r}
+
+```r
 meta_variable <- with(dll_data,
                       paste(genotype, temp, 
                             sep = ":"))
@@ -578,7 +633,8 @@ Note: you get to choose the character to use as a seperator. ":", "." and "_" ar
 
 The only problem is this is now a character vector not a factor, although this is easily fixed.
 
-```{r}
+
+```r
 meta_variable <- as.factor(meta_variable)
 str(meta_variable)
 ```
@@ -586,7 +642,8 @@ Great!
 
 The other pretty easy way, especially for factors is to use the `interaction` function.
 
-```{r}
+
+```r
 meta_variable2 <- with(dll_data,
      interaction(as.factor(temp), genotype,
                  drop = TRUE,

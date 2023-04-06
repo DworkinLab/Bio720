@@ -1,7 +1,7 @@
 ---
 title: "Bio720 R In Class Exercise 2"
 author: "Ian Dworkin"
-date: "October 29, 2018"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output: 
   html_document: 
     keep_md: yes

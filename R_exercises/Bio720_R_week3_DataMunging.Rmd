@@ -1,19 +1,21 @@
 ---
-title: "Bio720_DataMunging"
+title: "Bio720_DataMunging in base R"
 author: "Ian Dworkin"
-date: "November 5th, 2018"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output: 
   html_document: 
     keep_md: yes
     number_sections: yes
     toc: yes
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(digits  = 3)
 ```
-# Data parsing and munging in Base R
+## Data parsing and munging in Base R
 
 ## Brief introduction
 One of the most common "programming" activities you will do in genomics and bioinfomatics is to get the data into a format that facilitates (and makes possible) the analyses you are doing. This activity can often occupy very large amounts of your time
@@ -52,7 +54,8 @@ We will use a number of different data sets to illustrate each of the points, bu
 
 
 ```{r}
-dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
+dll_data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
+                       h = T, stringsAsFactors = TRUE)
 ```
 
 
@@ -355,7 +358,7 @@ tail(line_names3)
 
 What has happened here? Well we looked in the `line_str` object, and found all instances of our pattern (which in this case was the simple "line-"), and then we *replaced* this with "", in other words an emptry string.
 
-`R` can handle POSIX style regular expressions (probably what you learned with Brian) as well PERL style regular expressions by setting the flag `PERL = TRUE`. This enables very flexible pattern searching.
+`R` can handle POSIX style regular expression as well PERL style regular expressions by setting the flag `PERL = TRUE`. This enables very flexible pattern searching.
 
 ### Some other things to help "clean" up names, etc..
 
@@ -499,7 +502,8 @@ Now we can merge the data
 
 ```{r}
 merged_data <- merge(x = elevation_data, 
-                     y = dll_data)
+                     y = dll_data,
+                     sort = TRUE)
 ```
 
 How can we check if it merged correctly?
@@ -509,7 +513,7 @@ head(merged_data)
 tail(merged_data)
 ```
 
-The `merge()` function has a great deal more flexibility, and it is worth looking at the examples in the help function! A word of warning with `merge()` and `reshape()` (below). The functions can result in some odd behaviour when there are non-unique rows which create conflicts. They can also stumble with missing data sometimes. So be on the look out for such things when you are using these functions.
+The `merge()` function has a great deal more flexibility, and it is worth looking at the examples in the help function! A word of warning with `merge()` and `reshape()` (below). The functions can result in some odd behaviour when there are non-unique rows which create conflicts. They can also stumble with missing data sometimes. So be on the look out for such things when you are using these functions. The other thing to know is that it will sort the new object it creates, so if you need to use this in conjunction with other files, keep a dummy variable in both files that have unique identifiers. 
 
 ### the power of the index
 

@@ -12,11 +12,17 @@ editor_options:
 ---
 
 
-# Introduction
+# Worked examples using control flow
+
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+**NOTE:** I have set the defaults (line above) for evaluation of blocks of code to be off (`eval = FALSE`). When you are running the code you might need to change these. I did this for rendering this activity.
 
 Let's do a little exercise integrating some of the things we have learned. Here are some Illumina HiSeq reads for one of our recent projects:
 
-```{r}
+```{r, eval = TRUE}
 read_1 <- "CGCGCAGTAGGGCACATGCCAGGTGTCCGCCACTTGGTGGGCACACAGCCGATGACGAACGGGCTCCTTGACTATAATCTGACCCGTTTGCGTTTGGGTGACCAGGGAGAACTGGTGCTCCTGC"
 
 read_2 <- "AAAAAGCCAACCGAGAAATCCGCCAAGCCTGGCGACAAGAAGCCAGAGCAGAAGAAGACTGCTGCGGCTCCCGCTGCCGGCAAGAAGGAGGCTGCTCCCTCGGCTGCCAAGCCAGCTGCCGCTG"
