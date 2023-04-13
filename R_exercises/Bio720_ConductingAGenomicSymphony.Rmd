@@ -1,8 +1,12 @@
 ---
 title: "Bio720_MuckingWithDrosophilaPromoters"
 author: "Ian Dworkin"
-date: "12/06/2021"
-output: html_document
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output: 
+  html_document: 
+    toc: yes
+    number_sections: yes
+    keep_md: yes
 editor_options: 
   chunk_output_type: console
 ---
@@ -15,13 +19,13 @@ You have to give the developers of Bioconductor a little love. They have really 
 
 ## A little introduction with Drosophila
 
-With 2083 (as of December 6th, 2021) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
+With 2083 (as of April 13th, 2023) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
 
 We will just use a few packages today
 
 ```{r}
-#library(BiocInstaller) # old deprecated
-library(BiocManager) # new way
+#library(BiocInstaller) # old deprecated. Don't use, but you may see in old scripts.
+library(BiocManager) # current way
 library(Biostrings)
 library(GenomicRanges)
 library(GenomicFeatures)
@@ -57,6 +61,18 @@ First let us take a look at available genomes
 available.genomes()
 ```
 
+
+TOO MUCH! 
+
+Use the help from available.genomes to see how you can take a look at the genomes
+
+```{r}
+av_gen <- available.genomes(splitNameParts=TRUE)
+table(av_gen$organism)
+table(av_gen$provider)
+
+av_gen[av_gen$organism == "Dmelanogaster",]
+```
 This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the *Drosophila melanogaster* genome assembly
 
 ```{r}
@@ -166,12 +182,40 @@ Let's take a look at just one arm of one chromosome.
 ```{r}
 alphabetFrequency(Dm6$chr2R)
 ```
-
-
-**Question:** How would you represent this as probabilities instead. Use the help file for alphabetFrequency.
-
 **Question:** Why is there more than just ACGT?
 
+**Questions:** How would you represent this as probabilities instead. Use the help file for alphabetFrequency. 
+
+ - How about if you only wanted frequency of A, C, G or T?
+ 
+
+
+
+```{r}
+alphabetFrequency(Dm6$chr2R, as.prob = TRUE)
+
+letterFrequency(Dm6$chr2R, 
+                  letters = c("A", "C", "G", "T"),
+                  as.prob = TRUE)
+```
+
+
+Similar for dinucleotide, trinucleotide and arbitrary oligonucloetides
+```{r}
+dinucleotideFrequency(Dm6$chr2R, as.prob = TRUE)
+trinucleotideFrequency(Dm6$chr2R, as.prob = TRUE)
+
+oligonucleotideFrequency(Dm6$chr2R, width = 6, as.prob = TRUE)
+```
+
+
+
+## nucleotide transition matric
+
+```{r}
+oligonucleotideTransitions(Dm6$chr2R, as.prob = TRUE)
+oligonucleotideTransitions(Dm6$chr2R, 2, as.prob = TRUE)
+```
 
 
 ## Single chromosome arm
@@ -226,11 +270,16 @@ alphabetFrequency(dm_chr3L, baseOnly = T, as.prob = T)
 
 ```
 
+**Question:**  - Using that same region, how would you find the reverse complement of that sequence? What should it be equivalent to (use the help or vignettes in biostrings to find the functions to help you)
+
+```{r}
+rc_dm_chr3L <- reverseComplement(dm_chr3L) 
+```
 
 
 ## Finding some simple patterns in our chromosome
 
-Often we are looking through genomes for certain patterns (usually best set up as a kinf of regular expression, but with the ambiguous nucleotide characters)
+Often we are looking through genomes for certain patterns (usually best set up as a kind of regular expression, but with the ambiguous nucleotide characters)
 
 ```{r}
 seqs <- c("CCCGGG", "CCCCTTTT", "AAATTT", "TAGCT")
