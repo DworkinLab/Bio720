@@ -94,3 +94,7 @@ Final Project: 45%
  - Written paper and annotated and reproducible code (github)
 
 Class Participation: 10%
+
+## Lecture materials
+
+[Introduction - 12/01/24](./BIO722_lectures/BIO722_lecture1/BIO722_2024_Introduction.pdf)
