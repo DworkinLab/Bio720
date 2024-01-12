@@ -2,6 +2,9 @@
 
 Winter/Spring 2024
 
+## Location and time
+ETB 126, Friday 9:30am-11:20am
+
 ## Instructors
 
 Dr. Ben Evans
@@ -37,7 +40,8 @@ This course will help graduate students further develop their computational skil
 
 ## What we do not cover in this course
 
-- We do not review the fundamentals of programming in UNIX, R, python, etc. We assume students have previous background or taken a course like Bio720 or equivalent.
+- We do not review the fundamentals of programming in UNIX, R, python, etc. We assume students have previous background or taken a course like Bio720 or equivalent. Ask Ian to add you to DataCamp if you want to do interactive tutorials to further these skills. Also see https://sandbox.bio/.
+
 
 - We do not discuss or do any wet lab experiments. So we do not go into detail on DNA, RNA, protein (etc) extraction, library prep etc.
 
@@ -68,3 +72,18 @@ If you want any additional specific recommendations on books for UNIX, R or pyth
 The grade for this course will be based on a Final independent Project and on student led/facilitated workshop style tutorials (short lecture and practical). The exact number and format of student led tutorials will be determined the first week of class (once we know enrolment).
 
  While there will be practical activities during the first few weeks of the class , these will not be formally marked. However, if you want the instructors to check over your code.
+ 
+### Course evaluation breakdown is as follows
+Project Proposal: 10%
+ - (first week of February)
+ - Written (2 pages maximum)
+ - Class pitch (10 minutes + 5 minutes questions)
+ 
+Group Project: 30%
+ - workshop/tutorial led by small groups (2-3 people)
+
+Progress report for independent project: 5% (1-2 pages)
+
+Final Project: 45%
+
+Class Participation: 10%
