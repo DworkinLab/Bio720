@@ -3,6 +3,7 @@
 Winter/Spring 2024
 
 ## Location and time
+
 ETB 126, Friday 9:30am-11:20am
 
 ## Instructors
@@ -32,7 +33,7 @@ This course will help graduate students further develop their computational skil
 
 1. RNAseq: The first 3-4 weeks will be led by Dr. Dworkin, and will go over conceptual and practical considerations for RNAseq experiments for differential expression. (experimental design, QC, mapping, read counting, more QC, statistical modeling, regularization, dealing with multiple comparisons, did I mention QC...). We will use a combination of mapping software (Salmon, STAR) and R libraries for differential expression (DEseq2, limma/voom, edgeR) along with a number of tools to perform quality control throughout the pipelines. Visualizations will be done through plotting using R.
 
-2. Burrows Wheeler Transform (Dr. Golding). A conceptual overview of the Burrows Wheeler transform which is fundamental for many of the mapping tools that are commonly used.
+2. TBD
 
 3. DNA "resequencing" experiments, syntenic mapping, reduced representation libraries and variant calling. Dr. Evans will lead 1-2 lecture/tutorials on using DNA resequencing experiments with the goal of mapping and identifying variants (SNPs, indels etc) and using these for downstream analyses (like population genetics, possibly using PLINK for genome wide association mapping). Dealing with range data might be introduced here (or possibly earlier)
 
@@ -63,7 +64,7 @@ All students will be given access to the Golding cluster (info), although you ca
 
 ## readings for Class
 
-We will provide readings for classes (papers, tutorials etc). However, if students do not already have it, we do recommend considering to get Vince Buffalo's excellent book [Bioinformatics Data Skills](https://www.amazon.ca/Bioinformatics-Data-Skills-Reproducible-Research/dp/1449367372/) which you will probably want to keep under your pillow to allow all of the excellent advice to seep into your brain. Seriously, a very useful book!
+We will provide readings for classes (papers, tutorials etc). However, if students do not already have it, we do recommend considering to get Vince Buffalo's excellent book either from the ebook available from McMaster [Bioinformatics Data Skills](https://mcmaster.primo.exlibrisgroup.com/permalink/01OCUL_MU/6thkva/cdi_askewsholts_vlebooks_9781449367510) or purchase a physical copy, which you will probably want to keep under your pillow to allow all of the excellent advice to seep into your brain. Seriously, a very useful book!
 
 If you want any additional specific recommendations on books for UNIX, R or python scripting contact Dr. Dworkin. If you are choosing perl, contact Dr. Evans or Dr. Golding. If you are using another scripting language (julia, ruby etc) you might be on your own...
 
