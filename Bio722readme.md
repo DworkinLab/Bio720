@@ -73,17 +73,23 @@ The grade for this course will be based on a Final independent Project and on st
 
  While there will be practical activities during the first few weeks of the class , these will not be formally marked. However, if you want the instructors to check over your code.
  
-### Course evaluation breakdown is as follows
+### Course evaluation breakdown
 Project Proposal: 10%
- - (first week of February)
+ - First week of February
  - Written (2 pages maximum)
  - Class pitch (10 minutes + 5 minutes questions)
  
 Group Project: 30%
  - workshop/tutorial led by small groups (2-3 people)
+ - Throughout March
 
-Progress report for independent project: 5% (1-2 pages)
+Progress report for independent project: 5%
+ - Early March
+ - Written, 1-2 pages
+ - We may do a short in class oral update
 
 Final Project: 45%
+ - Due mid-late April
+ - Written paper and annotated and reproducible code (github)
 
 Class Participation: 10%
