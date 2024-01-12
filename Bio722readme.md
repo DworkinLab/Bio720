@@ -1,6 +1,6 @@
 # BIO722 Fundamentals of genomic data analysis
 
-Winter/Spring 2021 (expected to be taught love online via zoom or teams)
+Winter/Spring 2024
 
 ## Instructors
 
@@ -49,7 +49,7 @@ This course will help graduate students further develop their computational skil
 
 ## Assumed background for students taking this class
 
-- Unlike [Bio720](./README.md) this class assumes you already have some familiarity with both UNIX shell scripting and at least one other scripting language (R, python, perl, etc). Activities in the class will provide some example code (mostly UNIX and R), but students will be expected to be writing much of their own code and examples.
+- Unlike [Bio720](./README.md) this class assumes you already have familiarity with UNIX shell scripting and at least one other scripting language (R, python, perl, etc). Activities in the class will provide some example code (mostly UNIX and R), but students will be expected to be writing much of their own code and examples.
 
 - If you have not taken Bio720, but have a reasonable background in both UNIX shell scripting and a standard scripting language, please contact the Instructors.
 

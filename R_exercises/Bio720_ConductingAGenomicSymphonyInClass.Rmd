@@ -32,7 +32,7 @@ library(BiocManager) # current way
 
 ### you will need to install things a bit differently for bioconductors
 ```{r}
-BiocManager::install(c("BSgenome", "Biostrings", "GenomicFeatures", "Biostrings", "seqLogo")) 
+BiocManager::install(c("BSgenome", "GenomicFeatures", "Biostrings", "seqLogo")) 
 ```
 
 
@@ -185,7 +185,7 @@ Let's take a look at just one arm of one chromosome (chromosome "2R")
 
 
 ```{r}
-alphabetFrequency(Dm6$chr2R)
+alphabetFrequency(Dm6$chr2R, as.prob = TRUE)
 ```
 
 **Question:** Why is there more than just ACGT?
@@ -205,12 +205,19 @@ oligonucleotideFrequency(Dm6$chr2R, width = 6, as.prob = TRUE)
 ```
 
 **Question:** Of all possible homopolymers of length 6 (or greater) which is the most frequent?
+```{r}
+hexamers <- oligonucleotideFrequency(Dm6$chr2R, 
+                                     width = 6, as.prob = TRUE)
+
+head(hexamers)
+hexamers[names(hexamers) %in% c("TTTTTT", "AAAAAA",  "GGGGGG", "CCCCCC")]
+```
+
+
 
 ## Single chromosome arm
 
 Let's take a look at just one arm of one chromosome.
-
-
 
 
 
