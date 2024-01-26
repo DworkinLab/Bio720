@@ -98,3 +98,5 @@ Class Participation: 10%
 ## Lecture materials
 
 [Introduction - 12/01/24](./BIO722_lectures/BIO722_lecture1/BIO722_2024_Introduction.pdf)
+
+[A bit more on RNAseq, getting started 26/01/24](./RNA_Seq/RNA_Seq_Salmon_Tutorial_2024.md)
