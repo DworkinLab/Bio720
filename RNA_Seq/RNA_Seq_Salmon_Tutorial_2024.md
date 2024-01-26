@@ -1,7 +1,7 @@
 ---
 title: "Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)"
 author: "Ian Dworkin"
-date: "January 27th 2021"
+date: "26 Jan 2024"
 output:
   html_document: 
     keep_md: yes
@@ -11,7 +11,7 @@ editor_options:
 ---
 
 
-Modified from my NGS2016 Tutorial on Differential Expression analysis using RNA-Seq data and DESeq2
+
 
 
 ## Background
@@ -27,7 +27,7 @@ So file names like
 
 `samw_17C_gen_fed_R1_TAGCTT_L002`
 
-Means that the genotype (strain) was a wild type strain called Samarkand, marked with the *white* mutation (all of these samples are genetically identical), reared at 17 degrees C with high quality food, this would be replicate 1. L002 means this sample was run on lane 2 of the flow cell.
+Means that the genotype (strain) was a wild type strain called Samarkand, marked with the *white* mutation (all of these samples are genetically identical), reared at $17/degree $ with high quality food, this would be replicate 1. L002 means this sample was run on lane 2 of the flow cell.
 
 `samw_24C_wings_fed_R2_AGTCAA_L004` means the animals were reared at 24C, these were wings, also fed from lane 4. The 6 letter sequence is the barcode used for the sample during multiplexed sequencing.
 
@@ -37,11 +37,11 @@ In total, 20 samples were sequenced (100bp paired end using Illumina Tru-Seq che
 
 All of the data for the class will be in.
 
-`/2/scratch/Bio722_2019`
+`/2/scratch/Bio722/Drosophila_RNA`
 
 The data we are working with today is in
 
-`/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset`
+`/2/scratch/Bio722/Drosophila_RNA`
 
 So navigate your way to there. take a look at the files using `ls`
 
@@ -114,9 +114,9 @@ Generally we would like to remove adapter sequences, and generally we want to co
 
 
 ```bash
-dir=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/rawReads
+dir=/2/scratch/Bio722/Drosophila_RNA
 name=samw_wings_fed_R1_TGACCA_L002
-dir_out=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads
+dir_out=/2/scratch/Bio722/Drosophila_RNA/trimmedReads
 
 java -jar /usr/local/trimmomatic/trimmomatic-0.36.jar PE -threads 16 \
   ${dir}/${name}_R1_001.fastq ${dir}/${name}_R2_001.fastq \
@@ -134,9 +134,9 @@ We can run this one on the subsetted files. Again please set output directories 
 
 
 ```bash
-dir=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/rawReads/subset
+dir=/2/scratch/Bio722/Drosophila_RNA
 name=subset_samw_17C_gen_fed_R1_TAGCTT_L002
-dir_out=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads
+dir_out=/2/scratch/Bio722/Drosophila_RNA/trimmedReads
 
 java -jar /usr/local/trimmomatic/trimmomatic-0.36.jar PE -threads 12 \
   ${dir}/${name}_R1_001.fastq ${dir}/${name}_R2_001.fastq \
@@ -151,8 +151,8 @@ Obviously we don't want to run the script each time so instead, I recommend maki
 
 
 ```bash
-raw_dir=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/rawReads
-trim_dir=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads
+raw_dir=/2/scratch/Bio722/Drosophila_RNA
+trim_dir=/2/scratch/Bio722/Drosophila_RNA/trimmedReads
 
 
 files=(${raw_dir}/*_R1_001.fastq)
@@ -167,8 +167,8 @@ do
 
 I will go through how this works, in particular `${files[@]}` in class.
 
-All of the trimmed reads I generated are in 
-`/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads`
+All of the trimmed reads I will generate will be in
+`/2/scratch/Bio722/Drosophila_RNA/trimmedReads`
 Don't forget to perform fastqc (or whatever qc) on the trimmed files to confirm that you have removed adapteds as well as low quality sequence!
 
 As mentioned in class, the trimmomatic adapter files are a bit minimal. I decided to use the adapter file from BBMap, which has many more adapters (including all of the index adapters in this data set). You should consider carefully which adapters you need to include. The fastqc report helps with this!
@@ -231,7 +231,7 @@ Once the index was generated I could then generate counts, using the trimmed pai
 ```bash
 index_dir=/2/scratch/Bio722_2019/ID/drosophilaReference/salmon_index2/dmel-all-transcript_r6.25_index
 
-sample_dir=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads
+sample_dir=/2/scratch/Bio722/Drosophila_RNA/trimmedReads
 
 sample_name=samw_wings_starved_R3_GCCAAT_L004
 
