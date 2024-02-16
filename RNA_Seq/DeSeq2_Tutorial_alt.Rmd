@@ -1,7 +1,7 @@
 ---
 title: "Differential Expression analysis using RNA-Seq data with DESeq2 (salmon)"
 author: "Ian Dworkin"
-date: "Wed February 17th 2021"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
   html_document: 
     keep_md: yes
@@ -11,7 +11,9 @@ editor_options:
   chunk_output_type: console
 ---
  
- 
+ ```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+```
 
 
 ## Note, this version uses the tximeta library to handle the import
@@ -30,8 +32,7 @@ It is possible or even likely that you will get an error for some of these, as y
 To install for base R (like `gplots`) you can use the:
 You will need to remove the `#` first which is the comment character in R
 
-
-```r
+```{r, eval = FALSE}
 #install.packages("gplots")
 ```
 
@@ -39,8 +40,7 @@ You will need to remove the `#` first which is the comment character in R
 
 Please note that bioconductor (all of the genomics libraries in R) has its own way of installing things using the `BioCManager` library `install()` function.
 
-
-```r
+```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -84,15 +84,13 @@ First I downloaded the Drosophila transcriptome (in the drosophilaReference fold
 salmon requires the generation of the index for the transcriptome (this only has to be done once per transcriptome). I used the commands
 
  **Don't re-run the index right now**
-
-```bash
+```{bash, eval = FALSE}
 salmon index -t dmel-all-transcript-r6.25.fasta -i ./salmon_index/dmel-all-transcript_r6.25_index
 ```
 
 Once the index was generated I could then generate counts, using the trimmed paired end files. Here is an example of doing it for a set of paired end reads.
 
-
-```bash
+```{bash, eval = FALSE}
 index_dir=/2/scratch/Bio722_2019/ID/drosophilaReference/salmon_index/dmel-all-transcript_r6.25_index
 
 sample_dir=/2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/trimmedReads
@@ -116,22 +114,20 @@ Question 8: Trying running salmon on one sample (set of reads pairs) that differ
 
 ### Getting the full set of counts we are going to use.
 Counts from Salmon are found on info
-`2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/salmon_counts`
+`/2/scratch/Bio722/salmon_counts`
 
 I suggest using scp (with `-r`) to copy these to your local computer. Something like. There may be a better way, but I first generally copy what I am going to scp over to my regular folder
 
 So on info (need to be logged into info11*, with * being the one you work on)
 
-
-```bash
-cd /2/scratch/Bio722_2019/ID/drosophilaDiscsGrowthSubset/
+```{bash, eval = FALSE}
+cd /2/scratch/Bio722/salmon_counts/
 
 cp -r salmon_counts ~
 ```
 
 Then on your laptop/local machine
-
-```bash
+```{bash, eval = FALSE}
 cd YourWorkingDirHere
 scp -r yourinfo@info.mcmaster.ca:~salmon_counts .
 ```
@@ -143,8 +139,7 @@ Which should copy the files to your local machine
 
 First we load in libraries in `R`. In addition to `DESeq2`, there are a few other libraries we will need.
 
-
-```r
+```{r}
 library(DESeq2)
 library(tximport)
 #library(tximeta)
@@ -165,8 +160,7 @@ The folder that contains all of the sub-folders with the quantifications should 
 
 
 
-
-```r
+```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
 setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
@@ -198,8 +192,7 @@ DESeq2 and other libraries often have helper functions for getting your count da
 
 Normally I extract these direct from the file names (which I could here given how I have the names written). However, more generally (but more laborious) you can do it directly in `R` like I have below, or you could make a second data frame containing the meta data.
 
-
-```r
+```{r}
 # Names of samples.
 samples <- c("samw_17C_gen_fed_R1", 
              "samw_17C_gen_fed_R2", 
@@ -230,8 +223,7 @@ We also need to load in the table of gene and transcript names (with corresponde
 To import it into `R` we are going to use the most basic and general import tool in base `R`. `read.table()`. There are many options (and I often use read.csv). The data.table library has many useful approaches to this problem (FYI.)
 
 
-
-```r
+```{r}
 tx2gene <- read.table("txp_to_gene.tsv", col.names=c("TXNAME", "GENEID"))
 
 head(tx2gene)
@@ -242,16 +234,14 @@ Drosophila genomics and datasets have their own unique gene and transcript ident
 
 It is probably (before we start) worth asking about how many genes and how many transcripts we have in our list. How might you do this in `R`?
 
-
-```r
+```{R genesVStranscript}
 length(table(tx2gene$TXNAME))
 length(table(tx2gene$GENEID))
 ```
 
 
 
-
-```r
+```{r}
 txi <- tximport(quant_files,
   type = "salmon",
   tx2gene = tx2gene)
@@ -275,8 +265,8 @@ pairs(log(txi$counts[,1:6]),
 
 DESeq2 needs the information about your experiment set up, so it knows the various predictors in the model (in this case genotype and background). The easiest way to do this is by setting it up as a data frame in R (which is a specialized version of a list). I will (time permitting) show you a more general way of doing this with another example, but for now we are explictly writing this out.
 
+```{r}
 
-```r
 tissue <- c(rep("genital", 5),
             rep("wing", 6),
             rep("genital", 3),
@@ -319,8 +309,7 @@ load.model <- formula(~ tissue)
 
 Below is the crucial function, `DESeqDataSetFromTximport()`, that gives you a DESeq2 count matrix from the txt object. interestingly, this is the step that converts the estimated counts to integers (again we can take a look at the quant_files).
 
-
-```r
+```{r}
 all.data <- DESeqDataSetFromTximport(txi, 
                                      rna.design,
                                      design=load.model)
@@ -338,8 +327,7 @@ It is well known that there can be substantial lane to lane variation. For this 
 
 First we create a DESeq data object using our counts, experimental design and a simple statistical model (more on this later)
 
-
-```r
+```{r}
 load.model <- formula(~ lane)
 
 test_lane_effects <- DESeqDataSetFromTximport(txi,
@@ -350,15 +338,13 @@ test_lane_effects2 <- DESeq(test_lane_effects)
 ```
 
 This generates a fairly complex object
-
-```r
+```{r, echo=TRUE}
 str(test_lane_effects2)
 ```
 
 For the moment we can ask whether any genes show evidence of different expression based solely on lane to lane variation. We use the results() to summarize some of the results.
 
-
-```r
+```{r}
 test_lane_effects2_results <- results(test_lane_effects2, 
                                       alpha = 0.05)
 # alpha = 0.05 is the  "cut-off" for significance (not really - I will discuss).
@@ -376,8 +362,7 @@ head(test_lane_effects2_results)
 
 We can also plot the mean-dispersion relationship for this data.
 
-
-```r
+```{r plot Dispersion, echo=TRUE }
 plotDispEsts(test_lane_effects2, 
              legend =F)
 
@@ -390,8 +375,7 @@ Let's talk about what this means.
 
  We can also use some multivariate approaches to look at variation. For PCA (checking it with a "blind" dispersion estimate to look for any funky effects. Not for biological inference).
 
-
-```r
+```{r}
 for_pca <- rlog(test_lane_effects2, 
                 blind = TRUE)
 dim(for_pca)
@@ -399,8 +383,7 @@ dim(for_pca)
 `rlog` is one approach to adjusting for both library size and dispersion among samples. `blind=TRUE`, has it ignore information from the model (in this case lane). So we want to see `blind=TRUE` when we are doing QC, but if we are using the PCA for downstream analysis, we might want to consider using TRUE.
 
 
-
-```r
+```{r lane effects, echo=TRUE}
 plotPCA(for_pca, 
         intgroup=c("lane"),
         ntop = 2000) 
@@ -410,8 +393,7 @@ The `plotPCA()` function is actually just a wrapper for one of the built in func
 
 If you want to see what this wrapper is doing we can ask about this particular function
 
-
-```r
+```{R}
 getMethod("plotPCA","DESeqTransform")
 
 # or 
@@ -421,8 +403,7 @@ It is very easy to modify this function if you need to.
 
 By default this only examine the top 500 genes. Let's look at 2000 or more to get a sense of the stability of the pattern.
 
-
-```r
+```{r lane_effects, echo=TRUE}
 plotPCA(for_pca, 
         ntop = 1000, 
         intgroup=c("lane")) 
@@ -434,8 +415,7 @@ While there is some lane effects based on our initial statistical check, and vis
 
 We can quickly take a look to see if this pattern shows anything interesting for our biological interest. However, this is putting the cart before the horse, so be warned. Also keep in mind the regularized log transformation of the data being used is not accounting for condition effects (we can do this below)
 
-
-```r
+```{r, echo=TRUE}
 plotPCA(for_pca, ntop = 2000,
         intgroup=c("tissue", "food", "temperature"))
 
@@ -454,16 +434,14 @@ Also keep in mind that it is by default only showing the first two principal com
 ### We can also use some hierarchical clustering to further check for lane effects or for clustering based
 
 For distance matrix for clustering QC
-
-```r
+```{r}
 rlogMat <- assay(for_pca) # just making a matrix of the counts that have been corrected for over-dispersion in a "blind" fashion
 distsRL <- dist(t(rlogMat)) # Computes a distance matrix (Euclidian Distance)
 mat <- as.matrix(distsRL)  # Make sure it is a matrix
 ```
 
 We need to rename our new matrix of distances based on the samples.
-
-```r
+```{r}
 rownames(mat) <- colnames(mat) <-   with(colData(test_lane_effects2), 
                                          paste(tissue, food, temperature,
                                                sep=" : "))
@@ -473,8 +451,7 @@ hmcol <- colorRampPalette(brewer.pal(9, "GnBu"))(100)  # picking our colours
 ```
 
 Now we generate the plot
-
-```r
+```{r heatmap, echo=TRUE}
 heatmap.2(mat, Rowv=as.dendrogram(hc),
           symm = TRUE, trace="none",
           col = rev(hmcol), margin=c(10,10))
@@ -487,13 +464,13 @@ heatmap.2(mat, Rowv=as.dendrogram(hc),
 Given the results from above, I am removing lane entirely.
 
 Let's fit and run a simple model comparing the two tissue types (ignoring for the fact that we think that two samples are reversed in each tissue.)
+```{r}
 
-```r
 load.model <- formula(~ lane + tissue)
+
 ```
 
-
-```r
+```{r}
 test_tissue_effects <- DESeqDataSetFromTximport(txi,
   rna.design, 
   design = load.model)
@@ -503,19 +480,18 @@ resultsNames(test_tissue_effects2)
 ```
 
 Quick PCA with blind = F
-
-```r
+```{r}
 for_pca <- rlog(test_tissue_effects2, 
                 blind = FALSE)
 
 plotPCA(for_pca, ntop = 1000,
         intgroup=c("tissue", "food"))
+
 ```
 
 Now we can look at some of the results. First we recheck the dispersion estimates estimated in our model
 
-
-```r
+```{r model_dispersion}
 plotDispEsts(test_tissue_effects2,
              legend = F)
 ```
@@ -523,8 +499,7 @@ Not much different. A few outliers though, and it may be worth later going in an
 
 Let's get going with things we are interested in, like looking for differentially expressed genes across genotypes. We can start by doing a visualization using a so-called MA plot (look it up on wikipedia, then we will talk)
 
-
-```r
+```{r MA_plot}
 plotMA(test_tissue_effects2, 
        ylim =c(-4, 4))
 ```
@@ -532,8 +507,7 @@ plotMA(test_tissue_effects2,
  
 Let's actually look at our results. DESeq2 has some functions to make this a bit easier, as the object we generated above (of class `DESeqDataSet`) is quite complex.
 
-
-```r
+```{r DE_results}
 tissue_results <- results(test_tissue_effects2,
                             contrast = c("tissue", "genital", "wing"),
                             alpha = 0.1)
@@ -552,6 +526,7 @@ summary(tissue_results)
 print(tissue_results)
 
 head(tissue_results)
+
 ```
 
 A few things to note. By default alpha is set at 0.1 This is a pretty liberal "threshold" for assessing "significance". While it is a much larger conversation, I do not recommend getting hung up too much on statistical significance (since you have estimates of effects and estimates of uncertainty). In particular if you have specific questions about specific sets of genes, and if these were planned comparisons (i.e. before you started to analyze your data) you should focus on those.
@@ -561,8 +536,7 @@ You will see that DESeq2 also will throw out genes that it deems outliers or hav
 
 Let's take a look at the results.
 
-
-```r
+```{r re_order}
 # reorder
 tissue_results <- tissue_results[order(tissue_results$padj),]
 
@@ -587,8 +561,7 @@ plotCounts(test_tissue_effects2,
 
 ## Shrinking the estimates
 
-
-```r
+```{r}
 tissue_results_shrunk <- lfcShrink(test_tissue_effects2, 
                                    coef = 2,
                                    type = "normal",
@@ -608,8 +581,7 @@ While everything is stored, by default DESeq2 is printing its evaluation of the 
 Let's start by examining the effects of genotype (like we did above), but by first taking into account difference in different wild type genetic background and any residual lane effects
 
 
-
-```r
+```{r, echo=TRUE}
 load.model <- formula(~ lane + tissue + food + tissue:food) # Let me go over the matrix rank issue here
 
 test_temp_tissue <- DESeqDataSetFromTximport(txi,
@@ -664,8 +636,7 @@ resultsNames(test_FT_2)
 ### Interaction terms in models. 
 In our case we are as much interested in genes that show an interaction between genotype and background as those that show just an effect of genotype. However for the subset of all of the samples we are looking at, we are going to run into estimation issues.
 
-
-```r
+```{r, echo=TRUE}
 load.model <- formula(~ lane + tissue + food + tissue:food) # Let me go over the matrix rank issue here
 
 test_FxT_effects <- DESeqDataSetFromTximport(txi,
@@ -684,19 +655,18 @@ summary(FxT_results)
 # reorder
 FxT_results <- FxT_results[order(FxT_results$padj),]
 FxT_results[1:14,]
+
 ```
 
 Relatively few "significant" genes. Just to keep in mind. We expect a priori, with no true "significant" hits an approximately uniform distribution that looks like (for 13140 genes)
 
-
-```r
+```{r null dist, echo=TRUE}
 p_fake <- rbeta(13140, 1,1) # you could also use runif(12627,1,1)
 hist(p_fake)
 ```
 
 But we actually observe
-
-```r
+```{r, echo=TRUE}
 hist(FxT_results$pvalue)
 ```
 
