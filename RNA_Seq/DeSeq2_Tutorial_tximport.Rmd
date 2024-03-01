@@ -28,7 +28,7 @@ Instead of running these analyses on info, we'll run this locally on our own com
 
 It is possible or even likely that you will get an error for some of these, as you have not yet installed the appropriate library. Some are from CRAN (where most R libraries are available), while others are part of bioconductor.
 
-To install for base R (like `gplots`) you can use the:
+To install for base R () you can use the:
 You will need to remove the `#` first which is the comment character in R
 
 
@@ -42,7 +42,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("DESeq2")
-BiocManager::install("edgeR")
+aBiocManager::install("edgeR")
 BiocManager::install("limma")
 BiocManager::install("tximport")
 BiocManager::install("tximportData") # this is relatively big
@@ -178,21 +178,13 @@ The folder that contains all of the sub-folders with the quantifications should 
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
-setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
-# Setting it up for the import (this is not the import itself)
-quant_files <- file.path("quants", list.files("quants"), "quant.sf")
+setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/salmon_counts")
 
-
-# check that the files actually exist. Should return TRUE for each file
-file.exists(quant_files)
-
-# Let's take a look at this variable we have created
-quant_files
+getwd()
 ```
 
-## Loading the count data into R
 
-DESeq2 and other libraries often have helper functions for getting your count data in. In particular if you are using objects created from other tools that the same authors generated. However, if you are going to make your own pipeline, it is important to know how to write some simple R code to be able to get your data in, and to parse it so that it is in the format you need. I will (if we have time) go through a more typical example where there is no helper functions (so you write it yourself). However, we will use the ones available from `tximport`.
+
 
 
 ### Getting the meta-data set
@@ -222,9 +214,30 @@ samples <- c("samw_17C_gen_fed_R1",
              "samw_24C_wings_starved_R2",
              "samw_24C_wings_starved_R3")
 
-names(quant_files) <- samples
+
 ```
 
+
+
+```{r}
+
+
+# Setting it up for the import (this is not the import itself)
+quant_files <- file.path( getwd(), samples, "quant.sf")
+
+
+# Let's take a look at this variable we have created
+quant_files
+
+# check that the files actually exist. Should return TRUE for each file
+file.exists(quant_files)
+
+
+```
+
+## Loading the count data into R
+
+DESeq2 and other libraries often have helper functions for getting your count data in. In particular if you are using objects created from other tools that the same authors generated. However, if you are going to make your own pipeline, it is important to know how to write some simple R code to be able to get your data in, and to parse it so that it is in the format you need. I will (if we have time) go through a more typical example where there is no helper functions (so you write it yourself). However, we will use the ones available from `tximport`.
 
 
 ## using tximport

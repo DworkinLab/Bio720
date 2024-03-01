@@ -121,7 +121,7 @@ I suggest using scp (with `-r`) to copy these to your local computer. Something 
 So on info (need to be logged into info11*, with * being the one you work on)
 
 ```{bash, eval = FALSE}
-cd /2/scratch/Bio722/salmon_counts/
+cd /2/scratch/Bio722/salmon_counts
 
 cp -r salmon_counts ~
 ```
@@ -163,7 +163,7 @@ The folder that contains all of the sub-folders with the quantifications should 
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
-setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Bio722_2019/salmon_counts/")
+setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/salmon_counts")
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 
