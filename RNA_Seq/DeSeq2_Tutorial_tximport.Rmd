@@ -223,7 +223,7 @@ samples <- c("samw_17C_gen_fed_R1",
 
 
 # Setting it up for the import (this is not the import itself)
-quant_files <- file.path( getwd(), samples, "quant.sf")
+quant_files <- file.path( dir(), "quant.sf")
 
 
 # Let's take a look at this variable we have created
