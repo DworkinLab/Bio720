@@ -42,7 +42,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("DESeq2")
-aBiocManager::install("edgeR")
+BiocManager::install("edgeR")
 BiocManager::install("limma")
 BiocManager::install("tximport")
 BiocManager::install("tximportData") # this is relatively big
@@ -181,6 +181,8 @@ The folder that contains all of the sub-folders with the quantifications should 
 setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/salmon_counts")
 
 getwd()
+
+dir()
 ```
 
 
@@ -231,8 +233,6 @@ quant_files
 
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)
-
-
 ```
 
 ## Loading the count data into R
@@ -297,10 +297,10 @@ cor_vals <- cor(txi$counts[,1:20])
 hist(cor_vals)
 
 pairs(log2(txi$counts[,1:6]), 
-      pch = 20, lower.panel = NULL, col = "#00000019")
+      pch = 20, lower.panel = NULL, col = rgb(0,0,1, 0.25))
 
 pairs(log2(txi$counts[,1:2]), 
-      pch = 20, lower.panel = NULL, col = "#00000019")
+      pch = 20, lower.panel = NULL, col = rgb(0,0,1, 0.25))
 ```
 
 
@@ -341,11 +341,11 @@ lane <- c(2,4,5,5,2,3,2,4,4,3,2,4,2,3,2,4,3,3,2,4)
 lane <- factor(lane) # we will want to treat this as a factor
 length(lane)
 
-rna.design <- data.frame(sample=samples,
+rna.design <- data.frame(sample = samples,
   file=quant_files,
-  tissue=tissue,
-  food=food,
-  temperature=temperature,
+  tissue = tissue,
+  food = food,
+  temperature = temperature,
   lane = lane)
 
 rna.design
@@ -378,7 +378,7 @@ First we create a DESeq data object using our counts, experimental design and a 
 load.model <- formula(~ lane)
 
 test_lane_effects <- DESeqDataSetFromTximport(txi,
-  rna.design, design=load.model)
+  rna.design, design = load.model)
 
 test_lane_effects2 <- DESeq(test_lane_effects)
 # We now fit the simple model
@@ -436,7 +436,7 @@ plotPCA(for_pca,
         ntop = 2000) 
 ```
 
-The `plotPCA()` function is actually just a wrapper for one of the built in functions for performing a principle components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the `plotPCA` function only plots the first couple of Principle components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.
+The `plotPCA()` function is actually just a wrapper for one of the built in functions for performing a principal components analysis. The goal of this (without getting into the details for the moment) is to find statistically independent (orthogonal) axes of overall variation. PC1 accounts for the greatest amount of overall variation among samples, PC2 is statistically independent of PC1 and accounts for the second largest amount of variation. By default the `plotPCA` function only plots the first couple of Principle components. In this case it explains just under 80% of all of the variation among the samples. However, I highly recommend looking at the plots for higher PCs as well, as sometimes there is something going on, even if it only accounts for a few % of variation.
 
 If you want to see what this wrapper is doing we can ask about this particular function
 
@@ -451,7 +451,7 @@ It is very easy to modify this function if you need to.
 By default this only examine the top 500 genes. Let's look at 2000 or more to get a sense of the stability of the pattern.
 
 ```{r lane_effects, echo=TRUE}
-plotPCA(for_pca, PC = 1:2,
+plotPCA(for_pca, pcsToUse = 1:2,
         ntop = 1000, 
         intgroup=c("lane")) 
 ```
@@ -543,7 +543,7 @@ Now we can look at some of the results. First we recheck the dispersion estimate
 plotDispEsts(test_tissue_effects2,
              legend = F)
 ```
-Not much different. A few outliers though, and it may be worth later going in and checking these.
+Not much different. A few outlie rs though, and it may be worth later going in and checking these.
 
 Let's get going with things we are interested in, like looking for differentially expressed genes across genotypes. We can start by doing a visualization using a so-called MA plot (look it up on wikipedia, then we will talk)
 
