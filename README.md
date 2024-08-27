@@ -1,11 +1,14 @@
 # Bio720
 
+
 ## Course Summary
-This is my (ID) github repo for students for both Bio720 (introduction to computational skills for biologists) and BIO722 (practical introduction to bioinformatic and genomic computational skills). The reason I have these together is mostly history, but also utility. Those in BIO722 may need some reminders, so there are other useful links here. This is taught through the Biology Department at McMaster University, but most course materials are freely available to anyone interested.
+This is my (ID) github repo for students for  Bio720 (introduction to computational skills for biologists).
+
+[Link to R portal for class](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md)
 
 **Please note**, other instructors (Dr. Golding and Dr. Evans) may not put their material up here. So this may only be the parts of each class taught by ID.
 
-**please note** scripts for BIO722 are here, but most of the readme below is about BIO720.
+
 
 
 ## Instructors
