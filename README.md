@@ -6,7 +6,7 @@ This is my (ID) github repo for students for  Bio720 (introduction to computatio
 
 [Link to R portal for class](https://github.com/DworkinLab/Bio720/blob/master/Introduction_to_R.md)
 
-[Link to UNIX and shell portal for class](http://helix.mcmaster.ca/720.html). This will have pertinent links to Brian's section of the course.
+[Link to UNIX and shell portal for class](http://helix.mcmaster.ca/720.html). 
 
 ## Instructors
 [Dr. Brian Golding](http://helix.biology.mcmaster.ca/)
