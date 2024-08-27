@@ -9,9 +9,12 @@ Most of the activities for this section of the course will be self-guided, using
 There are plenty of other amazing [`R` tutorials](https://cran.r-project.org/other-docs.html) (including less amazing ones by me) online. Use the link in the previous sentence to get to some links. I suggest something like [this one](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) to start with. Alternatively McMaster has access to a number of good ebooks. I think that [this one](http://catalogue.mcmaster.ca/catalogue/Record/2702791) by Larry Pace & Joshua Wiley is a good one to start with. You should (while on campus) be able to access the PDF from [here](http://link.springer.com/book/10.1007%2F978-1-4842-0373-6). I am also making a longer list of various `R` resources to help you out, which is currently [here](https://github.com/DworkinLab/Bio720/blob/master/Some_R_resources.md).  I suggest that reading a bit, and/or going through the relevant video tutorial & exercises, and then moving onto the next component may work best.
 
 ## Installing R
-Please install the current version of `R` (4.2.2 "Innocent and Trusting" released on 2022/10/31). This is required to be able to complete the class activities. There are several versions of `R` you might consider. R works on all major operating systems (Windows, Apple OS X and Linux).
+
+**Even if you have R on your computer, you need to install the current version (and delete your old one). Otherwise not all R libraries will work for you**
+
+Please install the current version of `R` (4.4.1 "Race for your life" released on 2024/06/14). This is required to be able to complete the class activities. There are several versions of `R` you might consider. R works on all major operating systems (Windows, Apple OS X and Linux). 
 - You can [download](https://cran.r-project.org/) and install the version of `R` appropriate to your computer. For Mac OS X or Windows you can download them at the page above. For Linux, use `yum`, `apt` or other package management utility you like. For the Mac OS X R GUI, it has a simple script editor that does syntax highlighting, and displays argument flags for functions. I think the Windows R script editor is much more bare bones.
-- You will also need to install the *current* version of [R-studio](https://posit.co/download/rstudio-desktop/), current version (Version: 2022.12.0+353), which is a pretty nice IDE (integrated development environment) for `R`, including advanced syntax highlighting (including RMarkdown, which we will use), and integration with github for version control. While I have a few pet peaves with it, some definitely prefer it, especially when getting started. Certainly makes your research easily reproducible very easily.
+- You will also need to install the *current* version of [R-studio](https://posit.co/download/rstudio-desktop/), current version (Version: 2024.04.2-764), which is a pretty nice IDE (integrated development environment) for `R`, including advanced syntax highlighting (including RMarkdown, which we will use), and integration with github for version control. While I have a few pet peaves with it, some definitely prefer it, especially when getting started. Certainly makes your research easily reproducible very easily.
 - We will be using Git and Github for version control and ultimately assignments in the class. This means you will need to [install git](https://git-scm.com/). I would probably look at [this tutorial](http://happygitwithr.com/install-git.html).
 - You will also need to sign up for a free [Github account](https://github.com/). Don't worry about it for now, but you can contact them for an academic account to get private repositories if you want.
 
@@ -20,8 +23,8 @@ I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720)
 
 ## Assignments
 
-**PLEASE NOTE FOR 2023** 
-For Next week (January 26th), please complete both the introduction to R and the Intermediate R courses on DataCamp. (but wait for confirmation in class, this morning)
+**PLEASE NOTE FOR 2024** 
+For the second week of class (September 9th, 2024), please complete both the `introduction to R` and the `Intermediate R` courses on DataCamp. 
 
 ## In class activities
 1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
