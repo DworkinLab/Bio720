@@ -16,7 +16,8 @@ This is my (ID) github repo for students for both Bio720 (introduction to comput
 
 ## Class time and location
 
-BIO720, "lecture" Mondays, 9:30-10:20, BSB B138
+BIO720, "lecture" Mondays, 9:30-10:20, BSB B138  
+
 BIO720, "practical lab" Tuesdays, 9:30 - 11:20 ETB228
 
 ## Background assumed for students for Bio720
