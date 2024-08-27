@@ -10,7 +10,7 @@ There are plenty of other amazing [`R` tutorials](https://cran.r-project.org/oth
 
 ## Installing R
 
-**Even if you have R on your computer, you need to install the current version (and delete your old one). Otherwise not all R libraries will work for you**
+**Even if you have R on your computer, you need to install the current version (and delete your old one). Otherwise not all R libraries will work for you!**
 
 Please install the current version of `R` (4.4.1 "Race for your life" released on 2024/06/14). This is required to be able to complete the class activities. There are several versions of `R` you might consider. R works on all major operating systems (Windows, Apple OS X and Linux). 
 - You can [download](https://cran.r-project.org/) and install the version of `R` appropriate to your computer. For Mac OS X or Windows you can download them at the page above. For Linux, use `yum`, `apt` or other package management utility you like. For the Mac OS X R GUI, it has a simple script editor that does syntax highlighting, and displays argument flags for functions. I think the Windows R script editor is much more bare bones.
@@ -19,7 +19,7 @@ Please install the current version of `R` (4.4.1 "Race for your life" released o
 - You will also need to sign up for a free [Github account](https://github.com/). Don't worry about it for now, but you can contact them for an academic account to get private repositories if you want.
 
 ## Access to DataCamp tutorials and exercises
-I have set up class access to [DataCamp](https://www.datacamp.com/groups/bio720) for 2023. You should get an email about this soon, and I will provide details about which courses I expect you to do prior to each class. These will provide foundational skills for us to build on during in class activities, and your problem sets.
+I have set up class access to [DataCamp](https://app.datacamp.com/groups/introduction-to-basic-bioinformatics-skills/dashboard) for 2024. You should get an email about this soon, and I will provide details about which courses I expect you to do prior to each class. These will provide foundational skills for us to build on during in class activities, and your problem sets.
 
 ## Assignments
 
