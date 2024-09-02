@@ -26,7 +26,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Readings and DataCamp
 - DataCamp, I have assigned the courses on RMarkdown and git.  
+
 - Read [Good enough practices in scientific computing](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510) by Wilson et al.  
+
 - Read chapters 1 and 2 in [Bioinformatics Data Skills](https://mcmaster.primo.exlibrisgroup.com/permalink/01OCUL_MU/deno1h/alma991030055129707371)
 
 
@@ -51,8 +53,8 @@ What easy steps can make science more reproducible & helpful for future scientis
 - Future you (6 months after you finish data collecting), will thank you too!
 
 
-## New Tri-council (NSERC, CIHR and SSHRC) guidelines are in place
-"“Grant recipients are required to deposit into a recognized digital repository all digital research data, metadata and code that directly support the research… 
+## Tri-council (NSERC, CIHR and SSHRC) guidelines are in place
+"Grant recipients are required to deposit into a recognized digital repository all digital research data, metadata and code that directly support the research… 
 The repository will ensure safe storage, preservation, and curation of the data. The agencies encourage researchers to provide access to the data ... 
 Whenever possible, these data, metadata and code should be linked to the publication with a persistent"
 [See links here](https://www.ic.gc.ca/eic/site/063.nsf/eng/h_97610.html
@@ -104,6 +106,7 @@ This will save you hours or days down the road!
 Some "do's" and "do not"
 
 **DO**: Use the same naming conventions for every file. i.e.
+
 ID_Dmel_M_HN_01.tif   
 ID_Dmel_M_HN_02.tif  
 ID_Dmel_M_HN_03.tif  
@@ -114,8 +117,10 @@ ID_Dmel_F_HN_03.tif
 ## Rule 2.5: Consistent file naming of raw data
  **DO NOT**:Use spaces in file names. Use consistent delimiters, and limit it to one type of delimiter if you can. i.e. underscores!
 
-ID_Dmel_M_HN_01.tif   
+ID_Dmel_M_HN_01.tif  
+
 **Not** ID Dmel_M_HN 01.tif
+
 **Not** ID_Dmel-M_HN.01.tif 
 
 ## Rule 2.5: Consistent file naming of raw data
