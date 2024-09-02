@@ -117,6 +117,6 @@ In case you want to see another example [here](https://angus.readthedocs.io/en/2
 
 Week 1:
 
-Welcome to BIO720 - [slides](./lectures/Welcome_BIO720.html) or [markdown](./lectures/Welcome_BIO720.md)
+Welcome to BIO720 - [slides](./lectures/) or [markdown](./lectures/Welcome_BIO720.md)
 
-Short introduction to reproducible research - [slides](./lectures/BIO720_VersionControl_reproducibleResearch.html) or [markdown](./lectures/BIO720_VersionControl_reproducibleResearch.md)
+Short introduction to reproducible research - [slides](./lectures/) or [markdown](./lectures/BIO720_VersionControl_reproducibleResearch.md)
