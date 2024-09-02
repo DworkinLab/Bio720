@@ -113,3 +113,10 @@ Week 5 - For more information on some of the basic file types used in genomics (
 In case you want to see another example [here](https://angus.readthedocs.io/en/2018/running-command-line-blast.html) is a tutorial on making a BLAST database and querying sequences with it.
 
 
+## Weekly materials (in class)
+
+Week 1:
+
+Welcome to BIO720 - [slides](./lectures/Welcome_BIO720.html) or [markdown](./lectures/Welcome_BIO720.md)
+
+Short introduction to reproducible research - [slides](./lectures/BIO720_VersionControl_reproducibleResearch.html) or [markdown](./lectures/BIO720_VersionControl_reproducibleResearch.md)
