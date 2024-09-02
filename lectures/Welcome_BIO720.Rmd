@@ -1,7 +1,7 @@
 ---
 title: "WelcomeToBio720"
 author: ""
-date: "19 Jan 2023"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
   slidy_presentation: 
     keep_md: yes
@@ -12,15 +12,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
-
-# Welcome to BIO720
+# Welcome to BIO720!
 
 ## Introductions
-- Dr. Ben Evans  
+- Dr. Ian Dworkin  
 - Dr. Brian Golding  
-- Dr. Ian Dworkin
-
 - All y'all
 
 ## Learning Objectives for the course
@@ -41,14 +41,16 @@ editor_options:
 
 ## Course organization and assignments
 
-BG, BE...
+- Weekly problem sets
+
+- Dr. Brian Golding with be sending out an email on how these will be peer evaluated (yes, you are evaluating each other).
 
 ## Topics
 - Reproducible Research, literate programming and science (ID)
 
-- Introduction to the UNIX command line (BG)
+- Introduction to R programming (ID)
 
-- Introduction to R programming (BE)
+- Introduction to the UNIX command line and remote computing (BG)
 
 - Putting it all together (a few examples in bioinformatics, genomics and maybe image analysis?)
 
@@ -67,6 +69,7 @@ Literate programming just means combining the computer code with an explanation 
 - Many ways of achieving this
 
 - At least while working in R we will use R markdown via Rstudio.
+    - R studio also has a newer approach, quatro, which is pretty similar.
 
 - Combines code snippets (R, python, c++, bash) with a very simple markup language (called markdown) that is human readable, and can be rendered.
 
