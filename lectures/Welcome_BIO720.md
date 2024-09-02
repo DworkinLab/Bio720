@@ -46,9 +46,9 @@ editor_options:
 ## Topics
 - Reproducible Research, literate programming and science (ID)
 
-- Introduction to R programming (ID)
+- Introduction to practical computer programming for science, using R (ID)
 
-- Introduction to the UNIX command line and remote computing (BG)
+- Introduction to the UNIX command line (shell) and remote computing (BG)
 
 - Putting it all together (a few examples in bioinformatics, genomics and maybe image analysis?)
 
