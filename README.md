@@ -120,3 +120,5 @@ Week 1:
 Welcome to BIO720 - [slides](./lectures/) or [markdown](./lectures/Welcome_BIO720.md)
 
 Short introduction to reproducible research - [slides](./lectures/) or [markdown](./lectures/BIO720_VersionControl_reproducibleResearch.md)
+
+Time permitting some activities introducing R.
