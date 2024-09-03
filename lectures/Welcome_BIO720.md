@@ -1,7 +1,7 @@
 ---
 title: "WelcomeToBio720"
 author: ""
-date: "02 Sep 2024"
+date: "03 Sep 2024"
 output:
   slidy_presentation: 
     keep_md: yes
@@ -20,6 +20,19 @@ editor_options:
 - Dr. Ian Dworkin  
 - Dr. Brian Golding  
 - All y'all
+
+
+## Introduce yourself
+- Name
+
+- What are you studying? Are you new to McMaster?
+
+- What skills do you hope to develop during this class?
+
+## Why do we use (and need) computers for modern scientific research?
+
+## Why do we use (and need) scientific computing skills for modern scientific research?
+
 
 ## Learning Objectives for the course
 - develop fundamental computational skills necessary for modern biological research 
@@ -44,6 +57,7 @@ editor_options:
 - Dr. Brian Golding with be sending out an email on how these will be peer evaluated (yes, you are evaluating each other).
 
 ## Topics
+
 - Reproducible Research, literate programming and science (ID)
 
 - Introduction to practical computer programming for science, using R (ID)
@@ -68,33 +82,13 @@ Literate programming just means combining the computer code with an explanation 
 
 - At least while working in R we will use R markdown via Rstudio.
     - R studio also has a newer approach, quatro, which is pretty similar.
-
-- Combines code snippets (R, python, c++, bash) with a very simple markup language (called markdown) that is human readable, and can be rendered.
-
+    
+    
 ## R markdown
 
 Let's do a few examples.
+- Combines code snippets (R, python, c++, bash) with a very simple markup language (called markdown) that is human readable, and can be rendered.
 
-
-## version control
-What's wrong with this?
-![alt text](http://www.phdcomics.com/comics/archive/phd052810s.gif "PhD Comics 1323, Copyright Jorge Cham")
-
-## Version control
-- version control enables you to organize and keep track of changes to all kinds of documents, including data and code!!
-
-- We will use git in this class (next week)
-
-## Organizing project structure
-```bash
-/ProjectName
-  ./data
-  ./scripts
-  ./outputs
-  ./misc
-  ./manuscript
-  README
-```
 
 ## link to github page for the class on this
 [go here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md)

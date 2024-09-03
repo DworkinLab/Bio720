@@ -1,5 +1,5 @@
 ---
-title: "Version Control and using git and github"
+title: "Reproducibel research, part I"
 author: ""
 date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
@@ -16,7 +16,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Reproducible research is key to better science
+# Reproducible research is key to better science!
 
 ## link to github page for the class on this
 [go here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md)
@@ -25,11 +25,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ## Readings and DataCamp
-- DataCamp, I have assigned the courses on RMarkdown and git.  
+- DataCamp, I will assign the courses on RMarkdown and git. ON DataCamp 
 
 - Read [Good enough practices in scientific computing](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510) by Wilson et al.  
 
 - Read chapters 1 and 2 in [Bioinformatics Data Skills](https://mcmaster.primo.exlibrisgroup.com/permalink/01OCUL_MU/deno1h/alma991030055129707371)
+
+- An alternative reading on version control and using git and github is [chapter 2 in the CSB] book(https://doi-org.libaccess.lib.mcmaster.ca/10.1515/9780691183961-006). Pick which one you prefer.
 
 
 ## What's wrong with this?
@@ -162,7 +164,7 @@ At least 40% of my coding time is spent parsing and cleaning badly organized dat
 
 - There are many version control systems out there. 
 
-## Write a readme file right at the beginning of your analysis
+## Rule 4 (or rule 1!) Write a readme file right at the beginning of your analysis
 - Don’t assume that any collaborators or future users (or future you) will know what variables are in your data set.
 
 - Write a short readme file containing basic meta-data for the project including: explanations of the variables, how and where they were collected (and why), file naming conventions etc.
