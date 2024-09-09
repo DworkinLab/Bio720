@@ -122,3 +122,12 @@ Welcome to BIO720 - [slides](./lectures/) or [markdown](./lectures/Welcome_BIO72
 Short introduction to reproducible research - [slides](./lectures/) or [markdown](./lectures/BIO720_VersionControl_reproducibleResearch.md)
 
 Time permitting some activities introducing R.
+
+Week 2:
+**Monday**
+
+- Pseudo-code.
+
+- Working with data in R using your new skills.
+
+  -- [You will want to be able to access this script to download the RNAseq data we will be playing with](./R_exercises/R_activities_InClass_Sept9_2024.Rmd)
