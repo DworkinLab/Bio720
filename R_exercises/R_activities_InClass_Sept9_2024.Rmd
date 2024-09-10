@@ -2,11 +2,13 @@
 title: "BIO720_Week2_hr1"
 author: "Ian Dworkin"
 date: "`r Sys.Date()`"
-output: 
-  html_document: 
+output:
+  pdf_document:
+    toc: true
+  html_document:
     toc: true
     number_sections: true
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -93,11 +95,18 @@ anyNA(rna_counts)
 So what are we looking at?
 
 
+```{r}
+class(rna_counts)
+mode(rna_counts)
+```
+
 ### A small but important change
 
 Typically in R and bioconductor for genomics experiments, we have columns as samples and rows as features (transcripts, genes, SNPs, taxa, etc). How is it currently set up?
 
-How would we make a new object (generally don't over-write the old one!) where it corresponds to this format? Write down the steps you need to take in order to do so (the pseudo-code)
+How would we make a new object (generally don't over-write the old one!) where it corresponds to this format? Write down the steps you need to take in order to do so (the pseudo-code). 
+
+Row names need to be the feature names (in this case the genes)
 
 
 
