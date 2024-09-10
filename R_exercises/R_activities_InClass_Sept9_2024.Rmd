@@ -35,7 +35,6 @@ In any case, the count data can be downloaded like this, directly from the githu
 ```{r}
 rna_counts <- read.table("https://raw.githubusercontent.com/DworkinLab/DrosophilaSociabilityTranscriptomics/main/data/star/star_count_matrix.txt",
                          header = TRUE)
-
 ```
 
 
@@ -234,15 +233,15 @@ read_sums_alt1 <- apply(X = rna_counts2, MARGIN = 2, sum)
 
 
 #### for loop
-In most other languages, a `for` loop would be fine and you could it like this
+In most other languages, a `for` loop would be fine and you could use it like this:
 
-First we initialize and pre-allocate memory for a vector to store the data we are going to generate (the sums). In this case I am creating a vector with `NA`, which we will fill with the sums we compute
+First we initialize the variable and make it the "right size" vector to pre-allocate memory to store the data we are going to generate (the sums from each column). In this case I am creating a vector with `NA`, which we will fill with the sums we compute in the next step.
 ```{r}
 read_sums_alt2 <- rep(x = NA,
                       times = ncol(rna_counts2))
 
 
-names(read_sums_alt2) <- colnames(rna_counts2)
+names(read_sums_alt2) <- colnames(rna_counts2) # just so we have the sample names
 length(read_sums_alt2)
 
 head(read_sums_alt2)
@@ -258,7 +257,7 @@ rm(i) # a bit of cleanup
 ```
 
 
-All of these achieve the same thing. Although for some reason using colSums stores it as numeric not integers...
+All of these achieve the same thing. A small note, for some reason using `colSums` stores it as numeric not integers.
 ```{r}
 head(read_sums)
 head(read_sums_alt1)
