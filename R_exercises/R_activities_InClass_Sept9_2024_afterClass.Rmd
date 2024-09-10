@@ -89,6 +89,15 @@ anyNA(rna_counts)
 
 ## Let's look at the names of the variables we have
 
+```{r}
+names(rna_counts)
+colnames(rna_counts)
+dimnames(rna_counts)
+```
+
+```{r}
+head(names(rna_counts))
+```
 
 So what are we looking at?
 
@@ -100,6 +109,16 @@ Typically in R and bioconductor for genomics experiments, we have columns as sam
 How would we make a new object (generally don't over-write the old one!) where it corresponds to this format? Write down the steps you need to take in order to do so (the pseudo-code)
 
 
+- create a copy of the data, but without the "gene column"
+- turn rownames into gene names
+
+```{r}
+rna_counts2 <- rna_counts[, -1]
+
+rownames(rna_counts2) <- rna_counts$gene
+
+rna_counts2[1:5, 1:5]
+```
 
 
 ### extract the information about the experimental design from the column names for each sample
@@ -118,4 +137,20 @@ We used underscored "_" for our delimiter in the files
 ## Pseudo code
 
 Write pseudo-code to take the sample names and generate an object (but what kind of object?) to store all of the experimental meta-data.
+
+
+- copy all sample names to a variable
+- split sample names based on delimiters
+- check metadata split appropriately
+- give appropriate variable names
+- give rownames the samplenames
+
+```{r}
+sample_names <- colnames(rna_counts2)
+
+split_variables_temp <- stringr::str_split_fixed(string = sample_names, 
+                                pattern = "_", n = 7)
+```
+
+
 
