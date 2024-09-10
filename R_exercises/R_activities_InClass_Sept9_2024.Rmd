@@ -122,6 +122,14 @@ or
 2. use gene names as rownames via extracting the gene identifier from the original data set
 
 
+```{r}
+rna_counts2 <- rna_counts[, 2:143] # or [, -1]
+
+rownames(rna_counts2) <- rna_counts$gene
+
+rna_counts2[1:6, 1:6]
+```
+
 
 ### extract the information about the experimental design from the column names for each sample
 
@@ -139,4 +147,43 @@ We used underscore "_" for our delimiter in the files
 ## Pseudo code
 
 Write pseudo-code to take the sample names and generate an object (but what kind of object?) to store all of the experimental meta-data.
+
+- such that rows represent individual samples
+- and columns experimental variables.
+
+
+1. make a new variable storing all samples names as a vector.
+2a. initialize a data frame to store our new information. Thankfully in R, it does it for us.
+2b. seperate based on the underscore delimiter
+3. label the variables
+
+
+```{r}
+sample_names <- colnames(rna_counts2)
+class(sample_names)
+```
+
+
+we are going to use a function in the stringr library
+```{r}
+install.packages("stringr")
+```
+
+
+```{r}
+library("stringr")
+```
+
+
+```{r}
+sample_names_matrix <- str_split_fixed(string = sample_names,
+                                       pattern = "_",
+                                       n = 7)
+
+# alternative (but can cause issues if there are problems with the delimiters)
+sample_names_matrix2 <- str_split(string = sample_names,
+                                       pattern = "_",
+                                       simplify = TRUE)
+```
+
 
