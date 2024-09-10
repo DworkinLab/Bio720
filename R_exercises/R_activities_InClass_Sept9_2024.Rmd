@@ -1,5 +1,5 @@
 ---
-title: "BIO720_Week2_hr1"
+title: "BIO720_Week2"
 author: "Ian Dworkin"
 date: "`r Sys.Date()`"
 output:
@@ -30,8 +30,7 @@ The [link to the data and script repository is here](https://github.com/DworkinL
 But for the moment, all we need is the counts that were generated. For this particular analysis this was done by aligning the sequence reads to the *Drosophila melanogaster* genome using a *splice aware* alignment tool, [STAR](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3530905/). While it is not relevant for the moment, if you want to read about this approach, you can [take a look at this tutorial](https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html).
 
 
-
-In any case, the count data can be downloaded like this, directly from our github repository.
+In any case, the count data can be downloaded like this, directly from the github repository.
 
 ```{r}
 rna_counts <- read.table("https://raw.githubusercontent.com/DworkinLab/DrosophilaSociabilityTranscriptomics/main/data/star/star_count_matrix.txt",
@@ -82,10 +81,6 @@ We then checked to see if there was any missing data (encoded by `NA`)
 ```{r}
 anyNA(rna_counts)
 ```
-
-
-### let's finish answering the questions we had regarding what kind of object we have
-
 
 
 
@@ -154,8 +149,9 @@ Write pseudo-code to take the sample names and generate an object (but what kind
 
 1. make a new variable storing all samples names as a vector.
 2a. initialize a data frame to store our new information. Thankfully in R, it does it for us.
-2b. seperate based on the underscore delimiter
-3. label the variables
+2b. separate based on the underscore delimiter
+3. label the variables (columns)
+4. Label the rows by their unique sample names
 
 
 ```{r}
@@ -169,7 +165,7 @@ we are going to use a function in the stringr library
 #install.packages("stringr") # only install once!
 ```
 
-
+To use the library...
 ```{r}
 library("stringr")
 ```
@@ -184,6 +180,89 @@ sample_names_matrix <- str_split_fixed(string = sample_names,
 sample_names_matrix2 <- str_split(string = sample_names,
                                        pattern = "_",
                                        simplify = TRUE)
+```
+
+
+For the metadata, make sure we have each experimental variable (columns) labelled, along with the sample identifiers (along each row).
+
+```{r}
+colnames(sample_names_matrix) <- c("initials", "treatment", "lineage", "sex", "environment", "sample", "lane")
+
+rownames(sample_names_matrix) <- sample_names 
+```
+
+
+
+## let's look at the data!
+
+
+### How many mapped reads do we have in each sample?
+
+pseudo-code
+1. Compute sum of each columns (i.e. compute sum of column 1, then column 2...)
+
+For column 1 you could compute the sum like:
+
+```{r}
+sum(rna_counts2[,1])
+```
+
+I don't want to do that for each column!
+
+
+
+We could write a for loop (which I do below), but there are two "Rish" ways that are worth knowing about.
+
+First is `colSums` which computes the sum for each column. This is generally the fastest way (both coding and computing)
+
+#### colSums
+```{r}
+read_sums <- colSums(rna_counts2)
+
+length(read_sums)
+
+read_sums
+```
+
+
+#### apply
+Alternatively, you could use a function like `apply` to do the same thing, by applying the `sum` function to each column. apply functions tend to be somewhat slower (but not for a tiny problem like this)
+
+```{r}
+read_sums_alt1 <- apply(X = rna_counts2, MARGIN = 2, sum)
+```
+
+
+#### for loop
+In most other languages, a `for` loop would be fine and you could it like this
+
+First we initialize and pre-allocate memory for a vector to store the data we are going to generate (the sums). In this case I am creating a vector with `NA`, which we will fill with the sums we compute
+```{r}
+read_sums_alt2 <- rep(x = NA,
+                      times = ncol(rna_counts2))
+
+
+names(read_sums_alt2) <- colnames(rna_counts2)
+length(read_sums_alt2)
+
+head(read_sums_alt2)
+```
+
+Then the for loop
+```{r}
+for (i in 1:ncol(rna_counts2)) {
+  read_sums_alt2[i] <- sum(rna_counts2[, i])
+}
+
+rm(i) # a bit of cleanup
+```
+
+
+All of these achieve the same thing. Although for some reason using colSums stores it as numeric not integers...
+```{r}
+head(read_sums)
+head(read_sums_alt1)
+head(read_sums_alt2)
 ```
 
 
