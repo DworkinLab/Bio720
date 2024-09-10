@@ -166,7 +166,7 @@ class(sample_names)
 
 we are going to use a function in the stringr library
 ```{r}
-install.packages("stringr")
+#install.packages("stringr") # only install once!
 ```
 
 
