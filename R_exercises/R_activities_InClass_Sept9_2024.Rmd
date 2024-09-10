@@ -108,12 +108,24 @@ How would we make a new object (generally don't over-write the old one!) where i
 
 Row names need to be the feature names (in this case the genes)
 
+What steps do we need?
+
+1. extract out gene names as a variable
+2. generate a copy of the data, with a new name, without first column
+3. use gene names as rownames
+
+
+or
+
+
+1. generate a copy of the data, with a new name, without first column
+2. use gene names as rownames via extracting the gene identifier from the original data set
 
 
 
 ### extract the information about the experimental design from the column names for each sample
 
-We used underscored "_" for our delimiter in the files
+We used underscore "_" for our delimiter in the files
 
 - AS: Initials of who collected the samples
 - the next is for the evolutionary treatments
