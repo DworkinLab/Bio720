@@ -16,7 +16,7 @@ This is my (ID) github repo for students for  Bio720 (introduction to computatio
 
 ## Class time and location
 
-BIO720, "lecture" Mondays, 9:30-10:20, BSB B138  
+BIO720, "lecture" Mondays, 9:30-10:20, ETB 227 **PLEASE NOTE THE ROOM CHANGE**  
 
 BIO720, "practical lab" Tuesdays, 9:30 - 11:20 ETB228
 
@@ -133,3 +133,4 @@ Week 2:
   -- [You will want to be able to access this script to download the RNAseq data we will be playing with](./R_exercises/R_activities_InClass_Sept9_2024.Rmd)
   
 Week 3:  
+**PLEASE NOTE THE ROOM CHANGE for Monday, ETB 227**  
