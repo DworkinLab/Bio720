@@ -24,8 +24,7 @@ With 2183 (as of April 13th, 2023) [packages](https://www.bioconductor.org/packa
 We will just use a few packages today
 
 ```{r}
-#library(BiocInstaller) # old deprecated. Don't use, but you may see in old scripts.
-library(BiocManager) # current way
+library(BiocManager)
 ```
 
 
@@ -224,7 +223,6 @@ Let's take a look at just one arm of one chromosome.
 We can also use the `getSeq` function to extract a set of sequences, like a chromosome
 
 ```{r}
-
 dm_chrX <- getSeq(Dm6, names = "chrX")
 dm_chrX
 

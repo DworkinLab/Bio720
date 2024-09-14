@@ -30,7 +30,9 @@ I have set up class access to [DataCamp](https://app.datacamp.com/groups/introdu
 **PLEASE NOTE FOR 2024** 
 For the second week of class (September 9th, 2024), please complete both the `introduction to R` and the `Intermediate R` courses on DataCamp. 
 
-## In class activities (to be updated for 2024)
+## Old In class activities (2022)
+
+**For 2024, the R activities are on the main README page**
 
 1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
 

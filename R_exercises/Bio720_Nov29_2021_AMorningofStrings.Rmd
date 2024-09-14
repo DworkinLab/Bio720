@@ -80,7 +80,7 @@ paste("x", 1:5, sep="", collapse = " + ")
 
 seq_gen <- function() {
    x <- sample(c("A", "C", "T", "G"), 
-           size = rbinom(100, 100, 0.8),
+           size = rbinom(1, 100, 0.8),
            replace =T)
    paste0(x, collapse="")    
 }
