@@ -24,7 +24,7 @@ Two nutritional treatments (lg and sm)
 four tissues (only three in females)  hdhorn (head horn), thoracic horn (thxhorn), wing and genitalia.
 
 
- For this assignment I want you to use your knowledge of control flow, writing functions, and performing repeated operations (using loops and/or apply family of functions) to generate some summaries.
+ For this assignment I want you to use your knowledge of control flow, writing simple functions, and performing repeated operations (using loops or the apply family of functions, or other functions) to generate some summaries of this RNAseq data.
 
  2. Read in the `.csv` file (call it rna_counts). Write a function that calculates and can output mean expression  (using the `mean()` function) for a given data column. Write this function so that it can work on either raw counts (as provided) or transformed to log2 values of the counts, with a logical argument that allows the user to choose whether to do this on the raw scale or log2 scale (i.e. log2 transform, then calculate the mean). Make sure all functions you write for this assignment have this argument. We often use log2 scale for RNAseq data. Demonstrate that it works on several of the columns of data.
 

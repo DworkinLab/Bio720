@@ -9,7 +9,7 @@ Sys.info()[["user"]]
 require(rstudioapi)
 versionInfo()
 ```
-then copy the information that is printed out and email it to me (along with the information for question 4 below).
+then copy the information that is rendered as a PDF and email it to Dr. Golding (along with the information for question 4 below).
 
 Note: Some people may (not sure why) not have the `rstudioapi` package already installed. If it gives you an error about this you can install it (and then re-run the code above). i.e.
 

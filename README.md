@@ -14,11 +14,16 @@ This is my (ID) github repo for students for  Bio720 (introduction to computatio
 
 [Dr. Ian Dworkin](https://dworkinlab.github.io/)
 
-## Class time and location
+## Class times and locations
 
-BIO720, "lecture" Mondays, 9:30-10:20, ETB 227 **PLEASE NOTE THE ROOM CHANGE**  
+BIO720, "lecture" Mondays, 9:30-10:20, ETB 227 **PLEASE NOTE ROOM CHANGE, starting September 16th**  
 
 BIO720, "practical lab" Tuesdays, 9:30 - 11:20 ETB228
+
+## Information on submitting assignments and grading
+
+[Please follow this link](./BIO720_assignments_HowToSubmitGrade.md)
+
 
 ## Background assumed for students for Bio720
 For this class we are not assuming students have background in programming/scripting, nor in bioinformatics. We do assume that students have a working knowledge of basic molecular biology and genetics and have basic familiarity with using computers. i.e. you can figure out how to install basic software on a Mac (OS X) or a PC (Windows).
@@ -98,7 +103,7 @@ You are responsible for ordering your own copies of these books if you want phys
 
 [For Brian's section](http://helix.mcmaster.ca/720.html). This will have pertinent links to Brian's section of the course.
 
-## Readings (not yet updated for 2024)
+## Readings
 Week 1 - BDS Chapter 1, Chapter 2 pages 21-30, Chapter 3 pages 37-45, Chapter 4 pages 57-59.
 
 Also check out [here](https://github.com/DworkinLab/Bio720/blob/master/IntroductionMarkdownAndVersionControl/Bio720_IntroductionMarkdown.md#a-few-words-on-project-organization) for a review of organizing computational data analysis projects. You don't need to read about version control or using markdown **yet**.
@@ -109,8 +114,7 @@ Week 3 - Chapter 3 pages 45 - 56, Chapter 7 125 - 156. Maybe also worth looking 
 
 Week 4 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
 
-Week 5 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365). I also suggest reading chapter 6 (pages 109-115). Also, [here](https://github.com/DworkinLab/EvolveResequencePipeline/blob/master/QC_Software.md) is a link to a few tools for doing QC at various steps. Not meant to be comprehensive, but if you use some google, chances are someone has already written some tool for QC and sanity checks for some steps similar to your own.
-In case you want to see another example [here](https://angus.readthedocs.io/en/2018/running-command-line-blast.html) is a tutorial on making a BLAST database and querying sequences with it.
+Week 5 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365) in BDS. I also suggest reading chapter 6 (pages 109-115).
 
 
 ## Weekly materials (in class)
@@ -133,4 +137,9 @@ Week 2:
   -- [You will want to be able to access this script to download the RNAseq data we will be playing with](./R_exercises/R_activities_InClass_Sept9_2024.Rmd)
   
 Week 3:  
-**PLEASE NOTE THE ROOM CHANGE for Monday, ETB 227**  
+**PLEASE NOTE THE ROOM CHANGE for Monday, ETB 227** 
+
+
+## Assignments
+
+[Assignment 1, due Monday, September 23rd, 2024](./assignments/Bio720_2024_R_Assignment_1.pdf)
