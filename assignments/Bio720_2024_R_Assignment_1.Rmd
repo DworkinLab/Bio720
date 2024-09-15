@@ -1,5 +1,5 @@
 ---
-title: "BIO720, Fall 2024, Individual Assignments"
+title: "BIO720, Fall 2024, Individual Assignments 1"
 author: "Ian Dworkin"
 date: "`r Sys.Date()`"
 output:
@@ -9,7 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-# BIO720, Fall 2024, Individual Assignments
+# BIO720, Fall 2024, Individual Assignments 1
 
 
 **Due Date:** Monday, September 23rd, 9AM. Send the rendered document of your assignment as a PDF, and email it to Dr. Golding, as per instructions that Dr. Golding discussed in class and available on the class github README.
