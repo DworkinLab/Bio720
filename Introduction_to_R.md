@@ -34,7 +34,7 @@ For the second week of class (September 9th, 2024), please complete both the `in
 
 **For 2024, the R activities are on the main README page**
 
-1. In class R exercises on the introduction to `R` are [here](https://github.com/DworkinLab/Bio720/blob/master/R_exercises/R_ClassExercise_1_InClass.md). The [answers](./R_exercises/R_ClassExercise_1_answers.md) Please go through DataCamp courses (intro to R and intermediate R) screencasts 1 - 7 above first (or else it may not make much sense).
+
 
 2.  In class R_exercises for control flow in `R` (as well as the apply family of functions) are  [here](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd), with [answers](./R_exercises/Bio720_R_InClass_Control_flow_worked_answers.md) and the second activity is [here](./R_exercises/Bio720_R_InClassExercise2.Rmd), with answers [here](./R_exercises/Bio720_R_InClassExercise2Answers.md).
 
@@ -47,7 +47,11 @@ We also introduced some basic concepts about simulations, and went through a sim
 
 6. String exercise [here](./R_exercises/Bio720_AnightofStringsInClass.Rmd) and answers [here](./R_exercises/Bio720_AnightofStrings.Rmd)
 
-## other R video tutorials and exercises.
+## other R video tutorials and exercises
+
+Much of this below is from previous versions of the class that belong to the dustbins of (teaching history). However, for posterity (and I don't like getting rid of files), I am keeping them here. There is exactly no need to go through these, unless you have some strange desire to see how I taught some of this more than a decade ago.... 
+
+
 The data set that is used for some of these activities can be found on the [DRYAD Digital repository](http://datadryad.org/) right [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv?sequence=1). You can also set this up (so you do not need a local copy of the data by putting this command in your script or copying and pasting it into the R editor :
 ```R
 dll.data <- read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", h=T)
@@ -60,19 +64,19 @@ The first link is to the screencast itself (hosted on youtube). The subsequent l
 1. Why use `R` (and why learn to program): Motivating example of working counts of expression data from RNAseq (not yet completed, so skip ahead!).
 2. Introduction to `R`: [part 1. `R` as a calculator](https://youtu.be/Kyxx9_NLlUY)
   - the introductory script can be found [here](./Rscripts/R_Introductory_tutorial_part_1.R)
-  - the first exercise is [here](./R_exercises/R_exercise_1.md)
+  
 3. Introduction to `R`: [part 2. Basic operations and operators in `R`](https://www.youtube.com/watch?v=UrtWeRPpWCw)
-  - the second exercise is [here](./R_exercises/R_exercise_2.md)
+ 
 4. Introduction to `R`: [part 3. Element-by-element operations, booleans & basic functions](https://www.youtube.com/watch?v=8VcysxMmpg0)
-  - the third exercise is [here](./R_exercises/R_exercise_3.md)
+  
 5. Introduction to `R`: [part 4. objects and classes in `R`](https://www.youtube.com/watch?v=-qDiqnEVaLk)
-  - the fourth exercise is [here](./R_exercises/R_exercise_4.md)
+  
 6. Introduction to `R`: [part 5. workspaces and getting help in `R`](https://www.youtube.com/watch?v=0Y9IRfJwzjo)
-  - the fifth exercise is [here](./R_exercises/R_exercise_5.md)
+  
 7. Introduction to `R`: [part 6. writing your own functions in `R`](https://www.youtube.com/watch?v=Mth_tvrxik0)
-  - the sixth exercise is [here](./R_exercises/R_exercise_6.md)
+  
 8. Introduction to `R`: [part 7. regular sequences and indexing](https://www.youtube.com/watch?v=V5_vb7gLtrk)
-  - the seventh exercise is [here](./R_exercises/R_exercise_7.md)
+  
 9. Introduction to `R`: [part 8. getting data into `R`](https://www.youtube.com/watch?v=SlupCvzH2nM)
   - the script for this activity can be found [here](./Rscripts/R_Introductory_tutorial_part_2.R)
   - the data can be downloaded [here](http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv)
