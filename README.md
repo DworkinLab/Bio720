@@ -137,7 +137,13 @@ Week 2:
   -- [You will want to be able to access this script to download the RNAseq data we will be playing with](./R_exercises/R_activities_InClass_Sept9_2024.Rmd)
   
 Week 3:  
+
 **PLEASE NOTE THE ROOM CHANGE for Monday, ETB 227** 
+
+- Monday (control flow)
+    - [This is the script we will be using in class](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd)
+
+- Tuesday (making and breaking functions, in class activity)    
 
 
 ## Assignments

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 **NOTE:** I have set the defaults (line above) for evaluation of blocks of code to be off (`eval = FALSE`). When you are running the code you might need to change these. I did this for rendering this activity.
 
-Let's do a little exercise integrating some of the things we have learned. Here are some Illumina HiSeq reads for one of our recent projects:
+Let's do a little exercise integrating some of the things we have learned. Here are some Illumina HiSeq reads for one of our projects:
 
 ```{r, eval = TRUE}
 read_1 <- "CGCGCAGTAGGGCACATGCCAGGTGTCCGCCACTTGGTGGGCACACAGCCGATGACGAACGGGCTCCTTGACTATAATCTGACCCGTTTGCGTTTGGGTGACCAGGGAGAACTGGTGCTCCTGC"
@@ -32,12 +32,12 @@ read_3  <- "CAGCACGGACTGGGGCTTCTTGCCGGCGAGGACCTTCTTCTTGGCATCCTTGCTCTTGGCCTTGGCGG
 
 Question 1. what species are these sequences from?
 
-Question 2. Put all three of these reads into a single object (a vector) called "reads".  What class will the vector `reads` be? Check to make sure! How many characters are in each read (and why does `length()` not give you what you want.. try...)
+Question 2. Put all three of these reads into a single object (a vector) called "reads".  What class will the vector `reads` be? Check to make sure! How many characters are in each read (and why does `length()` not give you what you want... Do you remember the function you need to count the length of an individual string?)
 
 Question 3. Say we wanted to print each character (not the full string) from read_1, how do we do this using a for loop? You may wish to look at a function like `strsplit()` to accomplish this (there are other ways.)
 
 Replace the blanks.
-```{r}
+```{r, eval = FALSE}
 read_1_split <- strsplit(___, split = ___, fixed = T) 
 ```
 
@@ -49,4 +49,4 @@ Question 6. How would you make this into a nice looking function that can work o
 
 Question 7. Now how can you modify your approach to do it for an arbitrary numbers of reads? You could use a loop or use one of the apply like functions (which one)?
 
-Question 8. Can you revise your function so that it can handle the input of either a string as a single multicharacter vector, **or** a vector of individual characters **or** a list? Try it out with the vector of three sequence reads (`reads`).  
+Question 8. Can you revise your function so that it can handle the input of either a string as a single multi-character vector, **or** a vector of individual characters **or** a list? Try it out with the vector of three sequence reads (`reads`).  

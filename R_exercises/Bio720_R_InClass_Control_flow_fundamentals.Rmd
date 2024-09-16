@@ -1,0 +1,56 @@
+---
+title: "Control flow in R, the fundamentals"
+author: "Ian Dworkin"
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output: 
+  html_document: 
+    toc: yes
+    number_sections: yes
+    keep_md: yes
+editor_options: 
+  chunk_output_type: console
+---
+
+
+# Worked examples using control flow
+
+```{r}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+**NOTE:** I have set the defaults (line above) for evaluation of blocks of code to be off (`eval = FALSE`). When you are running the code you might need to change these. I did this for rendering this activity.
+
+
+## if else
+
+Here is an example of using `if` and `else` to do different computation (or in this case, different output) depending on the input
+
+```{r}
+p_test <- function(p){
+    if (p <= 0.05) print ("yeah!!!!") 
+        else if (p >= 0.9) print ("high!!!!")
+        else print ("somewhere in the middle")
+}
+```
+
+
+Try some numbers
+```{r}
+p_test()
+```
+
+
+Try a random number from a uniform distribution on $[0,1]$ using `runif`
+
+```{r}
+(test_val_1 <- runif(1))
+p_test(test_val_1)
+```
+
+
+But we often don't have just a single number, but a vector of numbers we need to evaluate and make decisions with. 
+
+```{r}
+
+```
+
