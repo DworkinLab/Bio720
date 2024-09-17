@@ -36,21 +36,100 @@ p_test <- function(p){
 
 Try some numbers
 ```{r}
-p_test()
+p_test(0.5)
 ```
 
 
 Try a random number from a uniform distribution on $[0,1]$ using `runif`
 
 ```{r}
-(test_val_1 <- runif(1))
+(test_val_1 <- runif(n = 1))
 p_test(test_val_1)
 ```
 
 
-But we often don't have just a single number, but a vector of numbers we need to evaluate and make decisions with. 
+But we often don't have just a single number, but a vector of numbers we need to evaluate and make decisions with.  Let's try it with 100 random numbers
 
 ```{r}
-
+(test_val_2 <- runif(n = 100))
 ```
 
+
+```{r}
+p_test(test_val_2)
+```
+
+
+What does it not like?
+
+The `if` and `else` function are not naturally vectorized. 
+
+What are our options?
+
+(`for` loop, `sapply`, `ifelse`)
+
+```{r}
+p_test_2 <- function(p){
+    ifelse(test = p <= 0.05, 
+           yes = print("yippee"), 
+           no = print("bummer")) }
+```
+
+```{r}
+p_test_2(test_val_2)
+```
+
+How many times were we happy or sad
+```{r}
+table(p_test_2(test_val_2))
+```
+
+For genomics we do sometimes need to assess things just like this, how many of our genomic features "pass" some threshold
+```{r}
+feature_tests <- runif(n = 17300, min = 0, max = 1)
+```
+
+
+via for loops
+```{r}
+p_vals_out <- rep(NA, length(feature_tests))
+
+for (i in 1:length(p_vals_out)) {
+  p_vals_out[i] <- p_test(feature_tests[i])
+}
+```
+
+
+via sapply
+```{r}
+p_vals_sapply_out <- sapply(feature_tests, p_test)
+```
+
+As you can see, we really should rewrite the functions so they are not outputting things to the screen
+
+
+```{r}
+p_test_V2 <- function(p){
+    if (p <= 0.05) x = "yeah!!!!"
+        else if (p >= 0.9) x = "high!!!!"
+        else x = "somewhere in the middle"
+    return(x)    
+}
+
+p_test_V2(0.5)
+```
+
+clean output!
+```{r}
+p_vals_sapply_out <- sapply(feature_tests, p_test_V2)
+```
+
+
+```{r}
+p_test_3 <- function(p){
+    ifelse(test = p <= 0.05, 
+           yes = "yippee", 
+           no =  "bummer") }
+
+p_test_3(feature_tests)
+```

@@ -317,7 +317,7 @@ In BioStrings, there are a few functions that can really help! Also see the help
 
 ## a position weight matrix for a Drosophila transcription factor HNF4alpha
 
-THis is a collection of known transcription factor (TF) binding sites in the Drosophila genome for the HNF transcriptiona factor that is already in bioconductor (although you may have to install)
+THis is a collection of known transcription factor (TF) binding sites in the Drosophila genome for the HNF transcription factor that is already in bioconductor (although you may have to install)
 
 
 ```{r}
