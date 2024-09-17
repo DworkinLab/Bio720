@@ -140,11 +140,13 @@ Week 3:
 
 **PLEASE NOTE THE ROOM CHANGE for Monday, ETB 227** 
 
-- Monday (control flow)
+- Monday and Tuesda7 (control flow)
     - [control flow fundamentals](./R_exercises/Bio720_R_InClass_Control_flow_fundamentals.Rmd)
     - [This is the script we will be using in class](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd)
+    - [The script with answers](./R_exercises/Bio720_R_InClass_Control_flow_worked_answers.Rmd)
 
-- Tuesday (making and breaking functions, in class activity)    
+Week 4:  
+- Monday (making and breaking functions, in class activity)    
 
 
 ## Assignments
