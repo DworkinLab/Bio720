@@ -3,7 +3,7 @@
  Upon completion of your assignment create a _single_ pdf with
   your answers.
 - Name the pdf file with your student number (and nothing else).
-- Mail the file to Brian "at"" Golding "at" McMaster "dot" CA (please fix the email address, this is done this way say BG does more spam email), 
+- Mail the file to Brian ( Golding "at" McMaster "dot" ca) (please fix the email address, this is done this way say BG does not get more spam email), 
 
 Use the subject header: "Biology 720 Assignment"
 (no quotes around the subject header)
