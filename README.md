@@ -148,7 +148,7 @@ Week 3:
 Week 4: 
 
 - Monday (making and breaking functions, in class activity) 
-    -   - [The script to start with](./R_exercises/MakingAndBreakingFunctions_InClass.Rmd)
+    - [The script to start with](./R_exercises/MakingAndBreakingFunctions_InClass.Rmd)
     
 - Tuesday, working with strings in `R`.
 
