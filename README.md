@@ -145,8 +145,12 @@ Week 3:
     - [This is the script we will be using in class](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd)
     - [The script with answers](./R_exercises/Bio720_R_InClass_Control_flow_worked_answers.Rmd)
 
-Week 4:  
-- Monday (making and breaking functions, in class activity)    
+Week 4: 
+
+- Monday (making and breaking functions, in class activity) 
+    -   - [The script to start with](./R_exercises/MakingAndBreakingFunctions_InClass.Rmd)
+    
+- Tuesday, working with strings in `R`.
 
 
 ## Assignments
