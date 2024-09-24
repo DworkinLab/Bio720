@@ -132,7 +132,7 @@ Now you don't know which rows, they are.  Please show how you would find whether
 So what should we do? We can use the `unique()` to remove these duplicated rows if we know for certain that they do not belong in the data set (i.e. they are duplicated in error, not just because the data set could actually have duplicated rows).
 
 
-If you remove tese, how many observations are you left with?
+If you remove these, how many observations are you left with?
 
 ```{r, eval = FALSE}
 dll_data_unique <- ___
