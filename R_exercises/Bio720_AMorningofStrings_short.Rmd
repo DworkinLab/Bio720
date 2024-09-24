@@ -103,7 +103,7 @@ Check how many sequences we have
 seq_gen <- function() {
    x <- sample(c("A", "C", "T", "G"), 
            size = rbinom(1, 100, 0.8),
-           replace =T)
+           replace = TRUE)
    paste0(x, collapse="")    
 }
 
@@ -121,6 +121,64 @@ str_length(seqs)
 stri_length(seqs)
 ```
 
+histogram of lengths of the DNA sequences
+```{r}
+hist(nchar(seqs),
+     xlab = "length of DNA sequence",
+     ylab = "number of sequences")
+```
+
+
+#### CG% and plots of it.
+
+We can use the `str_count` function
+
+```{r}
+C_count <- str_count(string = seqs, pattern = "C")
+G_count <- str_count(string = seqs, pattern = "G")
+
+CG_perc <- (C_count + G_count)/nchar(seqs)
+
+CG_perc
+```
+
+
+```{r}
+hist(CG_perc)
+```
+
+
+or from our function from last week (the one at the bottom of the script)
+
+```{r}
+BaseFrequencies <- function(x) {
+    
+    # if it is a single string still
+    if (length(x) == 1 & mode(x) == "character") {
+    	x <- strsplit(x, split = "", fixed = T) 
+        x <- as.character(unlist(x))
+    }     
+    
+    if (mode(x) == "list") {
+    	tab <- table(x)/lengths(x)}
+    
+    else {
+    	tab <- table(x)/length(x)
+    }	
+   return(tab)
+}
+```
+
+and then use `sapply` to run through all of the sequences. Note I had to use `t()` which is the transpose function so the matrix had 4 columns, and many rows.
+
+
+```{r}
+basefreq <- t(sapply(seqs, BaseFrequencies, USE.NAMES = F))
+
+head(basefreq)
+
+CG_perc2 <- rowSums(basefreq[,2:3])
+```
 
 ## **regular expressions in R**
 

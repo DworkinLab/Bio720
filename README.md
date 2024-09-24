@@ -152,6 +152,9 @@ Week 4:
     
 - Tuesday, working with strings in `R`.
     - [A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short_InClass.Rmd)
+    
+    - [answers - A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short.Rmd)
+    
     - [Data munging in base R](./R_exercises/Bio720_R_week3_DataMunging_InClass.Rmd)
 
 
