@@ -112,9 +112,11 @@ Week 2 (Beginning R) - Start with DataCamp assignments (Courses **Introduction T
 
 Week 3 - Chapter 3 pages 45 - 56, Chapter 7 125 - 156. Maybe also worth looking at pages 395 - 398 in Chapter 12.
 
-Week 4 - Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
+Week 4 - **(NOTE, regular expressions are now being done by Brian)** Chapter 7 140-145, 157-169 might be really useful. I also recommend the first tutorial on regular expressions listed [here](https://github.com/DworkinLab/Bio720/blob/master/Some_RegEx_resources.md). This takes you gently through regular expressions and within an hour you will realize what amazing things you can do.
 
-Week 5 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365) in BDS. I also suggest reading chapter 6 (pages 109-115).
+Week 5 - Plotting.. 
+
+Week 6 - For more information on some of the basic file types used in genomics (.fastq, .SAM, .BAM) see chapter 10 (only 13 pages) and chapter 11 (pages 355-365) in BDS. I also suggest reading chapter 6 (pages 109-115).
 
 
 ## Weekly materials (in class)
@@ -157,6 +159,7 @@ Week 4:
         - [answers: A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short.Rmd)
     
     - [Data munging in base R](./R_exercises/Bio720_R_week3_DataMunging_InClass.Rmd)
+        - [answers: Data Munging](./R_exercises/Bio720_R_week3_DataMunging.Rmd)
 
 
 ## Assignments
