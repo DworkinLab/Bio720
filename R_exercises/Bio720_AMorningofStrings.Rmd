@@ -1,7 +1,7 @@
 ---
 title: "BIO720_morning_activity_strings"
 author: "Ian Dworkin"
-date: "11/29/2021"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output: 
   html_document: 
     keep_md: yes
@@ -14,11 +14,11 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, error =T)
 ```
 
-# A lovely evening with strings
+# A lovely morning with strings
 
-Tonight we are going to work a bit with the string manipulation functions in R. R actually has many string manipulation functions, but they do not have a particularly standardized naming convention, nor do they have a common way of calling arguments (i.e. string first VS object you want to search etc...). So for some people this can be frustrating (it is actually not that bad). Some of tonights tutorial is based on an example from [here](https://francoismichonneau.net/2017/04/tidytext-origins-of-species/)
+Ths morning we are going to work a bit with the string manipulation functions in R. R actually has many string manipulation functions, but they do not have a particularly standardized naming convention, nor do they have a common way of calling arguments (i.e. string first VS object you want to search etc...). So for some people this can be frustrating (it is actually not that bad). Some of this tutorial is based on an example from [here](https://francoismichonneau.net/2017/04/tidytext-origins-of-species/)
 
-Given that there are probably two very important R libraries to know about for string manipulation, *stringi* and *stringr*. There have been important co-developments of both these packages, but the two main things to know are that *stringr* just provides wrappers for functions in *stringi* (to make common uses a bit easier), and *stringr* has relatively limited functionality. They both also are consistent with *tidyverse* usage, as is one more library worth knowing about *tidytext*. There are a few others, like *rebus* which as a library uses tidyverse piping to make regular expressions easier to understand. However, I don't recommend this as much, as it is important to get used to writing regular expressions which are common among many programming languages.
+Given that, there are probably two very important R libraries to know about for string manipulation, *stringi* and *stringr*. There have been important co-developments of both these packages, but the two main things to know are that *stringr* just provides wrappers for functions in *stringi* (to make common uses a bit easier), and *stringr* has relatively limited functionality. They both also are consistent with *tidyverse* usage, as is one more library worth knowing about *tidytext*. There are a few others, like *rebus* which as a library uses tidyverse piping to make regular expressions easier to understand. However, I don't recommend this as much, as it is important to get used to writing regular expressions which are common among many programming languages.
 
 All functions in *stringi* begin with `stri_..`, where ".." is the name of the function. For *stringr* all functions begin with `str_`.
 
@@ -39,10 +39,14 @@ library(tidytext)
 
 ## printing strings to the standard output (the console)
 
-It turns out there are some subtlies that you want to know about with respect to printing things to the console. First thing to keep in mind is that "\" is the escape character so if you want to print the quote " This is "me"" to the console how would you do it (i.e. double quotes for everything). Compare your results using `print` vs `writeLines`
+It turns out there are some subtleties that you want to know about with respect to printing things to the console. First thing to keep in mind is that "\" is the escape character so if you want to print the quote " This is "me"" to the console how would you do it (i.e. double quotes for everything). Compare your results using `print` vs `writeLines`
 
 ```{r}
 print("this is \"me\"")
+```
+
+
+```{r}
 writeLines("this is \"me\"")
 ```
 
@@ -52,42 +56,64 @@ also worth noting some of the differences in behaviours for vectors of strings.
 fly_seq <- c(A = "ACTGGCCA", B = "ACTGGCCT", C = "ACTGTCCA" )
 
 print(fly_seq)
+```
 
 
+```{r}
 writeLines(fly_seq, sep = " ")
-writeLines(fly_seq, sep ="\n")
+```
+
+
+```{r}
 cat(fly_seq, sep ="\n")
 cat(fly_seq)
 ```
 
 How might you get `writeLines` to print each string on a newline?
 
+```{r}
+writeLines(fly_seq, sep ="\n")
+```
 
 ## Joining strings together
 
-We already saw this a bit last week with `paste()` and `paste0`. Default argument for seperator between strings is a single space, but can be altered with `sep = ""`. The collapse argument is particularly useful for collapsing everything to a single string.
+We will use `paste()` and `paste0`. Default argument for separator between strings is a *single space*, but can be altered with `sep = ""`. The collapse argument is particularly useful for collapsing everything to a single string.
 
+We could use this to generate a set of strings of variable names
 
-Make a single string that looks like "x1 + x2 + x3 + x4 + x5" using `paste` or for stringi it is `stri_join()` and `str_c` in *stringr*
+```{r}
+variable_names <- paste("variable", 1:5, sep="_")
+print(variable_names)
+length(variable_names)
+```
+
+We can do this to help automate writing out certain syntax (like for a model).Make a single string called "predictors" that looks like "x1 + x2 + x3 + x4 + x5" using `paste` in base `R`, or for  `stringi` it is `stri_join()` and `str_c` in *stringr*. Before checking, what is the length of your new variables "predictors"?
 
 ```{r}
 paste("x", 1:5, sep="", collapse = " + ")
 ```
 
-# How long is your string?
+### How long are your strings?
+
+We are often given DNA (or RNA) fragments of varying lengths, and we want to look at the distribution of how long each sequence is. Below I am simulating some DNA sequences. 
+
+Check how many sequences we have 
 
 ```{r, echo = F}
-
+# generating how many sequences
 seq_gen <- function() {
    x <- sample(c("A", "C", "T", "G"), 
            size = rbinom(1, 100, 0.8),
            replace =T)
    paste0(x, collapse="")    
 }
-seqs <- replicate(20, seq_gen())
+
+number_sequences <- rpois(1, 2000) # generating how many sequences in our sample
+
+seqs <- replicate(number_sequences, seq_gen())
 ```
 
-I have created an object of DNA sequences called "seqs" how long is each sequence? How many sequences are there? `nchar()` in base, and `str_length()`
+I have created an object of DNA sequences called "seqs" how long is each sequence? How many sequences are there? `nchar()` in base, and `str_length()`. Can you plot the distribution of the sequence lengths? Can you plot the distribution of %GC of each sequence as well?
 
 ```{r}
 length(seqs)
@@ -103,6 +129,8 @@ In general in R remember that since a backslash, '\'' has a special meaning when
 
 
 ## Turning file names into variables (splitting strings)
+
+While we already did this, Brian said I should remind you how important this is!!!!!
 
 In our lab we use this a lot with our naming conventions for images that have names like ID_Experiment_Sex_Treatment_Vial_Individual.tiff. We use str_split or strsplit, to change these names to list which we can then use to generate the various factor levels for each variable.
 
@@ -122,8 +150,15 @@ If you know that each string going in will be split into the same number of elem
 ```{r}
 str_split(file_labels, pattern = "_", simplify = T)
 
-# or better yet
-covariates_mat <- str_split(file_labels, pattern = "_", simplify = T)
+# or
+str_split(file_labels, pattern = "_", n = 6)
+```
+
+
+```{r}
+# so we can
+covariates_mat <- str_split(file_labels, 
+                            pattern = "_", simplify = T)
 
 colnames(covariates_mat) <- c("lab_peep", "experiment", "treatment", "sex", "vial", "individual")
 ```

@@ -245,8 +245,10 @@ In groups of 4, each of you will (one at a time) give your version of the functi
 - `break`
 -`stopifnot` # really useful
 - checking object class
-- `stop` vs. `warning` vs. message
+- `stop` vs. `warning` vs. `message`
 -`exist` or `file.exists()`
+- `try`
+- 
 - using `if` in case of different types
 - `conditions` for handling unusual conditions
 

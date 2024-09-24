@@ -151,6 +151,7 @@ Week 4:
     - [The script to start with](./R_exercises/MakingAndBreakingFunctions_InClass.Rmd)
     
 - Tuesday, working with strings in `R`.
+    - [A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short_InClass.Rmd)
 
 
 ## Assignments

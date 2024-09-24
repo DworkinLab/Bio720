@@ -279,7 +279,8 @@ ratio_function_v2 <- function(x, y) {
     if (mode(x) != "numeric") stop("x is not numeric")
     if (mode(y) != "numeric") stop("y is not numeric")
     if (anyNA(x) || anyNA(y)) warning("missing data present")
-    x/y
+    ratio_xy <- x/y
+    return(c(ratio_variable = ratio_xy))
 }
 
 ```
@@ -297,3 +298,11 @@ ratio_function_v2(x, y)
 rm(x, y)
 ```
 
+
+```{r}
+a1 <- c("a", "b")
+
+a2 <- 1:5
+
+a12 <- c(a1, a2)
+```

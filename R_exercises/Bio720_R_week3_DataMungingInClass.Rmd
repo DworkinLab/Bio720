@@ -25,7 +25,7 @@ These activities have many names: *wrangling data, munging data, cleaning data, 
 ## Why no tidyverse in this tutorial
 You have already been introduced to a little bit of the use of the *dplyr* library and verbs within it like `filter()`, `arrange()`, `group_by()` and `summarize()` (one other important one is `select()`). You will have more opportunities to learn aspects of the tidyverse (more on dplyr and ggplot2 in particular). However, today I am not going to show you data munging this way, instead relying on base R techniques.
 
-Why? tidyverse libraries are excellent in many ways, *but* they do have some issues. First and foremost, there are lots of dependencies (so if you load library "a", you also need libraries "b", "c", "d", etc). That can add a lot of libraries potentially. Second, unlike base R where the code is very (probably too) conservative, and those that maintain and alter the code do so in a manner that is very unlikely to alter downstream behaviour (i.e. code in other libraries), tidyverse libraries change more rapidly (and thus, while still very unlikely are more likely to break existing code). 
+Why? tidyverse libraries are excellent in many ways, *but* they do have some issues. First and foremost, there are lots of dependencies (so if you load library "a", you also need libraries "b", "c", "d", etc). That can add a lot of libraries potentially. Second, unlike base R where the code is very (probably too) conservative, and those that maintain and alter the code do so in a manner that is very unlikely to alter downstream behaviour (i.e. code in other libraries), tidyverse libraries **change more rapidly** (and thus, while still very unlikely are more likely to break existing code). 
 
 Currently, *[Bioconductor](http://bioconductor.org/)* objects don't always "play nice" with tidyverse tibbles and approaches. These are essentially two independently evolving "ecosystems of syntax" (really macro languages) in *R*. There is a move to integrate these better. But at this time, if you are planning on using libraries from *Bioconductor* for genomic and bioinformatic analysis it is important to know how to work with data in base R.
 
@@ -133,9 +133,9 @@ dll_data[891,]
 dll_data[anyDuplicated(dll_data),]
 ```
 
-So for this example there was one duplicate rows.
+So for this example there was no duplicate rows.
 
-How can we use anyDuplicated to pull out the duplicated rows?
+
 
 However let's say an accident happened in generating the data set and a few rows were duplicated. I am going to use the `sample()` function to extract 5 random rows.
 
