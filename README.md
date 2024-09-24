@@ -142,8 +142,9 @@ Week 3:
 
 - Monday and Tuesday (control flow)
     - [control flow fundamentals](./R_exercises/Bio720_R_InClass_Control_flow_fundamentals.Rmd)
+    
     - [This is the script we will be using in class](./R_exercises/Bio720_R_InClass_Control_flow_worked_example.Rmd)
-    - [The script with answers](./R_exercises/Bio720_R_InClass_Control_flow_worked_answers.Rmd)
+        - [The script with answers](./R_exercises/Bio720_R_InClass_Control_flow_worked_answers.Rmd)
 
 Week 4: 
 
@@ -153,7 +154,7 @@ Week 4:
 - Tuesday, working with strings in `R`.
     - [A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short_InClass.Rmd)
     
-        - [answers - A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short.Rmd)
+        - [answers: A short introduction to working with strings](./R_exercises/Bio720_AMorningofStrings_short.Rmd)
     
     - [Data munging in base R](./R_exercises/Bio720_R_week3_DataMunging_InClass.Rmd)
 
