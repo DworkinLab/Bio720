@@ -161,6 +161,9 @@ Week 4:
     - [Data munging in base R](./R_exercises/Bio720_R_week3_DataMunging_InClass.Rmd)
         - [answers: Data Munging](./R_exercises/Bio720_R_week3_DataMunging.Rmd)
 
+Week 5: Plotting 
+
+- [Plotting in Base R, in class activity](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd)
 
 ## Assignments
 

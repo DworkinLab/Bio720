@@ -2,12 +2,15 @@
 title: 'Somewhat more advanced plotting in base `R`: Plotting confidence bands with
   transparency (and other tricks)'
 author: "Ian Dworkin"
+date: "`r format(Sys.time(),'%d %b %Y')`"
 output:
-  html_document:
-    keep_md: yes
-    number_sections: yes
-    toc: yes
   pdf_document: default
+  html_document: 
+    keep_md: true
+    number_sections: true
+    toc: true
+editor_options: 
+  chunk_output_type: console
 ---
 # The anatomy of a more advanced plot.
 
@@ -80,6 +83,11 @@ points(y ~ x, pch = 20, cex = 1.5)
 
 ### Adding transparency 
 
+The easiest way to use transparency in `base R` plots is to use the `rgb()` when specifying the functions. The first three arguments are red, green and blue. The 4th argument "alpha" is the transparency. This is what I now use.
+
+Below I describe another way which is more general using hexmode.
+
+
 To understand how to add transparency to colours in `R` it is important to understand how the colours are encoded in RGB (Red Green and Blue "channels") (each 8 bit, allowing 256 distinct values per channel). We also need to know how to convert these to hexmode. In hexmode each channel is represented by a two letter code so colours can be encoded with 6 letters. First two for "red" channel, second two for "blue", etc. Finally the degree of transparency is added to the end of the colour value from hexmode.
 
 So if we wanted to find the value for pure red with 50% opacity:
@@ -111,7 +119,8 @@ You may notice I made some additional changes to improve the figure. using the v
 ## More complex example with some real data.
 
 ```{r}
-dll.data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
+dll.data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
+                       h = T, stringsAsFactors = TRUE)
 
 dll.data <- na.omit(dll.data)
 ```

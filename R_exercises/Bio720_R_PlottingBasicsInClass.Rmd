@@ -1,21 +1,27 @@
 ---
 title: "Bio720_Rtutorial_Plotting"
 author: "Ian Dworkin"
-date: "November 1, 2016"
-output: 
-  html_document: 
-    keep_md: yes
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output:
+  pdf_document:
+    toc: true
+  html_document:
+    keep_md: true
+    toc: true
+    number_sections: true
+editor_options:
+  chunk_output_type: console
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 options(digits = 3)
 ```
 
-# Plotting in R
+# Plotting in R (in class)
 
 ## Why base `R` plotting
 
-Anyone who has done more than a little bit of plotting in `R` in the past 3-5 years has probably heard of other plotting libraries in `R`. Indeed there are many of them, and some are profoundly useful and general. In particular many like Hadley Wickham's `ggplot2` library based on the *grammar of graphics* and the `lattice` library on Trellis graphics system. Both of these are extremely powerful, and in particular `ggplot2` is worth getting to know.
+Anyone who has done more than a little bit of plotting in `R` in the past 10 years has probably heard of other plotting libraries in `R`. Indeed there are many of them, and some are profoundly useful and general. In particular many like Hadley Wickham's `ggplot2` library based on the *grammar of graphics* and the `lattice` library on Trellis graphics system. Both of these are extremely powerful, and in particular `ggplot2` is worth getting to know.
 
 Having said this, the following tutorial is primarily using functions in base `R` and not putatitively ancillary libraries (although many aRgue that `ggplot2` is for all intent, a base library). This is simply because, despite the syntax being based on standard `R syntax`, and not a potentially easy to learn "grammar" (essentially a macro language within `R`) like `ggplot2`, I think there is real value in being able to interact more directly with your plotting objects. In addition, many examples that are very useful still use base R. At the bottom of this tutorial, I do provide some useful links to other libraries and examples.
 
@@ -25,9 +31,13 @@ So with that, let us begin.
 We are going to use the same data set that we used for the data munging tutorial.
 
 ```{r}
-dll_data = read.csv("http://datadryad.org/bitstream/handle/10255/dryad.8377/dll.csv", header=TRUE)
+dll_data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
+                       h = T, stringsAsFactors = TRUE)
 
 dll_data <- na.omit(dll_data)
+
+str(dll_data)
+dll_data$temp <- as.factor(dll_data$temp)
 ```
 
 ## Our first plot
@@ -55,16 +65,18 @@ Clearly you get a sense that there is some positive relationship between these t
 
 However we may wish to make this plot look a bit nicer, and potentially more informative.
 
+I have written out the code, so you can see the various parameters I am using for plotting.
+
 ```{r}
 plot(femur ~ tibia,
-     pch = 20, # symbol
+     pch = 20, # symbol shape
      cex = 1.2, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.40, 0.57),
      ylim = c(0.42, 0.62),
      xlab = " tibia length",
      ylab = "femur length",
-     main = "leg lengths measures",
+     main = "leg length",
      data = dll_data_subset)
 ```
 
@@ -84,7 +96,7 @@ Most of these parameters are easily explained.
 
 ### Exercise
 
-1- Remake this plot but change the colour of characters to red.
+1- Remake this plot but change the colour of characters to red, with some transparency. Use the `rgb()` to specify the colour argument. the `alpha` value is the degree of transparency.
  
 2- Remake this plot but but use triangles instead of circles for the characters.
 
@@ -106,14 +118,14 @@ So let's change the page characters (`pch`) to match the different temperatures.
 
 ```{r}
 plot(femur ~ tibia,
-     pch = c(16,17), # symbol
+     pch = c(16,17), # symbol shape
      cex = 0.8, # size of symbol
      col = "blue", # symbol colour
      xlim = c(0.4, 0.57),
      ylim = c(0.4, 0.62),
      xlab = " tibia length",
      ylab = "femur length",
-     main = "leg lengths measures",
+     main = "leg length",
      data = dll_data_subset)
 ```
 
@@ -152,7 +164,8 @@ plot(femur ~ tibia,
      main = "leg lengths measures",
      data = dll_data_subset)
 
-legend(x = "bottomright", 
+legend(x = "bottomright", bty = "n",
+       ncol = 2, cex = 0.5,
        legend  = c("wt 25C", "wt 30C", "Dll 25C", "Dll 30C"),
        pch = c(16, 17, 16, 17),
        col = c(rep("red", 2), rep("blue", 2)))
@@ -171,8 +184,8 @@ plot(SCT ~ tibia,
      pch = c(16,17)[dll_data_subset$temp], # symbol
      cex = 0.75, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
-     xlim = c(0.4, 0.57),
-     ylim = c(8, 18),
+     xlim = c(0.38, 0.58),
+     ylim = c(7, 18.5),
      xlab = " tibia length",
      ylab = "Number of Sex Comb Teeth",
      main = "leg lengths measures",
@@ -186,7 +199,7 @@ plot(jitter(SCT) ~ tibia,
      cex = 0.75, # size of symbol
      col = c("blue", "red")[dll_data_subset$genotype], # symbol colour
      xlim = c(0.4, 0.57),
-     ylim = c(8, 18),
+     ylim = c(7, 18),
      xlab = " tibia length",
      ylab = "Number of Sex Comb Teeth",
      main = "leg lengths measures",
@@ -234,12 +247,13 @@ plot(jitter(SCT) ~ tibia,
      data = dll_data_subset)
 
 abline(v = mean(dll_data_subset$tibia),
-       lwd = 3, # line width,
+       lwd = 2, # line width,
        lty = 2, # stippling of line
-       col = "grey")
+       col = rgb(0.1, 0.1, 0.1, 0.25))
 
 abline(h = mean(dll_data_subset$SCT),
-       lwd = 3, lty = 2, col = "grey" )
+       lwd = 2, lty = 2, 
+       col = rgb(0.1, 0.1, 0.1, 0.25))
 ```
 This is not the nicest representation of this, but we will come back to it later. 
 
@@ -446,9 +460,14 @@ This `add = TRUE ` enables us to overplot on the single graphics window. R somet
 - Change the histogram to do proportion (probability density), instead of frequency. Also change the line shading and colours!
 
 
-## R plotting examples
+## R plotting examples and other information
+
 A little googling usually finds what you are looking for.
+
+- [R Graph Gallery](https://r-graph-gallery.com/) and the [associated book](https://bookdown.org/content/b298e479-b1ab-49fa-b83d-a57c2b034d49/)
 
 - [R plotting examples](http://shinyapps.org/apps/RGraphCompendium/index.php). There are way more examples out there. 
 
-- [ggplot2](http://www.statmethods.net/advgraphs/ggplot2.html). Also, here is a [link to the book](https://www.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/0387981403). In addition to activities on datacamp, there are many online tutorials and cheatsheets for ggplot2, in addition to the 
+- Here is a [link to the book](https://ggplot2-book.org/). In addition to activities on datacamp, there are many online tutorials and cheatsheets for ggplot2.
+
+- [For the plotly library](https://plotly.com/r/)
