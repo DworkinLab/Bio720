@@ -1,0 +1,365 @@
+---
+title: "Bio720 Plotting ggplot2"
+author: "Ian Dworkin"
+date: "`r format(Sys.time(),'%d %b %Y')`"
+output:
+  pdf_document:
+    toc: true
+  html_document:
+    keep_md: true
+    toc: true
+    number_sections: true
+editor_options:
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(digits = 3)
+```
+
+# Plotting in R (in class), ggplot2
+
+Don't forget to install these (if you have not already)
+```{r}
+library(ggplot2)
+library(ggbeeswarm)
+library(ggthemes)
+```
+
+
+
+## Some useful links to have as you work through this tutorial
+
+[the Rstudio ggplot2 "cheat sheet"](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-visualization.pdf). Super useful to have, and also available from the RStudio help.
+
+
+- Here is a [link to the ggplot2 book](https://ggplot2-book.org/). In addition to activities on datacamp, there are many online tutorials and cheatsheets for ggplot2.
+
+- The [R for Data Science](https://r4ds.hadley.nz/) book has a nice [introduction to plotting in ggplot2](https://r4ds.hadley.nz/data-visualize) as well. This is a great chapter to have open as you work through it.
+
+
+## Import the data
+We are going to use the same data set that we used for the data munging tutorial.
+
+```{r}
+dll_data = read.csv("http://beaconcourse.pbworks.com/f/dll.csv",
+                       h = T, stringsAsFactors = TRUE)
+
+dll_data <- na.omit(dll_data)
+
+str(dll_data)
+
+dll_data$temp <- as.factor(dll_data$temp)
+```
+
+## Our first plot
+
+
+
+To make things easier to look like, we are going to use a subset of just 300 observations to start with. We will deal with what happens when we have lots of data (so that the plotting window is very crowded) a bit later.
+
+So first I am making a random subset of the larger data set (just 300 of the rows randomly selected)
+```{r}
+dll_data_subset <- dll_data[sample(nrow(dll_data), 300, replace = F),]
+```
+
+### our first plot
+
+Here is a simple scatterplot to get us started
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
+  geom_point()
+```
+
+This provides a very basic scatterplot of the two variables femur and tarsus. If you are using RStudio, then the plots window needs to be big enough to show the whole plot. Also in Rstudio the quality may not look high, but if you save it (Export) as a PDF it will look better. If you are using the standard R GUI for Mac OSX, then it will look a bit better as well.
+
+
+Clearly you get a sense that there is some positive relationship between these two variables (likely reflecting how they both covary with overall body size).
+
+However we may wish to make this plot look a bit nicer, and potentially more informative.
+
+I have written out the code, so you can see the various parameters I am using for plotting.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
+  geom_point(shape = 20, colour = "red", size = 0.9)
+```
+
+Within the call to the *geom* (which is a graphical element layer to render how each observation is plotted) `geom_point` I have three arguments above.
+
+- `shape` what is the shape of the point (circle, square, triangle, etc)
+
+- `size` for the size of the point
+
+### Exercise
+
+1- Remake this plot but change the colour of characters to red, with some transparency. the `alpha` value is the degree of transparency.
+ 
+2- Remake this plot but but use triangles instead of circles for the characters. You can google the shapes associated with `geom_point`
+
+3- Remake this plot but use **ALL** the data not just the subset. What do you notice about the figure? What parameters might you change to make the plot clearer?
+
+4- Finally, remake the plot, but use `SCT` instead of `femur`. What do you notice about this plot? How can you explain it? (we will fix it later)
+
+## A bit more complexity
+
+This is fine, but sometimes we want to change the colour or the shape of the characters to match specific levels of factors. Going back to this data set we can see that we have two levels of genotype and two temperatures. 
+
+First let's remind ourselves about the structure of the data. You should know how to do this by now.
+
+Insert your code here
+```{r, eval = FALSE, echo = FALSE}
+
+```
+
+
+
+
+So let's change the shape of the symbols to match the different rearing temperatures. We have two temps (25 and 30) Try making this change to the code above and see what happens to your plot.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp)) +
+  geom_point(colour = "red", size = 1)
+```
+
+Notice a couple of features. First I have now moved the assignment of the shapes to represent each *data* observation (datum) from within `geom_point` to the main *aesthetics* layer (`aes`) in the initial call to `ggplot`. 
+
+Each geom can also have its own aesthetic layer. So we can actually produce the same plot like so.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
+  geom_point(aes(shape = temp), colour = "red", size = 1)
+```
+
+
+What happens when you map `shape = temp` for the observations on the graph, but not within `aes()`? Try it and see! Note you may need to write this so it knows to look into the data frame we are interested in `shape = dll_data_subset$temp` instead of what we did above.
+
+### Adding the mapping for genotype with colour
+
+Now we can do the same thing for colour using genotype. Try it yourself. Make sure to use the full data, not the subset.
+
+### changing some of the themes and modifying axes
+
+While the x and y axes were automatically named based on the variable names, sometimes we wish to change those. There are a few ways to do that, but the basic approach would be to **add** functions for `xlab()` and `ylab()` for instance. So add `xlab("tibia length, mm")` and `ylab("femur length, mm")` to the following code:
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 1, alpha = 0.5) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm")
+```
+
+
+If you want to leave the labels for the x (or y) axes blank you can use `xlab(NULL)`. 
+
+To do use all of this at once you can use the `labs()` function instead. Try using this to set xlab, ylab provide a title and a caption!
+
+### Setting scales along axes
+If you want to change the range of values presented along each axes, you can do so using `xlim()` and `ylim()`. Within each you will have a 2-elements vector setting the lower and upper limits. Modify the x and y axes so that they have the same range (upper and lower limits), that will show all the data (from the smallest to largest observation). Hint, using the `range` function might help!
+
+```{r}
+
+range_vals <- with(dll_data_subset, range(c(femur, tibia)))
+  
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 1, alpha = 0.75) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  xlim(range_vals) +
+  ylim(range_vals)
+```
+
+This is not really a great way of plotting it, but we may wish to at least have both axes on the same scale. Also see the functions `lims` and `coord_cartesian` and those starting with `scale_`
+
+### Modifying the underlying theme
+
+The default theme for ggplot2 is ok, but there are many other choices that are probably much more suitable for your particular needs. These are provided as `themes`. I happen to like two in particular for our plotting needs, so I will show you each of these. Then you should take a look yourself (some are pretty fun). A call to just `theme` has many options for setting everything up if you prefer.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 1, alpha = 0.75) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  theme_light()
+```
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 1, alpha = 0.75) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  theme_classic()
+```
+
+Or make your own.. Try working with theme to modify some of the attributes for the plotting theme.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 1, alpha = 0.75) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  theme_bw( legend.position = "top")
+```
+
+
+## Faceting
+
+Sometimes you want multiple plots for your different groups, to help compare. We can use `facet_wrap` to do this. For instance
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia, colour = genotype)) +
+  geom_point(size = 1, alpha = 0.75) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  facet_wrap(~temp) +
+  theme_light()
+```
+
+Do facet wrapping, but for both genotype and temp. Allow for the scales of the x and y axes to vary per facet.
+
+
+
+## Jitter
+A few minutes ago, I had you plot with the variable `SCT` (sex comb teeth), which are discrete entities and as such are integers. Not surprisingly this can make things hard for plotting. Not so much because of the fact that they are stored as integers, but because you can have many observations of exactly the same values.
+
+
+Even with only 300 individuals, it can be difficult to discern many of the observations. One standard thing to do is add a bit of "noise" (or jitter) to the values of the integers (in this case the `SCT`). Switch to `geom_jitter()` to add *just enough* jitter so the variation in the data set for both variables is clear, but not so much that it makes it unclear that SCT is an integer. Using a bit of transparency for the points for each observation can help too!
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = SCT, x = tarsus, colour = genotype)) +
+  geom_jitter(height = 0.2, alpha = 0.5) +
+  ylab("SCT number") +
+  xlab("tarsus length, mm") +
+  facet_wrap(~temp) +
+  theme_light()
+```
+
+
+### boxplots, violin plots and beeswarm plot
+
+What if we want to examine the variation in tarsus length with respect to genotype and temperature? In this case we are setting up the x-axis to have a discrete scale
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_boxplot() + 
+  ylab("tarsus length, mm") +
+  theme_light()
+```
+
+This basic type of plot is not actually that useful by itself, it is best to not show the "outliers" only, but to show this along with the actual raw data. Try to add a `geom` to allow you to do this (and don't forget to suppress the outlier in boxplot since it will be plotted as part of the raw data). *hint* using `geom_point(position=position_jitterdodge())` will help alot with this!
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_boxplot(outliers = FALSE) + 
+  geom_point(position = position_jitterdodge(), alpha = 0.25) +
+  ylab("tarsus length, mm") +
+  theme_tufte()
+```
+
+However, for small to moderate amounts of data, this is not actually the best visualization of this type. Two other options are the violin plot and the beeswarm plot (the latter, in a seperate package, `ggbeeswarm`)
+
+Try plotting this same data as both a beeswarm and a violin plot.
+
+
+```{r}
+ggplot(data = dll_data, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_violin(aes(fill = genotype), alpha = 0.25) + 
+  ylab("tarsus length, mm") +
+  theme_bw()
+```
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_quasirandom(aes(x = temp:genotype), alpha = 0.5) + 
+  ylab("tarsus length, mm") +
+  theme_bw()
+```
+
+
+## Adding lines.
+
+There are many reasons we would want to add lines (or more points, or more text) to a plot. `R` handles all of these pretty easily. In this case, let's say we wanted to re-plot the previous example but show a certain region of particular interest (say at the means of both values). We can add lines across the graph using the `abline()` specifies the a (intercept)  or "b" (slope of a line), but can also do vertical or horizontal lines.
+
+Modify the code below and add vertical and horizontal lines (with appropriate transparency and dashes) at the mean values of SCT and tarsus length. See `geom_vline` and `geom_xline`.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = SCT, x = tarsus, colour = genotype)) +
+  geom_jitter(height = 0.2, alpha = 0.5) +
+  geom_vline(xintercept = mean(dll_data_subset$tarsus), lty = 2, alpha = 0.25) +
+  geom_hline(yintercept = mean(dll_data_subset$SCT),  lty = 2, alpha = 0.25) +
+  ylab("SCT number") +
+  xlab("tarsus length, mm") +
+  facet_wrap(~temp) +
+  theme_tufte()
+```
+
+
+Now using the `geom_smooth()` add the fit from a linear regression of SCT onto tarsus length onto the plots.Make a plot of SCT VS tarsus, and the best fit line from the regression in black (also dashed).
+
+
+
+```{r}
+ggplot(data = dll_data, aes(y = SCT, x = tarsus, colour = genotype)) +
+  geom_jitter(height = 0.2, alpha = 0.2) +
+  geom_smooth(method = "lm") +
+  ylab("SCT number") +
+  xlab("tarsus length, mm") +
+  facet_wrap(~temp) +
+  theme_bw()
+```
+
+
+
+
+
+## Histograms and density plots
+
+Another useful type of plot to make is a histogram.
+
+Render a figure of a histogram of all of the femur lengths
+
+```{r}
+ggplot(data = dll_data, aes(x = femur)) +
+  geom_histogram(fill = "grey", colour = "black") +
+  xlab("femur length, mm") +
+  theme_bw()
+```
+
+
+There may be a lot of things we would want to change in this figure. The two most obvious is the number of breaks, and whether instead of frequency we get a proportion. These are both pretty straightforward. 
+
+
+However, histograms are not a perfect way of showing the distribution of quantitative data. density plots are often much clearer
+
+```{r}
+ggplot(data = dll_data, aes(x = femur)) +
+  geom_density() +
+  xlab("femur length, mm") +
+  theme_bw()
+```
+Using this and also the `ggridges` package, try and examine the distributions of the traits across the treatments.
+
+
+### Exercises
+1 - Play with breaks and also setting the xlim to different ranges to see how it effects your plot.
+
+
+### Exercise
+- Change the histogram to do proportion (probability density), instead of frequency. Also change the line shading and colours!
+
+
+## R plotting examples and other information
+
+A little googling usually finds what you are looking for.
+
+- [R Graph Gallery](https://r-graph-gallery.com/) and the [associated book](https://bookdown.org/content/b298e479-b1ab-49fa-b83d-a57c2b034d49/)
+
+- [R plotting examples](http://shinyapps.org/apps/RGraphCompendium/index.php). There are way more examples out there. 
+
+- Here is a [link to the ggplot2 book](https://ggplot2-book.org/). In addition to activities on datacamp, there are many online tutorials and cheatsheets for ggplot2.
+
+- Here is a link to the excellent book [Fundamentals of data visualizations by Claus Wilke](https://clauswilke.com/dataviz/)
+
+- The [R for Data Science](https://r4ds.hadley.nz/) book has a nice [introduction to plotting in ggplot2](https://r4ds.hadley.nz/data-visualize) as well.
+
+- [For the plotly library](https://plotly.com/r/)

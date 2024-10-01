@@ -163,7 +163,9 @@ Week 4:
 
 Week 5: Plotting 
 
-- [Plotting in Base R, in class activity](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd)
+- [Plotting in ggplot2, in class](./R_exercises/Bio720_R_Plotting_ggplot_intro_InClass.Rmd)
+
+- [Plotting in Base R, extra activity](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd)
 
 ## Assignments
 
