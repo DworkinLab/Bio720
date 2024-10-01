@@ -279,6 +279,13 @@ A few minutes ago, I had you plot with the variable `SCT` (sex comb teeth), whic
 Even with only 300 individuals, it can be difficult to discern many of the observations. One standard thing to do is add a bit of "noise" (or jitter) to the values of the integers (in this case the `SCT`). Switch to `geom_jitter()` to add *just enough* jitter so the variation in the data set for both variables is clear, but not so much that it makes it unclear that SCT is an integer. Using a bit of transparency for the points for each observation can help too!
 
 
+```{r}
+ggplot(data = dll_data, aes(y = SCT, x = tarsus, shape = temp, colour = genotype)) +
+  geom_jitter(height = 0.2, width = 0, size = 1.25, alpha = 0.45) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  theme_classic()
+```
 
 
 ### boxplots, violin plots and beeswarm plot
@@ -292,10 +299,25 @@ ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
   theme_light()
 ```
 
-This basic type of plot is not actually that useful by itself, it is best to not show the "outliers" only, but to show this along with the actual raw data. Try to add a `geom` to allow you to do this (and don't forget to suppress the outlier in boxplot since it will be plotted as part of the raw data). *hint* using `geom_point(position=position_jitterdodge())` will help alot with this!
+This basic type of plot is not actually that useful by itself, it is best to not show the "outliers" only, but to show this along with the actual raw data. Try to add a `geom` to allow you to do this (and don't forget to suppress the outlier in boxplot since it will be plotted as part of the raw data). *hint* using `geom_point(position = position_jitterdodge())` will help alot with this!
 
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_violin(aes(fill = genotype)) +
+  ylab("tarsus length, mm") +
+  theme_light()
+```
 
 However, for small to moderate amounts of data, this is not actually the best visualization of this type. Two other options are the violin plot and the beeswarm plot (the latter, in a seperate package, `ggbeeswarm`)
+
+
+```{r}
+ggplot(data = dll_data, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_quasirandom(aes(x = temp:genotype, alpha = 0.5)) +
+  ylab("tarsus length, mm") +
+  theme_light()
+```
 
 Try plotting this same data as both a beeswarm (in ggbeeswarm package) and a violin plot.
 
@@ -312,6 +334,8 @@ Modify the code below and add vertical and horizontal lines (with appropriate tr
 ```{r}
 ggplot(data = dll_data_subset, aes(y = SCT, x = tarsus, colour = genotype)) +
   geom_jitter(height = 0.2, alpha = 0.5)  +
+  geom_hline(yintercept = mean(dll_data_subset$SCT), lty = 2, alpha = 0.25) +
+  geom_vline(xintercept = mean(dll_data_subset$tarsus), lty = 2, alpha = 0.25) +
   ylab("SCT number") +
   xlab("tarsus length, mm") +
   facet_wrap(~temp) +
@@ -326,6 +350,7 @@ Now using the `geom_smooth()` add the fit from a linear regression of SCT onto t
 ```{r}
 ggplot(data = dll_data, aes(y = SCT, x = tarsus, colour = genotype)) +
   geom_jitter(height = 0.2, alpha = 0.2) +
+  geom_smooth(method = "lm") + 
   ylab("SCT number") +
   xlab("tarsus length, mm") +
   facet_wrap(~temp) +
