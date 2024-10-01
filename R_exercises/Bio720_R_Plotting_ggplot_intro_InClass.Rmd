@@ -94,12 +94,35 @@ Within the call to the *geom* (which is a graphical element layer to render how 
 ### Exercise
 
 1- Remake this plot but change the colour of characters to red, with some transparency. the `alpha` value is the degree of transparency.
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
+  geom_point(shape = 20, colour = "blue", alpha = 0.5, size = 3)
+```
+
  
 2- Remake this plot but but use triangles instead of circles for the characters. You can google the shapes associated with `geom_point`
 
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
+  geom_point(shape = 17, colour = "blue", alpha = 0.5, size = 3)
+```
+
 3- Remake this plot but use **ALL** the data not just the subset. What do you notice about the figure? What parameters might you change to make the plot clearer?
 
+```{r}
+ggplot(data = dll_data, aes(y = femur, x = tibia)) +
+  geom_point(shape = 20, colour = "blue", alpha = 0.25, size = 2)
+```
+
 4- Finally, remake the plot, but use `SCT` instead of `femur`. What do you notice about this plot? How can you explain it? (we will fix it later)
+
+
+
+```{r}
+ggplot(data = dll_data, aes(y = SCT, x = tibia)) +
+  geom_point(shape = 20, colour = "blue", alpha = 0.25, size = 2)
+```
 
 ## A bit more complexity
 
@@ -109,7 +132,7 @@ First let's remind ourselves about the structure of the data. You should know ho
 
 Insert your code here
 ```{r, eval = FALSE, echo = FALSE}
-
+str(dll_data)
 ```
 
 
@@ -119,7 +142,7 @@ So let's change the shape of the symbols to match the different rearing temperat
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp)) +
-  geom_point(colour = "red", size = 1)
+  geom_point(colour = "red", size = 2)
 ```
 
 Notice a couple of features. First I have now moved the assignment of the shapes to represent each *data* observation (datum) from within `geom_point` to the main *aesthetics* layer (`aes`) in the initial call to `ggplot`. 
@@ -128,7 +151,7 @@ Each geom can also have its own aesthetic layer. So we can actually produce the 
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
-  geom_point(aes(shape = temp), colour = "red", size = 1)
+  geom_point(aes(shape = temp), colour = "red", size = 2)
 ```
 
 
@@ -138,13 +161,20 @@ What happens when you map `shape = temp` for the observations on the graph, but 
 
 Now we can do the same thing for colour using genotype. Try it yourself. Make sure to use the full data, not the subset.
 
+```{r}
+ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
+  geom_point(aes(shape = temp, colour = genotype), size = 2)
+```
+
 ### changing some of the themes and modifying axes
 
 While the x and y axes were automatically named based on the variable names, sometimes we wish to change those. There are a few ways to do that, but the basic approach would be to **add** functions for `xlab()` and `ylab()` for instance. So add `xlab("tibia length, mm")` and `ylab("femur length, mm")` to the following code:
 
 ```{r}
-ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.5) 
+ggplot(data = dll_data, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 2, alpha = 0.5) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm")
 ```
 
 
@@ -152,10 +182,37 @@ If you want to leave the labels for the x (or y) axes blank you can use `xlab(NU
 
 To do use all of this at once you can use the `labs()` function instead. Try using this to set xlab, ylab provide a title and a caption!
 
+
+```{r}
+ggplot(data = dll_data, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 2, alpha = 0.5) +
+  labs(title = "what an outstanding plot",
+       caption = "as basic as Ian's clothes",
+       x = "tibia length, mm",
+       y = "femur length, mm")
+```
+
+
 ### Setting scales along axes
 If you want to change the range of values presented along each axes, you can do so using `xlim()` and `ylim()`. Within each you will have a 2-elements vector setting the lower and upper limits. Modify the x and y axes so that they have the same range (upper and lower limits), that will show all the data (from the smallest to largest observation). Hint, using the `range` function might help!
 
+```{r}
+range_vals <- with(dll_data, 
+                   range(c(femur, tarsus)))
 
+range_vals
+```
+
+```{r}
+ggplot(data = dll_data, aes(y = femur, x = tarsus, shape = temp, colour = genotype)) +
+  geom_point(size = 2, alpha = 0.5) +
+  xlim(range_vals) +
+  ylim(range_vals) +
+  labs(title = "what a terrible plot",
+       caption = "too much white space",
+       x = "tibia length, mm",
+       y = "femur length, mm")
+```
 
 This is not really a great way of plotting it, but we may wish to at least have both axes on the same scale. Also see the functions `lims` and `coord_cartesian` and those starting with `scale_`
 
@@ -164,8 +221,8 @@ This is not really a great way of plotting it, but we may wish to at least have 
 The default theme for ggplot2 is ok, but there are many other choices that are probably much more suitable for your particular needs. These are provided as `themes`. I happen to like two in particular for our plotting needs, so I will show you each of these. Then you should take a look yourself (some are pretty fun). A call to just `theme` has many options for setting everything up if you prefer.
 
 ```{r}
-ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.75) +
+ggplot(data = dll_data, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 1.5, alpha = 0.5) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
   theme_light()
@@ -182,11 +239,11 @@ ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = 
 Or make your own.. Try working with theme to modify some of the attributes for the plotting theme. here is one example.
 
 ```{r}
-ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.75) +
+ggplot(data = dll_data, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
+  geom_point(size = 2, alpha = 0.25) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
-  theme_bw( legend.position = "top")
+  theme(legend.position = "top")
 ```
 
 
@@ -195,8 +252,8 @@ ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = 
 Sometimes you want multiple plots for your different groups, to help compare. We can use `facet_wrap` to do this. For instance
 
 ```{r}
-ggplot(data = dll_data_subset, aes(y = femur, x = tibia, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.75) +
+ggplot(data = dll_data, aes(y = femur, x = tibia, colour = genotype)) +
+  geom_point(size = 1.5, alpha = 0.5) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
   facet_wrap(~temp) +
@@ -206,6 +263,14 @@ ggplot(data = dll_data_subset, aes(y = femur, x = tibia, colour = genotype)) +
 Do facet wrapping, but for both genotype and temp. Allow for the scales of the x and y axes to vary per facet.
 
 
+```{r}
+ggplot(data = dll_data, aes(y = femur, x = tibia, colour = genotype)) +
+  geom_point(size = 1.5, alpha = 0.5) +
+  xlab("tibia length, mm") +
+  ylab("femur length, mm") +
+  facet_wrap(~temp + genotype, ncol = 2) +
+  theme_light()
+```
 
 ## Jitter
 A few minutes ago, I had you plot with the variable `SCT` (sex comb teeth), which are discrete entities and as such are integers. Not surprisingly this can make things hard for plotting. Not so much because of the fact that they are stored as integers, but because you can have many observations of exactly the same values.
