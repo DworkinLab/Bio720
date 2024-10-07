@@ -172,7 +172,10 @@ Week 6: bioconductor, and simulations (?)
 
 - [Introduction to Bioconductor](./R_exercises/Bio720_ConductingAGenomicSymphonyInClass.Rmd)
 
-- [a simple population genetics simulation](Bio720_SimulatingData_Part1.Rmd)
+- [Introduction to monte carlo simulations](./R_exercises/BIO720_TeachingMC_SimulationsBasics.Rmd)
+
+- [a simple population genetics simulation](./R_exercises/Bio720_SimulatingData_Part1.Rmd)
+
 
 ## Assignments
 
