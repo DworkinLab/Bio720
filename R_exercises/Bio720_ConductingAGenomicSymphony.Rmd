@@ -436,3 +436,18 @@ length(upstream_hits)
 
 ```
 
+## Extracting transcripts
+
+```{r}
+dmel_transcript_lengths <- transcriptLengths(dm_txdb,
+                                             with.utr5_len = TRUE, 
+                                             with.utr3_len = TRUE)
+```
+
+```{r}
+dim(dmel_transcript_lengths)
+
+class(dmel_transcript_lengths)
+```
+
+
