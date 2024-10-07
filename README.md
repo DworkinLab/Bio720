@@ -167,6 +167,13 @@ Week 5: Plotting
 
 - [Plotting in Base R, extra activity](./R_exercises/Bio720_R_PlottingBasicsInClass.Rmd)
 
+
+Week 6: bioconductor, and simulations (?)
+
+- [Introduction to Bioconductor](./R_exercises/Bio720_ConductingAGenomicSymphonyInClass.Rmd)
+
+- [a simple population genetics simulation](Bio720_SimulatingData_Part1.Rmd)
+
 ## Assignments
 
 [Assignment 1, due Monday, September 23rd, 2024](./assignments/Bio720_2024_R_Assignment_1.pdf)

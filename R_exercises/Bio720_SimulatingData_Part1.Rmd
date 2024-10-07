@@ -1,7 +1,7 @@
 ---
 title: "Bio720 - Simulating Data"
 author: "Ian Dworkin"
-date: "11/22/2021"
+date: "`r Sys.Date()`"
 output:
   pdf_document:
     toc: yes
@@ -54,9 +54,10 @@ That is the models can not be solved for the general case.
 - Frequency of *A* at time *t* is $p(t)$
 - Fitness of *A* is $W_A$, and for *a* is $W_a$
 
-$p(t+1) = \frac{p(t) W_A}{p(t) W_A + W_a(1-p(t))}$
+$$p(t+1) = \frac{p(t) W_A}{p(t) W_A + W_a(1-p(t))}$$
 
-$p(t+1) = \frac{p(t) W_A} {\overline W }$
+
+$$p(t+1) = \frac{p(t) W_A} {\overline W }$$
 
 - Where $\overline{W}$ is mean fitness for the population
 
