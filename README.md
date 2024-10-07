@@ -181,5 +181,5 @@ Week 6: bioconductor, and simulations (?)
 
 [Assignment 1, due Monday, September 23rd, 2024](./assignments/Bio720_2024_R_Assignment_1.pdf)
 
-[Assignment 2, due Monday, October 14th, 2024](./assignments/BIO720_Assignment2.Rmd)
+[Assignment 2, due Tuesday, October 15th, 2024](./assignments/BIO720_Assignment2.Rmd)
 
