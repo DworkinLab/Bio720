@@ -163,6 +163,7 @@ seqlengths(Dm6) # length of each contig.
 
 
 
+
 Thankfully there is an easier way of looking at this!
 
 ```{r}

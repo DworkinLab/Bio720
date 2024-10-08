@@ -165,6 +165,18 @@ seqinfo(Dm6)
 
 **Question:** How long is the assembled genome in base pairs (bp)? How about in mega base pairs (Mb)?
 
+
+```{r}
+seqinfo(Dm6)@seqlengths
+
+head(seqinfo(Dm6)@seqnames, n = 10)
+
+sum(seqinfo(Dm6)@seqlengths[1:8])
+
+sum(seqinfo(Dm6)@seqlengths[1:8])/1e6
+```
+
+Same idea....
 ```{r}
 sum(seqlengths(Dm6)[1:8])
 
@@ -230,6 +242,10 @@ hexamers[names(hexamers) %in% c("TTTTTT", "AAAAAA",  "GGGGGG", "CCCCCC")]
 
 ```{r}
 oligonucleotideTransitions(Dm6$chr2R, as.prob = TRUE)
+```
+
+
+```{r}
 oligonucleotideTransitions(Dm6$chr2R, 2, as.prob = TRUE)
 ```
 
@@ -318,7 +334,7 @@ which.max(n)
 seqs2 <- c("CCCNGG", "CCCNTTTT", "AAANTT", "TAGNT")
 n = sapply(seqs2, function(x) countPattern(x, dm_chrX, fixed = FALSE ))
 n
-which.max(n)
+which.max(n)x
 
 ```
 
