@@ -15,7 +15,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Due Date:** Tuesday, October 15, 9AM. Send the rendered document of your assignment as a PDF, and email it to Dr. Golding, as per instructions that Dr. Golding discussed in class and available on the class github README.
+**Due Date:** Monday, October 14, 9AM. Send the rendered document of your assignment as a PDF, and email it to Dr. Golding, as per instructions that Dr. Golding discussed in class and available on the class github README.
 
 **Please code independently. Additionally, there is no use of large language models or other generative AI for this or any other assignments, unless specifically stated otherwise**. This class provides the opportunity to learn how to think computationally, and to learn the practical skills of scientific computing. To develop the fundamentals of the skills requires you to work through the thought processes, problem-solving and practice of computation. Any evidence of group work OR use of generative AIs is cheating on assignments.
 
@@ -78,7 +78,7 @@ What are the 9 columns (variables) in our GTF file?
 Q1. Please name the columns of the dmel_gtf object, with the 9 variable names listed above. Check that it worked.
 
 
-Q1A. We will be mostly working with gene length and transcript (mRNA) length data. So we only need columns 1,3,4,5 and the final column ("group") . Make a file ("dmel_gtf_subset1") with only those columns. Confirm that you new object, `dmel_gtf_subset1` is as expected.
+Q1A. We will be mostly working with gene length and transcript (mRNA) length data. So we only need columns 1,3,4,5 and the final column ("group"). Make a file ("dmel_gtf_subset1") with only those columns. Confirm that you new object, `dmel_gtf_subset1` is as expected.
 
 
 Q1B. We will only need a subset of rows as well. In this case we only need the information about genes and mRNA. Let's see what all the features are first. Generate a variable ("features") containing a `table` with unique names of each of the feature types and counts of each.
@@ -134,29 +134,23 @@ This object has 6 columns:
 `5' UTR length` in base pairs
 `3' UTR length` in base pairs
 
-You will notice that the transcript identifiers do not begin with FBtr, but NM or NR. This is because these annotations are [*refseq* identifiers](https://www.ncbi.nlm.nih.gov/books/NBK50679/#RefSeqFAQ.what_is_the_difference_between). But unfortunately, they don't provide the identifiers from the other database we used (flybase). This issue is a very common problem from database to database!  If you really hate yourself, I guess you could go to the [refseq page](https://www.ncbi.nlm.nih.gov/refseq/) and copy and paste all of those identifiers... But of course, computers can make our lives easier...
+You will notice that the transcript identifiers do not begin with FBtr, but NM or NR. This is because these annotations are [*refseq* identifiers](https://www.ncbi.nlm.nih.gov/books/NBK50679/#RefSeqFAQ.what_is_the_difference_between). While flybase is the source of transcript information (see section 9.12 in this [FAQ](https://wiki.flybase.org/wiki/FlyBase:FAQ)), other databases use them and have their own identifiers. unfortunately, they don't provide the identifiers from the other database we used (flybase)! This issue is a very common problem from database to database.  If you really hate yourself, I guess you could go to the [refseq page](https://www.ncbi.nlm.nih.gov/refseq/) and copy and paste all of those identifiers... But of course, computers can make our lives easier...
 
 So we need to find a file that has the matching identifiers. Thankfully one is available on [this page](https://flybase.org/downloads/bulkdata). Most model organisms will also have a similar database page for such purposes.
 
-```{r}
-download.file(url = "http://ftp.flybase.org/releases/FB2024_04/precomputed_files/genes/fbgn_NAseq_Uniprot_fb_2024_04.tsv.gz", destfile = "dmel_6_59_DB_identifiers.tsv.gz" )
-```
+So we need to find a file that has matching identifiers. Thankfully one is available courtesy of flybase [this page](https://flybase.org/downloads/bulkdata). Most model organisms will also have a similar database page for such purposes.
 
 This is a *tab seperated values* flat file. 
 
-If you unzip the file and look at it (excel will work, as will any basic text editor), you will see the first 5 lines of the file  begin with "##". The first four of those lines don't matter very much, but the fifth line has the headers. So you can import this file into R (keep in mind the appropriate delimiter), excluding the first four lines. However, this file is a bit of a mess, so I have made a cleaner version for us to work with as a csv (comma seperated values). However, feel free to learn how to do this yourself! Again you may wish to download a local copy of this file to work with instead of downloading it each time you run your script.
 
 ```{r}
-Dm_identifiers <- read.csv( file = "https://raw.githubusercontent.com/DworkinLab/Bio720/refs/heads/master/data/dmel_6_59_DB_identifiers.csv",
-                            h = TRUE, na.strings = "")
+Dm_identifiers <- read.delim(file = "./fbtr_refseq.tsv", 
+                             sep = "\t",
+                             header = TRUE)
 ```
 
 
-This file should have 937210 rows and 9 columns. Which you should check.
-
-
-Q3A - Create a new object from `Dm_identifiers` called `Dm_FBgn_refseq`, that contains columns "gene_symbol", "FBgn" and "RefSeq_transcripts", and then filter it so that any columns that don't have both a "Fbgn" and RefSeq identifier are removed.
-
+Q3A - Rename the variables in `Dm_identifiers` so that they are consistent with your variable names in your other files (i.e. the same variable names for the variables with Fbtr identifiers, etc...).
 
 Q3B. We finally have all of the information we want, but across multiple files.
 
