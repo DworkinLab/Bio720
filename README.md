@@ -171,6 +171,7 @@ Week 5: Plotting
 Week 6: bioconductor, and simulations (?)
 
 - [Introduction to Bioconductor](./R_exercises/Bio720_ConductingAGenomicSymphonyInClass.Rmd)
+    - [Introduction to Bioconductor - with answers](./R_exercises/Bio720_ConductingAGenomicSymphony.Rmd)
 
 - [Introduction to monte carlo simulations](./R_exercises/BIO720_TeachingMC_SimulationsBasics.Rmd)
 

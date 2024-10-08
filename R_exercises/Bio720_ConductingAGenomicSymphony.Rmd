@@ -92,7 +92,6 @@ class(BSgenome.Dmelanogaster.UCSC.dm6)
 typeof(BSgenome.Dmelanogaster.UCSC.dm6) # an S4 object
 
 str(BSgenome.Dmelanogaster.UCSC.dm6)  # not so useful from a bioinformatics analysis perspective
- 
 ```
 
 
@@ -403,7 +402,6 @@ While this is useful to see, we can do this more directly (protect those kittens
 
 
 ```{r}
-
 pwm <- PWM(HNF4alpha, type = "prob")
 
 
@@ -447,7 +445,7 @@ Makes a TxDb object (transcript annotations. Again, lots of options depending on
 
 
 ```{r}
-dm_txdb <- makeTxDbFromUCSC("dm6", tablename="refGene") 
+dm_txdb <- makeTxDbFromUCSC("dm6", tablename = "refGene") 
 
 dm_txdb 
 
@@ -474,8 +472,9 @@ length(upstream_hits)
 
 ```
 
-## Extracting transcripts
+## Extracting transcript lengths
 
+This is one way of doing it.
 ```{r}
 dmel_transcript_lengths <- transcriptLengths(dm_txdb,
                                              with.utr5_len = TRUE, 
@@ -488,4 +487,5 @@ dim(dmel_transcript_lengths)
 class(dmel_transcript_lengths)
 ```
 
+I also recommend looking at the tools in the [txdbmaker](https://www.bioconductor.org/packages/release/bioc/html/txdbmaker.html) library, which provides a great deal of additional functionality.
 
