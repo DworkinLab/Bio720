@@ -111,7 +111,7 @@ str(BSgenome.Dmelanogaster.UCSC.dm6)  # not so useful from a bioinformatics anal
 
 
 
-**Question:** Pick another genome and download it and give it initials (like Hs for Homo sapiens)
+**Question:** Pick another genome and download it and give it initials (like Hs for *Homo sapiens*)
 
 
 ### Note about Non-model species genomes
