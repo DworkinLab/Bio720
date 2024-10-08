@@ -144,7 +144,7 @@ This is a *tab seperated values* flat file.
 
 
 ```{r}
-Dm_identifiers <- read.delim(file = "./fbtr_refseq.tsv", 
+Dm_identifiers <- read.delim(file = "https://raw.githubusercontent.com/DworkinLab/Bio720/refs/heads/master/data/fbtr_refseq.tsv",
                              sep = "\t",
                              header = TRUE)
 ```
