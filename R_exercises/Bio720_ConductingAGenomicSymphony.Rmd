@@ -78,9 +78,10 @@ This is of course only a handful of genomes to play with, and getting your own g
 ```{r}
 #biocLite("BSgenome.Dmelanogaster.UCSC.dm6") # Should not need this now!
 BiocManager::install("BSgenome.Dmelanogaster.UCSC.dm6")
+```
 
 
-
+```{r}
 library(BSgenome.Dmelanogaster.UCSC.dm6)
 Dm6 <- BSgenome.Dmelanogaster.UCSC.dm6
 
@@ -203,14 +204,29 @@ letterFrequency(Dm6$chr2R,
 Similar for dinucleotide, trinucleotide and arbitrary oligonucloetides
 ```{r}
 dinucleotideFrequency(Dm6$chr2R, as.prob = TRUE)
-trinucleotideFrequency(Dm6$chr2R, as.prob = TRUE)
-
-oligonucleotideFrequency(Dm6$chr2R, width = 6, as.prob = TRUE)
 ```
 
 
+```{r}
+trinucleotideFrequency(Dm6$chr2R, as.prob = TRUE)
+```
 
-## nucleotide transition matric
+
+```{r}
+oligonucleotideFrequency(Dm6$chr2R, width = 6, as.prob = TRUE)
+```
+
+**Question:** Of all possible homopolymers of length 6 (or greater) which is the most frequent?
+```{r}
+hexamers <- oligonucleotideFrequency(Dm6$chr2R, 
+                                     width = 6, as.prob = TRUE)
+
+head(hexamers)
+hexamers[names(hexamers) %in% c("TTTTTT", "AAAAAA",  "GGGGGG", "CCCCCC")]
+```
+
+
+## nucleotide transition matrix
 
 ```{r}
 oligonucleotideTransitions(Dm6$chr2R, as.prob = TRUE)
@@ -228,23 +244,29 @@ alphabetFrequency(Dm6$chr2R,
                   baseOnly = T, as.prob = T)
 ```
 
-
+## Extracting sequences
 We can also use the `getSeq` function to extract a set of sequences, like a chromosome
 
 ```{r}
-
 dm_chrX <- getSeq(Dm6, names = "chrX")
 dm_chrX
 
+class(dm_chrX) # This is now a DNAString type object, not a BSgenome object
+typeof(dm_chrX)
+```
+
+These both do the same thing
+```{r}
 show(dm_chrX)
 
 print(dm_chrX)
+```
 
 
-class(dm_chrX) # This is now a DNAString type object, not a BSgenome object
-typeof(dm_chrX)
+Question: How long is this chromosome arm?
 
-
+How long is the chromosome?
+```{r}
 length(dm_chrX)/1e6  # hey, why does this work!?   ;)
 
 nchar(dm_chrX)/1e6
