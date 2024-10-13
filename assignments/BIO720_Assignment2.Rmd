@@ -15,7 +15,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**Due Date:** Monday, October 14, 9AM. Send the rendered document of your assignment as a PDF, and email it to Dr. Golding, as per instructions that Dr. Golding discussed in class and available on the class github README.
+**Due Date:** Tuesday, October 15, 9AM. Send the rendered document of your assignment as a PDF, and email it to Dr. Golding, as per instructions that Dr. Golding discussed in class and available on the class github README.
 
 **Please code independently. Additionally, there is no use of large language models or other generative AI for this or any other assignments, unless specifically stated otherwise**. This class provides the opportunity to learn how to think computationally, and to learn the practical skills of scientific computing. To develop the fundamentals of the skills requires you to work through the thought processes, problem-solving and practice of computation. Any evidence of group work OR use of generative AIs is cheating on assignments.
 
