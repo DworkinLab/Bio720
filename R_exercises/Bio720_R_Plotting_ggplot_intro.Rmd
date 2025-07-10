@@ -82,7 +82,7 @@ I have written out the code, so you can see the various parameters I am using fo
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia)) +
-  geom_point(shape = 20, colour = "red", size = 0.9)
+  geom_point(shape = 20, colour = "red", size = 1.1)
 ```
 
 Within the call to the *geom* (which is a graphical element layer to render how each observation is plotted) `geom_point` I have three arguments above.
@@ -144,7 +144,7 @@ While the x and y axes were automatically named based on the variable names, som
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.5) +
+  geom_point(size = 1.25, alpha = 0.6) +
   xlab("tibia length, mm") +
   ylab("femur length, mm")
 ```
@@ -169,7 +169,7 @@ ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = 
   ylim(range_vals)
 ```
 
-This is not really a great way of plotting it, but we may wish to at least have both axes on the same scale. Also see the functions `lims` and `coord_cartesian` and those starting with `scale_`
+This is not really a great way of plotting it at all! But we may wish to at least have both axes on the same scale. Also see the functions `lims` and `coord_cartesian` and those starting with `scale_`
 
 ### Modifying the underlying theme
 
@@ -177,7 +177,7 @@ The default theme for ggplot2 is ok, but there are many other choices that are p
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.75) +
+  geom_point(alpha = 0.75) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
   theme_light()
@@ -185,7 +185,7 @@ ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = 
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.75) +
+  geom_point(alpha = 0.75) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
   theme_classic()
@@ -198,7 +198,7 @@ ggplot(data = dll_data_subset, aes(y = femur, x = tibia, shape = temp, colour = 
   geom_point(size = 1, alpha = 0.75) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
-  theme_bw( legend.position = "top")
+  theme_bw()
 ```
 
 
@@ -208,7 +208,7 @@ Sometimes you want multiple plots for your different groups, to help compare. We
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = femur, x = tibia, colour = genotype)) +
-  geom_point(size = 1, alpha = 0.75) +
+  geom_point(size = 1.5, alpha = 0.65) +
   xlab("tibia length, mm") +
   ylab("femur length, mm") +
   facet_wrap(~temp) +
@@ -227,11 +227,11 @@ Even with only 300 individuals, it can be difficult to discern many of the obser
 
 ```{r}
 ggplot(data = dll_data_subset, aes(y = SCT, x = tarsus, colour = genotype)) +
-  geom_jitter(height = 0.2, alpha = 0.5) +
+  geom_jitter(height = 0.15, alpha = 0.6) +
   ylab("SCT number") +
   xlab("tarsus length, mm") +
   facet_wrap(~temp) +
-  theme_light()
+  theme_bw()
 ```
 
 
@@ -251,7 +251,7 @@ This basic type of plot is not actually that useful by itself, it is best to not
 ```{r}
 ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
   geom_boxplot(outliers = FALSE) + 
-  geom_point(position = position_jitterdodge(), alpha = 0.25) +
+  geom_point(position = position_jitterdodge(jitter.height = 0), alpha = 0.25) +
   ylab("tarsus length, mm") +
   theme_tufte()
 ```
@@ -268,12 +268,24 @@ ggplot(data = dll_data, aes(y = tarsus, x = temp, colour = genotype)) +
   theme_bw()
 ```
 
+
+For a beeswarm, these are two approaches that are relatively straightforward to understand
 ```{r}
 ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
   geom_quasirandom(aes(x = temp:genotype), alpha = 0.5) + 
   ylab("tarsus length, mm") +
   theme_bw()
 ```
+
+or
+
+```{r}
+ggplot(data = dll_data_subset, aes(y = tarsus, x = temp, colour = genotype)) +
+  geom_quasirandom(alpha = 0.5, dodge.width = 0.75, bandwidth  = 0.1) + 
+  ylab("tarsus length, mm") +
+  theme_light()
+```
+
 
 
 ## Adding lines.
@@ -335,7 +347,7 @@ However, histograms are not a perfect way of showing the distribution of quantit
 ggplot(data = dll_data, aes(x = femur)) +
   geom_density() +
   xlab("femur length, mm") +
-  theme_bw()
+  theme_classic()
 ```
 Using this and also the `ggridges` package, try and examine the distributions of the traits across the treatments.
 

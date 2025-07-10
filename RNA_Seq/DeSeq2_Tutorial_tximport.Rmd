@@ -41,15 +41,16 @@ Please note that bioconductor (all of the genomics libraries in R) has its own w
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("DESeq2")
+BiocManager::install("DESeq2", force = TRUE)
 BiocManager::install("edgeR")
 BiocManager::install("limma")
 BiocManager::install("tximport")
+BiocManager::install("vst")
 BiocManager::install("tximportData") # this is relatively big
-BiocManager::install("tximeta")
-BiocManager::install("GenomeInfoDb")
-BiocManager::install("org.Dm.eg.db")
-BiocManager::install("TxDb.Dmelanogaster.UCSC.dm6.ensGene") # Drosophila
+BiocManager::install("tximeta", force = TRUE)
+BiocManager::install("GenomeInfoDb", force = TRUE)
+BiocManager::install("org.Dm.eg.db", force = TRUE)
+BiocManager::install("TxDb.Dmelanogaster.UCSC.dm6.ensGene", force = TRUE) # Drosophila
 
 ```
 
@@ -60,7 +61,7 @@ For your organisms it is worth checking what annotation packages are available. 
 
 avail <- BiocManager::available() # available packages
 
-avail[grep("Dmelanogaster", avail)] # which ones have Drosophila melanogaster.
+avail[grep("xlaevis", avail)] # which ones have Drosophila melanogaster.
 ```
 
 You will see that there are two transcriptome available for *Drosophila melanogaster*. We want (and actually already installed) the `TxDb.Dmelanogaster.UCSC.dm6.ensGene` 
@@ -163,9 +164,8 @@ library(DESeq2)
 library(tximport)
 library(readr)
 library("RColorBrewer")
-library(gplots)
+library(RNAseqQC)
 ```
-
 
 
 
@@ -178,7 +178,8 @@ The folder that contains all of the sub-folders with the quantifications should 
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
-setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/salmon_counts")
+setwd("/Users/iandworkin/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/salmon_counts")
+
 
 getwd()
 
@@ -222,8 +223,6 @@ samples <- c("samw_17C_gen_fed_R1",
 
 
 ```{r}
-
-
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path( dir(), "quant.sf")
 
@@ -233,6 +232,18 @@ quant_files
 
 # check that the files actually exist. Should return TRUE for each file
 file.exists(quant_files)
+```
+
+
+## As an alternative
+
+
+I can use the file names directly to extract the information
+
+```{r}
+sample_names_alt <- gsub("\\quant.sf", "", quant_files)
+
+experimental_data <- stringr::str_split(sample_names_alt, pattern = "_", simplify = TRUE)
 ```
 
 ## Loading the count data into R
@@ -297,6 +308,7 @@ The counts are just that. the length represents sample specific average transcri
 We can even start to look at the data in some basic ways. For instance, we can look at correlations among the full set of genes (remember our discussion of what this does and DOES NOT mean)
 ```{r}
 cor_vals <- cor(txi$counts[,1:20]) 
+
 hist(cor_vals)
 
 pairs(log2(txi$counts[,1:6]), 
@@ -345,7 +357,6 @@ lane <- factor(lane) # we will want to treat this as a factor
 length(lane)
 
 rna.design <- data.frame(sample = samples,
-  file=quant_files,
   tissue = tissue,
   food = food,
   temperature = temperature,
@@ -354,7 +365,7 @@ rna.design <- data.frame(sample = samples,
 rna.design
 
 # and we can start with a simple model (back to this later)
-load.model <- formula(~ tissue)
+load.model <- formula(~ lane + tissue + temperature + food)
 ```
 
 Below is the crucial function, `DESeqDataSetFromTximport()`, that gives you a DESeq2 count matrix from the txt object. interestingly, this is the step that converts the estimated counts to integers (again we can take a look at the quant_files).
@@ -378,7 +389,7 @@ It is well known that there can be substantial lane to lane variation. For this 
 First we create a DESeq data object using our counts, experimental design and a simple statistical model (more on this later)
 
 ```{r}
-load.model <- formula(~ lane)
+#load.model <- formula(~ lane)
 
 test_lane_effects <- DESeqDataSetFromTximport(txi,
   rna.design, design = load.model)
@@ -414,28 +425,54 @@ We can also plot the mean-dispersion relationship for this data.
 
 ```{r plot Dispersion, echo=TRUE }
 plotDispEsts(test_lane_effects2, 
-             legend = F)
+             legend = T)
 
 plotDispEsts(test_lane_effects2, 
              CV = T, legend =F)
 ```
 Let's talk about what this means.
 
+
+
+
 ### Principal Components analysis and hierarchical clustering are useful tools to visualize patterns (and to identify potential confounds)
 
  We can also use some multivariate approaches to look at variation. For PCA (checking it with a "blind" dispersion estimate to look for any funky effects. Not for biological inference).
 
 ```{r}
-for_pca <- rlog(test_lane_effects2, 
-                blind = TRUE)
+for_pca_rlog <- rlog(test_lane_effects2, 
+                blind = FALSE)
 dim(for_pca)
+
+for_pca_vst <- vst(test_lane_effects2, 
+                blind = FALSE)
 ```
 `rlog` is one approach to adjusting for both library size and dispersion among samples. `blind=TRUE`, has it ignore information from the model (in this case lane). So we want to see `blind=TRUE` when we are doing QC, but if we are using the PCA for downstream analysis, we might want to consider using TRUE.
 
 
+## use vsn library
+
+```{r}
+meanSdPlot(txi$counts, ranks = FALSE)
+```
+
+
+```{r}
+meanSdPlot(log2((txi$counts) + 1), ranks = FALSE)
+```
+
+## Can we get RNASeqQC working
+```{r}
+mean_sd_plot(for_pca_vst)
+
+mean_sd_plot(for_pca_rlog)
+```
+
+
 ```{r lane effects, echo=TRUE}
-plotPCA(for_pca, 
-        intgroup=c("l"),
+plotPCA(for_pca_vst, 
+        intgroup=c("lane", "food"),
+        pcsToUse = 1:2,
         ntop = 10000) 
 ```
 
@@ -458,6 +495,7 @@ plotPCA(for_pca, pcsToUse = 1:2,
         ntop = 1000, 
         intgroup=c("lane")) 
 ```
+
 
 
 ### Back to the analysis
