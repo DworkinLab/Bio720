@@ -147,6 +147,7 @@ library(tximport)
 library(readr)
 library("RColorBrewer")
 library(gplots)
+library(ggplot2)
 ```
 
 
@@ -163,7 +164,8 @@ The folder that contains all of the sub-folders with the quantifications should 
 ```{r}
 #setwd("../data/salmon_counts")
 # This will differ for you!!!
-setwd("/Users/ian/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/salmon_counts")
+setwd("/Users/iandworkin/Dropbox/macBook_HD/TeachingAndLectures/Bio722/Tutorial_Feb16/")
+
 # Setting it up for the import (this is not the import itself)
 quant_files <- file.path("quants", list.files("quants"), "quant.sf")
 
@@ -228,6 +230,9 @@ tx2gene <- read.table("txp_to_gene.tsv", col.names=c("TXNAME", "GENEID"))
 
 head(tx2gene)
 dim(tx2gene)
+
+length(unique(tx2gene$GENEID))
+length(unique(tx2gene$TXNAME))
 ```
 
 Drosophila genomics and datasets have their own unique gene and transcript identifiers (as well as more universal ones). In this case the column TXNAME are the identifiers for the transcripts (FBtr) and the gene identifier is in the GENEID column (FBgn). The names for those columns are from when we generated above for the counts using salmon. More information about Drosophila genes, transcripts, etc can be found at [flybase](http://flybase.org/). 
@@ -252,7 +257,10 @@ summary(txi) # why 274560?
 str(txi)
 head(txi$counts) # note these are not integers!
 dim(txi$counts)
+```
 
+
+```{r}
 # We can look at patterns of correlations among samples
 cor(txi$counts[,1:3])
 
@@ -328,10 +336,11 @@ It is well known that there can be substantial lane to lane variation. For this 
 First we create a DESeq data object using our counts, experimental design and a simple statistical model (more on this later)
 
 ```{r}
-load.model <- formula(~ lane)
+load.model <- formula(~lane)
 
 test_lane_effects <- DESeqDataSetFromTximport(txi,
-  rna.design, design=load.model)
+                                              rna.design, 
+                                              design = load.model)
 
 test_lane_effects2 <- DESeq(test_lane_effects)
 # We now fit the simple model
@@ -418,7 +427,85 @@ We can quickly take a look to see if this pattern shows anything interesting for
 ```{r, echo=TRUE}
 plotPCA(for_pca, ntop = 2000,
         intgroup=c("tissue", "food", "temperature"))
+```
 
+This can be hard to look at. So let's do this ourselves
+
+```{r}
+assay(for_pca)[1:10, 1:10]
+
+how_many_variable_genes <- 2000
+rlog_counts <- assay(for_pca)
+
+variance_by_genes <- rowVars(rlog_counts)
+hist(variance_by_genes)
+
+# select the "n" most variable genes 
+
+dummy_variable_genes <- order(variance_by_genes, decreasing = TRUE)[seq_len(min(how_many_variable_genes, 
+        length(variance_by_genes)))]
+
+
+filtered_genes <- rlog_counts[dummy_variable_genes, ]
+
+pca_out <- prcomp(t(filtered_genes))
+summary(pca_out)
+```
+
+```{r}
+colnames(filtered_genes)
+View(rna.design)
+
+pc_out_design <- data.frame(rna.design, pca_out$x)
+```
+
+Nowe we can plot it anyway we want!!!!
+
+
+```{r}
+ggplot(pc_out_design, aes(x = PC3, y = PC4, colour = tissue, shape = food:temperature)) +
+  geom_point(alpha = 0.8, size = 4) +
+  theme_light()
+```
+
+
+
+```{r}
+ggplot(pc_out_design, aes(x = PC1, y = PC2, colour = tissue, shape = food:temperature, label = sample)) +
+  xlim(-50, 50) + ylim(-50, 50) +
+  geom_label(size = 2.5, alpha = 0.5, position = position_jitter(height = 10, width = 4)) +
+  theme_light()
+```
+uh-oh, some samples seem like they were mislabeled.
+
+Grouping with wings are:
+samw_17C_gen_fed_R1
+samw_17C_gen_fed_R3
+
+
+Grouping with genitals are:
+samw_17C_wings_fed_R1
+samw_17C_wings_starved_R2
+
+And the outlier
+
+samw_17C_gen_starved_R1
+
+
+Let's decide what genes to look at for wings and genital discs.
+
+```{r}
+temp_counts <- assay(all.data)
+
+temp_counts[rownames(temp_counts) == "FBgn0003975",] #vg
+temp_counts[rownames(temp_counts) == "FBgn0267978",] # ap
+temp_counts[rownames(temp_counts) == "FBgn0000015",]# Abd-B
+
+```
+
+
+
+```{r, echo=TRUE}
 plotPCA(for_pca, ntop = 2000,
         intgroup=c("tissue"))
 
@@ -465,9 +552,7 @@ Given the results from above, I am removing lane entirely.
 
 Let's fit and run a simple model comparing the two tissue types (ignoring for the fact that we think that two samples are reversed in each tissue.)
 ```{r}
-
 load.model <- formula(~ lane + tissue)
-
 ```
 
 ```{r}
@@ -501,7 +586,7 @@ Let's get going with things we are interested in, like looking for differentiall
 
 ```{r MA_plot}
 plotMA(test_tissue_effects2, 
-       ylim =c(-4, 4))
+       ylim =c(-9, 9))
 ```
  A few things to note. The points coloured in red are the genes that show evidence of differential expression. The triangles are ones whose log2 fold change is greater than or less than 1 ( i.e. 2 fold difference). Please keep in mind that many genes that have small fold changes can still still be differentially expressed. Don't get overly hung up on either just fold changes alone or a threshold for significance. Look carefully at results to understand them. This takes lots of time!!!
  
@@ -538,11 +623,11 @@ Let's take a look at the results.
 
 ```{r re_order}
 # reorder
-tissue_results <- tissue_results[order(tissue_results$padj),]
+tissue_results <- tissue_results[order(abs(tissue_results$stat), decreasing = TRUE),]
 
 
 rownames(tissue_results[1:20,])
-tissue_results[1:20,]
+tissue_results[31:36,]
 
 plotCounts(test_tissue_effects2, 
            gene = which.min(tissue_results$padj),
