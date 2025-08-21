@@ -627,17 +627,26 @@ tissue_results <- tissue_results[order(abs(tissue_results$stat), decreasing = TR
 
 
 rownames(tissue_results[1:20,])
-tissue_results[31:36,]
+tissue_results[1:5,]
+```
 
+
+```{r re_order}
 plotCounts(test_tissue_effects2, 
            gene = which.min(tissue_results$padj),
            intgroup="tissue")
+```
 
+
+```{r re_order}
 plotCounts(test_tissue_effects2, 
            gene = "FBgn0000015",
            intgroup="tissue",
            pch = 20, col = "red")
+```
 
+
+```{r re_order}
 plotCounts(test_tissue_effects2, 
            gene = "FBgn0003975",
            intgroup="tissue",
@@ -652,7 +661,7 @@ tissue_results_shrunk <- lfcShrink(test_tissue_effects2,
                                    type = "normal",
                                    lfcThreshold = 0)
 
-plotMA(tissue_results_shrunk, ylim =c(-2, 2))
+plotMA(tissue_results_shrunk, ylim =c(-5, 5))
 
 summary(tissue_results_shrunk)
 ```
@@ -671,12 +680,19 @@ load.model <- formula(~ lane + tissue + food + tissue:food) # Let me go over the
 
 test_temp_tissue <- DESeqDataSetFromTximport(txi,
   rna.design, design=load.model)
+```
 
+
+```{r, echo=TRUE}
 test_temp_tissue$group <- factor(paste0(test_temp_tissue$tissue,test_temp_tissue$temperature))
 
 design(test_temp_tissue) <- ~ lane + group
+```
 
+
+```{r, echo=TRUE}
 test_FT_2 <- DESeq(test_temp_tissue)
+
 resultsNames(test_FT_2)
 
 plotDispEsts(test_FT_2, legend = F)
@@ -685,20 +701,24 @@ temp_results_wing <- results(test_FT_2,
                      contrast = c("group", "wing17", "wing24"),
                      alpha = 0.1, pAdjustMethod="BH")
 
-mcols(food_results_wing)$description
+mcols(temp_results_wing)$description
 
-summary(food_results_wing)
+summary(temp_results_wing)
 
-plotMA(food_results, 
-       ylim =c(-5, 5))
+plotMA(temp_results_wing, 
+       ylim =c(-10, 10))
 
+
+temp_results_wing <- temp_results_wing [order(temp_results_wing $stat, decreasing = TRUE),]
+
+head(temp_results_wing)
 
 temp_wing_results_shrunk <- lfcShrink(test_FT_2, 
                                    coef = 2,
                                    type = "normal",
                                    lfcThreshold = 0)
 
-plotMA(temp_wing_results_shrunk, ylim =c(-2, 2))
+plotMA(temp_wing_results_shrunk, ylim =c(-5, 5))
 
 summary(temp_wing_results_shrunk)
 head(temp_wing_results_shrunk)
@@ -709,9 +729,9 @@ rownames(temp_wing_results_shrunk[1:20,])
 
 
 plotCounts(test_FT_2, 
-           gene = "FBgn0032282",
+           gene = "FBgn0052603",
            intgroup="group",
-           pch = 20, col = "red")
+           pch = 20, col = rgb(1,0,0, 0.5))
 
 resultsNames(test_FT_2)
 ```
