@@ -16,7 +16,8 @@ This is my (ID) github repo for students for  Bio720 (introduction to computatio
 
 ## Class times and locations
 
-BIO720, "lecture" Mondays, 9:30-10:20, ETB 227 **PLEASE NOTE ROOM CHANGE, starting September 16th**  
+BIO720, "lecture" Mondays, 10
+:30-10:20, ETB 227 **PLEASE NOTE ROOM CHANGE, starting September 16th**  
 
 BIO720, "practical lab" Tuesdays, 9:30 - 11:20 ETB228
 
