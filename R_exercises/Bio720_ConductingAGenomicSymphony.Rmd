@@ -19,19 +19,19 @@ You have to give the developers of Bioconductor a little love. They have really 
 
 ## A little introduction with Drosophila
 
-With 2083 (as of April 13th, 2023) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
+With 2418 (as of May 7th, 2026) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
 
 We will just use a few packages today
 
 ```{r}
 #library(BiocInstaller) # old deprecated. Don't use, but you may see in old scripts.
-library(BiocManager) # current way
 library(Biostrings)
 library(GenomicRanges)
 library(GenomicFeatures)
-library('BSgenome')
-
+library(BSgenome)
 library(seqLogo)
+library(txdbmaker)
+library(GenomeInfoDbData)
 ```
 
 
@@ -45,7 +45,7 @@ In terms of installing BioConductor genomes and libraries they have deprecated s
 #biocLite('BSgenome') # deprecated
 ```
 
-**New!**
+**Use this**
 
 ```{r}
 BiocManager::install("BSgenome") 
@@ -76,7 +76,6 @@ av_gen[av_gen$organism == "Dmelanogaster",]
 This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the *Drosophila melanogaster* genome assembly
 
 ```{r}
-#biocLite("BSgenome.Dmelanogaster.UCSC.dm6") # Should not need this now!
 BiocManager::install("BSgenome.Dmelanogaster.UCSC.dm6")
 ```
 
@@ -228,11 +227,13 @@ oligonucleotideFrequency(Dm6$chr2R, width = 6, as.prob = TRUE)
 ```
 
 **Question:** Of all possible homopolymers of length 6 (or greater) which is the most frequent?
+
 ```{r}
 hexamers <- oligonucleotideFrequency(Dm6$chr2R, 
                                      width = 6, as.prob = TRUE)
 
 head(hexamers)
+
 hexamers[names(hexamers) %in% c("TTTTTT", "AAAAAA",  "GGGGGG", "CCCCCC")]
 ```
 
@@ -304,7 +305,6 @@ dm_chr3L <- getSeq(Dm6, names = "chr3L",
 
 
 alphabetFrequency(dm_chr3L, baseOnly = T, as.prob = T)
-
 ```
 
 **Question:**  - Using that same region, how would you find the reverse complement of that sequence? What should it be equivalent to (use the help or vignettes in biostrings to find the functions to help you)
@@ -331,10 +331,13 @@ which.max(n)
 
 ```{r}
 seqs2 <- c("CCCNGG", "CCCNTTTT", "AAANTT", "TAGNT")
-n = sapply(seqs2, function(x) countPattern(x, dm_chrX, fixed = FALSE ))
-n
-which.max(n)x
 
+n = sapply(seqs2, 
+           function(x) countPattern(x, dm_chrX, fixed = FALSE))
+
+n
+
+which.max(n)
 ```
 
 
@@ -378,22 +381,16 @@ pfm
 Not the most useful way of looking at it. So let's clean this up a bit. 
 
 ```{r}
-
 round(pfm[1:4,]/colSums(pfm[1:4,]), 2)
-class(pfm)
 
+class(pfm)
 ```
 
 
 We can now use this and create a position weight matrix (PWM) object
 
 ```{r}
-
-
 pwm <- PWM(pfm)
-
-# or directly
-
 ```
 
 
@@ -404,12 +401,11 @@ While this is useful to see, we can do this more directly (protect those kittens
 ```{r}
 pwm <- PWM(HNF4alpha, type = "prob")
 
-
 round(pwm[1:4,]/colSums(pwm[1:4,]), 2)
+
 maxWeights(pwm)
 
 conMat <- consensusMatrix(HNF4alpha, as.prob = T)[1:4,]
-
 
 seqLogo(conMat)
 
@@ -433,12 +429,16 @@ hist(mcols(TF_hits)$score)
 ## How about the reverse complement of the X?
 
 ```{r}
-TF_hits_rc <- matchPWM(reverseComplement(pwm), dm_chrX, with.score = TRUE)
+TF_hits_rc <- matchPWM(reverseComplement(pwm), 
+                       dm_chrX, with.score = TRUE)
+
 length(TF_hits_rc)
+
 hist(mcols(TF_hits_rc)$score)
 ```
 
 ## Extracting upstream sequences from Drosphila melanogaster
+
 Oftem the Transcription factor binding sites (TFBS) are upstream of the coding sequence of genes (although in Drosophila, many are intronic as well). Let's download the transcripts (and their genomic co-ordinates/positions) and use this to extract the upstream sequences.
 
 Makes a TxDb object (transcript annotations. Again, lots of options depending on how you want to refer to genes. Then extract the upstream sequences from the genes.
@@ -447,9 +447,11 @@ Makes a TxDb object (transcript annotations. Again, lots of options depending on
 ```{r}
 dm_txdb <- makeTxDbFromUCSC("dm6", tablename = "refGene") 
 
-dm_txdb 
+dm_txdb
+```
 
 
+```{r}
 class(dm_txdb) # as always, know what kind of object you are working with!
 columns(dm_txdb)
 keytypes(dm_txdb )  # GenomicFeatures uses a "key pairs" approach
@@ -469,7 +471,6 @@ How about this pattern?
 upstream_hits <- vcountPattern("NGNNCAAAGNNCA", up10000seqs, fixed = FALSE)
 
 length(upstream_hits)
-
 ```
 
 ## Extracting transcript lengths
@@ -487,5 +488,4 @@ dim(dmel_transcript_lengths)
 class(dmel_transcript_lengths)
 ```
 
-I also recommend looking at the tools in the [txdbmaker](https://www.bioconductor.org/packages/release/bioc/html/txdbmaker.html) library, which provides a great deal of additional functionality.
 

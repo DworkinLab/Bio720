@@ -19,7 +19,7 @@ You have to give the developers of Bioconductor a little love. They have really 
 
 ## A little introduction with Drosophila
 
-With 2183 (as of April 13th, 2023) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
+With 2418 (as of May 7th, 2026) [packages](https://www.bioconductor.org/packages/release/BiocViews.html#___Software) it is not like I can show you everything. However the Bioinformatic Data Skills book, and the datacamp tutorial will give you a tiny bit of an intro into things.
 
 We will just use a few packages today
 
@@ -31,7 +31,7 @@ library(BiocManager)
 
 ### you will need to install things a bit differently for bioconductors
 ```{r}
-BiocManager::install(c("BSgenome", "GenomicFeatures", "Biostrings", "seqLogo")) 
+BiocManager::install(c("BSgenome", "GenomicFeatures", "Biostrings", "seqLogo", "txdbmaker", "GenomeInfoDbData")) 
 ```
 
 
@@ -42,6 +42,8 @@ library(GenomicRanges)
 library(GenomicFeatures)
 library(BSgenome)
 library(seqLogo)
+library(txdbmaker)
+library(GenomeInfoDbData)
 ```
 
 
@@ -79,7 +81,7 @@ Use the help from available.genomes to see how you can take a look at the genome
 
 ```
 
-This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the *Drosophila melanogaster* genome assembly
+This is of course only a handful of genomes to play with, and getting your own genome of interest installed is something for you to do. We with work with a recent version of the *Drosophila melanogaster* genome assembly. 
 
 ```{r}
 BiocManager::install("BSgenome.Dmelanogaster.UCSC.dm6")
@@ -90,6 +92,7 @@ Now we load the library in
 
 ```{r}
 library(BSgenome.Dmelanogaster.UCSC.dm6)
+
 Dm6 <- BSgenome.Dmelanogaster.UCSC.dm6
 ```
 
@@ -97,12 +100,14 @@ Dm6 <- BSgenome.Dmelanogaster.UCSC.dm6
 We can take a look at the type of object it is?
 ```{r}
 BSgenome.Dmelanogaster.UCSC.dm6
+
 Dm6
 ```
 
 
 ```{r}
 class(BSgenome.Dmelanogaster.UCSC.dm6)
+
 typeof(BSgenome.Dmelanogaster.UCSC.dm6) # an S4 object
 
 str(BSgenome.Dmelanogaster.UCSC.dm6)  # not so useful from a bioinformatics analysis perspective, but notice the "@" not "$"
@@ -148,6 +153,7 @@ Obviously a lot more information available for our genome
 
 ```{r}
 show(Dm6)
+
 organism(Dm6)
 
 isS4(Dm6)
@@ -282,8 +288,8 @@ Often we are looking through genomes for certain patterns (usually best set up a
 ```{r}
 seqs <- c("CCCGGG", "CCCCTTTT", "AAATTT", "TAGCT")
 
-n = sapply(seqs, function(x) countPattern(x, dm_chrX ))
-
+n = sapply(seqs, 
+           function(x) countPattern(x, dm_chrX ))
 
 n
 
@@ -312,7 +318,7 @@ In BioStrings, there are a few functions that can really help! Also see the help
 
 ## a position weight matrix for a Drosophila transcription factor HNF4alpha
 
-THis is a collection of known transcription factor (TF) binding sites in the Drosophila genome for the HNF transcriptiona factor that is already in bioconductor (although you may have to install)
+THis is a collection of known transcription factor (TF) binding sites in the Drosophila genome for the HNF transcriptiona factor that is already in bioconductor (although you may have to install).
 
 
 ```{r}
@@ -353,7 +359,6 @@ While this is useful to see, we can do this more directly (protect those kittens
 
 
 ```{r}
-
 pwm <- PWM(HNF4alpha, 
            type = "prob")
 
@@ -362,7 +367,6 @@ round(pwm[1:4,]/colSums(pwm[1:4,]), 2)
 maxWeights(pwm)
 
 conMat <- consensusMatrix(HNF4alpha, as.prob = T)[1:4,]
-
 
 seqLogo(conMat)
 
@@ -373,7 +377,9 @@ seqLogo(pwm[1:4,]/colSums(pwm[1:4,]))
 
 ```{r}
 TF_hits <- matchPWM(pwm, dm_chrX, with.score = TRUE)
+
 length(TF_hits)
+
 head(mcols(TF_hits)$score)
 
 hist(mcols(TF_hits)$score)
@@ -382,8 +388,11 @@ hist(mcols(TF_hits)$score)
 ## How about the reverse complement of the X?
 
 ```{r}
-TF_hits_rc <- matchPWM(reverseComplement(pwm), dm_chrX, with.score = TRUE)
+TF_hits_rc <- matchPWM(reverseComplement(pwm),
+                       dm_chrX, with.score = TRUE)
+
 length(TF_hits_rc)
+
 hist(mcols(TF_hits_rc)$score)
 ```
 
@@ -391,9 +400,13 @@ hist(mcols(TF_hits_rc)$score)
 
 Makes a TxDb object (transcript annotations. Again, lots of options depending on how you want to refer to genes. Then extract the upstream sequences from the genes.
 ```{r}
-dm_txdb <- makeTxDbFromUCSC("dm6") 
+supportedUCSCtables("dm6")
 
-up10000seqs <- extractUpstreamSeqs(dm, dm_txdb, width=10000)
+dm_txdb <- makeTxDbFromUCSC("dm6", tablename = "refGene") 
+
+
+
+up10000seqs <- extractUpstreamSeqs(Dm6, dm_txdb, width = 10000)
 ```
 
 How about this pattern?
